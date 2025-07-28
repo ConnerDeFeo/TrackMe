@@ -5,6 +5,7 @@ load_dotenv()
 
 
 def create_athlete(event, context):
+    #Connect to DynamoDB
     dynamodb = boto3.resource(
         'dynamodb',
         endpoint_url=os.getenv("DYNAMODB_ENDPOINT_URL"),
@@ -13,6 +14,8 @@ def create_athlete(event, context):
         region_name="us-east-2"
     )
     table = dynamodb.Table('athletes')
+
+    #Create athlete
     table.put_item(
         Item={
             'first_name': event['first_name'],

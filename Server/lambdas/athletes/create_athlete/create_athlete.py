@@ -1,12 +1,9 @@
 import json
 
-# import requests
-
-
-def lambda_handler(event, context):
+def create_athlete(event, context):
     return {
         "statusCode": 200,
         "body": json.dumps({
-            "message": "hello world",
+            "message": "athlete created",
         }),
     }

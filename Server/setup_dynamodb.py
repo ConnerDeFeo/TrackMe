@@ -2,6 +2,7 @@ import boto3
 import json
 from botocore.exceptions import ClientError
 
+"""Create DynamoDB tables, they persist in the docker container"""
 def create_dynamodb_tables():
     # Initialize DynamoDB client
     dynamodb = boto3.resource('dynamodb', 

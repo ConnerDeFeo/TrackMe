@@ -1,11 +1,16 @@
 import boto3
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 def create_athlete(event, context):
     dynamodb = boto3.resource(
         'dynamodb',
-        os.getenv('DYNAMODB_ENDPOINT_URL')
+        endpoint_url=os.getenv("DYNAMODB_ENDPOINT_URL"),
+        aws_access_key_id="dummy",
+        aws_secret_access_key="dummy",
+        region_name="us-east-2"
     )
     table = dynamodb.Table('athletes')
     table.put_item(
@@ -18,6 +23,5 @@ def create_athlete(event, context):
         }
     )
     return {
-        "statusCode": 200,
-        "body": "Injected into dynamodb successfully"
+        "statusCode": 200
     }

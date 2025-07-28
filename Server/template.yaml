@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
-  HelloWorldFunction:
+  CreateAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: lambdas/athlete/create_athlete/
+      Handler: create_athlete.create_athlete
       Runtime: python3.12

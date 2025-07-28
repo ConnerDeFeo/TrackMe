@@ -8,7 +8,7 @@ Resources:
       CodeUri: lambdas/athlete/create_athlete/
       Handler: create_athlete.create_athlete
       Runtime: python3.12
-      Timeout: 10 #Needed for the lambda to run
+      Timeout: 15
       Environment:
         Variables:
           DYNAMODB_ENDPOINT_URL: http://host.docker.internal:8000

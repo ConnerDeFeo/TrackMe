@@ -9,6 +9,7 @@ services:
       - dynamodb-data:/home/dynamodblocal/data
     working_dir: /home/dynamodblocal
     command: "-jar DynamoDBLocal.jar -dbPath /home/dynamodblocal/data -sharedDb"
+    
 
 volumes:
   dynamodb-data:

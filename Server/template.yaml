@@ -2,6 +2,14 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
+  DynamoDBLayer:
+      Type: AWS::Serverless::LayerVersion
+      Properties:
+        LayerName: DynamoDBLayer
+        Description: DynamoDBLayer utilities
+        ContentUri: layers/common/  # directory containing the layer content
+        CompatibleRuntimes:
+          - python3.12
   CreateAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -18,3 +26,5 @@ Resources:
           Properties:
             Path: /athletes/create_athlete/
             Method: post
+      Layers:
+        - Ref: CommonLayer

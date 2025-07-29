@@ -1,6 +1,5 @@
 import json
-from layers.dynamodb_client import athletes_table
-
+from layers.common.python.dynamodb_client import athletes_table
 def get_athlete(event, context):
     body = json.loads(event['body'])
     # Get item from DynamoDB

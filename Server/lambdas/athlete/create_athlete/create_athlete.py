@@ -1,10 +1,10 @@
 import json
-from layers.dynamodb_client import athletes_table
+from layers.common.python.dynamodb_client import athletes_table
 
 def create_athlete(event, context):
     body = json.loads(event['body'])
     # Put item in DynamoDB
-    athletes_table.put_item(Item=
+    athletes_table(Item=
         {
             'username': body['username'],
             'first_name': body['first_name'],

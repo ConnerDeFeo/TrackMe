@@ -4,20 +4,25 @@ from dynamodb_client import put_item
 
 #Create athlete
 def create_athlete(event, context):
+    body = json.loads(event['body']) 
     # Put item in DynamoDB
     response = put_item('athletes', {
-        'username': event['username'],
-        'first_name': event['first_name'],
-        'last_name': event['last_name'],
-        'email': event['email'],
-        'password': event['password']
+        'username': body['username'],
+        'first_name': body['first_name'],
+        'last_name': body['last_name'],
+        'email': body['email'],
+        'password': body['password']
     })
 
     # If athlete created successfully, return success
     if response['ResponseMetadata']['HTTPStatusCode'] == 200:
         return {
             "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
+            "headers": {
+                "Access-Control-Allow-Origin": "http://localhost:8081",  # Match your frontend
+                "Access-Control-Allow-Credentials": True,
+                "Content-Type": "application/json"
+            },
             "body": json.dumps({"message": "Athlete created successfully"})
         }
     # If athlete already exists, return error

@@ -1,5 +1,15 @@
 
 Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+      Cors:
+        AllowMethods: "'POST, GET, OPTIONS'"
+        AllowHeaders: "'Content-Type, Authorization'"
+        AllowOrigin: "'http://localhost:8081'"
+        AllowCredentials: true
+
   DynamoDBLayer:
       Type: AWS::Serverless::LayerVersion
       Properties:
@@ -27,5 +37,6 @@ Resources:
           Properties:
             Path: /athletes/create_athlete/
             Method: post
+            RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: DynamoDBLayer

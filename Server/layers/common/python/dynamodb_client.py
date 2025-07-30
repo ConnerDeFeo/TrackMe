@@ -11,5 +11,18 @@ dynamodb = boto3.resource(
     aws_secret_access_key="dummy",
     region_name="us-east-2"
 )
-# Get table reference once at module level
-athletes_table = dynamodb.Table('athletes')
+
+#Add item to table
+def put_item(table_name, item):
+    table = dynamodb.Table(table_name)
+    return table.put_item(Item=item)
+
+#Get item from table
+def get_item(table_name, key):
+    table = dynamodb.Table(table_name)
+    return table.get_item(Key=key)
+
+#Delete item from table
+def delete_item(table_name, key):
+    table = dynamodb.Table(table_name)
+    return table.delete_item(Key=key)

@@ -1,12 +1,15 @@
 import { SafeAreaView } from 'react-native';
 import './global.css'
 import Setup from './pages/Setup';
-import { createStaticNavigation, NavigationContainer } from '@react-navigation/native';
+import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ComponentType } from 'react';
 import CreateAccount from './pages/CreateAccount';
 import SignIn from './pages/SignIn';
 
+//Root component used to render everything
+
+//Base page layout for all components
 function BaseLayout(content: React.ReactElement): ComponentType<any>{
   return ()=>{
     return(
@@ -17,6 +20,7 @@ function BaseLayout(content: React.ReactElement): ComponentType<any>{
   }
 }
 
+//Directory allowing page navigation
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'Home',
   screenOptions: {
@@ -28,9 +32,9 @@ const RootStack = createNativeStackNavigator({
     SignIn: BaseLayout(<SignIn/>)
   },
 });
-
 const Navigation = createStaticNavigation(RootStack);
 
+//Return the navigation stack as the app
 export default function App() {
   return <Navigation />;
 }

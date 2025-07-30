@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 
+//First page user sees when they open the app for first time or logout
 const Setup = ()=>{
     const textStyling = "text-3xl text-center";
     const navigation = useNavigation<any>();

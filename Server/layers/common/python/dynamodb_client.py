@@ -14,15 +14,15 @@ dynamodb = boto3.resource(
 
 #Add item to table
 def put_item(table_name, item):
-    table = dynamodb.Table(table_name)
+    table = dynamodb.Table(table_name) #type: ignore
     return table.put_item(Item=item)
 
 #Get item from table
 def get_item(table_name, key):
-    table = dynamodb.Table(table_name)
+    table = dynamodb.Table(table_name) #type: ignore
     return table.get_item(Key=key)
 
 #Delete item from table
 def delete_item(table_name, key):
-    table = dynamodb.Table(table_name)
+    table = dynamodb.Table(table_name) #type: ignore
     return table.delete_item(Key=key)

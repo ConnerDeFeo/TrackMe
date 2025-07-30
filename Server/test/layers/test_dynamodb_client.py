@@ -30,4 +30,4 @@ def test_delete_item():
     assert response['ResponseMetadata']['HTTPStatusCode'] == 200
 
     response = get_item('athletes', {'username': 'test'})
-    assert response['Item'] is None
+    assert response.get('Item') is None

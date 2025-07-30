@@ -14,11 +14,12 @@ from Server.lambdas.athlete.create_athlete.create_athlete import create_athlete
 
 def test_create_athlete():
     # Load the test data
-    test_data = json.load(open('events/create_athlete.json'))
-    # Create an AWS API Gateway event structure
+    events_file = os.path.join(os.path.dirname(__file__), '../../../events/create_athlete.json')
+    test_data = json.load(open(events_file))
     event = {
         'body': json.dumps(test_data)
     }
     
+    # Call the create_athlete function, should return 200
     response = create_athlete(event, {})
     assert response['statusCode'] == 200

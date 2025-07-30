@@ -7,7 +7,7 @@ Resources:
       Properties:
         LayerName: DynamoDBLayer
         Description: DynamoDBLayer utilities
-        ContentUri: layers/common/  # directory containing the layer content
+        ContentUri: layers/common/
         CompatibleRuntimes:
           - python3.12
   CreateAthleteFunction:

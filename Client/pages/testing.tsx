@@ -3,7 +3,7 @@ import { Text } from "react-native";
 const TestComponent = () => {
   return(
     <>
-        <Text className="text-4xl">testing</Text>
+        <Text className="mt-10 text-5xl text-blue-100">testi</Text>
     </>
   );
 };

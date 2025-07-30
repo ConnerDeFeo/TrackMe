@@ -1,5 +1,8 @@
 {
     "python.autoComplete.extraPaths": [
         "./Server/layers/common/python"
-    ]
+    ],
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false
 } 

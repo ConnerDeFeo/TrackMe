@@ -4,14 +4,13 @@ from dynamodb_client import put_item
 
 #Create athlete
 def create_athlete(event, context):
-    body = json.loads(event['body'])
     # Put item in DynamoDB
     response = put_item('athletes', {
-        'username': body['username'],
-        'first_name': body['first_name'],
-        'last_name': body['last_name'],
-        'email': body['email'],
-        'password': body['password']
+        'username': event['username'],
+        'first_name': event['first_name'],
+        'last_name': event['last_name'],
+        'email': event['email'],
+        'password': event['password']
     })
 
     # If athlete created successfully, return success

@@ -4,5 +4,21 @@
     ],
     "css.validate": false,
     "less.validate": false,
-    "scss.validate": false
+    "scss.validate": false,
+    "yaml.validate": false,
+    "yaml.schemas": {},
+    "yaml.customTags": [
+        "!Ref",
+        "!GetAtt",
+        "!Sub",
+        "!Join",
+        "!Split",
+        "!Select",
+        "!FindInMap",
+        "!Base64",
+        "!Cidr",
+        "!ImportValue",
+        "!GetAZs",
+        "!Condition"
+    ]
 } 

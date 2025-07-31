@@ -1,28 +1,38 @@
 import json
 from dynamodb_client import put_item
 
-#Create coach
-def create_coach(event, context):
-    # Put item in DynamoDB
-    response = put_item('coaches', {
-        'username': event['username'],
-        'first_name': event['first_name'],
-        'last_name': event['last_name'],
-        'email': event['email'],
-        'password': event['password']
-    })
 
-    # If coach created successfully, return success
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+#Create athlete
+def create_coach(event, context):
+    body = json.loads(event['body']) 
+
+    # Attempt athlete creation
+    try:
+        put_item('coaches', {
+            'username': body['username'],
+            'first_name': body['first_name'],
+            'last_name': body['last_name'],
+            'email': body['email'],
+            'password': body['password']
+        }, "attribute_not_exists(username)")
         return {
             "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
+            "headers": {
+                "Access-Control-Allow-Origin": "http://localhost:8081", 
+                "Access-Control-Allow-Credentials": True,
+                "Content-Type": "application/json"
+            },
             "body": json.dumps({"message": "Coach created successfully"})
         }
-    # If coach already exists, return error
-    else:
+
+    # If athlete already exists, return error
+    except Exception as e:
         return {
-            "statusCode": 500,
-            "headers": {"Content-Type": "application/json"},
+            "statusCode": 409,
+            "headers": {
+                "Access-Control-Allow-Origin": "http://localhost:8081",  
+                "Access-Control-Allow-Credentials": True,
+                "Content-Type": "application/json"
+            },
             "body": json.dumps({"message": "Coach already exists"})
         }

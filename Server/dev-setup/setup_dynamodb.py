@@ -9,17 +9,16 @@ dynamodb = boto3.resource(
         aws_secret_access_key='dummy'
     )
 
-def create_athlete_table():
-    athletes_table = 'athletes'
+def create_table(table_name):
     # Check if table exists
     try:
-        table = dynamodb.Table(athletes_table)
+        table = dynamodb.Table(table_name)
         table.load()  # Tries to load the table metadata
-        print(f"Table '{athletes_table}' already exists.")
+        print(f"Table '{table_name}' already exists.")
     except ClientError as e:
-        print(f"Table '{athletes_table}' does not exist. Creating...")
+        print(f"Table '{table_name}' does not exist. Creating...")
         table = dynamodb.create_table(
-            TableName=athletes_table,
+            TableName=table_name,
             KeySchema=[
                 {
                     'AttributeName': 'username',
@@ -38,6 +37,9 @@ def create_athlete_table():
             }
         )
         table.wait_until_exists()
-        print(f"Table '{athletes_table}' created successfully.")
+        print(f"Table '{table_name}' created successfully.")
 
-create_athlete_table()
+create_table('athletes')
+create_table('athletes_test')
+create_table('coaches')
+create_table('coaches_test')

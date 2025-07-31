@@ -1,9 +1,0 @@
-{
-    "body": {
-        "first_name": "John",
-        "last_name": "Doe",
-        "email": "john.doe@example.com",
-        "username": "john.doe",
-        "password": "password"
-    }
-}

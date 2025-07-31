@@ -9,24 +9,15 @@ const SignIn = ()=>{
     const navigation = useNavigation<any>();
 
     const [username,setUsername] = useState<string>("");
-    const [email,setEmail] = useState<string>("");
     const [password,setPassword] = useState<string>("");
-    const [confirmPassword,setConfirmPassword] = useState<string>("");
-    const handleCreateAccount = async () => {
-        await AthleteService.createAthlete({
-            'username': username,
-            'first_name': "test username",
-            'last_name': "test last name",
-            'email': email,
-            'password': password
-        });
+    const handleSignIn = async () => {
     }
 
     return(
         <View className="m-auto gap-y-10 w-[90%]">
             <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
-            <AuthInput value={password} setValue={setPassword} placeholder="Password"/>
-            <Button title="Sign In" onPress={handleCreateAccount}/>
+            <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
+            <Button title="Sign In" onPress={handleSignIn}/>
             <View className="flex flex-row mx-auto">
                 <Text className="text-center">Don't have an account? </Text>
                 <Pressable onPress={()=>navigation.navigate('CreateAccount')}>

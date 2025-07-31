@@ -1,9 +1,10 @@
 import AuthInput from "../components/AuthInput";
 import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
-import AthleteService from "../services/AthleteService";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
+import { signUp } from 'aws-amplify/auth';
+import GlobalStorage from "../services/GlobalStorage";
 
 //Create account page
 const CreateAccount = ()=>{
@@ -16,53 +17,52 @@ const CreateAccount = ()=>{
     const [email,setEmail] = useState<string>("");
     const [password,setPassword] = useState<string>("");
     const [confirmPassword,setConfirmPassword] = useState<string>("");
-
-    const validateCredentials = ():boolean => {
-        if (password !== confirmPassword) {
-            setMessage("Passwords do not match");
-            return false;
+    
+    //Handle error messages based on the error type
+    const handleError = (error:any) => {
+        switch (error.name) {
+            case 'UsernameExistsException':
+                setMessage("Username already exists. Please choose a different username.");
+                break;
+            case 'InvalidPasswordException':
+                setMessage("Password must be at least 8 characters with uppercase, lowercase, numbers, and symbols.");
+                break;
+            case 'InvalidParameterException':
+                setMessage("Please enter a valid email address.");
+                break;
+            default:
+                setMessage("Sign up failed. Please try again.");
+                break;
         }
-        else if (password.length < 8){
-            setMessage("Password must be at least 8 characters long");
-            return false;
-        }
-        else if (username.length < 5){
-            setMessage("Username must be at least 5 characters long");
-            return false;
-        }
-        else if (email.length < 5){
-            setMessage("Email must be at least 5 characters long");
-            return false;
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setMessage("Invalid email format");
-            return false;
-        }
-        return true;
     }
 
-    //OnClickl of the create account button
+    //OnClick of the create account button
     const handleCreateAccount = async () => {
-        if (!validateCredentials()) {
+        if(password!==confirmPassword){
+            setMessage("Passwords must match");
             return;
         }
-        const resp = await AthleteService.createAthlete({
-            'username': username,
-            'first_name': "test username",
-            'last_name': "test last name",
-            'email': email,
-            'password': password
-        });
-        if(resp.status == 200){
-            return;
+        try{
+            const resp = await signUp({
+                username: username,
+                password: password,
+                options:{
+                    userAttributes:{
+                        email:email
+                    }
+                }
+            });
+            GlobalStorage.setItem("username", username);
+            navigation.navigate('ConfirmEmail')
         }
-        setMessage("Username or email already exists.");
+        catch (error:any) {
+            handleError(error);
+        }
     }
 
     return(
         <View className="m-auto gap-y-10 w-[90%]">
-            <Text className="text-3xl text-red-500">{message}</Text>
+            <Text className="text-3xl text-red-500 text-center">{message}</Text>
             <Picker
                 selectedValue={accountType}
                 onValueChange={itemValue => setAccountType(itemValue)}

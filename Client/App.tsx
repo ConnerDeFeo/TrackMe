@@ -6,9 +6,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ComponentType } from 'react';
 import CreateAccount from './pages/CreateAccount';
 import SignIn from './pages/SignIn';
+import { Amplify } from 'aws-amplify';
+import awsConfig from './aws-config';
+import ConfirmEmail from './pages/ConfirmEmail';
+import HomePage from './pages/HomePage';
 
 //Root component used to render everything
 
+
+Amplify.configure(awsConfig);
 //Base page layout for all components
 function BaseLayout(content: React.ReactElement): ComponentType<any>{
   return ()=>{
@@ -29,7 +35,9 @@ const RootStack = createNativeStackNavigator({
   screens: {
     Home: BaseLayout(<Setup/>),
     CreateAccount: BaseLayout(<CreateAccount/>),
-    SignIn: BaseLayout(<SignIn/>)
+    SignIn: BaseLayout(<SignIn/>),
+    ConfirmEmail: BaseLayout(<ConfirmEmail/>),
+    HomePage: BaseLayout(<HomePage/>)
   },
 });
 const Navigation = createStaticNavigation(RootStack);

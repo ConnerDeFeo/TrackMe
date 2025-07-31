@@ -19,7 +19,9 @@
       },
       "edgeToEdgeEnabled": true
     },
-    "web": {
-    }
+    "web": {},
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }

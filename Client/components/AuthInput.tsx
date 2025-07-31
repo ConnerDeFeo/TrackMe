@@ -1,5 +1,4 @@
 import { TextInput } from "react-native";
-import { useEffect, useState } from "react";
 
 //Default input for create account and sign in pages
 const AuthInput = (props:{value:string, setValue:React.Dispatch<React.SetStateAction<string>>, placeholder:string, sensitive?:boolean})=>{
@@ -10,7 +9,7 @@ const AuthInput = (props:{value:string, setValue:React.Dispatch<React.SetStateAc
             value={value} 
             onChangeText={text => setValue(text)} 
             secureTextEntry={sensitive}
-            className="text-3xl p-1 border-b" 
+            className="text-xl p-1 border-b" 
             placeholder={placeholder}
         /> 
     );

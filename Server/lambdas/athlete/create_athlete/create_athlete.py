@@ -18,7 +18,7 @@ def create_athlete(event, context):
         return {
             "statusCode": 200,
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8081",  # Match your frontend
+                "Access-Control-Allow-Origin": "http://localhost:8081", 
                 "Access-Control-Allow-Credentials": True,
                 "Content-Type": "application/json"
             },
@@ -30,7 +30,7 @@ def create_athlete(event, context):
         return {
             "statusCode": 409,
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8081",  # Match your frontend
+                "Access-Control-Allow-Origin": "http://localhost:8081",  
                 "Access-Control-Allow-Credentials": True,
                 "Content-Type": "application/json"
             },

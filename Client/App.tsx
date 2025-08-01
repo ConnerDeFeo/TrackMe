@@ -10,6 +10,8 @@ import { Amplify } from 'aws-amplify';
 import awsConfig from './aws-config';
 import ConfirmEmail from './pages/ConfirmEmail';
 import HomePage from './pages/HomePage';
+import 'react-native-get-random-values';
+import 'react-native-url-polyfill/auto';
 
 //Root component used to render everything
 

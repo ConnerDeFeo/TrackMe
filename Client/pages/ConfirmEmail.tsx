@@ -1,11 +1,21 @@
-import { confirmSignUp } from "aws-amplify/auth";
+import { confirmSignUp, signIn } from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import GlobalStorage from "../services/GlobalStorage";
-import { useNavigation } from "@react-navigation/native";
+
+//Used to transfer username and password from creation screen to this one
+type RootStackParamList = {
+    ConfirmScreen: {
+      password: string;
+    };
+}
+type ConfirmScreenRouteProp = RouteProp<RootStackParamList, 'ConfirmScreen'>;
 
 //Confirm Email page
 const ConfirmEmail = () => {
+    const route = useRoute<ConfirmScreenRouteProp>();
+    const {password} = route.params;
     const navigation = useNavigation<any>();
 
     const [verificationCode, setVerificationCode] = useState<string>("");
@@ -19,20 +29,28 @@ const ConfirmEmail = () => {
             return;
         }
         try {
-            const resp = await confirmSignUp({
-                username: username,
-                confirmationCode: verificationCode
-            });
+            console.log(username)
+            console.log(password)
+            // await confirmSignUp({
+            //     username: username,
+            //     confirmationCode: verificationCode
+            // });
+            //If confirm email is succesfull, immediatlye login and reroute to home page
+            const resp = await signIn({
+                username:"c.jack.defeo@gmail.com",
+                password:password
+            })
             console.log(resp);
             navigation.navigate("HomePage");
         } catch (error: any) {
+            console.log(error)
             setMessage(error.message);
         }
     }
 
     return (
         <View className="m-auto gap-y-10 w-[90%]">
-            <Text className="text-3xl text-red-500 text-center">{message}</Text>
+            <Text className="text-center text-lg text-red-500">{message}</Text>
             <Text>Confirm Email</Text>
             <Text>Please enter the verification code sent to your email.</Text>
             <TextInput

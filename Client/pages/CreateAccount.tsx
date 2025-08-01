@@ -6,6 +6,8 @@ import { Picker } from "@react-native-picker/picker";
 import { signUp } from 'aws-amplify/auth';
 import GlobalStorage from "../services/GlobalStorage";
 
+//type used to grab username and password that were given along the route
+
 //Create account page
 const CreateAccount = ()=>{
     const navigation = useNavigation<any>();
@@ -52,8 +54,8 @@ const CreateAccount = ()=>{
                     }
                 }
             });
-            GlobalStorage.setItem("username", username);
-            navigation.navigate('ConfirmEmail')
+            GlobalStorage.setItem("username",username)
+            navigation.navigate('ConfirmEmail',{password:password})
         }
         catch (error:any) {
             handleError(error);

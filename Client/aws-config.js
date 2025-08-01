@@ -1,6 +1,3 @@
-// src/aws-config.js
-import { Amplify } from 'aws-amplify';
-
 const awsConfig = {
   Auth: {
     Cognito: {

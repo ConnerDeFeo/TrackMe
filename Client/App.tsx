@@ -12,11 +12,10 @@ import ConfirmEmail from './pages/ConfirmEmail';
 import HomePage from './pages/HomePage';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
-
+import AuthCheck from './pages/AuthCheck';
 //Root component used to render everything
-
-
 Amplify.configure(awsConfig);
+
 //Base page layout for all components
 function BaseLayout(content: React.ReactElement): ComponentType<any>{
   return ()=>{
@@ -27,10 +26,9 @@ function BaseLayout(content: React.ReactElement): ComponentType<any>{
     ); 
   }
 }
-
 //Directory allowing page navigation
 const RootStack = createNativeStackNavigator({
-  initialRouteName: 'Home',
+  initialRouteName: 'AuthCheck',
   screenOptions: {
     headerShown: false
   },
@@ -39,7 +37,8 @@ const RootStack = createNativeStackNavigator({
     CreateAccount: BaseLayout(<CreateAccount/>),
     SignIn: BaseLayout(<SignIn/>),
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),
-    HomePage: BaseLayout(<HomePage/>)
+    HomePage: BaseLayout(<HomePage/>),
+    AuthCheck:BaseLayout(<AuthCheck/>)
   },
 });
 const Navigation = createStaticNavigation(RootStack);

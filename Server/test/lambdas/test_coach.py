@@ -1,6 +1,8 @@
+import datetime
 import json
 from Server.layers.common.python.dynamodb_client import delete_item
 from Server.lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.coach.get_group.get_group import get_group
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.get_coach.get_coach import get_coach;
 
@@ -26,8 +28,9 @@ def test_get_coach():
     response = get_coach(event, {})
     assert response['statusCode'] == 200
 
-#Clean up coach
-delete_item('coaches', {'userId': '123'})
+    coach = json.loads(response['body'])
+    assert 'userId' in coach
+    assert coach['userId'] == "123"
 
 def test_create_group():
     event = {
@@ -38,3 +41,24 @@ def test_create_group():
     }
     response = create_group(event, {})
     assert response['statusCode'] == 200
+
+def test_get_group():
+    event = {
+        "body": json.dumps({
+            "groupName": "Test Group",
+            "userId": "123"
+        })
+    }
+    response = get_group(event, {})
+    assert response['statusCode'] == 200
+
+    group = json.loads(response['body'])
+
+    currdate = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+    assert 'createdAt' in group
+    assert group['createdAt'] == currdate
+    assert 'date' in group
+    assert group['date'] == {currdate: {}}
+
+#Clean up coach
+delete_item('coaches', {'userId': '123'})

@@ -2,6 +2,10 @@ import boto3
 import os
 from dotenv import load_dotenv
 load_dotenv() #Load environment variables
+from boto3.dynamodb.conditions import Key, Attr
+
+key = Key  # Alias for easier access
+attr = Attr  # Alias for easier access
 
 # Create DynamoDB resource once at module level for reuse across invocations
 dynamodb = boto3.resource(
@@ -11,6 +15,7 @@ dynamodb = boto3.resource(
     aws_secret_access_key="dummy",
     region_name="us-east-2"
 )
+
 
 #Add item to table
 def put_item(table_name, item, condition_expression=None):
@@ -29,3 +34,10 @@ def get_item(table_name, key):
 def delete_item(table_name, key):
     table = dynamodb.Table(table_name)
     return table.delete_item(Key=key)
+
+def query_items(table_name, key_condition_expression, **kwargs):
+    table = dynamodb.Table(table_name)
+    return table.query(
+        KeyConditionExpression=key_condition_expression,
+        **kwargs
+    )

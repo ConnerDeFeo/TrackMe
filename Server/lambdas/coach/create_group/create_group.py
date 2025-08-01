@@ -20,7 +20,7 @@ def create_group(event, context):
                 f'{today}': {}
             },
             'createdAt': today
-        }, 'attribute_not_exists(groupName)')
+        }, 'attribute_not_exists(groupName) AND attribute_exists(userId)')
 
         return {
             "statusCode": 200,
@@ -33,6 +33,7 @@ def create_group(event, context):
         }
 
     except Exception as e:
+        print(f"Error creating group: {str(e)}")
         return {
             "statusCode": 500,
             "headers": {

@@ -9,7 +9,17 @@ dynamodb = boto3.resource(
         aws_secret_access_key='dummy'
     )
 
-def create_table(table_name):
+tables = ['athletes', 'athletes_test', 'coaches', 'coaches_test']
+
+for table_name in tables:
+    table = dynamodb.Table(table_name)
+    try:
+        table.delete()
+        print(f"Table '{table_name}' deleted successfully.")
+    except ClientError as e:
+        continue
+
+def create_user_tables(table_name):
     # Check if table exists
     try:
         table = dynamodb.Table(table_name)
@@ -29,17 +39,37 @@ def create_table(table_name):
                 {
                     'AttributeName': 'userId',
                     'AttributeType': 'S' #This is a string
+                },
+                {
+                    'AttributeName': 'groupId',
+                    'AttributeType': 'S'  # String, for GSI
                 }
             ],
             ProvisionedThroughput={
                 'ReadCapacityUnits': 5,
                 'WriteCapacityUnits': 5 
-            }
+            },
+            GlobalSecondaryIndexes=[ 
+                {
+                    'IndexName': 'GroupIndex',
+                    'KeySchema': [
+                        {
+                            'AttributeName': 'groupId',
+                            'KeyType': 'HASH'
+                        }
+                    ],
+                    'Projection': {
+                        'ProjectionType': 'ALL'
+                    },
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': 5,
+                        'WriteCapacityUnits': 5
+                    }
+                }
+            ]
         )
         table.wait_until_exists()
         print(f"Table '{table_name}' created successfully.")
 
-create_table('athletes')
-create_table('athletes_test')
-create_table('coaches')
-create_table('coaches_test')
+for table in tables:
+    create_user_tables(table)

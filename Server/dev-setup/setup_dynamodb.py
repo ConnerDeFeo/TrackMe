@@ -21,13 +21,13 @@ def create_table(table_name):
             TableName=table_name,
             KeySchema=[
                 {
-                    'AttributeName': 'username',
+                    'AttributeName': 'userId',
                     'KeyType': 'HASH'
                 }
             ],
             AttributeDefinitions=[
                 {
-                    'AttributeName': 'username',
+                    'AttributeName': 'userId',
                     'AttributeType': 'S'
                 }
             ],

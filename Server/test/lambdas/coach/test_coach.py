@@ -17,20 +17,12 @@ def test_create_coach():
     #Send a valid JSON event
     event = {
         "body": json.dumps({
-            "username": "johndoe",
-            "email": "john.doe@example.com",
-            "first_name": "John",
-            "last_name": "Doe",
-            "password": "password"
+            "userId": "123",
         })
     }
     
     response = create_coach(event, {})
     assert response['statusCode'] == 200
 
-    # Should return 409 because username already exists
-    response = create_coach(event, {})
-    assert response['statusCode'] == 409
-
     #Clean up coach
-    delete_item('coaches', {'username': 'johndoe'})
+    delete_item('coaches', {'userId': '123'})

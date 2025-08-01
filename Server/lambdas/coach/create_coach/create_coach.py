@@ -9,12 +9,8 @@ def create_coach(event, context):
     # Attempt athlete creation
     try:
         put_item('coaches', {
-            'username': body['username'],
-            'first_name': body['first_name'],
-            'last_name': body['last_name'],
-            'email': body['email'],
-            'password': body['password']
-        }, "attribute_not_exists(username)")
+            'userId': body['userId']
+        }, "attribute_not_exists(userId)")
         return {
             "statusCode": 200,
             "headers": {

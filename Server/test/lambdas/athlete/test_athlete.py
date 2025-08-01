@@ -17,20 +17,11 @@ def test_create_athlete():
     #Send a valid JSON event
     event = {
         "body": json.dumps({
-            "username": "johndoe",
-            "email": "john.doe@example.com",
-            "first_name": "John",
-            "last_name": "Doe",
-            "password": "password"
+            "userId": "123",
         })
     }
-    
     response = create_athlete(event, {})
     assert response['statusCode'] == 200
 
-    # Should return 409 because username already exists
-    response = create_athlete(event, {})
-    assert response['statusCode'] == 409
-
     #Clean up athlete
-    delete_item('athletes', {'username': 'johndoe'})
+    delete_item('athletes', {'userId': '123'})

@@ -22,7 +22,7 @@ def create_coach(event, context):
         }
 
     # If athlete already exists, return error
-    except Exception as e:
+    except Exception:
         return {
             "statusCode": 409,
             "headers": {

@@ -19,21 +19,21 @@ def create_table(table_name):
         print(f"Table '{table_name}' does not exist. Creating...")
         table = dynamodb.create_table(
             TableName=table_name,
-            KeySchema=[
+            KeySchema=[ #Primary key
                 {
                     'AttributeName': 'userId',
                     'KeyType': 'HASH'
                 }
             ],
-            AttributeDefinitions=[
+            AttributeDefinitions=[ #The type for each attribute
                 {
                     'AttributeName': 'userId',
-                    'AttributeType': 'S'
+                    'AttributeType': 'S' #This is a string
                 }
             ],
             ProvisionedThroughput={
                 'ReadCapacityUnits': 5,
-                'WriteCapacityUnits': 5
+                'WriteCapacityUnits': 5 
             }
         )
         table.wait_until_exists()

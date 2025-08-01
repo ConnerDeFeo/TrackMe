@@ -1,8 +1,3 @@
-import sys
-import os
-import boto3
-import json
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 from Server.layers.common.python.dynamodb_client import *
 
 test_athlete = {

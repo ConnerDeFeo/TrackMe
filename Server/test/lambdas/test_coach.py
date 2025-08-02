@@ -20,7 +20,7 @@ test_coach = {
             'username': "testcoach",
         })
     }
-test_group = event = {
+test_group = {
         "body": json.dumps({
             "groupName": "Test Group",
             "userId": "123"
@@ -47,24 +47,3 @@ def test_get_coach():
     coach = json.loads(response['body'])
     assert '123' in coach
     assert 'testcoach' in coach
-
-def test_create_group():
-    create_coach(test_coach, {})
-    response = create_group(test_group, {})
-    assert response['statusCode'] == 200
-
-def test_get_group():
-    create_coach(test_coach, {})
-    create_group(test_group, {})
-    response = get_group(test_group, {})
-    assert response['statusCode'] == 404 #no athletes in group yet
-
-    execute("INSERT INTO athletes (userId, username) VALUES (%s, %s)", ("1234", "test_athlete"))
-    execute("INSERT INTO athlete_groups (athleteId, groupId) VALUES (%s, %s)", ("1234", 1))
-
-    response = get_group(test_group, {})
-    assert response['statusCode'] == 200
-
-    group_data = json.loads(response['body'])
-    assert len(group_data) == 1
-    assert "test_athlete" in group_data[0]

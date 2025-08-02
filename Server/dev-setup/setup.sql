@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS coaches CASCADE;
 DROP TABLE IF EXISTS athletes CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS athlete_groups CASCADE;
+DROP TABLE IF EXISTS athlete_group_invites CASCADE;
 
 CREATE TABLE coaches (
     userId VARCHAR(255) PRIMARY KEY,
@@ -25,4 +26,11 @@ CREATE TABLE athlete_groups (
     athleteId VARCHAR(255) REFERENCES athletes(userId),
     groupId INT REFERENCES groups(id),
     PRIMARY KEY (athleteId, groupId)
+);
+
+CREATE TABLE athlete_group_invites (
+    id SERIAL PRIMARY KEY,
+    athleteId VARCHAR(255) REFERENCES athletes(userId),
+    groupId INT REFERENCES groups(id),
+    UNIQUE (athleteId, groupId)
 );

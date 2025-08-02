@@ -7,6 +7,7 @@ def create_coach(event, context):
 
     # Attempt athlete creation
     try:
+        #Insert coach into the database
         execute("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (body['userId'], body['username']))
         return {
             "statusCode": 200,

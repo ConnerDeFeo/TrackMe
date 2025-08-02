@@ -7,6 +7,8 @@ def invite_athlete(event, context):
     try:
         athlete_id = body['athleteId']
         group_id = body['groupId']
+
+        # Insert the athlete into the group invite table
         execute(
             """
             INSERT INTO athlete_group_invites (athleteId, groupId)

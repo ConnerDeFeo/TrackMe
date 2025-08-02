@@ -6,16 +6,10 @@ from lambdas.general.get_group.get_group import get_group
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
-from lambdas.coach.search_athlete.search_athlete import search_athlete
+from lambdas.coach.search_athlete_for_group.search_athlete_for_group import search_athlete_for_group
 import json
-from rds import execute_file, execute
+from rds import execute_file, execute, fetch_one
 
-
-@pytest.fixture(autouse=True)
-def setup_before_each_test(): #This will run before each test
-    print("Setting up before test...")
-    execute_file('dev-setup/setup.sql')
-    yield
 
 test_coach = {
         "body": json.dumps({
@@ -23,6 +17,14 @@ test_coach = {
             'username': "testcoach",
         })
     }
+
+@pytest.fixture(autouse=True)
+def setup_before_each_test(): #This will run before each test
+    print("Setting up before test...")
+    execute_file('dev-setup/setup.sql')
+    create_coach(test_coach, {})
+    yield
+
 test_group = {
         "body": json.dumps({
             "groupName": "Test Group",
@@ -51,12 +53,10 @@ def generate_athlete(username, userId):
     },{})
 
 def test_create_group():
-    create_coach(test_coach, {})
     response = create_group(test_group, {})
     assert response['statusCode'] == 200
 
 def test_get_group():
-    create_coach(test_coach, {})
     create_group(test_group, {})
     response = get_group(test_group, {})
     assert response['statusCode'] == 404 #no athletes in group yet
@@ -72,7 +72,6 @@ def test_get_group():
     assert "test_athlete" in group_data[0]
 
 def test_invite_athlete():
-    create_coach(test_coach, {})
     create_group(test_group, {})
     generate_athlete("test_athlete", "1234")
     event = {
@@ -84,33 +83,68 @@ def test_invite_athlete():
     response = invite_athlete(event, {})
     assert response['statusCode'] == 200
 
+    #Check if athlete is invited
+    response =  fetch_one("""
+        SELECT * FROM athlete_group_invites WHERE athleteId = %s AND groupId = %s
+    """, ("1234", "1"))
+    assert response is not None
+    assert response[1] == "1234"
+    assert response[0] == 1
+
 def test_search_athlete_for_group():
-    create_coach(test_coach, {})
     create_group(test_group, {})
+
+    # Athletes that are part of group
     generate_athlete("test_athlete", "1234")
+    invite_athlete(test_athlete_invite, {})
+    accept_group_invite(test_accept_invite, {})
+
+    # Athletes invited
     generate_athlete("test", "1235")
+    invite_athlete({
+        "body": json.dumps({
+            "athleteId": "1235",
+            "groupId": "1"
+        })
+    }, {})
+
+    # Athletes not invited or part of group
     generate_athlete("athlete_test", "1236")
     generate_athlete("something", "1237")
+
+    # Test searching athletes empty search term
     event = {
         "body": json.dumps({
-            "searchTerm": ""
+            "searchTerm": "",
+            "groupId": "1"
         })
     }
-    response = search_athlete(event, {})
+    response = search_athlete_for_group(event, {})
     assert response['statusCode'] == 200
     athletes = json.loads(response['body'])
     assert len(athletes) == 4  # All athletes should be returned
+    for athlete in athletes:
+        if athlete[0] == "test_athlete":
+            assert athlete[1] == "Joined"
+        elif athlete[0] == "test":
+            assert athlete[1] == "Invited"
+        else:
+            assert athlete[1] == "Not Invited"
 
+    #Test with valid search term
     event['body'] = json.dumps({
-        "searchTerm": "test"
+        "searchTerm": "test",
+        "groupId": "1"
     })
-    response = search_athlete(event, {})
+    response = search_athlete_for_group(event, {})
     assert response['statusCode'] == 200
     athletes = json.loads(response['body'])
-    assert len(athletes) == 3  # onlyt test athletes should be returned
+    assert len(athletes) == 3  # only test athletes should be returned
 
+    #Test with invalid search term
     event['body'] = json.dumps({
-        "searchTerm": "ciderapple"
+        "searchTerm": "ciderapple",
+        "groupId": "1"
     })
-    response = search_athlete(event, {})
+    response = search_athlete_for_group(event, {})
     assert response['statusCode'] == 404  # No athletes should be returned, because no athletes match the search term

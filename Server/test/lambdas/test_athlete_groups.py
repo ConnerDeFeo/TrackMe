@@ -60,5 +60,6 @@ def test_accept_group_invite():
     assert response['statusCode'] == 200
     group = json.loads(response['body'])
     assert len(group) == 1
-    assert 'test_athlete' in group[0]
+    assert 'test_athlete' == group[0][0]
+
 

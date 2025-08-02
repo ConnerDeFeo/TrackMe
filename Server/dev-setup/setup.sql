@@ -37,9 +37,16 @@ CREATE TABLE athlete_group_invites (
 );
 
 --Workout related tables--
+DROP TABLE IF EXISTS workout_inputs CASCADE;
+DROP TABLE IF EXISTS workouts CASCADE;
+DROP TABLE IF EXISTS group_workouts CASCADE;
+DROP TABLE IF EXISTS excersies CASCADE;
+DROP TABLE IF EXISTS excersies_parts CASCADE;
+DROP TABLE IF EXISTS workout_excersies CASCADE;
 
 CREATE TABLE workout_inputs(
     id SERIAL PRIMARY KEY,
+    workoutId INT REFERENCES workouts(id),
     athleteId VARCHAR(255) REFERENCES athletes(userId),
     distance FLOAT NOT NULL,
     time FLOAT NOT NULL,

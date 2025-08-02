@@ -1,24 +1,24 @@
 import json
 from rds import fetch_all
 
-
+#Search athletes based on a search term
 def search_athlete(event, context):
     body = json.loads(event['body'])
 
     try:
         search_term = body['searchTerm']
-        if search_term == "":
+        if search_term == "": # If search term is empty, return 20 random athletes
             users = fetch_all("""
                 SELECT * FROM athletes
                 ORDER BY RANDOM()
                 LIMIT 20;
             """)
-        else:
+        else: # If search term is provided, search athletes by username
             users = fetch_all("""
                 SELECT * FROM athletes
                 WHERE to_tsvector('english', username) @@ to_tsquery(%s)
                 LIMIT 20;
-            """, (search_term,))
+            """, (search_term,))  
         if users:
             return {
                 'statusCode': 200,

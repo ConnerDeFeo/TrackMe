@@ -1,6 +1,5 @@
 import datetime
 import json
-from Server.layers.common.python.dynamodb_client import delete_item
 from Server.lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.get_group.get_group import get_group
 from lambdas.coach.create_group.create_group import create_group

@@ -1,15 +1,13 @@
 services:
-  dynamodb-local:
-    image: amazon/dynamodb-local:latest
-    container_name: dynamodb-local
-    user: root
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: trackme
     ports:
-      - 8000:8000
+      - "5433:5432"
     volumes:
-      - dynamodb-data:/home/dynamodblocal/data
-    working_dir: /home/dynamodblocal
-    command: "-jar DynamoDBLocal.jar -dbPath /home/dynamodblocal/data -sharedDb"
-    
-
+      - pgdata:/var/lib/postgresql/data
 volumes:
-  dynamodb-data:
+  pgdata:

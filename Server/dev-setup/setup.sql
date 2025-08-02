@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS coaches CASCADE;
+DROP TABLE IF EXISTS athletes CASCADE;
+DROP TABLE IF EXISTS groups CASCADE;
+
+CREATE TABLE coaches (
+    userId VARCHAR(255) PRIMARY KEY
+);
+
+CREATE TABLE athletes (
+    userId VARCHAR(255) PRIMARY KEY
+);
+
+CREATE TABLE groups (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    coachId VARCHAR(255) REFERENCES coaches(userId),
+    athleteId VARCHAR(255) REFERENCES athletes(userId)
+);

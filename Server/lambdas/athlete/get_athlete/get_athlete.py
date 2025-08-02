@@ -1,5 +1,5 @@
 import json
-from dynamodb_client import get_item
+from rds import fetch_one
 
 
 def get_athlete(event, context):
@@ -7,11 +7,11 @@ def get_athlete(event, context):
     userId = event['pathParameters']['userId']
     
     try:
-        # Get athlete from DynamoDB
-        response = get_item('athletes', {'userId': userId})
+        # Get athlete from RDS
+        response = fetch_one("SELECT * FROM athletes WHERE userId = %s", (userId,))
         
         # Check if athlete exists
-        if 'Item' in response:
+        if response:
             return {
                 "statusCode": 200,
                 "headers": {
@@ -19,7 +19,7 @@ def get_athlete(event, context):
                     "Access-Control-Allow-Credentials": True,
                     "Content-Type": "application/json"
                 },
-                "body": json.dumps(response['Item'])
+                "body": json.dumps(response)
             }
         else:
             return {
@@ -33,6 +33,7 @@ def get_athlete(event, context):
             }
     
     except Exception as e:
+        print(f"Error retrieving athlete: {str(e)}")
         return {
             "statusCode": 500,
             "headers": {

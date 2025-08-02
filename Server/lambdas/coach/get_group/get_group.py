@@ -1,25 +1,28 @@
 import json
-from dynamodb_client import query_items
-from dynamodb_client import key, attr
+from rds import fetch_all
 
-#Gets a group for a coach
+#Gets a group and all related athletes for a coach
 def get_group(event, context):
     body = json.loads(event['body'])
     userId = body['userId']
     groupName = body['groupName']
 
     try:
-        # Logic to retrieve the group from the database
-        data = query_items('coaches',
-            key_condition_expression=key("userId").eq(userId),
-            FilterExpression=attr("groupName").eq(groupName)
+        group_data = fetch_all(
+            """
+            SELECT a.username FROM groups g
+            LEFT JOIN athlete_groups ag ON g.id = ag.groupId
+            LEFT JOIN athletes a ON ag.athleteId = a.userId
+            WHERE g.coachId = %s AND g.name = %s
+            AND a.username IS NOT NULL
+            """,
+            (userId, groupName)
         )
-        group = data['Items'][0]
 
-        if group:
+        if group_data:
             return {
                 "statusCode": 200,
-                "body": json.dumps(group)
+                "body": json.dumps(group_data)
             }
         else:
             return {

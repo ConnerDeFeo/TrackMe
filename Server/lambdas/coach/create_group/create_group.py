@@ -1,6 +1,6 @@
 import json
 
-from dynamodb_client import put_item
+from rds import execute
 import datetime
 
 #Create group for a coach
@@ -12,15 +12,8 @@ def create_group(event, context):
         userId = body['userId']
         today = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 
-        # Create group in DynamoDB with the current date
-        response = put_item('coaches', {
-            'userId': userId,
-            'groupName': group_name,
-            'date':{
-                f'{today}': {}
-            },
-            'createdAt': today
-        }, 'attribute_not_exists(groupName) AND attribute_exists(userId)')
+        # Create group in RDS with the current date
+        execute('INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s)', (userId, group_name, today))
 
         return {
             "statusCode": 200,
@@ -29,7 +22,7 @@ def create_group(event, context):
                 "Access-Control-Allow-Credentials": True,
                 "Content-Type": "application/json"
             },
-            "body": json.dumps({"message": "Group created successfully", "group": response})
+            "body": json.dumps({"message":"Group created successfully"})
         }
 
     except Exception as e:

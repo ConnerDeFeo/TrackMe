@@ -1,5 +1,5 @@
 import json
-from dynamodb_client import put_item
+from rds import execute
 
 
 #Create athlete
@@ -8,9 +8,7 @@ def create_athlete(event, context):
 
     # Attempt athlete creation
     try:
-        put_item('athletes', {
-            'userId': body['userId']
-        }, "attribute_not_exists(userId)")
+        execute('INSERT INTO athletes (userId, username) VALUES (%s, %s)', (body['userId'], body['username']))
         return {
             "statusCode": 200,
             "headers": {
@@ -22,7 +20,8 @@ def create_athlete(event, context):
         }
 
     # If athlete already exists, return error
-    except Exception:
+    except Exception as e:
+        print(f"Error creating athlete: {str(e)}")
         return {
             "statusCode": 409,
             "headers": {

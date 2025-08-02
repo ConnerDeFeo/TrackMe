@@ -38,7 +38,7 @@ def fetch_one(query, params={}):
     with _connection.cursor() as cursor:
         cursor.execute(query, params)
         return cursor.fetchone()
-    
+        
 #Fetches all rows from db that match the query
 def fetch_all(query, params={}):
     with _connection.cursor() as cursor:

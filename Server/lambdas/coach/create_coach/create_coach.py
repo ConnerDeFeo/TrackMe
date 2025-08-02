@@ -7,7 +7,7 @@ def create_coach(event, context):
 
     # Attempt athlete creation
     try:
-        execute("INSERT INTO coaches (userId) VALUES (%s)", (body['userId'],))
+        execute("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (body['userId'], body['username']))
         return {
             "statusCode": 200,
             "headers": {
@@ -19,7 +19,8 @@ def create_coach(event, context):
         }
 
     # If athlete already exists, return error
-    except Exception:
+    except Exception as e:
+        print(f"Error creating coach: {str(e)}")
         return {
             "statusCode": 409,
             "headers": {

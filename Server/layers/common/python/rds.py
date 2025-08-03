@@ -50,7 +50,7 @@ def execute(query, params={}):
     with _connection.cursor() as cursor:
         cursor.execute(query, params)
         _connection.commit()
-
+        
 #Executes a SQL file
 def execute_file(file_path, params={}):
     with open(file_path, 'r') as file:

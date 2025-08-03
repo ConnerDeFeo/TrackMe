@@ -22,38 +22,38 @@ test_group = {
 
 test_workout = {
     "body": json.dumps({
-        "coach_id": "123",
-        "title": "Test Workout",
-        "description": "This is a test workout",
-        "excersies": [
+        'coach_id': '123',
+        'title': 'Test Workout',
+        'description': 'This is a test workout',
+        'excersies': [
             {
-                "name": "Test name",
-                "sets": 3,
-                "reps": 10,
-                "excersiesParts": [
+                'name': 'Test name',
+                'sets': 3,
+                'reps': 10,
+                'excersiesParts': [
                     {
-                        "distance": 100,
-                        "measurement": "meters"
+                        'distance': 100,
+                        'measurement': 'meters'
                     },
                     {
-                        "distance": 50,
-                        "measurement": "meters"
+                        'distance': 50,
+                        'measurement': 'meters'
                     }
                 ]
             },
             {
-                "name": "Test name 2",
-                "sets": 2,
-                "reps": 15,
-                "excersiesParts": [
+                'name': 'Test name 2',
+                'sets': 2,
+                'reps': 15,
+                'excersiesParts': [
                     {
-                        "distance": 200,
-                        "measurement": "meters"
+                        'distance': 200,
+                        'measurement': 'meters'
                     }
                 ]
             },
             {
-                "name": "Warm-up",
+                'name': 'Warm-up',
             }
         ]
     })
@@ -79,19 +79,29 @@ def test_create_workout():
     assert data['description'] == 'This is a test workout'
 
     assert len(data['excersies']) == 3
-    assert data['excersies'][0]['name'] == 'Test name'
-    assert data['excersies'][0]['sets'] == 3
-    assert data['excersies'][0]['reps'] == 10
-    assert len(data['excersies'][0]['excersiesParts']) == 2
-    assert data['excersies'][0]['excersiesParts'][0]['distance'] == 100
-    assert data['excersies'][0]['excersiesParts'][0]['measurement'] == 'meters'
 
-    assert data['excersies'][1]['name'] == 'Test name 2'
-    assert data['excersies'][1]['sets'] == 2
-    assert data['excersies'][1]['reps'] == 15
-    assert len(data['excersies'][1]['excersiesParts']) == 1
-    assert data['excersies'][1]['excersiesParts'][0]['distance'] == 200
-    assert data['excersies'][1]['excersiesParts'][0]['measurement'] == 'meters'
-    
-    assert data['excersies'][2]['name'] == 'Warm-up'
-    assert 'excersiesParts' not in data['excersies'][2]
+    excersise1 = data['excersies'][0]
+    assert excersise1['name'] == 'Test name'
+    assert excersise1['sets'] == 3
+    assert excersise1['reps'] == 10
+    assert len(excersise1['excersiesParts']) == 2
+    excersie1_parts = excersise1['excersiesParts']
+    assert excersie1_parts[0]['distance'] == 100
+    assert excersie1_parts[0]['measurement'] == 'meters'
+    assert excersie1_parts[1]['distance'] == 50
+    assert excersie1_parts[1]['measurement'] == 'meters'
+
+    excersise2 = data['excersies'][1]
+    assert excersise2['name'] == 'Test name 2'
+    assert excersise2['sets'] == 2
+    assert excersise2['reps'] == 15
+    assert len(excersise2['excersiesParts']) == 1
+    excersie2_parts = excersise2['excersiesParts']
+    assert excersie2_parts[0]['distance'] == 200
+    assert excersie2_parts[0]['measurement'] == 'meters'
+
+    excersise3 = data['excersies'][2]
+    assert excersise3['name'] == 'Warm-up'
+    assert 'sets' not in excersise3
+    assert 'reps' not in excersise3
+    assert 'excersiesParts' not in excersise3

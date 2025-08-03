@@ -71,3 +71,11 @@ test_workout = {
         ]
     })
 }
+
+test_assign_workout = {
+    "body": json.dumps({
+        "title": "Test Workout",
+        "userId": "123",
+        "groupName": "Test Group"
+    })
+}

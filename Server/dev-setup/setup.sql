@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS athlete_groups CASCADE;
 DROP TABLE IF EXISTS athlete_group_invites CASCADE;
 DROP TABLE IF EXISTS group_workouts CASCADE;
+DROP TABLE IF EXISTS athlete_workout_inputs CASCADE;
 
 --User and user relation related tables--
 CREATE TABLE coaches (
@@ -45,9 +46,10 @@ CREATE TABLE group_workouts (
     UNIQUE (groupId, date, title)
 );
 
--- CREATE TABLE athlete_workout_inputs(
---     athleteId VARCHAR(255) REFERENCES athletes(userId),
---     workoutId INT REFERENCES group_workouts(id),
---     inputData JSONB,
---     PRIMARY KEY (athleteId, workoutId)
--- );
+CREATE TABLE athlete_workout_inputs(
+    athleteId VARCHAR(255) REFERENCES athletes(userId),
+    groupWorkoutId INT REFERENCES group_workouts(id),
+    date VARCHAR(10) DEFAULT CURRENT_DATE,
+    distance int DEFAULT 0,
+    time int DEFAULT 0
+);

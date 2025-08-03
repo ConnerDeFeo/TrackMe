@@ -15,10 +15,10 @@ def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
     execute_file('dev-setup/setup.sql')
     create_coach(test_coach, {})
+    create_group(test_group, {})
     yield
 
 def test_create_workout():
-    create_group(test_group, {})
     response = create_workout(test_workout, {})
     assert response['statusCode'] == 200
 
@@ -59,7 +59,6 @@ def test_create_workout():
     assert 'excersiesParts' not in excersise3
 
 def test_assign_group_workout():
-    create_group(test_group, {})
     create_workout(test_workout, {})
 
     event = {
@@ -78,3 +77,6 @@ def test_assign_group_workout():
     assert data[1] == 1
     assert data[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")
     assert data[3] == 'Test Workout'
+
+def test_view_workout_coach():
+    pass

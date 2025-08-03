@@ -41,6 +41,7 @@ def test_create_workout():
     assert excersie1_parts[0]['measurement'] == 'meters'
     assert excersie1_parts[1]['distance'] == 50
     assert excersie1_parts[1]['measurement'] == 'meters'
+    assert excersise1['inputs'] is True
 
     excersise2 = data['excersies'][1]
     assert excersise2['name'] == 'Test name 2'
@@ -65,7 +66,7 @@ def test_assign_group_workout():
         "body": json.dumps({
             "userId": "123",
             "groupName": "Test Group",
-            "workoutTitle": "Test Workout"
+            "title": "Test Workout"
         })
     }
     response = assign_group_workout(event, {})

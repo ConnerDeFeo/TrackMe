@@ -51,7 +51,8 @@ test_workout = {
                         'distance': 50,
                         'measurement': 'meters'
                     }
-                ]
+                ],
+                "inputs":True
             },
             {
                 'name': 'Test name 2',

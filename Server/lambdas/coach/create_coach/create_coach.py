@@ -1,5 +1,5 @@
 import json
-from rds import execute
+from rds import execute_commit
 
 #Create athlete
 def create_coach(event, context):
@@ -8,7 +8,7 @@ def create_coach(event, context):
     # Attempt athlete creation
     try:
         #Insert coach into the database
-        execute("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (body['userId'], body['username']))
+        execute_commit("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (body['userId'], body['username']))
         return {
             "statusCode": 200,
             "headers": {

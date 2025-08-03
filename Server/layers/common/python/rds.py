@@ -46,7 +46,7 @@ def fetch_all(query, params={}):
         return cursor.fetchall()
 
 #Executes a query that does not return any rows (e.g. INSERT, UPDATE, DELETE)
-def execute(query, params={}):
+def execute_commit(query, params={}):
     with _connection.cursor() as cursor:
         cursor.execute(query, params)
         _connection.commit()

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 import json
 
-from rds import execute
+from rds import execute_commit
 from dynamo import get_item
 
 
@@ -9,7 +9,7 @@ def assign_group_workout(event, context):
     body = json.loads(event['body'])
     try:
         #Check if workout exists
-        workout_title = body['workoutTitle']
+        workout_title = body['title']
         coach_id = body['userId']
         workout = get_item('Workouts', {'title': workout_title, 'coach_id': coach_id})
         if not workout:
@@ -23,8 +23,8 @@ def assign_group_workout(event, context):
         group_name = body['groupName']
         date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         # Create connection in RDS
-        execute("""
-            INSERT INTO group_workouts (groupId, date, workoutName)
+        execute_commit("""
+            INSERT INTO group_workouts (groupId, date, title)
             VALUES ((SELECT id FROM groups WHERE name = %s AND coachId = %s), %s, %s)
         """, (group_name, coach_id, date, workout_title))
         return {

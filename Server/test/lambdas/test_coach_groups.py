@@ -9,7 +9,7 @@ from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.search_athlete_for_group.search_athlete_for_group import search_athlete_for_group
 import json
 from data import test_coach, test_group, test_invite, test_accept_group_invite
-from rds import execute_file, execute, fetch_one
+from rds import execute_file, execute_commit, fetch_one
 
 
 test_coach = {
@@ -43,8 +43,8 @@ def test_get_group():
     response = get_group(test_group, {})
     assert response['statusCode'] == 404 #no athletes in group yet
 
-    execute("INSERT INTO athletes (userId, username) VALUES (%s, %s)", ("1234", "test_athlete"))
-    execute("INSERT INTO athlete_groups (athleteId, groupId) VALUES (%s, %s)", ("1234", 1))
+    execute_commit("INSERT INTO athletes (userId, username) VALUES (%s, %s)", ("1234", "test_athlete"))
+    execute_commit("INSERT INTO athlete_groups (athleteId, groupId) VALUES (%s, %s)", ("1234", 1))
 
     response = get_group(test_group, {})
     assert response['statusCode'] == 200

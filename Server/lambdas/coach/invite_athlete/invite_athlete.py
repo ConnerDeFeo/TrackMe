@@ -1,5 +1,5 @@
 import json
-from rds import execute
+from rds import execute_commit
 
 # Function to invite an athlete to a group
 def invite_athlete(event, context):
@@ -9,7 +9,7 @@ def invite_athlete(event, context):
         group_id = body['groupId']
 
         # Insert the athlete into the group invite table
-        execute(
+        execute_commit(
             """
             INSERT INTO athlete_group_invites (athleteId, groupId)
             VALUES (%s, %s)

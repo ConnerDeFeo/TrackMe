@@ -1,7 +1,7 @@
 import json
 
 from rds import execute
-import datetime
+from datetime import datetime, timezone
 
 #Create group for a coach
 def create_group(event, context):
@@ -10,7 +10,7 @@ def create_group(event, context):
         body = json.loads(event['body'])
         group_name = body['groupName']
         userId = body['userId']
-        today = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         # Create group in RDS with the current date
         execute('INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s)', (userId, group_name, today))

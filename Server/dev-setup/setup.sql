@@ -40,5 +40,7 @@ CREATE TABLE athlete_group_invites (
 CREATE TABLE group_workouts (
     id SERIAL PRIMARY KEY,
     groupId INT REFERENCES groups(id),
-    date VARCHAR(10) DEFAULT CURRENT_DATE
+    date VARCHAR(10) DEFAULT CURRENT_DATE,
+    workoutName VARCHAR(255) NOT NULL,
+    UNIQUE (groupId, date, workoutName)
 );

@@ -1,10 +1,12 @@
 import json
 import pytest
 from dynamo import get_item
-from rds import execute_file
+from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
+from rds import execute_file, fetch_one
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
+from datetime import datetime, timezone
 
 
 test_coach = {
@@ -105,3 +107,24 @@ def test_create_workout():
     assert 'sets' not in excersise3
     assert 'reps' not in excersise3
     assert 'excersiesParts' not in excersise3
+
+def test_assign_group_workout():
+    create_group(test_group, {})
+    create_workout(test_workout, {})
+
+    event = {
+        "body": json.dumps({
+            "userId": "123",
+            "groupName": "Test Group",
+            "workoutTitle": "Test Workout"
+        })
+    }
+    response = assign_group_workout(event, {})
+    assert response['statusCode'] == 200
+
+    data = fetch_one("SELECT * FROM group_workouts;")
+    assert data is not None
+    assert data[0] == 1
+    assert data[1] == 1
+    assert data[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    assert data[3] == 'Test Workout'

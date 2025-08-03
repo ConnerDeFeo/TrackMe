@@ -22,7 +22,7 @@ def assign_group_workout(event, context):
 
         group_name = body['groupName']
         date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-
+        # Create connection in RDS
         execute("""
             INSERT INTO group_workouts (groupId, date, workoutName)
             VALUES ((SELECT id FROM groups WHERE name = %s AND coachId = %s), %s, %s)

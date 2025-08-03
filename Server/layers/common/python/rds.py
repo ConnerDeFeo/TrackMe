@@ -50,6 +50,11 @@ def execute_commit(query, params={}):
     with _connection.cursor() as cursor:
         cursor.execute(query, params)
         _connection.commit()
+
+def execute_commit_many(query, params):
+    with _connection.cursor() as cursor:
+        cursor.executemany(query, params)
+        _connection.commit()
         
 #Executes a SQL file
 def execute_file(file_path, params={}):

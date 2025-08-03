@@ -53,3 +53,17 @@ CREATE TABLE athlete_workout_inputs(
     distance int DEFAULT 0,
     time int DEFAULT 0
 );
+
+CREATE TABLE group_workouts (
+    id SERIAL PRIMARY KEY,
+    leaderId VARCHAR(255) REFERENCES athletes(userId),
+    groupWorkoutId INT REFERENCES group_workouts(id),
+    date VARCHAR(10) DEFAULT CURRENT_DATE,
+    groupName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE group_workout_members(
+    groupWorkoutId INT REFERENCES group_workouts(id),
+    athleteUsername VARCHAR(255) REFERENCES athletes(username),
+    PRIMARY KEY (groupWorkoutId, athleteUsername)
+)

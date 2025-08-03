@@ -34,7 +34,6 @@ def input_time(event, context):
                 %s, %s, %s
             )
         """, (athlete_id, workout_title, date, group_name, coach_username, date, time, distance))
-        print((athlete_id, workout_title, date, group_name, coach_username, date, time, distance))
 
         return {
             'statusCode': 200,

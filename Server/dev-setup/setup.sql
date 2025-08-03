@@ -44,3 +44,10 @@ CREATE TABLE group_workouts (
     workoutName VARCHAR(255) NOT NULL,
     UNIQUE (groupId, date, workoutName)
 );
+
+-- CREATE TABLE athlete_workout_inputs(
+--     athleteId VARCHAR(255) REFERENCES athletes(userId),
+--     workoutId INT REFERENCES group_workouts(id),
+--     inputData JSONB,
+--     PRIMARY KEY (athleteId, workoutId)
+-- );

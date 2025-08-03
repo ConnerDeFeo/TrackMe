@@ -8,6 +8,7 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.search_athlete_for_group.search_athlete_for_group import search_athlete_for_group
 import json
+from data import test_coach, test_group, test_invite, test_accept_group_invite
 from rds import execute_file, execute, fetch_one
 
 
@@ -24,25 +25,6 @@ def setup_before_each_test(): #This will run before each test
     execute_file('dev-setup/setup.sql')
     create_coach(test_coach, {})
     yield
-
-test_group = {
-        "body": json.dumps({
-            "groupName": "Test Group",
-            "userId": "123"
-        })
-    }
-test_athlete_invite = {
-    "body": json.dumps({
-        "athleteId": "1234",
-        "groupId": "1"
-    })
-}
-test_accept_invite = {
-    "body": json.dumps({
-        "athleteId": "1234",
-        "groupId": "1"
-    })
-}
 
 def generate_athlete(username, userId):
     create_athlete( {
@@ -96,8 +78,8 @@ def test_search_athlete_for_group():
 
     # Athletes that are part of group
     generate_athlete("test_athlete", "1234")
-    invite_athlete(test_athlete_invite, {})
-    accept_group_invite(test_accept_invite, {})
+    invite_athlete(test_invite, {})
+    accept_group_invite(test_accept_group_invite, {})
 
     # Athletes invited
     generate_athlete("test", "1235")

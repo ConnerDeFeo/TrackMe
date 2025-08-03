@@ -7,59 +7,8 @@ from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
 from datetime import datetime, timezone
+from data import test_coach, test_group, test_workout
 
-
-test_coach = {
-        "body": json.dumps({
-            "userId": "123",
-            'username': "testcoach",
-        })
-    }
-test_group = {
-        "body": json.dumps({
-            "groupName": "Test Group",
-            "userId": "123"
-        })
-    }
-
-test_workout = {
-    "body": json.dumps({
-        'coach_id': '123',
-        'title': 'Test Workout',
-        'description': 'This is a test workout',
-        'excersies': [
-            {
-                'name': 'Test name',
-                'sets': 3,
-                'reps': 10,
-                'excersiesParts': [
-                    {
-                        'distance': 100,
-                        'measurement': 'meters'
-                    },
-                    {
-                        'distance': 50,
-                        'measurement': 'meters'
-                    }
-                ]
-            },
-            {
-                'name': 'Test name 2',
-                'sets': 2,
-                'reps': 15,
-                'excersiesParts': [
-                    {
-                        'distance': 200,
-                        'measurement': 'meters'
-                    }
-                ]
-            },
-            {
-                'name': 'Warm-up',
-            }
-        ]
-    })
-}
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test

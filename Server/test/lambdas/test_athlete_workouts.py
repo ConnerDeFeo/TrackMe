@@ -99,25 +99,38 @@ def test_create_workout_group():
         })
     }
     response = create_workout_group(event, {})
-    # assert response['statusCode'] == 200
+    assert response['statusCode'] == 200
 
+    #Check group is created
+    workout_group = fetch_one("SELECT * FROM workout_groups")
+    assert workout_group is not None
+    assert 'Test Group' in workout_group
+    assert '1234' in workout_group 
 
-def test_input_group_time():
-    create_extra_athlete("test2", "1235")
-    create_extra_athlete("test3", "1236")
+    #Check other athletes are added to the group
+    group_members = fetch_all("SELECT * FROM workout_group_members")
+    assert group_members is not None
+    assert len(group_members) == 2
+    for member in group_members:
+        assert member[0] == 1
+        assert member[1] in ["test2", "test3"]
 
-    event = {
-        "body": json.dumps({
-            "athleteId": "1234",
-            "other athletes": ["test2", "test3"],
-            "workoutTitle": "Test Workout",
-            "coachUsername": "testcoach",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "groupName": "Test Group",
-            "time": 30,
-            "distance": 150
-        })
-    }
+# def test_input_group_time():
+#     create_extra_athlete("test2", "1235")
+#     create_extra_athlete("test3", "1236")
+
+#     event = {
+#         "body": json.dumps({
+#             "athleteId": "1234",
+#             "other athletes": ["test2", "test3"],
+#             "workoutTitle": "Test Workout",
+#             "coachUsername": "testcoach",
+#             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+#             "groupName": "Test Group",
+#             "time": 30,
+#             "distance": 150
+#         })
+#     }
 
     # response = input_group_time(event, {})
     # assert response['statusCode'] == 200

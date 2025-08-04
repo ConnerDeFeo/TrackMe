@@ -5,6 +5,9 @@ DROP TABLE IF EXISTS athlete_groups CASCADE;
 DROP TABLE IF EXISTS athlete_group_invites CASCADE;
 DROP TABLE IF EXISTS group_workouts CASCADE;
 DROP TABLE IF EXISTS athlete_workout_inputs CASCADE;
+DROP TABLE IF EXISTS workout_groups CASCADE;
+DROP TABLE IF EXISTS group_workout_members CASCADE;
+
 
 --User and user relation related tables--
 CREATE TABLE coaches (
@@ -54,10 +57,10 @@ CREATE TABLE athlete_workout_inputs(
     time int DEFAULT 0
 );
 
-CREATE TABLE group_workouts (
+CREATE TABLE workout_groups (
     id SERIAL PRIMARY KEY,
     leaderId VARCHAR(255) REFERENCES athletes(userId),
-    groupWorkoutId INT REFERENCES group_workouts(id),
+    workoutId INT REFERENCES group_workouts(id),
     date VARCHAR(10) DEFAULT CURRENT_DATE,
     groupName VARCHAR(255) NOT NULL
 );

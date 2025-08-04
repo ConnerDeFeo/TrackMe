@@ -51,6 +51,12 @@ def execute_commit(query, params={}):
         cursor.execute(query, params)
         _connection.commit()
 
+def execute_commit_fetch_one(query, params={}):
+    with _connection.cursor() as cursor:
+        cursor.execute(query, params)
+        _connection.commit()
+        return cursor.fetchone()
+
 def execute_commit_many(query, params):
     with _connection.cursor() as cursor:
         cursor.executemany(query, params)

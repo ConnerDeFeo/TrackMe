@@ -18,21 +18,19 @@ def input_time(event, context):
         # To do this we need the group id, which we get by getting the group name and getting
         # the coach username thorugh the passed in username
         execute_commit("""
-            INSERT INTO athlete_workout_inputs 
-                (athleteId, groupWorkoutId, date, time, distance)
-            VALUES (
-                %s,
-                (
-                    SELECT id FROM group_workouts 
-                    WHERE title = %s AND date = %s AND groupId = (
-                        SELECT id FROM groups 
-                        WHERE name = %s AND coachId = (
-                            SELECT userId FROM coaches WHERE username = %s
-                        )
-                    )
-                ),
-                %s, %s, %s
+            WITH workout_info AS (
+                SELECT gw.id as workout_id
+                FROM group_workouts gw
+                JOIN groups g ON gw.groupId = g.id
+                JOIN coaches c ON g.coachId = c.userId
+                WHERE gw.title = %s 
+                AND gw.date = %s 
+                AND g.name = %s 
+                AND c.username = %s
             )
+            INSERT INTO athlete_workout_inputs 
+            (athleteId, groupWorkoutId, date, time, distance)
+            VALUES (%s,(SELECT workout_id FROM workout_info), %s, %s, %s)
         """, (athlete_id, workout_title, date, group_name, coach_username, date, time, distance))
 
         return {

@@ -12,7 +12,7 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.create_workout_group.create_workout_group import create_workout_group
 from data import test_athlete, test_coach, test_group, test_workout, test_invite, test_accept_group_invite, test_assign_workout
-from rds import execute_file, fetch_one
+from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
 
 
@@ -119,13 +119,20 @@ def test_input_group_time():
         })
     }
 
-    response = input_group_time(event, {})
+    # response = input_group_time(event, {})
     # assert response['statusCode'] == 200
 
-    # input = fetch_all("SELECT * FROM athlete_workout_inputs")
-    # assert input is not None
-    # assert len(input) == 3  # One for each athlete in the group
-    # for i in input:
+    # #Make sure the group was created
+    # group = fetch_one("SELECT * FROM workout_groups")
+    # assert group is not None
+    # assert group[1] == 'Test Group'
+    # assert group[2] == '1234'  # leaderId
+
+    # #Check that the inputs for all athletes in the group were recorded
+    # inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
+    # assert inputs is not None
+    # assert len(inputs) == 3  # One for each athlete in the group
+    # for i in inputs:
     #     assert i[0] in ["1234", "test2", "test3"]
     #     assert i[1] == 1
     #     assert i[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")  # date

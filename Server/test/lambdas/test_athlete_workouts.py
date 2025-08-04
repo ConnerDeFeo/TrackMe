@@ -129,6 +129,14 @@ def test_input_group_time():
     assert inputs[0][1] == 150
     assert inputs[0][2] == 30
 
+    #Cheack dynamoDB for the input
+    input = get_item("WorkoutInputs", {"group_date_identifier": f"123#Test Group#{date}", "input_type": "group#Test Workout Group"})
+    assert input is not None
+    assert len(input['inputs']) == 1
+    assert input['inputs'][0]['distance'] == 150
+    assert input['inputs'][0]['time'] == 30
+    assert input['leader_id'] == '1234'
+
 
 def test_view_workout_inputs():
     create_extra_athlete("test2", "1235")

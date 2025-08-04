@@ -20,14 +20,14 @@ def assign_group_workout(event, context):
                     "error": "Workout not found"
                 })
             }
+        group_name = body['groupName']
+
         #Create basic workout inputs in dynamo
         put_item('WorkoutInputs', {
             'coach_id': coach_id,
-            'date': date,
+            'group_date': f"{group_name}_{date}",
             'title': workout_title
         })
-
-        group_name = body['groupName']
         
         # Create connection in RDS
         execute_commit("""

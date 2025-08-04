@@ -55,7 +55,7 @@ _connection.create_table(
             'KeyType': 'HASH'
         },
         {
-            'AttributeName': 'date',
+            'AttributeName': 'group_date',
             'KeyType': 'RANGE'
         }
     ],
@@ -65,7 +65,7 @@ _connection.create_table(
             'AttributeType': 'S'
         },
         {
-            'AttributeName': 'date',
+            'AttributeName': 'group_date',
             'AttributeType': 'S'
         }
     ],

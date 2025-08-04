@@ -49,6 +49,8 @@ CREATE TABLE group_workouts (
     title VARCHAR(255) NOT NULL,
     UNIQUE (groupId, date, title)
 );
+--Indexes for faster lookups--
+CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, title);
 
 CREATE TABLE athlete_workout_inputs(
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
@@ -64,9 +66,6 @@ CREATE TABLE workout_groups (
     workoutGroupName VARCHAR(255) NOT NULL,
     UNIQUE (workoutId, workoutGroupName)
 );
-
---Indexes for faster lookups--
-CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, title);
 
 CREATE TABLE workout_group_members(
     workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,

@@ -121,4 +121,23 @@ def test_view_workout_inputs():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
     create_workout_group(TestData.test_workout_group, {})
+    input_time(TestData.test_input_time, {})
+    input_group_time(TestData.test_input_group_time, {})
 
+    event = {
+        "body": json.dumps({
+            "userId": "1234",
+            "groupName": "Test Workout Group",
+            "coachUsername":"testcoach",
+            "workoutTitle": "Test Workout",
+            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        })
+    }
+
+    response = view_workout_athlete(event, {})
+    assert response['statusCode'] == 200
+
+    ##
+    # The data returned should look something like:
+    # [[groupName, coachUsername, workoutGroupName, distance, time], [groupName, coachUsername, workoutGroupName, distance, time],
+    #  [groupName, coachUsername, username, distance, time], [groupName, coachUsername, username, distance, time]]

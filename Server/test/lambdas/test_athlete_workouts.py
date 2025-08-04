@@ -30,25 +30,6 @@ def setup_before_each_test(): #This will run before each test
     assign_group_workout(TestData.test_assign_workout, {})
     yield
 
-
-def debug_table():
-    workout_group_inputs = fetch_all("SELECT * FROM workout_group_inputs")
-    athlet_inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
-    workout_members = fetch_all("SELECT * FROM workout_group_members")
-    workout_groups = fetch_all("SELECT * FROM workout_groups")
-    group_workouts = fetch_all("SELECT * FROM group_workouts")
-    coaches = fetch_all("SELECT * FROM coaches")
-    groups = fetch_all("SELECT * FROM groups")
-
-    print("Coaches:", coaches)
-    print("Groups:", groups)
-    print("Group Workouts:", group_workouts)
-    print("Workout Group:", workout_groups)
-    print("Workout Group Inputs:", workout_group_inputs)
-    print("Athlete Inputs:", athlet_inputs)
-    print("Workout Group Members:", workout_members)
-
-
 def create_extra_athlete(username,id):
     extra_athlete = {
         "body": json.dumps({

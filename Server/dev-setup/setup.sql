@@ -25,59 +25,57 @@ CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     dateCreated VARCHAR(10) DEFAULT CURRENT_DATE,
-    coachId VARCHAR(255) REFERENCES coaches(userId),
+    coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
     UNIQUE (name, coachId)
 );
 
 CREATE TABLE athlete_groups (
-    athleteId VARCHAR(255) REFERENCES athletes(userId),
-    groupId INT REFERENCES groups(id),
+    athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
+    groupId INT REFERENCES groups(id) NOT NULL,
     PRIMARY KEY (athleteId, groupId)
 );
 
 CREATE TABLE athlete_group_invites (
     id SERIAL PRIMARY KEY,
-    athleteId VARCHAR(255) REFERENCES athletes(userId),
-    groupId INT REFERENCES groups(id),
+    athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
+    groupId INT REFERENCES groups(id) NOT NULL,
     UNIQUE (athleteId, groupId)
 );
 
 CREATE TABLE group_workouts (
     id SERIAL PRIMARY KEY,
-    groupId INT REFERENCES groups(id),
+    groupId INT REFERENCES groups(id) NOT NULL,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
     title VARCHAR(255) NOT NULL,
     UNIQUE (groupId, date, title)
 );
 
 CREATE TABLE athlete_workout_inputs(
-    athleteId VARCHAR(255) REFERENCES athletes(userId),
-    groupWorkoutId INT REFERENCES group_workouts(id),
-    date VARCHAR(10) DEFAULT CURRENT_DATE,
+    athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
+    groupWorkoutId INT REFERENCES group_workouts(id) NOT NULL,
     distance int DEFAULT 0,
     time int DEFAULT 0
 );
 
 CREATE TABLE workout_groups (
     id SERIAL PRIMARY KEY,
-    leaderId VARCHAR(255) REFERENCES athletes(userId),
-    workoutId INT REFERENCES group_workouts(id),
-    date VARCHAR(10) DEFAULT CURRENT_DATE,
+    leaderId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
+    workoutId INT REFERENCES group_workouts(id) NOT NULL,
     workoutGroupName VARCHAR(255) NOT NULL,
-    UNIQUE (leaderId, workoutId, date)
+    UNIQUE (workoutId, workoutGroupName)
 );
 
 --Indexes for faster lookups--
 CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, title);
 
 CREATE TABLE workout_group_members(
-    workoutGroupId INT REFERENCES workout_groups(id),
-    athleteUsername VARCHAR(255) REFERENCES athletes(username),
+    workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
+    athleteUsername VARCHAR(255) REFERENCES athletes(username) NOT NULL,
     PRIMARY KEY (workoutGroupId, athleteUsername)
 );
 
 CREATE TABLE workout_group_inputs(
-    workoutGroupId INT REFERENCES workout_groups(id),
+    workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
     distance int DEFAULT 0,
     time int DEFAULT 0
 );

@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 
 test_coach = {
         "body": json.dumps({
@@ -79,3 +80,15 @@ test_assign_workout = {
         "groupName": "Test Group"
     })
 }
+
+test_workout_group = {
+        "body": json.dumps({
+            "leaderId": "1234",
+            "other athletes": ["test2", "test3"],
+            "groupName": "Test Group",
+            "workoutGroupName": "Test Workout Group",
+            "workoutTitle": "Test Workout",
+            "coachUsername": "testcoach",
+            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        })
+    }

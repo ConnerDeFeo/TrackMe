@@ -29,9 +29,9 @@ def input_time(event, context):
                 AND c.username = %s
             )
             INSERT INTO athlete_workout_inputs 
-            (athleteId, groupWorkoutId, date, time, distance)
-            VALUES (%s,(SELECT workout_id FROM workout_info), %s, %s, %s)
-        """, (workout_title, date, group_name, coach_username, athlete_id, date, time, distance))
+            (athleteId, groupWorkoutId, time, distance)
+            VALUES (%s,(SELECT workout_id FROM workout_info), %s, %s)
+        """, (workout_title, date, group_name, coach_username, athlete_id, time, distance))
 
         return {
             'statusCode': 200,

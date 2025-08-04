@@ -11,7 +11,7 @@ from lambdas.athlete.view_workout_athlete.view_workout_athlete import view_worko
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.create_workout_group.create_workout_group import create_workout_group
-from data import test_athlete, test_coach, test_group, test_workout, test_invite, test_accept_group_invite, test_assign_workout
+from data import test_athlete, test_coach, test_group, test_workout, test_invite, test_accept_group_invite, test_assign_workout, test_workout_group
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
 
@@ -80,31 +80,21 @@ def test_input_time():
     assert input is not None
     assert input[0] == '1234'  # athleteId
     assert input[1] == 1
-    assert input[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")  # date  
-    assert input[3] == 150  # time
-    assert input[4] == 30
+    assert input[2] == 150  # time
+    assert input[3] == 30
 
 
 def test_create_workout_group():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-    event = {
-        "body": json.dumps({
-            "leaderId": "1234",
-            "other athletes": ["test2", "test3"],
-            "groupName": "Test Group",
-            "workoutTitle": "Test Workout",
-            "coachUsername": "testcoach",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        })
-    }
-    response = create_workout_group(event, {})
+
+    response = create_workout_group(test_workout_group, {})
     assert response['statusCode'] == 200
 
     #Check group is created
     workout_group = fetch_one("SELECT * FROM workout_groups")
     assert workout_group is not None
-    assert 'Test Group' in workout_group
+    assert 'Test Workout Group' in workout_group
     assert '1234' in workout_group 
 
     #Check other athletes are added to the group
@@ -119,11 +109,12 @@ def test_create_workout_group():
 def test_input_group_time():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-
+    create_workout_group(test_workout_group, {})
     event = {
         "body": json.dumps({
-            "athleteId": "1234",
+            "leaderId": "1234",
             "workoutTitle": "Test Workout",
+            "workoutGroupName": "Test Workout Group",
             "coachUsername": "testcoach",
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
             "groupName": "Test Group",
@@ -136,18 +127,15 @@ def test_input_group_time():
     assert response['statusCode'] == 200
 
     #Make sure the group was created
-    group = fetch_one("SELECT * FROM workout_groups")
+    group = fetch_one("SELECT leaderId, workoutGroupName FROM workout_groups")
     assert group is not None
-    assert group[1] == 'Test Group'
-    assert group[2] == '1234'  # leaderId
+    assert group[1] == 'Test Workout Group'
+    assert group[0] == '1234'
 
     #Check that the inputs for all athletes in the group were recorded
-    inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
+    inputs = fetch_all("SELECT * FROM workout_group_inputs")
     assert inputs is not None
-    assert len(inputs) == 3  # One for each athlete in the group
-    for i in inputs:
-        assert i[0] in ["1234", "test2", "test3"]
-        assert i[1] == 1
-        assert i[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")  # date
-        assert i[3] == 150  # time
-        assert i[4] == 30
+    assert len(inputs) == 1  # One for each athlete in the group
+    assert inputs[0][0] == 1
+    assert inputs[0][1] == 150
+    assert inputs[0][2] == 30

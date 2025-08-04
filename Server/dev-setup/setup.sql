@@ -70,7 +70,7 @@ CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, title);
 
 CREATE TABLE workout_group_members(
     workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
-    athleteUsername VARCHAR(255) REFERENCES athletes(username) NOT NULL,
+    athleteUsername VARCHAR(255),
     PRIMARY KEY (workoutGroupId, athleteUsername)
 );
 

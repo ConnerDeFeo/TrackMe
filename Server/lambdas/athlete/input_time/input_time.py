@@ -31,7 +31,7 @@ def input_time(event, context):
             INSERT INTO athlete_workout_inputs 
             (athleteId, groupWorkoutId, date, time, distance)
             VALUES (%s,(SELECT workout_id FROM workout_info), %s, %s, %s)
-        """, (athlete_id, workout_title, date, group_name, coach_username, date, time, distance))
+        """, (workout_title, date, group_name, coach_username, athlete_id, date, time, distance))
 
         return {
             'statusCode': 200,

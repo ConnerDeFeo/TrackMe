@@ -115,39 +115,39 @@ def test_create_workout_group():
         assert member[0] == 1
         assert member[1] in ["test2", "test3"]
 
-# def test_input_group_time():
-#     create_extra_athlete("test2", "1235")
-#     create_extra_athlete("test3", "1236")
 
-#     event = {
-#         "body": json.dumps({
-#             "athleteId": "1234",
-#             "other athletes": ["test2", "test3"],
-#             "workoutTitle": "Test Workout",
-#             "coachUsername": "testcoach",
-#             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-#             "groupName": "Test Group",
-#             "time": 30,
-#             "distance": 150
-#         })
-#     }
+def test_input_group_time():
+    create_extra_athlete("test2", "1235")
+    create_extra_athlete("test3", "1236")
 
-    # response = input_group_time(event, {})
-    # assert response['statusCode'] == 200
+    event = {
+        "body": json.dumps({
+            "athleteId": "1234",
+            "workoutTitle": "Test Workout",
+            "coachUsername": "testcoach",
+            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "groupName": "Test Group",
+            "time": 30,
+            "distance": 150
+        })
+    }
 
-    # #Make sure the group was created
-    # group = fetch_one("SELECT * FROM workout_groups")
-    # assert group is not None
-    # assert group[1] == 'Test Group'
-    # assert group[2] == '1234'  # leaderId
+    response = input_group_time(event, {})
+    assert response['statusCode'] == 200
 
-    # #Check that the inputs for all athletes in the group were recorded
-    # inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
-    # assert inputs is not None
-    # assert len(inputs) == 3  # One for each athlete in the group
-    # for i in inputs:
-    #     assert i[0] in ["1234", "test2", "test3"]
-    #     assert i[1] == 1
-    #     assert i[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")  # date
-    #     assert i[3] == 150  # time
-    #     assert i[4] == 30
+    #Make sure the group was created
+    group = fetch_one("SELECT * FROM workout_groups")
+    assert group is not None
+    assert group[1] == 'Test Group'
+    assert group[2] == '1234'  # leaderId
+
+    #Check that the inputs for all athletes in the group were recorded
+    inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
+    assert inputs is not None
+    assert len(inputs) == 3  # One for each athlete in the group
+    for i in inputs:
+        assert i[0] in ["1234", "test2", "test3"]
+        assert i[1] == 1
+        assert i[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")  # date
+        assert i[3] == 150  # time
+        assert i[4] == 30

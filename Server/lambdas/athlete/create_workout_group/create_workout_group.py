@@ -45,7 +45,7 @@ def create_workout_group(event,context):
             params.append((athlete, workout_group_id))
 
         execute_commit_many("""
-            INSERT INTO workout_group_members (athleteUsername, groupWorkoutId)
+            INSERT INTO workout_group_members (athleteUsername, workoutGroupId)
             VALUES (%s, %s)
         """, params)
         return {

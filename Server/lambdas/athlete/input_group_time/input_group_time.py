@@ -9,6 +9,8 @@ def input_group_time(event, context):
         athlete_id = body['athleteId']
         
 
+        #Insert time for the 
+
 
         return {
             'statusCode': 200,

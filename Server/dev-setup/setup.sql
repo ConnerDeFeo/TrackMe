@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS group_workouts CASCADE;
 DROP TABLE IF EXISTS athlete_workout_inputs CASCADE;
 DROP TABLE IF EXISTS workout_groups CASCADE;
 DROP TABLE IF EXISTS workout_group_members CASCADE;
+DROP TABLE IF EXISTS workout_group_inputs CASCADE;
 
 
 --User and user relation related tables--
@@ -66,8 +67,17 @@ CREATE TABLE workout_groups (
     UNIQUE (leaderId, workoutId, date)
 );
 
+--Indexes for faster lookups--
+CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, title);
+
 CREATE TABLE workout_group_members(
-    groupWorkoutId INT REFERENCES group_workouts(id),
+    workoutGroupId INT REFERENCES workout_groups(id),
     athleteUsername VARCHAR(255) REFERENCES athletes(username),
-    PRIMARY KEY (groupWorkoutId, athleteUsername)
-)
+    PRIMARY KEY (workoutGroupId, athleteUsername)
+);
+
+CREATE TABLE workout_group_inputs(
+    workoutGroupId INT REFERENCES workout_groups(id),
+    distance int DEFAULT 0,
+    time int DEFAULT 0
+);

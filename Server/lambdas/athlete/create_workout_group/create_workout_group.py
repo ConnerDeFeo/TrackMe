@@ -7,7 +7,7 @@ def create_workout_group(event,context):
 
     try:
         leaderId = body['leaderId']
-        other_athletes = body['other athletes']
+        athletes = body['athletes']
         workout_title = body['workoutTitle']
         coach_username = body['coachUsername']
         workout_group_name = body['workoutGroupName']
@@ -38,10 +38,10 @@ def create_workout_group(event,context):
                     'message': 'Workout group creation failed'
                 })
             }
-        
-        #Insert other athletes into the group
+
+        #Insert all athletes into the group
         params = []
-        for athlete in other_athletes:
+        for athlete in athletes:
             params.append((athlete, workout_group_id))
 
         execute_commit_many("""

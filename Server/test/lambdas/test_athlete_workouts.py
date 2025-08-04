@@ -11,6 +11,7 @@ from lambdas.athlete.view_workout_athlete.view_workout_athlete import view_worko
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.create_workout_group.create_workout_group import create_workout_group
+from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
 from data import TestData
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
@@ -28,6 +29,24 @@ def setup_before_each_test(): #This will run before each test
     create_workout(TestData.test_workout, {})
     assign_group_workout(TestData.test_assign_workout, {})
     yield
+
+
+def debug_table():
+    workout_group_inputs = fetch_all("SELECT * FROM workout_group_inputs")
+    athlet_inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
+    workout_members = fetch_all("SELECT * FROM workout_group_members")
+    workout_groups = fetch_all("SELECT * FROM workout_groups")
+    group_workouts = fetch_all("SELECT * FROM group_workouts")
+    coaches = fetch_all("SELECT * FROM coaches")
+    groups = fetch_all("SELECT * FROM groups")
+
+    print("Coaches:", coaches)
+    print("Groups:", groups)
+    print("Group Workouts:", group_workouts)
+    print("Workout Group:", workout_groups)
+    print("Workout Group Inputs:", workout_group_inputs)
+    print("Athlete Inputs:", athlet_inputs)
+    print("Workout Group Members:", workout_members)
 
 
 def create_extra_athlete(username,id):
@@ -69,8 +88,8 @@ def test_input_time():
     assert input is not None
     assert input[0] == '1234'  # athleteId
     assert input[1] == 1
-    assert input[2] == 150  # time
-    assert input[3] == 30
+    assert input[2] == 100  # time
+    assert input[3] == 10
 
 
 def test_create_workout_group():
@@ -89,10 +108,10 @@ def test_create_workout_group():
     #Check other athletes are added to the group
     group_members = fetch_all("SELECT * FROM workout_group_members")
     assert group_members is not None
-    assert len(group_members) == 2
+    assert len(group_members) == 3
     for member in group_members:
         assert member[0] == 1
-        assert member[1] in ["test2", "test3"]
+        assert member[1] in ["test_athlete", "test2", "test3"]
 
 
 def test_input_group_time():
@@ -117,6 +136,7 @@ def test_input_group_time():
     assert inputs[0][1] == 150
     assert inputs[0][2] == 30
 
+
 def test_view_workout_inputs():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
@@ -127,17 +147,38 @@ def test_view_workout_inputs():
     event = {
         "body": json.dumps({
             "userId": "1234",
-            "groupName": "Test Workout Group",
-            "coachUsername":"testcoach",
-            "workoutTitle": "Test Workout",
+            "username": "test_athlete",
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
         })
     }
 
-    response = view_workout_athlete(event, {})
+    response = view_workout_inputs(event, {})
     assert response['statusCode'] == 200
 
     ##
     # The data returned should look something like:
-    # [[groupName, coachUsername, workoutGroupName, distance, time], [groupName, coachUsername, workoutGroupName, distance, time],
-    #  [groupName, coachUsername, username, distance, time], [groupName, coachUsername, username, distance, time]]
+    # [
+    #   [groupName, coachUsername, workoutGroupName, distance, time], 
+    #   [groupName, coachUsername, workoutGroupName, distance, time],
+    #   [groupName, coachUsername, username, distance, time], 
+    #   [groupName, coachUsername, username, distance, time]
+    # ]
+    body = json.loads(response['body'])
+
+    print(body)
+    assert len(body) == 2
+    group_inputs = body[0]
+    athlete_inputs = body[1]
+
+    assert len(group_inputs) == 5  # groupName, coachUsername, workoutGroupName, distance, time
+    assert group_inputs[0] == 'Test Group'
+    assert group_inputs[1] == 'testcoach'
+    assert group_inputs[2] == 'Test Workout Group'
+    assert group_inputs[3] == 150
+    assert group_inputs[4] == 30
+
+    assert len(athlete_inputs) == 4  # groupName, coachUsername, distance, time
+    assert athlete_inputs[0] == 'Test Group'
+    assert athlete_inputs[1] == 'testcoach'
+    assert athlete_inputs[2] == 100
+    assert athlete_inputs[3] == 10

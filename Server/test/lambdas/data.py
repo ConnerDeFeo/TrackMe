@@ -85,7 +85,7 @@ class TestData:
     test_workout_group = {
             "body": json.dumps({
                 "leaderId": "1234",
-                "other athletes": ["test2", "test3"],
+                "athletes": ["test_athlete","test2", "test3"],
                 "groupName": "Test Group",
                 "workoutGroupName": "Test Workout Group",
                 "workoutTitle": "Test Workout",
@@ -101,8 +101,8 @@ class TestData:
                 "coachUsername": "testcoach",
                 "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
                 "groupName": "Test Group",
-                "time": 30,
-                "distance": 150
+                "time": 10,
+                "distance": 100
             })
         }
 

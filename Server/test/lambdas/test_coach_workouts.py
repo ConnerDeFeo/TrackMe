@@ -71,12 +71,39 @@ def test_assign_group_workout():
     response = assign_group_workout(event, {})
     assert response['statusCode'] == 200
 
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    #Check if workout exists in rds
     data = fetch_one("SELECT * FROM group_workouts;")
     assert data is not None
     assert data[0] == 1
     assert data[1] == 1
-    assert data[2] == datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    assert data[2] == date
     assert data[3] == 'Test Workout'
+
+    #Check if workout inputs exist in dynamo
+    workout_inputs = get_item('WorkoutInputs', {'coach_id': '123', 'date': date})
+    assert workout_inputs is not None
+    assert workout_inputs['coach_id'] == '123'
+    assert workout_inputs['date'] == date
+    assert workout_inputs['title'] == 'Test Workout'
 
 def test_view_workout_coach():
     pass
+    # The format for this should be:
+    # {
+    #   coach_id: 1234
+    #   workout title: some title
+    #   workout: {the workout from dynamo}
+    #   inputs: {
+    #       groups:{
+    #           "leader": "some user"
+    #           "some group":[[distance, time], [distance, time]],
+    #           ""
+    #       } 
+    #       individuals{
+    #           "some user":[[distance, time], [distance, time]]
+    #       }#
+    #   }#
+    # }
+    # #

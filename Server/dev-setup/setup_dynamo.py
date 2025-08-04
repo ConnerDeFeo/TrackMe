@@ -10,11 +10,12 @@ _connection = boto3.resource('dynamodb',
     aws_secret_access_key=os.getenv("DYNAMODB_SECRET_KEY")
 )
 
-
+tables = ['Workouts', 'WorkoutInputs']
 try:
-    table = _connection.Table('Workouts')
-    table.delete()
-    table.wait_until_not_exists()
+    for table_name in tables:
+        table = _connection.Table(table_name)
+        table.delete()
+        table.wait_until_not_exists()
 except Exception:
     pass
 
@@ -37,6 +38,34 @@ _connection.create_table(
         },
         {
             'AttributeName': 'title',
+            'AttributeType': 'S'
+        }
+    ],
+    ProvisionedThroughput={
+        'ReadCapacityUnits': 5,
+        'WriteCapacityUnits': 5
+    }
+)
+
+_connection.create_table(
+    TableName = 'WorkoutInputs',             
+    KeySchema=[
+        {
+            'AttributeName': 'coach_id',
+            'KeyType': 'HASH'
+        },
+        {
+            'AttributeName': 'date',
+            'KeyType': 'RANGE'
+        }
+    ],
+    AttributeDefinitions=[
+        {
+            'AttributeName': 'coach_id',
+            'AttributeType': 'S'
+        },
+        {
+            'AttributeName': 'date',
             'AttributeType': 'S'
         }
     ],

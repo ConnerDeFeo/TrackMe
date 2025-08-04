@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 import json
 
 from rds import execute_commit
-from dynamo import get_item
+from dynamo import get_item, put_item
 
 
 def assign_group_workout(event, context):
@@ -11,6 +11,7 @@ def assign_group_workout(event, context):
         #Check if workout exists
         workout_title = body['title']
         coach_id = body['userId']
+        date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
         workout = get_item('Workouts', {'title': workout_title, 'coach_id': coach_id})
         if not workout:
             return {
@@ -19,9 +20,15 @@ def assign_group_workout(event, context):
                     "error": "Workout not found"
                 })
             }
+        #Create basic workout inputs in dynamo
+        put_item('WorkoutInputs', {
+            'coach_id': coach_id,
+            'date': date,
+            'title': workout_title
+        })
 
         group_name = body['groupName']
-        date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        
         # Create connection in RDS
         execute_commit("""
             INSERT INTO group_workouts (groupId, date, title)

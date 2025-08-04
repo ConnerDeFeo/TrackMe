@@ -81,13 +81,6 @@ def test_assign_group_workout():
     assert data[2] == date
     assert data[3] == 'Test Workout'
 
-    #Check if workout inputs exist in dynamo
-    workout_inputs = get_item('WorkoutInputs', {'coach_id': '123', 'group_date': f"Test Group_{date}"})
-    assert workout_inputs is not None
-    assert workout_inputs['coach_id'] == '123'
-    assert workout_inputs['group_date'] == f"Test Group_{date}"
-    assert workout_inputs['title'] == 'Test Workout'
-
 def test_view_workout_coach():
     pass
     # The format for this should be:

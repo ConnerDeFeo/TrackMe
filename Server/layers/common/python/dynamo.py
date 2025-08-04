@@ -25,3 +25,17 @@ def delete_item(table_name, key):
     table = _connection.Table(table_name)
     response = table.delete_item(Key=key)
     return response
+
+def update_item(table_name, key, update_expression, expression_attribute_names=None, expression_attribute_values=None):
+    table = _connection.Table(table_name)
+    params = {
+        'Key': key,
+        'UpdateExpression': update_expression,
+        'ReturnValues': "UPDATED_NEW"
+    }
+    if expression_attribute_names:
+        params['ExpressionAttributeNames'] = expression_attribute_names
+    if expression_attribute_values:
+        params['ExpressionAttributeValues'] = expression_attribute_values
+
+    return table.update_item(**params)

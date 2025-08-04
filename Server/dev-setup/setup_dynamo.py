@@ -51,21 +51,21 @@ _connection.create_table(
     TableName = 'WorkoutInputs',             
     KeySchema=[
         {
-            'AttributeName': 'coach_id',
+            'AttributeName': 'group_date_identifier',
             'KeyType': 'HASH'
         },
         {
-            'AttributeName': 'group_date',
+            'AttributeName': 'input_type',
             'KeyType': 'RANGE'
         }
     ],
     AttributeDefinitions=[
         {
-            'AttributeName': 'coach_id',
+            'AttributeName': 'group_date_identifier',
             'AttributeType': 'S'
         },
         {
-            'AttributeName': 'group_date',
+            'AttributeName': 'input_type',
             'AttributeType': 'S'
         }
     ],

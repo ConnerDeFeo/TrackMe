@@ -21,13 +21,6 @@ def assign_group_workout(event, context):
                 })
             }
         group_name = body['groupName']
-
-        #Create basic workout inputs in dynamo
-        put_item('WorkoutInputs', {
-            'coach_id': coach_id,
-            'group_date': f"{group_name}_{date}",
-            'title': workout_title
-        })
         
         # Create connection in RDS
         execute_commit("""

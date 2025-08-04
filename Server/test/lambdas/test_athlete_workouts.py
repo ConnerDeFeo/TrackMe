@@ -1,4 +1,5 @@
 import json
+import os
 import pytest
 from lambdas.athlete.input_time.input_time import input_time
 from lambdas.athlete.input_group_time.input_group_time import input_group_time
@@ -15,7 +16,10 @@ from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout
 from data import TestData
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
+from testing_utils import reset_dynamo
+from dynamo import get_item
 
+date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
@@ -60,7 +64,7 @@ def test_view_workout_athlete():
 
 
 def test_input_time():
-
+    reset_dynamo()
     response = input_time(TestData.test_input_time, {})
     assert response['statusCode'] == 200
 
@@ -71,6 +75,14 @@ def test_input_time():
     assert input[1] == 1
     assert input[2] == 100  # time
     assert input[3] == 10
+
+    #Check dynamoDB for the input
+    input = get_item("WorkoutInputs", {"group_date_identifier": f"123#Test Group#{date}", "input_type": "individual#1234"})
+    assert input is not None
+    assert len(input['inputs']) == 1
+    assert input['inputs'][0]['distance'] == 100
+    assert input['inputs'][0]['time'] == 10
+
 
 
 def test_create_workout_group():
@@ -129,7 +141,7 @@ def test_view_workout_inputs():
         "body": json.dumps({
             "userId": "1234",
             "username": "test_athlete",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            "date": date
         })
     }
 

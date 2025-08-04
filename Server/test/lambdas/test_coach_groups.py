@@ -8,7 +8,7 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.search_athlete_for_group.search_athlete_for_group import search_athlete_for_group
 import json
-from data import test_coach, test_group, test_invite, test_accept_group_invite
+from data import TestData
 from rds import execute_file, execute_commit, fetch_one
 
 
@@ -35,18 +35,18 @@ def generate_athlete(username, userId):
     },{})
 
 def test_create_group():
-    response = create_group(test_group, {})
+    response = create_group(TestData.test_group, {})
     assert response['statusCode'] == 200
 
 def test_get_group():
-    create_group(test_group, {})
-    response = get_group(test_group, {})
+    create_group(TestData.test_group, {})
+    response = get_group(TestData.test_group, {})
     assert response['statusCode'] == 404 #no athletes in group yet
 
     execute_commit("INSERT INTO athletes (userId, username) VALUES (%s, %s)", ("1234", "test_athlete"))
     execute_commit("INSERT INTO athlete_groups (athleteId, groupId) VALUES (%s, %s)", ("1234", 1))
 
-    response = get_group(test_group, {})
+    response = get_group(TestData.test_group, {})
     assert response['statusCode'] == 200
 
     group_data = json.loads(response['body'])
@@ -54,7 +54,7 @@ def test_get_group():
     assert "test_athlete" in group_data[0]
 
 def test_invite_athlete():
-    create_group(test_group, {})
+    create_group(TestData.test_group, {})
     generate_athlete("test_athlete", "1234")
     event = {
         "body": json.dumps({
@@ -74,12 +74,12 @@ def test_invite_athlete():
     assert response[0] == 1
 
 def test_search_athlete_for_group():
-    create_group(test_group, {})
+    create_group(TestData.test_group, {})
 
     # Athletes that are part of group
     generate_athlete("test_athlete", "1234")
-    invite_athlete(test_invite, {})
-    accept_group_invite(test_accept_group_invite, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_group_invite(TestData.test_accept_group_invite, {})
 
     # Athletes invited
     generate_athlete("test", "1235")

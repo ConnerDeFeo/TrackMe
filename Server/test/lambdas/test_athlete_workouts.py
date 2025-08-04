@@ -11,7 +11,7 @@ from lambdas.athlete.view_workout_athlete.view_workout_athlete import view_worko
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.create_workout_group.create_workout_group import create_workout_group
-from data import test_athlete, test_coach, test_group, test_workout, test_invite, test_accept_group_invite, test_assign_workout, test_workout_group
+from data import TestData
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
 
@@ -20,13 +20,13 @@ from datetime import datetime, timezone
 def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
     execute_file('dev-setup/setup.sql')
-    create_athlete(test_athlete, {})
-    create_coach(test_coach, {})
-    create_group(test_group, {})
-    invite_athlete(test_invite, {})
-    accept_group_invite(test_accept_group_invite, {})
-    create_workout(test_workout, {})
-    assign_group_workout(test_assign_workout, {})
+    create_athlete(TestData.test_athlete, {})
+    create_coach(TestData.test_coach, {})
+    create_group(TestData.test_group, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_group_invite(TestData.test_accept_group_invite, {})
+    create_workout(TestData.test_workout, {})
+    assign_group_workout(TestData.test_assign_workout, {})
     yield
 
 
@@ -60,19 +60,8 @@ def test_view_workout_athlete():
 
 
 def test_input_time():
-    event = {
-        "body": json.dumps({
-            "athleteId": "1234",
-            "workoutTitle": "Test Workout",
-            "coachUsername": "testcoach",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "groupName": "Test Group",
-            "time": 30,
-            "distance": 150
-        })
-    }
 
-    response = input_time(event, {})
+    response = input_time(TestData.test_input_time, {})
     assert response['statusCode'] == 200
 
     #Make sure the input was recorded in the database
@@ -88,7 +77,7 @@ def test_create_workout_group():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
 
-    response = create_workout_group(test_workout_group, {})
+    response = create_workout_group(TestData.test_workout_group, {})
     assert response['statusCode'] == 200
 
     #Check group is created
@@ -109,21 +98,9 @@ def test_create_workout_group():
 def test_input_group_time():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-    create_workout_group(test_workout_group, {})
-    event = {
-        "body": json.dumps({
-            "leaderId": "1234",
-            "workoutTitle": "Test Workout",
-            "workoutGroupName": "Test Workout Group",
-            "coachUsername": "testcoach",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "groupName": "Test Group",
-            "time": 30,
-            "distance": 150
-        })
-    }
+    create_workout_group(TestData.test_workout_group, {})
 
-    response = input_group_time(event, {})
+    response = input_group_time(TestData.test_input_group_time, {})
     assert response['statusCode'] == 200
 
     #Make sure the group was created
@@ -139,3 +116,9 @@ def test_input_group_time():
     assert inputs[0][0] == 1
     assert inputs[0][1] == 150
     assert inputs[0][2] == 30
+
+def test_view_workout_inputs():
+    create_extra_athlete("test2", "1235")
+    create_extra_athlete("test3", "1236")
+    create_workout_group(TestData.test_workout_group, {})
+

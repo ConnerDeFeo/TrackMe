@@ -1,7 +1,7 @@
 import json
 from rds import execute_file
 import pytest
-from data import test_athlete
+from data import TestData
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.athlete.get_athlete.get_athlete import get_athlete
 
@@ -14,12 +14,12 @@ def setup_before_each_test():
 
 def test_create_athlete():
     #Send a valid JSON event
-    response = create_athlete(test_athlete, {})
+    response = create_athlete(TestData.test_athlete, {})
     assert response['statusCode'] == 200
 
 def test_get_athlete():
     # Send a valid event to get an athlete
-    create_athlete(test_athlete, {})
+    create_athlete(TestData.test_athlete, {})
     event = {
         "pathParameters": {
             "userId": "1234"

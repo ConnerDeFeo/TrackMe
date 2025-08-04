@@ -1,6 +1,6 @@
 import pytest
 
-from data import test_coach, test_group, test_athlete, test_invite, test_accept_group_invite
+from data import TestData
 from lambdas.athlete.view_group_invites.view_group_invites import view_group_invites
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.general.get_group.get_group import get_group
@@ -19,25 +19,25 @@ def setup_before_each_test(): #This will run before each test
     yield
 
 def test_accept_invite():
-    create_coach(test_coach, {})
-    create_group(test_group, {})
-    create_athlete(test_athlete, {})
-    invite_athlete(test_invite, {})
-    response = accept_group_invite(test_accept_group_invite, {})
+    create_coach(TestData.test_coach, {})
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    response = accept_group_invite(TestData.test_accept_group_invite, {})
     assert response['statusCode'] == 200
 
     #Check if athlete is actually added to group
-    response = get_group(test_group, {})
+    response = get_group(TestData.test_group, {})
     assert response['statusCode'] == 200
     group = json.loads(response['body'])
     assert len(group) == 1
     assert 'test_athlete' == group[0][0]
 
 def test_view_group_invites():
-    create_coach(test_coach, {})
-    create_group(test_group, {})
-    create_athlete(test_athlete, {})
-    invite_athlete(test_invite, {})
+    create_coach(TestData.test_coach, {})
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
     event = {
         'body': json.dumps({
             'userId': '1234'

@@ -7,19 +7,19 @@ from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
 from datetime import datetime, timezone
-from data import test_coach, test_group, test_workout
+from data import TestData
 
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
     execute_file('dev-setup/setup.sql')
-    create_coach(test_coach, {})
-    create_group(test_group, {})
+    create_coach(TestData.test_coach, {})
+    create_group(TestData.test_group, {})
     yield
 
 def test_create_workout():
-    response = create_workout(test_workout, {})
+    response = create_workout(TestData.test_workout, {})
     assert response['statusCode'] == 200
 
     data = get_item('Workouts', {'coach_id': '123', 'title': 'Test Workout'})
@@ -59,7 +59,7 @@ def test_create_workout():
     assert 'excersiesParts' not in excersise3
 
 def test_assign_group_workout():
-    create_workout(test_workout, {})
+    create_workout(TestData.test_workout, {})
 
     event = {
         "body": json.dumps({

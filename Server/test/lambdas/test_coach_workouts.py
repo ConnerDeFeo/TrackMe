@@ -1,14 +1,24 @@
 import json
 import pytest
-from dynamo import get_item
-from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
-from rds import execute_file, fetch_one
-from lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.athlete.input_time.input_time import input_time
+from lambdas.athlete.input_group_time.input_group_time import input_group_time
+from lambdas.athlete.accept_group_invite.accept_group_invite import accept_group_invite
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
-from datetime import datetime, timezone
+from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
+from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
+from lambdas.athlete.create_athlete.create_athlete import create_athlete
+from lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.athlete.create_workout_group.create_workout_group import create_workout_group
+from lambdas.coach.view_workout_coach.view_workout_coach import view_workout_coach
+from testing_utils import reset_dynamo
 from data import TestData
+from rds import execute_file, fetch_one
+from datetime import datetime, timezone 
+from dynamo import get_item
 
+
+date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
@@ -71,8 +81,6 @@ def test_assign_group_workout():
     response = assign_group_workout(event, {})
     assert response['statusCode'] == 200
 
-    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-
     #Check if workout exists in rds
     data = fetch_one("SELECT * FROM group_workouts;")
     assert data is not None
@@ -82,21 +90,44 @@ def test_assign_group_workout():
     assert data[3] == 'Test Workout'
 
 def test_view_workout_coach():
-    pass
-    # The format for this should be:
-    # {
-    #   coach_id: 1234
-    #   workout title: some title
-    #   workout: {the workout from dynamo}
-    #   inputs: {
-    #       groups:{
-    #           "leader": "some user"
-    #           "some group":[[distance, time], [distance, time]],
-    #           ""
-    #       } 
-    #       individuals{
-    #           "some user":[[distance, time], [distance, time]]
-    #       }#
-    #   }#
-    # }
-    # #
+    reset_dynamo()
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_group_invite(TestData.test_accept_group_invite, {})
+    create_workout(TestData.test_workout, {})
+    assign_group_workout(TestData.test_assign_workout, {})
+    create_workout_group(TestData.test_workout_group, {})
+    input_time(TestData.test_input_time, {})
+    input_group_time(TestData.test_input_group_time, {})
+
+    event = {
+        "body": json.dumps({
+            "date": date,
+            "groupName": "Test Group",
+            "coachId": "123"
+        })
+    }
+    response = view_workout_coach(event, {})
+    assert response['statusCode'] == 200
+
+    #Check if the data is valid
+    data = json.loads(response['body'])
+    workout_data = data['Items']
+    assert workout_data is not None
+    assert len(workout_data) == 2
+    group_workout_input = workout_data[0]
+    individual_workout_input = workout_data[1]
+
+    assert group_workout_input['group_date_identifier'] == f'123#Test Group#{date}'
+    assert group_workout_input['input_type'] == 'group#Test Workout Group'
+    assert group_workout_input['leader_id'] == '1234'
+    
+    inputs = group_workout_input['inputs']
+    assert len(inputs) == 1
+    assert inputs[0]['distance'] == 150
+    assert inputs[0]['time'] == 30
+
+    inputs = individual_workout_input['inputs']
+    assert len(inputs) == 1
+    assert inputs[0]['distance'] == 100
+    assert inputs[0]['time'] == 10

@@ -39,3 +39,17 @@ def update_item(table_name, key, update_expression, expression_attribute_names=N
         params['ExpressionAttributeValues'] = expression_attribute_values
 
     return table.update_item(**params)
+
+#Query items from a table based on a key condition expression
+def query_items(table_name, key_condition_expression, expression_attribute_names=None, expression_attribute_values=None):
+    table = _connection.Table(table_name)
+    params = {
+        'KeyConditionExpression': key_condition_expression
+    }
+
+    if expression_attribute_names:
+        params['ExpressionAttributeNames'] = expression_attribute_names
+    if expression_attribute_values:
+        params['ExpressionAttributeValues'] = expression_attribute_values
+
+    return table.query(**params)

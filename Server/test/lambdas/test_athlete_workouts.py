@@ -1,5 +1,4 @@
 import json
-import os
 import pytest
 from lambdas.athlete.input_time.input_time import input_time
 from lambdas.athlete.input_group_time.input_group_time import input_group_time
@@ -83,9 +82,8 @@ def test_input_time():
     assert input['inputs'][0]['distance'] == 100
     assert input['inputs'][0]['time'] == 10
 
-
-
 def test_create_workout_group():
+    reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
 
@@ -108,6 +106,7 @@ def test_create_workout_group():
 
 
 def test_input_group_time():
+    reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
     create_workout_group(TestData.test_workout_group, {})
@@ -139,6 +138,7 @@ def test_input_group_time():
 
 
 def test_view_workout_inputs():
+    reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
     create_workout_group(TestData.test_workout_group, {})

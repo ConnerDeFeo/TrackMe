@@ -1,5 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 15
+    Environment:
+      Variables:
+        DYNAMODB_ENDPOINT_URL: http://host.docker.internal:8000
 
 Resources:
+  # API Gateway
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -10,37 +21,46 @@ Resources:
         AllowOrigin: "'http://localhost:8081'"
         AllowCredentials: true
 
+  # Layers
   DynamoDBLayer:
-      Type: AWS::Serverless::LayerVersion
-      Properties:
-        LayerName: DynamoDBLayer
-        Description: DynamoDBLayer utilities
-        ContentUri: layers/common/python/
-        CompatibleRuntimes:
-          - python3.12
-      Metadata:
-        BuildMethod: python3.12
-  RDSLayer:
-      Type: AWS::Serverless::LayerVersion
-      Properties:
-        LayerName: RDSLayer
-        Description: RDSLayer utilities
-        ContentUri: layers/common/python/
-        CompatibleRuntimes:
-          - python3.12
-      Metadata:
-        BuildMethod: python3.12
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: DynamoDBLayer
+      Description: DynamoDBLayer utilities
+      ContentUri: layers/dynamo/python/
+      CompatibleRuntimes:
+        - python3.12
+    Metadata:
+      BuildMethod: python3.12
 
+  RDSLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: RDSLayer
+      Description: RDSLayer utilities
+      ContentUri: layers/rds/python/
+      CompatibleRuntimes:
+        - python3.12
+    Metadata:
+      BuildMethod: python3.12
+
+  DecimalEncoderLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: DecimalEncoderLayer
+      Description: DecimalEncoderLayer utilities
+      ContentUri: layers/decimal_encoder/python/
+      CompatibleRuntimes:
+        - python3.12
+    Metadata:
+      BuildMethod: python3.12
+
+  # ATHLETE FUNCTIONS
   CreateAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: lambdas/athlete/create_athlete/
       Handler: create_athlete.create_athlete
-      Runtime: python3.12
-      Timeout: 15
-      Environment:
-        Variables:
-          DYNAMODB_ENDPOINT_URL: http://host.docker.internal:8000
       Events:
         CreateAthleteApi:
           Type: Api
@@ -50,3 +70,269 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: DynamoDBLayer
+
+  GetAthleteFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/get_athlete/
+      Handler: get_athlete.get_athlete
+      Events:
+        GetAthleteApi:
+          Type: Api
+          Properties:
+            Path: /athletes/get_athlete/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  CreateWorkoutGroupFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/create_workout_group/
+      Handler: create_workout_group.create_workout_group
+      Events:
+        CreateWorkoutGroupApi:
+          Type: Api
+          Properties:
+            Path: /athletes/create_workout_group/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  AcceptGroupInviteFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/accept_group_invite/
+      Handler: accept_group_invite.accept_group_invite
+      Events:
+        AcceptGroupInviteApi:
+          Type: Api
+          Properties:
+            Path: /athletes/accept_group_invite/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  ViewGroupInvitesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/view_group_invites/
+      Handler: view_group_invites.view_group_invites
+      Events:
+        ViewGroupInvitesApi:
+          Type: Api
+          Properties:
+            Path: /athletes/view_group_invites/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  InputTimeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/input_time/
+      Handler: input_time.input_time
+      Events:
+        InputTimeApi:
+          Type: Api
+          Properties:
+            Path: /athletes/input_time/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
+  InputGroupTimeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/input_group_time/
+      Handler: input_group_time.input_group_time
+      Events:
+        InputGroupTimeApi:
+          Type: Api
+          Properties:
+            Path: /athletes/input_group_time/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
+  ViewWorkoutAthleteFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/view_workout_athlete/
+      Handler: view_workout_athlete.view_workout_athlete
+      Events:
+        ViewWorkoutAthleteApi:
+          Type: Api
+          Properties:
+            Path: /athletes/view_workout_athlete/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
+  ViewWorkoutInputsFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/view_workout_inputs/
+      Handler: view_workout_inputs.view_workout_inputs
+      Events:
+        ViewWorkoutInputsApi:
+          Type: Api
+          Properties:
+            Path: /athletes/view_workout_inputs/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
+  # COACH FUNCTIONS
+  CreateCoachFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/create_coach/
+      Handler: create_coach.create_coach
+      Events:
+        CreateCoachApi:
+          Type: Api
+          Properties:
+            Path: /coaches/create_coach/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  GetCoachFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/get_coach/
+      Handler: get_coach.get_coach
+      Events:
+        GetCoachApi:
+          Type: Api
+          Properties:
+            Path: /coaches/get_coach/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  CreateGroupFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/create_group/
+      Handler: create_group.create_group
+      Events:
+        CreateGroupApi:
+          Type: Api
+          Properties:
+            Path: /coaches/create_group/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  CreateWorkoutFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/create_workout/
+      Handler: create_workout.create_workout
+      Events:
+        CreateWorkoutApi:
+          Type: Api
+          Properties:
+            Path: /coaches/create_workout/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
+  AssignGroupWorkoutFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/assign_group_workout/
+      Handler: assign_group_workout.assign_group_workout
+      Events:
+        AssignGroupWorkoutApi:
+          Type: Api
+          Properties:
+            Path: /coaches/assign_group_workout/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
+  InviteAthleteFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/invite_athlete/
+      Handler: invite_athlete.invite_athlete
+      Events:
+        InviteAthleteApi:
+          Type: Api
+          Properties:
+            Path: /coaches/invite_athlete/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  SearchAthleteForGroupFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/search_athlete_for_group/
+      Handler: search_athlete_for_group.search_athlete_for_group
+      Events:
+        SearchAthleteForGroupApi:
+          Type: Api
+          Properties:
+            Path: /coaches/search_athlete_for_group/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  ViewWorkoutCoachFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/view_workout_coach/
+      Handler: view_workout_coach.view_workout_coach
+      Events:
+        ViewWorkoutCoachApi:
+          Type: Api
+          Properties:
+            Path: /coaches/view_workout_coach/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
+  # GENERAL FUNCTIONS
+  GetGroupFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/general/get_group/
+      Handler: get_group.get_group
+      Events:
+        GetGroupApi:
+          Type: Api
+          Properties:
+            Path: /general/get_group/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+Outputs:
+  ApiGatewayApiUrl:
+    Description: "API Gateway endpoint URL for Dev stage"
+    Value: !Sub "https://${ApiGatewayApi}.execute-api.${AWS::Region}.amazonaws.com/Dev/"
+    
+  LocalApiUrl:
+    Description: "Local API Gateway endpoint URL"
+    Value: "http://127.0.0.1:3000"

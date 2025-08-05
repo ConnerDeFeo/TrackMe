@@ -20,6 +20,16 @@ Resources:
           - python3.12
       Metadata:
         BuildMethod: python3.12
+  RDSLayer:
+      Type: AWS::Serverless::LayerVersion
+      Properties:
+        LayerName: RDSLayer
+        Description: RDSLayer utilities
+        ContentUri: layers/common/python/
+        CompatibleRuntimes:
+          - python3.12
+      Metadata:
+        BuildMethod: python3.12
 
   CreateAthleteFunction:
     Type: AWS::Serverless::Function 

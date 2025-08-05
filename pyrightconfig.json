@@ -9,7 +9,9 @@
     ],
     "extraPaths": [
         "Server",
-        "Server/layers/common/python"
+        "Server/layers/rds/python",
+        "Server/layers/dynamo/python",
+        "Server/layers/decimal_encoder/python"
     ],
     "pythonVersion": "3.12",
     "typeCheckingMode": "basic",

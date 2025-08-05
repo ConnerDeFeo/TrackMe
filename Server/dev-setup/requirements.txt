@@ -1,3 +1,5 @@
 boto3
 botocore
--e ../layers/common/python
+-e ../layers/rds/python
+-e ../layers/dynamo/python
+-e ../layers/decimal_encoder/python

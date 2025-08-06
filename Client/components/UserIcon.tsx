@@ -18,8 +18,8 @@ const UserIcon = ()=> {
 
   return (
     <View className="rounded-full bg-black w-[3rem] h-[3rem] ml-auto mr-7 mt-[4.5rem]">
-      <TouchableOpacity onPress={() => navigation.navigate(`${accountType}Profile`)}>
-        <Text className="text-white m-auto">PFP</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(`${accountType}Profile`)} className="m-auto">
+        <Text className="text-white text-xs">{accountType}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,4 +1,4 @@
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import './global.css'
 import Setup from './pages/authentication/Setup';
 import { createStaticNavigation } from '@react-navigation/native';
@@ -16,6 +16,8 @@ import Footer from './components/Footer';
 import UserIcon from './components/UserIcon';
 import CoachGroups from './pages/coaches/CoachGroups';
 import AthleteGroups from './pages/athletes/AthleteGroups';
+import CoachProfile from './pages/coaches/CoachProfile';
+import AthleteProfile from './pages/athletes/AthleteProfile';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -27,7 +29,7 @@ function BaseLayout(content: React.ReactElement): ComponentType<any>{
         <View className='bg-white flex-1'>
           {content}
         </View>
-        <Footer buttons={[['Groups', 'Groups']]} />
+        <Footer buttons={[['Groups', 'AthleteGroups']]} />
       </>
     ); 
   }
@@ -73,6 +75,8 @@ const RootStack = createNativeStackNavigator({
     AuthCheck:BaseLayout(<AuthCheck/>),
     CoachGroups: CoachLayout(<CoachGroups/>),
     AthleteGroups: AthleteLayout(<AthleteGroups/>),
+    CoachProfile: CoachLayout(<CoachProfile/>),
+    AthleteProfile: AthleteLayout(<AthleteProfile/>)
   },
 });
 const Navigation = createStaticNavigation(RootStack);

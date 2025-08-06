@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from "react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
+import UserService from "../../services/UserService";
 
 //Check to see if user is already logged in, then redirect accordingly
 const AuthCheck=()=>{
@@ -10,13 +11,14 @@ const AuthCheck=()=>{
     useEffect(() => {
         async function checkUser() {
         try {
-            const userAttributes = await fetchUserAttributes();
-            if (userAttributes) {
-                const accountType = userAttributes['custom:accountType'];
+            const accountType =await UserService.getAccountType();
+            if (accountType) {
+                AsyncStorage.setItem('accountType', accountType);
                 navigation.navigate(`${accountType}Groups`);
                 return;
             } 
         } catch(Exception) {
+            console.error("Error fetching user attributes:", Exception);
             navigation.navigate('Setup');
         }
         }

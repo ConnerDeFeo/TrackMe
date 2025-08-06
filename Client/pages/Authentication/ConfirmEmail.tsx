@@ -2,6 +2,8 @@ import { confirmSignUp, signIn } from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import UserService from "../../services/UserService";
+import AsyncStorage from "../../services/AsyncStorage";
 
 //Used to transfer username and password from creation screen to this one
 type RootStackParamList = {
@@ -33,7 +35,9 @@ const ConfirmEmail = () => {
                 username:username,
                 password:password
             })
-            navigation.navigate(`AthleteHomePage`);
+            const accountType = await UserService.getAccountType();
+            AsyncStorage.storeData('accountType', accountType!);
+            navigation.navigate(`${accountType}Groups`);
         } catch (error: any) {
             console.log(error)
             setMessage(error.message);

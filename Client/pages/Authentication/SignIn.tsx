@@ -2,7 +2,8 @@ import AuthInput from "../../components/AuthInput";
 import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { fetchAuthSession, fetchUserAttributes, getCurrentUser, signIn } from "aws-amplify/auth";
+import { fetchUserAttributes, signIn } from "aws-amplify/auth";
+import AsyncStorage from "../../services/AsyncStorage";
 
 //Create account page
 const SignIn = ()=>{
@@ -21,7 +22,8 @@ const SignIn = ()=>{
             });
             const userAttributes = await fetchUserAttributes();
             const accountType = userAttributes['custom:accountType'];
-            navigation.navigate(`${accountType}HomePage`);
+            AsyncStorage.storeData('accountType', accountType!);
+            navigation.navigate(`${accountType}Groups`);
         }catch (error:any) {
             setError(error.message);
         }

@@ -1,4 +1,4 @@
-import AuthInput from "../components/AuthInput";
+import AuthInput from "../../components/AuthInput";
 import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -15,22 +15,13 @@ const SignIn = ()=>{
     //Function to handle sign in
     const handleSignIn = async () => {
         try{
-            const resp = await signIn({
+            await signIn({
                 username: username,
                 password: password
             });
-            console.log(resp);
             navigation.navigate('HomePage');
         }catch (error:any) {
             setError(error.message);
-            console.log('=== ERROR DETAILS ===');
-            console.log('Error object:', error);
-            console.log('Error name:', error.name);
-            console.log('Error message:', error.message);
-            console.log('Error stack:', error.stack);
-            console.log('Error code:', error.code);
-            console.log('Full error JSON:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-            console.log('=== END ERROR DETAILS ===');
         }
     }
 

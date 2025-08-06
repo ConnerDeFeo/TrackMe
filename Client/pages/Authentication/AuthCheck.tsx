@@ -10,16 +10,18 @@ const AuthCheck=()=>{
         async function checkUser() {
         try {
             const user = await getCurrentUser();
+            console.log("Current user:", user);
             
             // Uncomment the line below to force logout for testing
             await signOut();
             
             if (user) {
-            navigation.navigate('HomePage');
-            return;
+                navigation.navigate('HomePage');
+                return;
             } 
-        } catch {}
-        navigation.navigate('Setup');
+        } catch(Exception) {
+            navigation.navigate('Setup');
+        }
         }
         checkUser();
     }, [navigation]);

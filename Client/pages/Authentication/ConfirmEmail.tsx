@@ -1,4 +1,4 @@
-import { confirmSignUp, getCurrentUser, signIn } from "aws-amplify/auth";
+import { confirmSignUp, signIn } from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -6,7 +6,8 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 //Used to transfer username and password from creation screen to this one
 type RootStackParamList = {
     ConfirmScreen: {
-      password: string;
+        username: string;
+        password: string;
     };
 }
 type ConfirmScreenRouteProp = RouteProp<RootStackParamList, 'ConfirmScreen'>;
@@ -14,7 +15,7 @@ type ConfirmScreenRouteProp = RouteProp<RootStackParamList, 'ConfirmScreen'>;
 //Confirm Email page
 const ConfirmEmail = () => {
     const route = useRoute<ConfirmScreenRouteProp>();
-    const {password} = route.params;
+    const {username, password} = route.params;
     const navigation = useNavigation<any>();
 
     const [verificationCode, setVerificationCode] = useState<string>("");
@@ -22,12 +23,6 @@ const ConfirmEmail = () => {
 
     //On click of the confirm button
     const handleConfirmEmail = async () => {
-        const user = await getCurrentUser();
-        const username = user?.username;
-        if (username) {
-            setMessage("No username found. Please create an account first.");
-            return;
-        }
         try {
             await confirmSignUp({
                 username: username,
@@ -38,7 +33,7 @@ const ConfirmEmail = () => {
                 username:username,
                 password:password
             })
-            navigation.navigate("HomePage");
+            navigation.navigate(`AthleteHomePage`);
         } catch (error: any) {
             console.log(error)
             setMessage(error.message);

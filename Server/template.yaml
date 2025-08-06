@@ -78,7 +78,7 @@ Resources:
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
+        - Ref: RDSLayer
 
   GetAthleteFunction:
     Type: AWS::Serverless::Function 

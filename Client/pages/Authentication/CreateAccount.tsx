@@ -1,11 +1,11 @@
-import AuthInput from "../components/AuthInput";
+import AuthInput from "../../components/AuthInput";
 import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
-import { getCurrentUser, signUp } from 'aws-amplify/auth';
-import AthleteService from "../services/AthleteService";
-import CoachService from "../services/CoachService";
+import { signUp } from 'aws-amplify/auth';
+import AthleteService from "../../services/AthleteService";
+import CoachService from "../../services/CoachService";
 
 //type used to grab username and password that were given along the route
 
@@ -65,7 +65,7 @@ const CreateAccount = ()=>{
             }
             //Create the account in the database
             let rdsResp;
-            if(accountType === "athlete") 
+            if(accountType === "Athlete") 
                 rdsResp = await AthleteService.createAthlete({
                     username: username,
                     userId: userId
@@ -80,7 +80,7 @@ const CreateAccount = ()=>{
                 return;
             }
 
-            navigation.navigate('ConfirmEmail',{password:password})
+            navigation.navigate('ConfirmEmail',{username:username,password:password})
         }
         catch (error:any) {
             handleError(error);

@@ -10,13 +10,13 @@ const Footer: React.FC<FooterProps> = ({ buttons }) => {
     const navigation = useNavigation<any>();
 
     return (
-        <View className='h-[3rem] bg-gray-200 flex-row justify-around items-center'>
+        <View className='h-[5rem] bg-blue-500 flex-row justify-around items-center'>
             {buttons.map(([label, destination], idx) => (
                 <TouchableOpacity
                     key={idx}
                     onPress={() => navigation.navigate(destination)}
                 >
-                    <Text>{label}</Text>
+                    <Text className='text-white text-xl'>{label}</Text>
                 </TouchableOpacity>
             ))}
         </View>

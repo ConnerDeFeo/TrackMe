@@ -2,7 +2,6 @@ import pytest
 
 from lambdas.athlete.accept_group_invite.accept_group_invite import accept_group_invite
 from lambdas.coach.create_coach.create_coach import create_coach
-from lambdas.general.get_group.get_group import get_group
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
@@ -37,21 +36,6 @@ def generate_athlete(username, userId):
 def test_create_group():
     response = create_group(TestData.test_group, {})
     assert response['statusCode'] == 200
-
-def test_get_group():
-    create_group(TestData.test_group, {})
-    response = get_group(TestData.test_group, {})
-    assert response['statusCode'] == 404 #no athletes in group yet
-
-    execute_commit("INSERT INTO athletes (userId, username) VALUES (%s, %s)", ("1234", "test_athlete"))
-    execute_commit("INSERT INTO athlete_groups (athleteId, groupId) VALUES (%s, %s)", ("1234", 1))
-
-    response = get_group(TestData.test_group, {})
-    assert response['statusCode'] == 200
-
-    group_data = json.loads(response['body'])
-    assert len(group_data) == 1
-    assert "test_athlete" in group_data[0]
 
 def test_invite_athlete():
     create_group(TestData.test_group, {})

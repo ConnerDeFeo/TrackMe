@@ -1,4 +1,4 @@
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import './global.css'
 import Setup from './pages/authentication/Setup';
 import { createStaticNavigation } from '@react-navigation/native';
@@ -14,6 +14,7 @@ import 'react-native-url-polyfill/auto';
 import AuthCheck from './pages/authentication/AuthCheck';
 import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
+import UserIcon from './components/UserIcon';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -21,9 +22,12 @@ Amplify.configure(awsConfig);
 function BaseLayout(content: React.ReactElement): ComponentType<any>{
   return ()=>{
     return(
-      <SafeAreaView className='bg-white flex-1'>
-        {content}
-      </SafeAreaView>
+      <>
+        <View className='bg-white flex-1'>
+          {content}
+        </View>
+        <Footer buttons={[['Home', 'AthleteHomePage']]} />
+      </>
     ); 
   }
 }
@@ -31,10 +35,13 @@ function BaseLayout(content: React.ReactElement): ComponentType<any>{
 function AthleteLayout(content: React.ReactElement): ComponentType<any>{
   return ()=>{
     return(
-      <SafeAreaView className='bg-white flex-1'>
-        {content}
-        <Footer buttons={[['Home', 'Home'], ['Settings', 'Settings']]} />
-      </SafeAreaView>
+      <>
+        <View className='bg-white flex-1'>
+          <UserIcon />
+          {content}
+        </View>
+        <Footer buttons={[['Groups', 'Groups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches']]} />
+      </>
     ); 
   }
 }
@@ -42,10 +49,12 @@ function AthleteLayout(content: React.ReactElement): ComponentType<any>{
 function CoachLayout(content: React.ReactElement): ComponentType<any>{
   return ()=>{
     return(
-      <SafeAreaView className='bg-white flex-1'>
-        {content}
+      <>
+        <View className='bg-white flex-1'>
+          {content}
+        </View>
         <Footer buttons={[['Home', 'Home'], ['Settings', 'Settings']]} />
-      </SafeAreaView>
+      </>
     ); 
   }
 }

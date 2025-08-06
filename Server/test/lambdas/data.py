@@ -118,3 +118,17 @@ class TestData:
             "distance": 150
         })
     }
+
+    test_get_group_athlete = {
+        "body": json.dumps({
+            "userId": "1234",
+            "accountType": "Athlete"
+        })
+    }
+
+    test_get_group_coach = {
+        "body": json.dumps({
+            "userId": "123",
+            "accountType": "Coach"
+        })
+    }

@@ -2,8 +2,6 @@ import json
 
 import pytest
 from lambdas.coach.create_coach.create_coach import create_coach
-from lambdas.general.get_group.get_group import get_group
-from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.get_coach.get_coach import get_coach;
 from rds import execute_file
 from data import TestData

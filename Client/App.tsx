@@ -1,20 +1,19 @@
 import { SafeAreaView } from 'react-native';
 import './global.css'
-import Setup from './pages/Authentication/Setup';
+import Setup from './pages/authentication/Setup';
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ComponentType } from 'react';
-import CreateAccount from './pages/Authentication/CreateAccount';
+import CreateAccount from './pages/authentication/CreateAccount';
 import { Amplify } from 'aws-amplify';
 import awsConfig from './aws-config';
-import ConfirmEmail from './pages/Authentication/ConfirmEmail';
-import HomePage from './pages/athletes/AthleteHomePage';
+import ConfirmEmail from './pages/authentication/ConfirmEmail';
+import AthleteHomePage from './pages/athletes/AthleteHomePage';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
-import AuthCheck from './pages/Authentication/AuthCheck';
-import SignIn from './pages/Authentication/SignIn';
+import AuthCheck from './pages/authentication/AuthCheck';
+import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
-import AthleteHomePage from './pages/athletes/AthleteHomePage';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -61,7 +60,6 @@ const RootStack = createNativeStackNavigator({
     CreateAccount: BaseLayout(<CreateAccount/>),
     SignIn: BaseLayout(<SignIn/>),
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),
-    HomePage: BaseLayout(<HomePage/>),
     AuthCheck:BaseLayout(<AuthCheck/>),
     AthleteHomePage: AthleteLayout(<AthleteHomePage/>),
   },

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { getCurrentUser, signOut } from "aws-amplify/auth";
+import { fetchUserAttributes, getCurrentUser, signOut } from "aws-amplify/auth";
 import { useEffect } from "react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
 
@@ -9,14 +9,10 @@ const AuthCheck=()=>{
     useEffect(() => {
         async function checkUser() {
         try {
-            const user = await getCurrentUser();
-            console.log("Current user:", user);
-            
-            // Uncomment the line below to force logout for testing
-            await signOut();
-            
-            if (user) {
-                navigation.navigate('HomePage');
+            const userAttributes = await fetchUserAttributes();
+            if (userAttributes) {
+                const accountType = userAttributes['custom:accountType'];
+                navigation.navigate(`${accountType}HomePage`);
                 return;
             } 
         } catch(Exception) {

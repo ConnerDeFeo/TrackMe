@@ -2,7 +2,7 @@ import AuthInput from "../../components/AuthInput";
 import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { fetchAuthSession, getCurrentUser, signIn } from "aws-amplify/auth";
+import { fetchAuthSession, fetchUserAttributes, getCurrentUser, signIn } from "aws-amplify/auth";
 
 //Create account page
 const SignIn = ()=>{
@@ -19,7 +19,9 @@ const SignIn = ()=>{
                 username: username,
                 password: password
             });
-            navigation.navigate('HomePage');
+            const userAttributes = await fetchUserAttributes();
+            const accountType = userAttributes['custom:accountType'];
+            navigation.navigate(`${accountType}HomePage`);
         }catch (error:any) {
             setError(error.message);
         }

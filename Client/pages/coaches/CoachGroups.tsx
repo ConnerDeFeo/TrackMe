@@ -1,8 +1,10 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
 const CoachGroups = () => {
   return (
-    <Text>Coach Groups</Text>
+    <View>
+      <Text>Coach Groups</Text>
+    </View>
   );
 }
 

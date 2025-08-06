@@ -33,7 +33,7 @@ const CreateAccount = ()=>{
                 break;
             case 'InvalidParameterException':
                 setMessage("Please enter a valid email address.");
-                break;
+                break; 
             default:
                 setMessage("Sign up failed. Please try again.");
                 break;
@@ -66,15 +66,9 @@ const CreateAccount = ()=>{
             //Create the account in the database
             let rdsResp;
             if(accountType === "Athlete") 
-                rdsResp = await AthleteService.createAthlete({
-                    username: username,
-                    userId: userId
-                });
+                rdsResp = await AthleteService.createAthlete(userId, username);
             else
-                rdsResp = await CoachService.createCoach({
-                    username: username,
-                    userId: userId
-                });
+                rdsResp = await CoachService.createCoach(userId, username);
             if(!rdsResp) {
                 setMessage("Failed to create account. Please try again.");
                 return;

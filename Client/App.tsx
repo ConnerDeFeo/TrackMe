@@ -54,6 +54,7 @@ function CoachLayout(content: React.ReactElement): ComponentType<any>{
     return(
       <>
         <View className='bg-white flex-1'>
+          <UserIcon />
           {content}
         </View>
         <Footer buttons={[['Groups', 'CoachGroups'], ['Athletes', 'Athletes']]} />
@@ -76,7 +77,7 @@ const RootStack = createNativeStackNavigator({
     CoachGroups: CoachLayout(<CoachGroups/>),
     AthleteGroups: AthleteLayout(<AthleteGroups/>),
     CoachProfile: CoachLayout(<CoachProfile/>),
-    AthleteProfile: AthleteLayout(<AthleteProfile/>)
+    AthleteProfile: AthleteLayout(<AthleteProfile/>),
   },
 });
 const Navigation = createStaticNavigation(RootStack);

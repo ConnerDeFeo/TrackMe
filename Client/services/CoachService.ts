@@ -3,8 +3,13 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const CoachService = {
     //Creates coach
-    createCoach: async (coachData:Record<string, string>) => {
-        const response = await API.post(`${EXPO_PUBLIC_API_URL}/coaches/create_coach`, coachData);
+    createCoach: async (userId:string, username:string) => {
+        const response = await API.post(`${EXPO_PUBLIC_API_URL}/coaches/create_coach`,
+            { 
+                'userId': userId, 
+                'username': username 
+            }
+        );
         if (!response.ok) {
             throw new Error('Failed to create coach');
         }

@@ -3,8 +3,13 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const AthleteService = {
     //Creates athlete
-    createAthlete: async (athleteData:Record<string, string>) => {
-        const response = await API.post(`${EXPO_PUBLIC_API_URL}/athletes/create_athlete`, athleteData);
+    createAthlete: async (userId:string, username:string) => {
+        const response = await API.post(`${EXPO_PUBLIC_API_URL}/athletes/create_athlete`,
+            { 
+                'userId': userId, 
+                'username': username 
+            }
+        );
         if (!response.ok) {
             throw new Error('Failed to create athlete');
         }

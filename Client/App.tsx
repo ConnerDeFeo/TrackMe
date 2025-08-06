@@ -14,7 +14,8 @@ import AuthCheck from './pages/authentication/AuthCheck';
 import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
 import UserIcon from './components/UserIcon';
-import Groups from './pages/Groups';
+import CoachGroups from './pages/coaches/CoachGroups';
+import AthleteGroups from './pages/athletes/AthleteGroups';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -26,7 +27,7 @@ function BaseLayout(content: React.ReactElement): ComponentType<any>{
         <View className='bg-white flex-1'>
           {content}
         </View>
-        <Footer buttons={[['Home', 'AthleteHomePage']]} />
+        <Footer buttons={[['Groups', 'Groups']]} />
       </>
     ); 
   }
@@ -40,7 +41,7 @@ function AthleteLayout(content: React.ReactElement): ComponentType<any>{
           <UserIcon />
           {content}
         </View>
-        <Footer buttons={[['Groups', 'Groups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches']]} />
+        <Footer buttons={[['Groups', 'AthleteGroups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches']]} />
       </>
     ); 
   }
@@ -53,7 +54,7 @@ function CoachLayout(content: React.ReactElement): ComponentType<any>{
         <View className='bg-white flex-1'>
           {content}
         </View>
-        <Footer buttons={[['Home', 'Home'], ['Settings', 'Settings']]} />
+        <Footer buttons={[['Groups', 'CoachGroups'], ['Athletes', 'Athletes']]} />
       </>
     ); 
   }
@@ -70,7 +71,8 @@ const RootStack = createNativeStackNavigator({
     SignIn: BaseLayout(<SignIn/>),
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),
     AuthCheck:BaseLayout(<AuthCheck/>),
-    Groups: AthleteLayout(<Groups/>),
+    CoachGroups: CoachLayout(<CoachGroups/>),
+    AthleteGroups: AthleteLayout(<AthleteGroups/>),
   },
 });
 const Navigation = createStaticNavigation(RootStack);

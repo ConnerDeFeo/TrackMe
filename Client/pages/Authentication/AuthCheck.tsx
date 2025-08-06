@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { getCurrentUser } from "aws-amplify/auth";
+import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
 import { useEffect } from "react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
 
@@ -10,9 +10,10 @@ const AuthCheck=()=>{
     useEffect(() => {
         async function checkUser() {
         try {
-            const user = await getCurrentUser();
-            if (user) {
-                navigation.navigate(`Groups`);
+            const userAttributes = await fetchUserAttributes();
+            if (userAttributes) {
+                const accountType = userAttributes['custom:accountType'];
+                navigation.navigate(`${accountType}Groups`);
                 return;
             } 
         } catch(Exception) {

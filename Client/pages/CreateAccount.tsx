@@ -3,8 +3,9 @@ import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
-import { signUp } from 'aws-amplify/auth';
-import GlobalStorage from "../services/GlobalStorage";
+import { getCurrentUser, signUp } from 'aws-amplify/auth';
+import AthleteService from "../services/AthleteService";
+import CoachService from "../services/CoachService";
 
 //type used to grab username and password that were given along the route
 
@@ -22,6 +23,7 @@ const CreateAccount = ()=>{
     
     //Handle error messages based on the error type
     const handleError = (error:any) => {
+        console.error("Sign up error:", error);
         switch (error.name) {
             case 'UsernameExistsException':
                 setMessage("Username already exists. Please choose a different username.");
@@ -45,16 +47,39 @@ const CreateAccount = ()=>{
             return;
         }
         try{
-            const resp = await signUp({
+            //Amazon cognito
+            const cognitoResp = await signUp({
                 username: username,
                 password: password,
                 options:{
                     userAttributes:{
-                        email:email
+                        email:email,
+                        'custom:accountType': accountType
                     }
                 }
             });
-            GlobalStorage.setItem("username",username)
+            const userId = cognitoResp.userId;
+            if (!userId) {
+                setMessage("Failed to retrieve user ID. Please try again.");
+                return;
+            }
+            //Create the account in the database
+            let rdsResp;
+            if(accountType === "athlete") 
+                rdsResp = await AthleteService.createAthlete({
+                    username: username,
+                    userId: userId
+                });
+            else
+                rdsResp = await CoachService.createCoach({
+                    username: username,
+                    userId: userId
+                });
+            if(!rdsResp) {
+                setMessage("Failed to create account. Please try again.");
+                return;
+            }
+
             navigation.navigate('ConfirmEmail',{password:password})
         }
         catch (error:any) {

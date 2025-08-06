@@ -33,7 +33,8 @@ const RootStack = createNativeStackNavigator({
     headerShown: false
   },
   screens: {
-    Home: BaseLayout(<Setup/>),
+    Home: BaseLayout(<HomePage/>),
+    Setup: BaseLayout(<Setup/>),
     CreateAccount: BaseLayout(<CreateAccount/>),
     SignIn: BaseLayout(<SignIn/>),
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),

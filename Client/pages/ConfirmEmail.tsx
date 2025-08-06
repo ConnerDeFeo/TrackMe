@@ -1,8 +1,7 @@
-import { confirmSignUp, signIn } from "aws-amplify/auth";
+import { confirmSignUp, getCurrentUser, signIn } from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import GlobalStorage from "../services/GlobalStorage";
 
 //Used to transfer username and password from creation screen to this one
 type RootStackParamList = {
@@ -23,24 +22,22 @@ const ConfirmEmail = () => {
 
     //On click of the confirm button
     const handleConfirmEmail = async () => {
-        const username = await GlobalStorage.getItem("username");
-        if (!username) {
+        const user = await getCurrentUser();
+        const username = user?.username;
+        if (username) {
             setMessage("No username found. Please create an account first.");
             return;
         }
         try {
-            console.log(username)
-            console.log(password)
-            // await confirmSignUp({
-            //     username: username,
-            //     confirmationCode: verificationCode
-            // });
+            await confirmSignUp({
+                username: username,
+                confirmationCode: verificationCode
+            });
             //If confirm email is succesfull, immediatlye login and reroute to home page
-            const resp = await signIn({
-                username:"c.jack.defeo@gmail.com",
+            await signIn({
+                username:username,
                 password:password
             })
-            console.log(resp);
             navigation.navigate("HomePage");
         } catch (error: any) {
             console.log(error)

@@ -7,7 +7,16 @@ Globals:
     Timeout: 15
     Environment:
       Variables:
-        DYNAMODB_ENDPOINT_URL: http://host.docker.internal:8000
+        RDS_ENDPOINT: host.docker.internal
+        RDS_PORT: 5433
+        RDS_USER: postgres
+        RDS_DBNAME: trackme
+        RDS_PASSWORD: password
+        DYNAMODB_ENDPOINT: http://host.docker.internal:8000
+        DYNAMODB_REGION: us-west-1
+        AWS_ACCESS_KEY_ID: fakeAccessKeyId
+        AWS_SECRET_ACCESS_KEY: fakeSecretAccessKey
+
 
 Resources:
   # API Gateway

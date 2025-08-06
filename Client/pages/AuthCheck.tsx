@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { getCurrentUser } from "aws-amplify/auth";
+import { getCurrentUser, signOut } from "aws-amplify/auth";
 import { useEffect } from "react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
 
@@ -10,6 +10,10 @@ const AuthCheck=()=>{
         async function checkUser() {
         try {
             const user = await getCurrentUser();
+            
+            // Uncomment the line below to force logout for testing
+            await signOut();
+            
             if (user) {
             navigation.navigate('HomePage');
             return;

@@ -3,11 +3,11 @@ from rds import fetch_all
 
 #Gets all related groups for an athlet or coach
 def get_groups(event, context):
-    body = json.loads(event['body'])
-
+    query_params = event.get('queryStringParameters', {})
     try:
-        userId = body['userId']
-        accountType = body['accountType']
+        # Query string parameters
+        userId = query_params.get('userId')
+        accountType = query_params.get('accountType')
 
         #Athletes
         if accountType == 'Athlete':

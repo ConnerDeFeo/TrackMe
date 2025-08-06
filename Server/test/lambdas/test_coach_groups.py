@@ -8,7 +8,7 @@ from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.search_athlete_for_group.search_athlete_for_group import search_athlete_for_group
 import json
 from data import TestData
-from rds import execute_file, execute_commit, fetch_one
+from rds import execute_file, fetch_one
 
 
 test_coach = {

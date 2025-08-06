@@ -322,16 +322,16 @@ Resources:
         - Ref: DynamoDBLayer
 
   # GENERAL FUNCTIONS
-  GetGroupFunction:
+  GetGroupsFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/general/get_group/
-      Handler: get_group.get_group
+      CodeUri: lambdas/general/get_groups/
+      Handler: get_groups.get_groups
       Events:
-        GetGroupApi:
+        GetGroupsApi:
           Type: Api
           Properties:
-            Path: /general/get_group/
+            Path: /general/get_groups/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:

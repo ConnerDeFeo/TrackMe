@@ -120,15 +120,15 @@ class TestData:
     }
 
     test_get_group_athlete = {
-        "body": json.dumps({
+        "queryStringParameters":{
             "userId": "1234",
             "accountType": "Athlete"
-        })
+        }
     }
 
     test_get_group_coach = {
-        "body": json.dumps({
+        "queryStringParameters": {
             "userId": "123",
             "accountType": "Coach"
-        })
+        }
     }

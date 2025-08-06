@@ -8,13 +8,13 @@ import CreateAccount from './pages/authentication/CreateAccount';
 import { Amplify } from 'aws-amplify';
 import awsConfig from './aws-config';
 import ConfirmEmail from './pages/authentication/ConfirmEmail';
-import AthleteHomePage from './pages/athletes/AthleteHomePage';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import AuthCheck from './pages/authentication/AuthCheck';
 import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
 import UserIcon from './components/UserIcon';
+import Groups from './pages/Groups';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -70,7 +70,7 @@ const RootStack = createNativeStackNavigator({
     SignIn: BaseLayout(<SignIn/>),
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),
     AuthCheck:BaseLayout(<AuthCheck/>),
-    AthleteHomePage: AthleteLayout(<AthleteHomePage/>),
+    Groups: AthleteLayout(<Groups/>),
   },
 });
 const Navigation = createStaticNavigation(RootStack);

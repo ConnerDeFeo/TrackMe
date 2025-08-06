@@ -6,6 +6,7 @@ type FooterProps = {
     buttons: [string, string][];
 };
 
+//Footer at bottom of the screen with navigation buttons
 const Footer: React.FC<FooterProps> = ({ buttons }) => {
     const navigation = useNavigation<any>();
 

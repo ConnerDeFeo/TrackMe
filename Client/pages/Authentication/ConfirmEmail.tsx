@@ -30,7 +30,7 @@ const ConfirmEmail = () => {
                 username: username,
                 confirmationCode: verificationCode
             });
-            //If confirm email is succesfull, immediatlye login and reroute to home page
+            //If confirm email is succesfull, immediatley login and reroute to home page
             await signIn({
                 username:username,
                 password:password

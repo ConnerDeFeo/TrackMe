@@ -23,7 +23,7 @@ const CreateAccount = ()=>{
     
     //Handle error messages based on the error type
     const handleError = (error:any) => {
-        console.error("Sign up error:", error);
+        console.log("Sign up error:", error);
         switch (error.name) {
             case 'UsernameExistsException':
                 setMessage("Username already exists. Please choose a different username.");
@@ -94,8 +94,8 @@ const CreateAccount = ()=>{
                 selectedValue={accountType}
                 onValueChange={itemValue => setAccountType(itemValue)}
             >
-                <Picker.Item label="Athlete" value="athlete" style = {selectStyling}/>
-                <Picker.Item label="Coach" value="coach" style = {selectStyling}/>
+                <Picker.Item label="Athlete" value="Athlete" style = {selectStyling}/>
+                <Picker.Item label="Coach" value="Coach" style = {selectStyling}/>
             </Picker>
             <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
             <AuthInput value={username} setValue={setUsername} placeholder="Username"/>

@@ -4,7 +4,6 @@ import { Button, Text, View } from "react-native";
 
 //Profile athletes see when they click on their icon
 const AthleteProfile = () => {
-  console.log("AthleteProfile component loaded");
   const navigation = useNavigation<any>();
 
   const handleLogout = async () => {

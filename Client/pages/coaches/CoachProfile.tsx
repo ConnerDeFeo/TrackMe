@@ -4,7 +4,6 @@ import { Button, Text, View } from "react-native";
 
 //Profile coaches see when they click on their icon
 const CoachProfile = () => {
-  console.log("CoachProfile component loaded");
   const navigation = useNavigation<any>();
 
   const handleLogout = async () => {

@@ -10,17 +10,14 @@ const AuthCheck=()=>{
     
     useEffect(() => {
         async function checkUser() {
-        try {
             const accountType =await UserService.getAccountType();
             if (accountType) {
                 AsyncStorage.setItem('accountType', accountType);
                 navigation.navigate(`${accountType}Groups`);
                 return;
-            } 
-        } catch(Exception) {
-            console.error("Error fetching user attributes:", Exception);
+            }
             navigation.navigate('Setup');
-        }
+            
         }
         checkUser();
     }, [navigation]);

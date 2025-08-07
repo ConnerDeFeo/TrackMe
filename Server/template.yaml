@@ -65,6 +65,36 @@ Resources:
       BuildMethod: python3.12
 
   # ATHLETE FUNCTIONS
+  GetCoachesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/get_coaches/
+      Handler: get_coaches.get_coaches
+      Events:
+        GetCoachesApi:
+          Type: Api
+          Properties:
+            Path: /athletes/get_coaches/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
+  GetCoachRequestsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/athlete/get_coach_requests/
+      Handler: get_coach_requests.get_coach_requests
+      Events:
+        GetCoachRequestsApi:
+          Type: Api
+          Properties:
+            Path: /athletes/get_coach_requests/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   CreateAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -76,21 +106,6 @@ Resources:
           Properties:
             Path: /athletes/create_athlete/
             Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
-  GetAthleteFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/get_athlete/
-      Handler: get_athlete.get_athlete
-      Events:
-        GetAthleteApi:
-          Type: Api
-          Properties:
-            Path: /athletes/get_athlete/
-            Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
@@ -201,21 +216,6 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  GetCoachFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/get_coach/
-      Handler: get_coach.get_coach
-      Events:
-        GetCoachApi:
-          Type: Api
-          Properties:
-            Path: /coaches/get_coach/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
   CreateGroupFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -272,21 +272,6 @@ Resources:
           Properties:
             Path: /coaches/invite_athlete/
             Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
-  GetAthletesFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/get_athletes/
-      Handler: get_athletes.get_athletes
-      Events:
-        GetAthletesApi:
-          Type: Api
-          Properties:
-            Path: /coaches/get_athletes/
-            Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer

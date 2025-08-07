@@ -10,7 +10,13 @@ const AthleteService = {
                 'username': username 
             }
         );
-    } 
+    },
+    getCoaches: async (userId:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coaches?userId=${userId}`);
+    },
+    getCoachRequests: async (userId:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coach_requests?userId=${userId}`);
+    }
 }
 
 export default AthleteService;

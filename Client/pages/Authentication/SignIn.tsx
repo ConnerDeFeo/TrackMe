@@ -3,6 +3,7 @@ import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
+import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
 
 //Create account page
 const SignIn = ()=>{
@@ -16,6 +17,11 @@ const SignIn = ()=>{
     const handleSignIn = async () => {
         try{
             await UserService.signIn(username,password);
+            const attribute = await fetchUserAttributes();
+            const accountType = attribute['custom:accountType'];
+            if(accountType) {
+                navigation.navigate(`${accountType}Groups`);
+            }
         }catch (error:any) {
             setError(error.message);
         }

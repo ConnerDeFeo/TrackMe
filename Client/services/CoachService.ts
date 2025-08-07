@@ -14,7 +14,7 @@ const CoachService = {
     createGroup: async (coachId:string, groupName:string) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/create_group`, 
             { 
-                'coachId': coachId, 
+                'userId': coachId, 
                 'groupName': groupName 
             }
         );

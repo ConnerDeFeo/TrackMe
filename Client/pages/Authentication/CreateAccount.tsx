@@ -74,7 +74,7 @@ const CreateAccount = ()=>{
                 return;
             }
 
-            navigation.navigate('ConfirmEmail',{username:username,password:password})
+            navigation.navigate('ConfirmEmail',{username:username,password:password, accountType:accountType});
         }
         catch (error:any) {
             handleError(error);

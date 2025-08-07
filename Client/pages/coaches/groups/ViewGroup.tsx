@@ -6,11 +6,11 @@ const ViewGroup = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const {groupUsername} = route.params as { groupUsername: string };
+  const {groupName} = route.params as { groupName: string };
 
   return (
     <View>
-      <Text>Group Details</Text>
+      <Text>{groupName}</Text>
       <Button title="Edit Group"/>
     </View>
   );

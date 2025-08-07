@@ -33,7 +33,6 @@ function BaseLayout(content: React.ReactElement): ComponentType<any>{
         <View className='bg-white flex-1'>
           {content}
         </View>
-        <Footer buttons={[['Groups', 'AthleteGroups']]} />
       </>
     ); 
   }

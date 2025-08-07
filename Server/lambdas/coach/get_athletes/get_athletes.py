@@ -15,9 +15,14 @@ def get_athletes(event, context):
             JOIN coaches c ON ac.coachId = c.userId
             WHERE c.userId = %s;
         """, (coach_id,))
+        if athletes:
+            return {
+                'statusCode': 200,
+                'body': json.dumps(athletes)
+            }
         return {
-            'statusCode': 200,
-            'body': json.dumps(athletes)
+            'statusCode': 404,
+            'body': json.dumps({'message': 'No athletes found'})
         }
     except Exception as e:
         print(f"Error getting athletes: {e}")

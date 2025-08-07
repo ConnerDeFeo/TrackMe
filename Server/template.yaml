@@ -110,16 +110,16 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  AcceptGroupInviteFunction:
+  AcceptCoachInviteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/accept_group_invite/
-      Handler: accept_group_invite.accept_group_invite
+      CodeUri: lambdas/athlete/accept_coach_invite/
+      Handler: accept_coach_invite.accept_coach_invite
       Events:
         AcceptGroupInviteApi:
           Type: Api
           Properties:
-            Path: /athletes/accept_group_invite/
+            Path: /athletes/accept_coach_invite/
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:

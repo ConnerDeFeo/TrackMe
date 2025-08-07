@@ -2,7 +2,7 @@ import json
 import pytest
 from lambdas.athlete.input_time.input_time import input_time
 from lambdas.athlete.input_group_time.input_group_time import input_group_time
-from lambdas.athlete.accept_group_invite.accept_group_invite import accept_group_invite
+from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
@@ -28,7 +28,7 @@ def setup_before_each_test(): #This will run before each test
     create_coach(TestData.test_coach, {})
     create_group(TestData.test_group, {})
     invite_athlete(TestData.test_invite, {})
-    accept_group_invite(TestData.test_accept_group_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
     create_workout(TestData.test_workout, {})
     assign_group_workout(TestData.test_assign_workout, {})
     yield

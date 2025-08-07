@@ -6,20 +6,20 @@ def invite_athlete(event, context):
     body = json.loads(event.get('body', '{}'))
     try:
         athlete_id = body['athleteId']
-        group_id = body['groupId']
+        coach_id = body['coachId']
 
         # Insert the athlete into the group invite table
         execute_commit(
             """
-            INSERT INTO athlete_group_invites (athleteId, groupId)
+            INSERT INTO athlete_coach_invites (athleteId, coachId)
             VALUES (%s, %s)
-            ON CONFLICT (athleteId, groupId) DO NOTHING
-            """, 
-            (athlete_id, group_id)
+            ON CONFLICT (athleteId, coachId) DO NOTHING
+            """,
+            (athlete_id, coach_id)
         )
         return {
             "statusCode": 200,
-            "body": f"Invitation sent to {athlete_id} for group {group_id}"
+            "body": f"Invitation sent to {athlete_id} for coach {coach_id}"
         }
     except Exception as e:
         print(f"Error inviting athlete: {str(e)}")

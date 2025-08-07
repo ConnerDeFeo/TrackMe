@@ -1,13 +1,15 @@
-DROP TABLE IF EXISTS coaches CASCADE;
-DROP TABLE IF EXISTS athletes CASCADE;
-DROP TABLE IF EXISTS groups CASCADE;
-DROP TABLE IF EXISTS athlete_groups CASCADE;
-DROP TABLE IF EXISTS athlete_group_invites CASCADE;
-DROP TABLE IF EXISTS group_workouts CASCADE;
-DROP TABLE IF EXISTS athlete_workout_inputs CASCADE;
-DROP TABLE IF EXISTS workout_groups CASCADE;
-DROP TABLE IF EXISTS workout_group_members CASCADE;
-DROP TABLE IF EXISTS workout_group_inputs CASCADE;
+DROP TABLE IF EXISTS 
+coaches, 
+athletes, 
+groups, 
+athlete_groups, 
+athlete_coaches, 
+athlete_coach_invites, 
+group_workouts, 
+athlete_workout_inputs, 
+workout_groups, 
+workout_group_members, 
+workout_group_inputs CASCADE;
 
 
 --User and user relation related tables--
@@ -35,11 +37,18 @@ CREATE TABLE athlete_groups (
     PRIMARY KEY (athleteId, groupId)
 );
 
-CREATE TABLE athlete_group_invites (
+CREATE TABLE athlete_coaches (
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
-    groupId INT REFERENCES groups(id) NOT NULL,
-    UNIQUE (athleteId, groupId)
+    coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
+    UNIQUE (athleteId, coachId)
+);
+
+CREATE TABLE athlete_coach_invites (
+    id SERIAL PRIMARY KEY,
+    athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
+    coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
+    UNIQUE (athleteId, coachId)
 );
 
 CREATE TABLE group_workouts (
@@ -80,3 +89,4 @@ CREATE TABLE workout_group_inputs(
 );
 
 INSERT INTO coaches (userId, username) VALUES ('81cbd5d0-c0a1-709a-560f-ceb88b7d53d9', 'coachdefeo');
+INSERT INTO athletes (userId, username) VALUES ('91cbd5d0-c0a1-709a-560f-ceb88b7d53d9', 'athletedefeo');

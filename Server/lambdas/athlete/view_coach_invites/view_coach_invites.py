@@ -1,18 +1,19 @@
 from rds import fetch_all
 import json
 
-def view_group_invites(event, context):
+#Shows all coach invites for an athlete
+def view_coach_invites(event, context):
     body = json.loads(event['body'])
 
     try:
         user_id = body['userId']
 
         #Grab all invites for the athlete
-        invites = fetch_all("""
-            SELECT g.name, c.username FROM athlete_group_invites agi
-            JOIN groups g ON agi.groupId = g.id
-            JOIN coaches c ON g.coachId = c.userId
-            WHERE agi.athleteId = %s
+        invites = fetch_all(
+        """
+            SELECT c.username FROM athlete_coach_invites aci
+            JOIN coaches c ON aci.coachId = c.userId
+            WHERE aci.athleteId = %s
         """, (user_id,))
         return {
             'statusCode': 200,

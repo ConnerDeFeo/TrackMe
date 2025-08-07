@@ -1,12 +1,12 @@
 import json
-
 import pytest
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.general.get_groups.get_groups import get_groups
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
-from lambdas.athlete.accept_group_invite.accept_group_invite import accept_group_invite
+from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
+from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from rds import execute_file
 from data import TestData
 
@@ -18,7 +18,8 @@ def setup_before_each_test(): #This will run before each test
     create_athlete(TestData.test_athlete, {})
     create_group(TestData.test_group, {})
     invite_athlete(TestData.test_invite, {})
-    accept_group_invite(TestData.test_accept_group_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
     yield
 
 def test_get_groups_athlete():

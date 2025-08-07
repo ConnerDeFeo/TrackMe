@@ -23,14 +23,14 @@ class TestData:
     test_invite = {
         "body": json.dumps({
             "athleteId": "1234",
-            "groupId": "1"
+            "coachId": "123"
         })
     }
 
-    test_accept_group_invite = {
+    test_accept_coach_invite = {
             "body": json.dumps({
                 "athleteId": "1234",
-                "groupId": "1"
+                "coachId": "123"
             })
         }
 
@@ -131,4 +131,12 @@ class TestData:
             "userId": "123",
             "accountType": "Coach"
         }
+    }
+
+    test_add_athlete_to_group = {
+        "body": json.dumps({
+            "athleteId": "1234",
+            "coachId": "123",
+            "groupId": "1"
+        })
     }

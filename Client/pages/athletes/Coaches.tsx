@@ -25,6 +25,9 @@ const Coaches = ()=>{
             const data = await requestsResponse.json();
             setRequests(data);
         }
+        else if(requestsResponse.status === 404){
+            setRequests([]);
+        }
     }
 
     const reloadData = () => {
@@ -36,8 +39,9 @@ const Coaches = ()=>{
     useEffect(() => {
         const fetchUserId = async () => {
             const userId = await UserService.getUserId();
-            if (userId)
+            if(userId){
                 setUserId(userId);
+            }
         }
         fetchUserId();
         reloadData();

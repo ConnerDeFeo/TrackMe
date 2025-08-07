@@ -14,10 +14,12 @@ import AuthCheck from './pages/authentication/AuthCheck';
 import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
 import UserIcon from './components/UserIcon';
-import CoachGroups from './pages/coaches/CoachGroups';
+import CoachGroups from './pages/coaches/groups/CoachGroups';
 import AthleteGroups from './pages/athletes/AthleteGroups';
 import CoachProfile from './pages/coaches/CoachProfile';
 import AthleteProfile from './pages/athletes/AthleteProfile';
+import CreateGroup from './pages/coaches/groups/CreateGroup';
+import ViewGroup from './pages/coaches/groups/ViewGroup';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -78,6 +80,8 @@ const RootStack = createNativeStackNavigator({
     AthleteGroups: AthleteLayout(<AthleteGroups/>),
     CoachProfile: CoachLayout(<CoachProfile/>),
     AthleteProfile: AthleteLayout(<AthleteProfile/>),
+    CreateGroup: CoachLayout(<CreateGroup/>),
+    ViewGroup: CoachLayout(<ViewGroup/>),
   },
 });
 const Navigation = createStaticNavigation(RootStack);

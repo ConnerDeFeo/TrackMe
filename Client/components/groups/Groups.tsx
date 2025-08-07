@@ -2,10 +2,11 @@ import { Text, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import { useEffect, useState } from "react";
 
-//Athlete view when they are looking at all ther groups
+//View of all groups displayed in a list
 const Groups = () => {
   const [groups, setGroups] = useState<string[][]>([]);
 
+  //Fetch groups from the server
   useEffect(() => {
     const fetchGroups = async () => {
       try {

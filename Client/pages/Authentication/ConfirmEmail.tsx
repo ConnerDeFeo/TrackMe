@@ -1,24 +1,15 @@
-import { confirmSignUp, signIn } from "aws-amplify/auth";
+import { confirmSignUp, getCurrentUser, signIn } from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import UserService from "../../services/UserService";
 import AsyncStorage from "../../services/AsyncStorage";
 
-//Used to transfer username and password from creation screen to this one
-type RootStackParamList = {
-    ConfirmScreen: {
-        username: string;
-        password: string;
-    };
-}
-type ConfirmScreenRouteProp = RouteProp<RootStackParamList, 'ConfirmScreen'>;
 
 //Confirm Email page
 const ConfirmEmail = () => {
-    const route = useRoute<ConfirmScreenRouteProp>();
-    const {username, password} = route.params;
-    const navigation = useNavigation<any>();
+    const route = useRoute();
+    const {username, password} = route.params as { username: string; password: string };
 
     const [verificationCode, setVerificationCode] = useState<string>("");
     const [message, setMessage] = useState<string>("");
@@ -31,13 +22,7 @@ const ConfirmEmail = () => {
                 confirmationCode: verificationCode
             });
             //If confirm email is succesfull, immediatley login and reroute to home page
-            await signIn({
-                username:username,
-                password:password
-            })
-            const accountType = await UserService.getAccountType();
-            AsyncStorage.storeData('accountType', accountType!);
-            navigation.navigate(`${accountType}Groups`);
+            await UserService.signIn(username, password);
         } catch (error: any) {
             console.log(error)
             setMessage(error.message);

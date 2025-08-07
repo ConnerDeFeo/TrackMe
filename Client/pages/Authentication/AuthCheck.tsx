@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from "react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
 import UserService from "../../services/UserService";
-import { signOut } from "aws-amplify/auth";
 
 //Check to see if user is already logged in, then redirect accordingly
 const AuthCheck=()=>{

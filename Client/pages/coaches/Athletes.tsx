@@ -34,8 +34,8 @@ const Athletes = () => {
                 onPress={() => navigation.navigate("AddAthlete")}
             />
             {athletes.map((athlete) => (
-                <View key={athlete[1]}>
-                    <Text>{athlete[0]}</Text>
+                <View key={athlete[0]}>
+                    <Text>{athlete[1]}</Text>
                 </View>
             ))}
         </View>

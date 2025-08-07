@@ -201,6 +201,21 @@ Resources:
         - Ref: DynamoDBLayer
 
   # COACH FUNCTIONS
+  GetAthletesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/coach/get_athletes/
+      Handler: get_athletes.get_athletes
+      Events:
+        GetAthletesApi:
+          Type: Api
+          Properties:
+            Path: /coaches/get_athletes/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   CreateCoachFunction:
     Type: AWS::Serverless::Function 
     Properties:

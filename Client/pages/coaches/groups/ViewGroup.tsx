@@ -10,7 +10,7 @@ const ViewGroup = () => {
   return (
     <View>
       <Text className="text-2xl font-bold">{groupName}</Text>
-      <Button title="Add Athletes" onPress={() => navigation.navigate('AddAthlete', { groupId: groupId })} />
+      <Button title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId })} />
       <Button title="Send Workout" onPress={() => console.log("Send Workout")} />
     </View>
   );

@@ -1,7 +1,7 @@
 import json
 from rds import execute_commit, fetch_one
 
-#Adds an athlete to a group for workouts
+#Adds an athlete to a group
 def add_athlete_to_group(event, context):
     body = json.loads(event.get('body', '{}'))
 
@@ -11,12 +11,12 @@ def add_athlete_to_group(event, context):
         group_id = body['groupId']
 
         #Check to see if coach has athlete added
-        existing_invite = fetch_one(
+        connection_active = fetch_one(
         """
             SELECT * FROM athlete_coaches
             WHERE athleteId = %s AND coachId = %s
         """, (athlete_id, coach_id))
-        if existing_invite:
+        if connection_active:
             # Insert the athlete into the group
             execute_commit(
             """

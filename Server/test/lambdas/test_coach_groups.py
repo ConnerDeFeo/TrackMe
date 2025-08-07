@@ -1,6 +1,7 @@
 import pytest
 
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
+from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
@@ -49,3 +50,28 @@ def test_invite_athlete():
     assert response is not None
     assert response[1] == "1234"
     assert response[2] == '123'
+
+def test_add_athlete_to_group():
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
+
+    event = {
+        "body": json.dumps({
+            "athleteId": "1234",
+            "coachId": "123",
+            "groupId": "1"
+        })
+    }
+
+    response = add_athlete_to_group(event, {})
+    assert response['statusCode'] == 200
+
+    # Check if athlete is added to group
+    response = fetch_one("""
+        SELECT * FROM athlete_groups WHERE athleteId = %s AND groupId = %s
+    """, ("1234", "1"))
+    assert response is not None
+    assert response[0] == "1234"
+    assert response[1] == 1

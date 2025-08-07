@@ -1,6 +1,7 @@
 import { Text, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import { useEffect, useState } from "react";
+import GroupDisplay from "./GroupDisplay";
 
 //View of all groups displayed in a list
 const Groups = () => {
@@ -25,9 +26,7 @@ const Groups = () => {
   return (
     <View className="mt-10 w-[85%] mx-auto">
       {groups.map((group, index) => (
-        <View key={index} className="mx-auto text-2xl flex-row justify-between w-full border">
-          <Text>{group[0]}</Text>
-        </View>
+        <GroupDisplay key={index} groupName={group[0]} />
       ))}
     </View>
   );

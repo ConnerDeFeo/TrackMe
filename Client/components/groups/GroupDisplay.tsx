@@ -1,10 +1,11 @@
 import { Text, View } from "react-native";
 
-const GroupDisplay: React.FC<{ groupName:string, coachUsername:string }> = ({ groupName, coachUsername }) => {
+const GroupDisplay: React.FC<{ groupName:string }> = ({ groupName}) => {
     return (
-        <View>
+        <View className="border p-4 my-2">
             <Text>{groupName}</Text>
-            <Text>{coachUsername}</Text>
         </View>
     );
-};
+}
+
+export default GroupDisplay;

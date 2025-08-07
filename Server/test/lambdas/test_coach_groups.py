@@ -80,7 +80,7 @@ def test_search_athlete_for_group():
 
     # Test searching athletes empty search term
     event = {
-        "pathParameters": {
+        "queryStringParameters": {
             "searchTerm": "",
             "groupId": "1"
         }
@@ -98,7 +98,7 @@ def test_search_athlete_for_group():
             assert athlete[1] == "Not Invited"
 
     #Test with valid search term
-    event['pathParameters'] = {
+    event['queryStringParameters'] = {
         "searchTerm": "test",
         "groupId": "1"
     }
@@ -108,7 +108,7 @@ def test_search_athlete_for_group():
     assert len(athletes) == 3  # only test athletes should be returned
 
     #Test with invalid search term
-    event['pathParameters'] = {
+    event['queryStringParameters'] = {
         "searchTerm": "ciderapple",
         "groupId": "1"
     }

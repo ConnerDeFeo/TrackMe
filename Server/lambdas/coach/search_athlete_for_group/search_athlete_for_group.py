@@ -3,9 +3,10 @@ from rds import fetch_all
 
 #Search athletes based on a search term
 def search_athlete_for_group(event, context):
+    query_params = event.get('queryStringParameters', {})
     try:
-        search_term = event['pathParameters']['searchTerm']
-        group_id = event['pathParameters']['groupId']
+        search_term = query_params['searchTerm']
+        group_id = query_params['groupId']
 
         search_query = """
             SELECT a.username,

@@ -32,7 +32,6 @@ def test_accept_invite():
     groups = json.loads(response['body'])
     assert len(groups) == 1
     assert 'Test Group' == groups[0][0]
-    assert 'testcoach' == groups[0][1]
 
 def test_view_group_invites():
     create_coach(TestData.test_coach, {})

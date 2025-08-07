@@ -27,7 +27,7 @@ const CreateGroup = () => {
     const handleCreateGroup = async () => {
         try {
             const resp = await CoachService.createGroup(userId, groupName);
-            if(resp)
+            if(resp.ok)
                 navigation.navigate('ViewGroup', { groupName:groupName });
         } catch (error) {
             console.log("Error creating group:", error);

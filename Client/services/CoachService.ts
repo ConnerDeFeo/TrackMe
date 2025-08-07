@@ -18,6 +18,9 @@ const CoachService = {
                 'groupName': groupName 
             }
         );
+    },
+    searchAthletes: async (searchTerm:string, groupName:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/search_athletes/${searchTerm}`);
     }
 }
 

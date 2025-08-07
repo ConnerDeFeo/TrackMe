@@ -20,6 +20,7 @@ import CoachProfile from './pages/coaches/CoachProfile';
 import AthleteProfile from './pages/athletes/AthleteProfile';
 import CreateGroup from './pages/coaches/groups/CreateGroup';
 import ViewGroup from './pages/coaches/groups/ViewGroup';
+import AddAthlete from './pages/coaches/groups/AddAthlete';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -82,6 +83,7 @@ const RootStack = createNativeStackNavigator({
     AthleteProfile: AthleteLayout(<AthleteProfile/>),
     CreateGroup: CoachLayout(<CreateGroup/>),
     ViewGroup: CoachLayout(<ViewGroup/>),
+    AddAthlete: CoachLayout(<AddAthlete/>),
   },
 });
 const Navigation = createStaticNavigation(RootStack);

@@ -80,10 +80,10 @@ def test_search_athlete_for_group():
 
     # Test searching athletes empty search term
     event = {
-        "body": json.dumps({
+        "pathParameters": {
             "searchTerm": "",
             "groupId": "1"
-        })
+        }
     }
     response = search_athlete_for_group(event, {})
     assert response['statusCode'] == 200
@@ -98,19 +98,19 @@ def test_search_athlete_for_group():
             assert athlete[1] == "Not Invited"
 
     #Test with valid search term
-    event['body'] = json.dumps({
+    event['pathParameters'] = {
         "searchTerm": "test",
         "groupId": "1"
-    })
+    }
     response = search_athlete_for_group(event, {})
     assert response['statusCode'] == 200
     athletes = json.loads(response['body'])
     assert len(athletes) == 3  # only test athletes should be returned
 
     #Test with invalid search term
-    event['body'] = json.dumps({
+    event['pathParameters'] = {
         "searchTerm": "ciderapple",
         "groupId": "1"
-    })
+    }
     response = search_athlete_for_group(event, {})
     assert response['statusCode'] == 404  # No athletes should be returned, because no athletes match the search term

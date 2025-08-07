@@ -13,7 +13,7 @@ def get_groups(event, context):
         if accountType == 'Athlete':
             group_data = fetch_all(
                 """
-                    SELECT g.name FROM athlete_groups ag
+                    SELECT g.name, g.id FROM athlete_groups ag
                     JOIN groups g ON ag.groupId = g.id
                     JOIN coaches c ON g.coachId = c.userId
                     WHERE ag.athleteId = %s
@@ -25,7 +25,7 @@ def get_groups(event, context):
         else:
             group_data = fetch_all(
                 """
-                    SELECT g.name FROM groups g
+                    SELECT g.name, g.id FROM groups g
                     JOIN coaches c ON g.coachId = c.userId
                     WHERE c.userId = %s
                 """,

@@ -1,8 +1,8 @@
-import React, { use, useEffect, useState } from 'react';
-import { View, TextInput, FlatList, Text, Button} from 'react-native';
-import CoachService from '../../../services/CoachService';
+import React, { useEffect, useState } from 'react';
+import { View,  FlatList, Text, Button} from 'react-native';
+import CoachService from '../../services/CoachService';
 import { useRoute } from '@react-navigation/core';
-import SearchBar from '../../../components/SearchBar';
+import SearchBar from '../../components/SearchBar';
 
 //Page for adding athletes to a coaches group
 const AddAthlete= () => {
@@ -10,13 +10,12 @@ const AddAthlete= () => {
     const [results, setResults] = useState<string[][]>([]);
     const [loading, setLoading] = useState(false);
     const route = useRoute();
-    const { groupId } = route.params as { groupId: string };
 
     // Function to handle search input and fetch results
     const handleSearch = async (term: string) => {
         setSearchTerm(term);
         setLoading(true);
-        const res = await CoachService.searchAthletes(searchTerm, groupId);
+        const res = await CoachService.searchAthletes(searchTerm);
         if(res.ok){
             const athletes:string[][] = await res.json();
             setResults(athletes);
@@ -27,7 +26,7 @@ const AddAthlete= () => {
     //Invite athlete to group
     const handleInvite = async (userId: string) => {
         console.log(userId)
-        const resp = await CoachService.inviteAthleteToGroup(groupId, userId);
+        const resp = await CoachService.inviteAthlete(userId);
         if(resp.ok){
             handleSearch(searchTerm); // Re-fetch athletes to update the list
         }
@@ -38,7 +37,7 @@ const AddAthlete= () => {
         // Initial fetch to load all athletes when the component mounts
         const fetchAllAthletes = async () => {
             setLoading(true);
-            const res = await CoachService.searchAthletes('', groupId);
+            const res = await CoachService.searchAthletes('');
             if(res.ok){
                 const athletes:string[][] = await res.json();
                 setResults(athletes);

@@ -19,16 +19,18 @@ const CoachService = {
             }
         );
     },
-    searchAthletes: async (searchTerm:string, groupId:string) => {
-        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/search_athlete_for_group?groupId=${groupId}&searchTerm=${searchTerm}`);
+    searchAthletes: async (searchTerm:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/search_athlete_for_group?searchTerm=${searchTerm}`);
     },
-    inviteAthleteToGroup: async (groupId:string, athleteId:string) => {
+    inviteAthlete: async (athleteId:string) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/invite_athlete`, 
             { 
-                'groupId': groupId, 
                 'athleteId': athleteId 
             }
         );
+    },
+    getAthletes: async (coachId:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/get_athletes?coachId=${coachId}`);
     }
 }
 

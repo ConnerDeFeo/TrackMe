@@ -28,6 +28,7 @@ def test_get_groups_athlete():
     groups = json.loads(response['body'])
     assert len(groups) == 1
     assert groups[0][0] == 'Test Group'
+    assert groups[0][1] == 1
 
 def test_get_groups_coach():
     create_group({
@@ -42,4 +43,6 @@ def test_get_groups_coach():
     groups = json.loads(response['body'])
     assert len(groups) == 2
     assert groups[0][0] == 'Test Group'
+    assert groups[0][1] == 1
     assert groups[1][0] == 'Test Group 2'
+    assert groups[1][1] == 2

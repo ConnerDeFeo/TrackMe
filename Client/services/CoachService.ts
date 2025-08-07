@@ -11,14 +11,6 @@ const CoachService = {
             }
         );
     },
-    createGroup: async (coachId:string, groupName:string) => {
-        return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/create_group`, 
-            { 
-                'userId': coachId, 
-                'groupName': groupName 
-            }
-        );
-    },
     searchAthletes: async (searchTerm:string, coachId:string) => {
         return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/search_athletes?searchTerm=${searchTerm}&coachId=${coachId}`);
     },

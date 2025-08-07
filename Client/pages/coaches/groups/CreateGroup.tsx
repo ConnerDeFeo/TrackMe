@@ -3,6 +3,7 @@ import { Button, TextInput, View } from "react-native";
 import CoachService from "../../../services/CoachService";
 import AsyncStorage from "../../../services/AsyncStorage";
 import { useNavigation } from "@react-navigation/native";
+import CoachGroupService from "../../../services/CoachGroupService";
 
 
 //Page where coaches can create a new group
@@ -25,7 +26,7 @@ const CreateGroup = () => {
     //handles groups creation and redirection
     const handleCreateGroup = async () => {
         try {
-            const resp = await CoachService.createGroup(userId, groupName);
+            const resp = await CoachGroupService.createGroup(userId, groupName);
             if(resp.ok)
                 navigation.navigate('ViewGroup', { groupName:groupName });
         } catch (error) {

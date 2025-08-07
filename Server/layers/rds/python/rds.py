@@ -77,8 +77,10 @@ def execute_commit(query, params={}):
             try:
                 cursor.execute(query, params)
                 _connection.commit()
+                return True
             except:
                 _connection.rollback()
+                return False
     return execute_function(_execute_commit, query, params)
 
 #Executes a query that commits and fetches a single row
@@ -90,6 +92,7 @@ def execute_commit_fetch_one(query, params={}):
                 _connection.commit()
             except:
                 _connection.rollback()
+                return False
             return cursor.fetchone()
 
     return execute_function(_execute_commit_fetch_one, query, params)
@@ -101,8 +104,10 @@ def execute_commit_many(query, params):
             try:
                 cursor.executemany(query, params)
                 _connection.commit()
+                return True
             except:
                 _connection.rollback()
+                return False
 
     return execute_function(_execute_commit_many, query, params)
 
@@ -114,7 +119,9 @@ def execute_file(file_path, params={}):
         try:
             cursor.execute(sql, params)
             _connection.commit()
+            return True
         except:
             _connection.rollback()
+            return False
 
 

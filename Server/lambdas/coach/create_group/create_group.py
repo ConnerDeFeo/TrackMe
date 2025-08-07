@@ -13,16 +13,26 @@ def create_group(event, context):
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         # Create group in RDS with the current date
-        execute_commit('INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s)', (userId, group_name, today))
+        created = execute_commit('INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s)', (userId, group_name, today))
 
+        if created:
+            return {
+                "statusCode": 200,
+                "headers": {
+                    "Access-Control-Allow-Origin": "http://localhost:8081",
+                    "Access-Control-Allow-Credentials": True,
+                    "Content-Type": "application/json"
+                },
+                "body": json.dumps({"message":"Group created successfully"})
+            }
         return {
-            "statusCode": 200,
+            "statusCode": 404,
             "headers": {
                 "Access-Control-Allow-Origin": "http://localhost:8081",
                 "Access-Control-Allow-Credentials": True,
                 "Content-Type": "application/json"
             },
-            "body": json.dumps({"message":"Group created successfully"})
+            "body": json.dumps({"message": "Group already exists or could not be created"})
         }
 
     except Exception as e:

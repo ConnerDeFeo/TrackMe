@@ -306,6 +306,21 @@ Resources:
       Layers:
         - Ref: DynamoDBLayer
 
+  SearchAthletesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/coach/search_athletes/
+      Handler: search_athletes.search_athletes
+      Events:
+        SearchAthletesApi:
+          Type: Api
+          Properties:
+            Path: /coaches/search_athletes/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   # GENERAL FUNCTIONS
   GetGroupsFunction:
     Type: AWS::Serverless::Function 

@@ -3,19 +3,20 @@ import { View,  FlatList, Text, Button} from 'react-native';
 import CoachService from '../../services/CoachService';
 import { useRoute } from '@react-navigation/core';
 import SearchBar from '../../components/SearchBar';
+import { getCurrentUser } from 'aws-amplify/auth';
 
 //Page for adding athletes to a coaches group
 const AddAthlete= () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [results, setResults] = useState<string[][]>([]);
     const [loading, setLoading] = useState(false);
-    const route = useRoute();
 
     // Function to handle search input and fetch results
     const handleSearch = async (term: string) => {
         setSearchTerm(term);
         setLoading(true);
-        const res = await CoachService.searchAthletes(searchTerm);
+        const user = await getCurrentUser();
+        const res = await CoachService.searchAthletes(searchTerm, user.userId);
         if(res.ok){
             const athletes:string[][] = await res.json();
             setResults(athletes);
@@ -24,9 +25,10 @@ const AddAthlete= () => {
     };
 
     //Invite athlete to group
-    const handleInvite = async (userId: string) => {
-        console.log(userId)
-        const resp = await CoachService.inviteAthlete(userId);
+    const handleInvite = async (athleteId: string) => {
+        const user = await getCurrentUser();
+        console.log(user.userId)
+        const resp = await CoachService.inviteAthlete(athleteId, user.userId);
         if(resp.ok){
             handleSearch(searchTerm); // Re-fetch athletes to update the list
         }
@@ -37,7 +39,8 @@ const AddAthlete= () => {
         // Initial fetch to load all athletes when the component mounts
         const fetchAllAthletes = async () => {
             setLoading(true);
-            const res = await CoachService.searchAthletes('');
+            const user = await getCurrentUser();
+            const res = await CoachService.searchAthletes('', user.userId);
             if(res.ok){
                 const athletes:string[][] = await res.json();
                 setResults(athletes);
@@ -57,11 +60,11 @@ const AddAthlete= () => {
 
         //Determine what to display
         switch (status) {
-            case 'Joined':
-                joinedStatus = <Text className='text-green-600 font-semibold'>Joined</Text>;
+            case 'Added':
+                joinedStatus = <Text className='text-green-600 font-semibold'>Added</Text>;
                 break;
-            case 'Invited':
-                joinedStatus = <Text className='text-gray-500'>Invited</Text>;
+            case 'Pending':
+                joinedStatus = <Text className='text-gray-500'>Pending</Text>;
                 break;
             default:
                 joinedStatus = <Button title='Invite' onPress={() => handleInvite(userId)} />;

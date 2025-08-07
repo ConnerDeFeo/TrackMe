@@ -51,32 +51,45 @@ def execute_function(func,*args, **kwargs):
 def fetch_one(query, params={}):
     def _fetch_one(query, params={}):
         with _connection.cursor() as cursor:
-            cursor.execute(query, params)
-            return cursor.fetchone()
+            try:
+                cursor.execute(query, params)
+                return cursor.fetchone()
+            except:
+                _connection.rollback()
     return execute_function(_fetch_one, query, params)
 
 #Fetches all rows from db that match the query
 def fetch_all(query, params={}):
     def _fetch_all(query, params={}):
         with _connection.cursor() as cursor:
-            cursor.execute(query, params)
-            return cursor.fetchall()
+            try:
+                cursor.execute(query, params)
+                return cursor.fetchall()
+            except:
+                _connection.rollback()
+
     return execute_function(_fetch_all, query, params)
 
 #Executes a query that does not return any rows (e.g. INSERT, UPDATE, DELETE)
 def execute_commit(query, params={}):
     def _execute_commit(query, params={}):
         with _connection.cursor() as cursor:
-            cursor.execute(query, params)
-            _connection.commit()
+            try:
+                cursor.execute(query, params)
+                _connection.commit()
+            except:
+                _connection.rollback()
     return execute_function(_execute_commit, query, params)
 
 #Executes a query that commits and fetches a single row
 def execute_commit_fetch_one(query, params={}):
     def _execute_commit_fetch_one(query, params={}):
         with _connection.cursor() as cursor:
-            cursor.execute(query, params)
-            _connection.commit()
+            try:
+                cursor.execute(query, params)
+                _connection.commit()
+            except:
+                _connection.rollback()
             return cursor.fetchone()
 
     return execute_function(_execute_commit_fetch_one, query, params)
@@ -85,8 +98,11 @@ def execute_commit_fetch_one(query, params={}):
 def execute_commit_many(query, params):
     def _execute_commit_many(query, params):
         with _connection.cursor() as cursor:
-            cursor.executemany(query, params)
-            _connection.commit()
+            try:
+                cursor.executemany(query, params)
+                _connection.commit()
+            except:
+                _connection.rollback()
 
     return execute_function(_execute_commit_many, query, params)
 
@@ -95,7 +111,10 @@ def execute_file(file_path, params={}):
     with open(file_path, 'r') as file:
         sql = file.read()
     with _connection.cursor() as cursor:
-        cursor.execute(sql, params)
-        _connection.commit()
+        try:
+            cursor.execute(sql, params)
+            _connection.commit()
+        except:
+            _connection.rollback()
 
 

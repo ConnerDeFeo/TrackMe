@@ -22,7 +22,6 @@ const CreateGroup = () => {
         fetchUserId();
     }, []);
 
-    console.log("User ID:", userId);
     //handles groups creation and redirection
     const handleCreateGroup = async () => {
         try {

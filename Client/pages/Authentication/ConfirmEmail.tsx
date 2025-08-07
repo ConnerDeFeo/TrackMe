@@ -1,4 +1,4 @@
-import { confirmSignUp, getCurrentUser, signIn } from "aws-amplify/auth";
+import { confirmSignUp } from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";

@@ -22,10 +22,10 @@ const CoachService = {
     searchAthletes: async (searchTerm:string, coachId:string) => {
         return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/search_athletes?searchTerm=${searchTerm}&coachId=${coachId}`);
     },
-    inviteAthlete: async (athleteId:string, coachId:string) => {
+    inviteAthlete: async (userId:string, coachId:string) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/invite_athlete`, 
             { 
-                'athleteId': athleteId,
+                'athleteId': userId,
                 'coachId': coachId
             }
         );

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { View, Text, Button } from "react-native"
 import { useEffect } from "react";
 import CoachService from "../../services/CoachService";
-import { getCurrentUser } from "aws-amplify/auth";
 import { useNavigation } from "@react-navigation/native";
+import UserService from "../../services/UserService";
 
 //All of a given coach's athletes
 const Athletes = () => {
@@ -14,8 +14,8 @@ const Athletes = () => {
     useEffect(() => {
         const fetchAthletes = async () => {
             try {
-                const user = await getCurrentUser();
-                const resp = await CoachService.getAthletes(user.userId);
+                const userId = await UserService.getUserId();
+                const resp = await CoachService.getAthletes(userId!);
                 if(resp.ok){
                     const athletes: string[][] = await resp.json()
                     setAthletes(athletes);

@@ -37,7 +37,8 @@ def test_get_coaches():
 
     coaches = json.loads(response['body'])
     assert len(coaches) == 1
-    assert coaches[0][0] == 'testcoach'
+    assert coaches[0][0] == '123'
+    assert coaches[0][1] == 'testcoach'
 
 
 def test_get_coach_requests():
@@ -56,4 +57,5 @@ def test_get_coach_requests():
 
     coach_requests = json.loads(response['body'])
     assert len(coach_requests) == 1
-    assert coach_requests[0][0] == 'testcoach'
+    assert coach_requests[0][0] == '123'
+    assert coach_requests[0][1] == 'testcoach'

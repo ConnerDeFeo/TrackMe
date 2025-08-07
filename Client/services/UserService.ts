@@ -1,6 +1,5 @@
 import { fetchUserAttributes, getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import AsyncStorage from "./AsyncStorage";
-import { useNavigation } from "@react-navigation/native";
 
 const UserService = {
   //gets the account type of the currently signed in user
@@ -35,6 +34,15 @@ const UserService = {
       AsyncStorage.storeData('userId', user.userId);
     } catch (error) {
       console.log("Error signing in:", error);
+    }
+  },
+  getUserId: async () => {
+    try {
+      const user = await getCurrentUser();
+      return user.userId;
+    } catch (error) {
+      console.log("Error fetching user ID:", error);
+      return null;
     }
   }
 };

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View,  FlatList, Text, Button} from 'react-native';
 import CoachService from '../../services/CoachService';
-import { useRoute } from '@react-navigation/core';
 import SearchBar from '../../components/SearchBar';
-import { getCurrentUser } from 'aws-amplify/auth';
+import UserService from '../../services/UserService';
 
 //Page for adding athletes to a coaches group
 const AddAthlete= () => {
@@ -15,8 +14,8 @@ const AddAthlete= () => {
     const handleSearch = async (term: string) => {
         setSearchTerm(term);
         setLoading(true);
-        const user = await getCurrentUser();
-        const res = await CoachService.searchAthletes(searchTerm, user.userId);
+        const userId = await UserService.getUserId();
+        const res = await CoachService.searchAthletes(searchTerm, userId!);
         if(res.ok){
             const athletes:string[][] = await res.json();
             setResults(athletes);
@@ -26,9 +25,8 @@ const AddAthlete= () => {
 
     //Invite athlete to group
     const handleInvite = async (athleteId: string) => {
-        const user = await getCurrentUser();
-        console.log(user.userId)
-        const resp = await CoachService.inviteAthlete(athleteId, user.userId);
+        const userId = await UserService.getUserId();
+        const resp = await CoachService.inviteAthlete(athleteId, userId!);
         if(resp.ok){
             handleSearch(searchTerm); // Re-fetch athletes to update the list
         }
@@ -39,8 +37,8 @@ const AddAthlete= () => {
         // Initial fetch to load all athletes when the component mounts
         const fetchAllAthletes = async () => {
             setLoading(true);
-            const user = await getCurrentUser();
-            const res = await CoachService.searchAthletes('', user.userId);
+            const userId = await UserService.getUserId();
+            const res = await CoachService.searchAthletes('', userId!);
             if(res.ok){
                 const athletes:string[][] = await res.json();
                 setResults(athletes);

@@ -78,3 +78,5 @@ CREATE TABLE workout_group_inputs(
     distance int DEFAULT 0,
     time int DEFAULT 0
 );
+
+INSERT INTO coaches (userId, username) VALUES ('81cbd5d0-c0a1-709a-560f-ceb88b7d53d9', 'coachdefeo');

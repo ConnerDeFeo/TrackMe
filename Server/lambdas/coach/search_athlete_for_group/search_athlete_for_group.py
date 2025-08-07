@@ -9,7 +9,7 @@ def search_athlete_for_group(event, context):
         group_id = query_params['groupId']
 
         search_query = """
-            SELECT a.username,
+            SELECT a.username, a.userId,
                 CASE 
                     WHEN ag.athleteId IS NOT NULL THEN 'Joined'
                     WHEN agi.athleteId IS NOT NULL THEN 'Invited'

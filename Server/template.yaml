@@ -301,7 +301,7 @@ Resources:
           Type: Api
           Properties:
             Path: /coaches/search_athlete_for_group/
-            Method: post
+            Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer

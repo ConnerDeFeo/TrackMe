@@ -5,12 +5,12 @@ import { Text,Button,View } from "react-native";
 const ViewGroup = () => {
   const route = useRoute();
   const navigation = useNavigation<any>();
-  const {groupName} = route.params as { groupName: string };
+  const {groupName, groupId} = route.params as { groupName: string, groupId: string };
 
   return (
     <View>
       <Text className="text-2xl font-bold">{groupName}</Text>
-      <Button title="Add Athletes" onPress={() => navigation.navigate('AddAthlete', { groupName: groupName })} />
+      <Button title="Add Athletes" onPress={() => navigation.navigate('AddAthlete', { groupId: groupId })} />
       <Button title="Send Workout" onPress={() => console.log("Send Workout")} />
     </View>
   );

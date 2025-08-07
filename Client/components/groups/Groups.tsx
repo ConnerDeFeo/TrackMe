@@ -28,7 +28,7 @@ const Groups = () => {
   return (
     <View className="mt-10 w-[85%] mx-auto">
       {groups.map((group, index) => (
-        <GroupDisplay key={index} groupName={group[0]} navigateTo={() => navigation.navigate("ViewGroup", { groupName: group[0] })} />
+        <GroupDisplay key={index} groupName={group[0]} navigateTo={() => navigation.navigate("ViewGroup", { groupName: group[0], groupId: group[1] })} />
       ))}
     </View>
   );

@@ -2,12 +2,8 @@ import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-type FooterProps = {
-    buttons: [string, string][];
-};
-
 //Footer at bottom of the screen with navigation buttons
-const Footer: React.FC<FooterProps> = ({ buttons }) => {
+const Footer: React.FC<{ buttons: string[][] }> = ({ buttons }) => {
     const navigation = useNavigation<any>();
 
     return (

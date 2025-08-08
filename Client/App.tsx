@@ -24,8 +24,14 @@ import AddAthlete from './pages/coaches/AddAthlete';
 import Athletes from './pages/coaches/Athletes';
 import Coaches from './pages/athletes/Coaches';
 import AssignAthletes from './pages/coaches/groups/AssignAthletes';
+import CreateWorkout from './pages/coaches/workout/CreateWorkout';
 //Root component used to render everything
 Amplify.configure(awsConfig);
+
+const layouts = {
+  'athlete': [['Groups', 'AthleteGroups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches']],
+  'coach': [['Groups', 'CoachGroups'], ['Athletes', 'Athletes'], ['Workouts', 'Workouts']]
+}
 
 //Base page layout for all components
 function BaseLayout(content: React.ReactElement): ComponentType<any>{
@@ -40,7 +46,7 @@ function BaseLayout(content: React.ReactElement): ComponentType<any>{
   }
 }
 
-function AthleteLayout(content: React.ReactElement): ComponentType<any>{
+function UserLayout(content: React.ReactElement, userType: 'athlete' | 'coach'): ComponentType<any>{
   return ()=>{
     return(
       <>
@@ -48,21 +54,7 @@ function AthleteLayout(content: React.ReactElement): ComponentType<any>{
           <UserIcon />
           {content}
         </View>
-        <Footer buttons={[['Groups', 'AthleteGroups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches']]} />
-      </>
-    ); 
-  }
-}
-
-function CoachLayout(content: React.ReactElement): ComponentType<any>{
-  return ()=>{
-    return(
-      <>
-        <View className='bg-white flex-1'>
-          <UserIcon />
-          {content}
-        </View>
-        <Footer buttons={[['Groups', 'CoachGroups'], ['Athletes', 'Athletes']]} />
+        <Footer buttons={layouts[userType]} />
       </>
     ); 
   }
@@ -79,16 +71,17 @@ const RootStack = createNativeStackNavigator({
     SignIn: BaseLayout(<SignIn/>),
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),
     AuthCheck:BaseLayout(<AuthCheck/>),
-    CoachGroups: CoachLayout(<CoachGroups/>),
-    AthleteGroups: AthleteLayout(<AthleteGroups/>),
-    CoachProfile: CoachLayout(<CoachProfile/>),
-    AthleteProfile: AthleteLayout(<AthleteProfile/>),
-    CreateGroup: CoachLayout(<CreateGroup/>),
-    ViewGroup: CoachLayout(<ViewGroup/>),
-    AddAthlete: CoachLayout(<AddAthlete/>),
-    Athletes: CoachLayout(<Athletes/>),
-    Coaches: AthleteLayout(<Coaches/>),
-    AssignAthletes: CoachLayout(<AssignAthletes/>)
+    CoachGroups: UserLayout(<CoachGroups/>, 'coach'),
+    AthleteGroups: UserLayout(<AthleteGroups/>, 'athlete'),
+    CoachProfile: UserLayout(<CoachProfile/>, 'coach'),
+    AthleteProfile: UserLayout(<AthleteProfile/>, 'athlete'),
+    CreateGroup: UserLayout(<CreateGroup/>, 'coach'),
+    ViewGroup: UserLayout(<ViewGroup/>, 'coach'),
+    AddAthlete: UserLayout(<AddAthlete/>, 'coach'),
+    Athletes: UserLayout(<Athletes/>, 'coach'),
+    Coaches: UserLayout(<Coaches/>, 'athlete'),
+    AssignAthletes: UserLayout(<AssignAthletes/>, 'coach'),
+    CreateWorkout: UserLayout(<CreateWorkout/>, 'coach')
   },
 });
 const Navigation = createStaticNavigation(RootStack);

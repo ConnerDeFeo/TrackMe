@@ -23,9 +23,14 @@ def get_absent_group_athletes(event, context):
             WHERE ag.athleteId IS NULL
         """, (coach_id, group_id))
 
+        if absent_athletes:
+            return {
+                "statusCode": 200,
+                "body": json.dumps(absent_athletes)
+            }
         return {
-            "statusCode": 200,
-            "body": json.dumps(absent_athletes)
+            "statusCode": 404,
+            "body": json.dumps({"error": "No absent athletes found"})
         }
     except Exception as e:
         return {

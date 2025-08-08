@@ -9,12 +9,13 @@ import TrackMeButton from "../../../components/TrackMeButton";
 const AssignAthletes = ()=>{
     const [athletes, setAthletes] = useState<string[]>([]);
     const route = useRoute();
-    const { groupId } = route.params as { groupId: string };
+    const { groupId, fetchParticipants } = route.params as { groupId: string, fetchParticipants: () => void };
     const navigation = useNavigation<any>();
     
 
-    const fetchAthletes = async () => {
-            const response = await CoachGroupService.getAthletesForGroup(groupId);
+    const fetchAbsentAthletes = async () => {
+            const userId = await UserService.getUserId();
+            const response = await CoachGroupService.getAbsentGroupAthletes(groupId, userId!);
             if (response.ok) {
                 const data = await response.json();
                 setAthletes(data);
@@ -23,7 +24,7 @@ const AssignAthletes = ()=>{
 
     //Fetch all athletes on load
     useEffect(()=>{
-        fetchAthletes();
+        fetchAbsentAthletes();
     }, []);
 
     //Handle assigning athletes to given groups
@@ -31,7 +32,8 @@ const AssignAthletes = ()=>{
         const userId = await UserService.getUserId();
         const response = await CoachGroupService.add_athlete_to_group(athleteId, groupId, userId!);
         if (response.ok) {
-            fetchAthletes();
+            fetchAbsentAthletes();
+            fetchParticipants(); //used to reload previous page
         }
     };
 

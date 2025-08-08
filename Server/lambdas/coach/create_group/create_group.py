@@ -1,6 +1,6 @@
 import json
 
-from rds import execute_commit
+from rds import execute_commit_fetch_one
 from datetime import datetime, timezone
 
 #Create group for a coach
@@ -13,9 +13,10 @@ def create_group(event, context):
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         # Create group in RDS with the current date
-        created = execute_commit('INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s)', (userId, group_name, today))
+        group_id = execute_commit_fetch_one('INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s) RETURNING id', (userId, group_name, today))
 
-        if created:
+        print(group_id)
+        if group_id:
             return {
                 "statusCode": 200,
                 "headers": {
@@ -23,7 +24,7 @@ def create_group(event, context):
                     "Access-Control-Allow-Credentials": True,
                     "Content-Type": "application/json"
                 },
-                "body": json.dumps({"message":"Group created successfully"})
+                "body": json.dumps({"message":"Group created successfully", "groupId": group_id[0]})
             }
         return {
             "statusCode": 404,

@@ -39,6 +39,8 @@ def generate_athlete(username, userId):
 def test_create_group():
     response = create_group(TestData.test_group, {})
     assert response['statusCode'] == 200
+    group_id = json.loads(response['body'])
+    assert group_id['groupId'] == 1
 
 def test_invite_athlete():
     create_group(TestData.test_group, {})

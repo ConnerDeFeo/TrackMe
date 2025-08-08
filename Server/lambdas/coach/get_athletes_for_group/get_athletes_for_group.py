@@ -17,9 +17,14 @@ def get_athletes_for_group(event, context):
             WHERE ag.groupId = %s
         """, (group_id,))
 
+        if(athletes):
+            return {
+                "statusCode": 200,
+                "body": json.dumps(athletes)
+            }
         return {
-            "statusCode": 200,
-            "body": json.dumps(athletes)
+            "statusCode": 404,
+            "body": json.dumps({"error": "No athletes found"})
         }
     except Exception as e:
         return {

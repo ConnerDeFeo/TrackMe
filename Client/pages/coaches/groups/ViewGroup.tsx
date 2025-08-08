@@ -12,21 +12,22 @@ const ViewGroup = () => {
 
   const [participants, setParticipants] = useState<string[]>([]);
 
-  useEffect(()=>{
-    const fetchParticipants = async () => {
+  const fetchParticipants = async () => {
       const resp = await CoachGroupService.getAthletesForGroup(groupId);
       if (resp.ok) {
         const data = await resp.json();
         setParticipants(data);
       }
     }
+
+  useEffect(()=>{
     fetchParticipants();
   },[])
 
   return (
     <View>
       <Text className="text-2xl font-bold">{groupName}</Text>
-      <TrackMeButton title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId })} />
+      <TrackMeButton title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})} />
       <TrackMeButton title="Send Workout" onPress={() => console.log("Send Workout")} />
       {participants.map((participant) => (
         <Text key={participant[0]}>{participant[1]}</Text>

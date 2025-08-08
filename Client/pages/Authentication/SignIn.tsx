@@ -1,9 +1,10 @@
 import AuthInput from "../../components/AuthInput";
-import { Button, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes } from "aws-amplify/auth";
+import TrackMeButton from "../../components/TrackMeButton";
 
 //Create account page
 const SignIn = ()=>{
@@ -32,7 +33,7 @@ const SignIn = ()=>{
             <Text className="text-red-500 text-center">{error}</Text>
             <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
             <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
-            <Button title="Sign In" onPress={handleSignIn}/>
+            <TrackMeButton title="Sign In" onPress={handleSignIn}/>
             <View className="flex flex-row mx-auto">
                 <Text className="text-center">Don't have an account? </Text>
                 <Pressable onPress={()=>navigation.navigate('CreateAccount')}>

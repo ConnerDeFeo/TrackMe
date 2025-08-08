@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { View, Text, Button } from "react-native"
+import { View, Text } from "react-native"
 import { useEffect } from "react";
 import CoachService from "../../services/CoachService";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
+import TrackMeButton from "../../components/TrackMeButton";
 
 //All of a given coach's athletes
 const Athletes = () => {
@@ -29,7 +30,7 @@ const Athletes = () => {
 
     return (
         <View>
-            <Button
+            <TrackMeButton
                 title="Add Athlete"
                 onPress={() => navigation.navigate("AddAthlete")}
             />

@@ -1,11 +1,12 @@
 import AuthInput from "../../components/AuthInput";
-import { Button, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { signUp } from 'aws-amplify/auth';
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
+import TrackMeButton from "../../components/TrackMeButton";
 
 //type used to grab username and password that were given along the route
 
@@ -95,7 +96,7 @@ const CreateAccount = ()=>{
             <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
             <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
             <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
-            <Button title="Create Account" onPress={handleCreateAccount}/>
+            <TrackMeButton title="Create Account" onPress={handleCreateAccount}/>
             <View className="flex flex-row mx-auto">
                 <Text className="text-center">Already have an account? </Text>
                 <Pressable onPress={()=>navigation.navigate('SignIn')}>

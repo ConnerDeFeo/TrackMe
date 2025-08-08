@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { signOut } from "aws-amplify/auth";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import UserService from "../../services/UserService";
+import TrackMeButton from "../../components/TrackMeButton";
 
 //Profile coaches see when they click on their icon
 const CoachProfile = () => {
@@ -15,7 +15,7 @@ const CoachProfile = () => {
   return (
     <View>
       <Text>Coach Profile</Text>
-      <Button title="Logout" onPress={handleLogout} />
+      <TrackMeButton title="Logout" onPress={handleLogout} />
     </View>
   );
 };

@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import UserService from "../../../services/UserService";
+import TrackMeButton from "../../../components/TrackMeButton";
 
 //Page where coaches can add any current athletes to a given group
 const AssignAthletes = ()=>{
     const [athletes, setAthletes] = useState<string[]>([]);
     const route = useRoute();
     const { groupId } = route.params as { groupId: string };
+    const navigation = useNavigation<any>();
     
 
     const fetchAthletes = async () => {
             const response = await CoachGroupService.getAthletesForGroup(groupId);
-            console.log("Fetched athletes:", response);
             if (response.ok) {
                 const data = await response.json();
-                console.log("Fetched data:", data);
                 setAthletes(data);
             }
         }
@@ -37,11 +37,14 @@ const AssignAthletes = ()=>{
 
     return (
         <View>
-            <Text className="font-bold text-center mb-5">Assign Athletes</Text>
+            <View>
+                <TrackMeButton title="Back" onPress={() => navigation.goBack()}/>
+                <Text className="font-bold text-center mb-5">Assign Athletes</Text>
+            </View>
             {athletes.map(athlete => (
                 <View key={athlete[0]}>
                     <Text>{athlete[1]}</Text>
-                    {athlete[2] ? <Text>Assigned</Text> : <Button title="Assign" onPress={() => handleAssignAthlete(athlete[0])} />}
+                    {athlete[2] ? <Text>Assigned</Text> : <TrackMeButton title="Assign" onPress={() => handleAssignAthlete(athlete[0])} />}
                 </View>
             ))}
         </View>

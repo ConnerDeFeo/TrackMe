@@ -5,6 +5,7 @@ from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
+from lambdas.coach.get_absent_group_athletes.get_absent_group_athletes import get_absent_group_athletes
 from lambdas.coach.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 import json
@@ -78,7 +79,8 @@ def test_add_athlete_to_group():
     assert response[0] == "1234"
     assert response[1] == 1
 
-def test_get_athletes_for_group():
+#Setups the following tests for getting group athletes
+def setup_get_tests():
     create_group(TestData.test_group, {})
     create_athlete(TestData.test_athlete, {})
     invite_athlete(TestData.test_invite, {})
@@ -96,6 +98,15 @@ def test_get_athletes_for_group():
             "coachId": "123"
         })
     }, {})
+    accept_coach_invite({
+        "body": json.dumps({
+            "athleteId": "1235",
+            "coachId": "123"
+        })
+    }, {})
+
+def test_get_athletes_for_group():
+    setup_get_tests()
 
     event = {
         "queryStringParameters": {
@@ -107,12 +118,26 @@ def test_get_athletes_for_group():
     assert response['statusCode'] == 200
 
     body = json.loads(response['body'])
-    assert len(body) == 2
+    assert len(body) == 1
 
     assert body[0][0] == "1234"
     assert body[0][1] == "test_athlete"
-    assert body[0][2]
 
-    assert body[1][0] == "1235"
-    assert body[1][1] == "testathlete2"
-    assert not body[1][2]
+def test_get_absent_group_athletes():
+    setup_get_tests()
+
+    event = {
+        "queryStringParameters": {
+            "groupId": "1",
+            "coachId": "123"
+        }
+    }
+
+    response = get_absent_group_athletes(event, {})
+    assert response['statusCode'] == 200
+
+    body = json.loads(response['body'])
+    assert len(body) == 1
+
+    assert body[0][0] == "1235"
+    assert body[0][1] == "testathlete2"

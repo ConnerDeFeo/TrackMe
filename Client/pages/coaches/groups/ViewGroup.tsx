@@ -1,6 +1,8 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Text,View } from "react-native";
 import TrackMeButton from "../../../components/TrackMeButton";
+import { useEffect, useState } from "react";
+import CoachGroupService from "../../../services/CoachGroupService";
 
 //Page for viewing a given group
 const ViewGroup = () => {
@@ -8,11 +10,27 @@ const ViewGroup = () => {
   const navigation = useNavigation<any>();
   const {groupName, groupId} = route.params as { groupName: string, groupId: string };
 
+  const [participants, setParticipants] = useState<string[]>([]);
+
+  useEffect(()=>{
+    const fetchParticipants = async () => {
+      const resp = await CoachGroupService.getAthletesForGroup(groupId);
+      if (resp.ok) {
+        const data = await resp.json();
+        setParticipants(data);
+      }
+    }
+    fetchParticipants();
+  },[])
+
   return (
     <View>
       <Text className="text-2xl font-bold">{groupName}</Text>
       <TrackMeButton title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId })} />
       <TrackMeButton title="Send Workout" onPress={() => console.log("Send Workout")} />
+      {participants.map((participant) => (
+        <Text key={participant[0]}>{participant[1]}</Text>
+      ))}
     </View>
   );
 };

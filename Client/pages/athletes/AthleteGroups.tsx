@@ -8,7 +8,7 @@ const AthleteGroups = () => {
 
   return (
     <View className="mt-10 w-[85%] mx-auto">
-      <Groups navigateTo={() => console.log("Navigate to group")} />
+      <Groups/>
     </View>
   );
 };

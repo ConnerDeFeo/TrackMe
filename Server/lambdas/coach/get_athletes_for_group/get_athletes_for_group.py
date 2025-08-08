@@ -11,7 +11,7 @@ def get_athletes_for_group(event, context):
         #Get athletes
         athletes = fetch_all(
         """
-            SELECT a.username, a.userId,
+            SELECT a.userId, a.username,
                 CASE 
                     WHEN ag.athleteId IS NOT NULL THEN TRUE
                     ELSE FALSE
@@ -21,7 +21,6 @@ def get_athletes_for_group(event, context):
             AND ag.groupId = %s
         """, (group_id,))
 
-        print("athletes:", athletes)
         return {
             "statusCode": 200,
             "body": json.dumps(athletes)

@@ -201,6 +201,21 @@ Resources:
         - Ref: DynamoDBLayer
 
   # COACH FUNCTIONS
+  AddAthleteToGroupFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/add_athlete_to_group/
+      Handler: add_athlete_to_group.add_athlete_to_group
+      Events:
+        AddAthleteToGroupApi:
+          Type: Api
+          Properties:
+            Path: /coaches/add_athlete_to_group/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   GetAthletesForGroupFunction:
     Type: AWS::Serverless::Function
     Properties:

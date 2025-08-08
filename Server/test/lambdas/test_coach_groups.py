@@ -109,10 +109,10 @@ def test_get_athletes_for_group():
     body = json.loads(response['body'])
     assert len(body) == 2
 
-    assert body[0][0] == "test_athlete"
-    assert body[0][1] == "1234"
+    assert body[0][0] == "1234"
+    assert body[0][1] == "test_athlete"
     assert body[0][2]
 
-    assert body[1][0] == "testathlete2"
-    assert body[1][1] == "1235"
+    assert body[1][0] == "1235"
+    assert body[1][1] == "testathlete2"
     assert not body[1][2]

@@ -25,3 +25,4 @@ def create_workout(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': 'Invalid input', 'message': str(e)})
         }
+    

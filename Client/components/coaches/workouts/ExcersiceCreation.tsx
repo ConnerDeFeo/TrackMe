@@ -15,6 +15,22 @@ const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dis
     setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, exerciseParts: excerciseParts } : ex)));
   };
 
+  //Generic function for displaying sets and reps
+  const setsReps = (field: 'sets' | 'reps') => {
+    return (
+      <TextInput value={excercise[field] && `${excercise[field]}` || ''} onChangeText={text => {
+        //Update only if valid number was entered
+        if(text && !isNaN(Number(text))) {
+          const updatedExcercise = { ...excercise, [field]: Number(text) };
+          setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
+        }
+        if(text === '') {
+          setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, [field]: 0 } : ex)));
+        }
+      }} />
+    );
+  }
+
   return (
     <View className="border my-3">
       <Text>Create Excercise</Text>
@@ -26,31 +42,13 @@ const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dis
           setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
         }} />
       </View>
-      {/** Sets and Reps */}
+      {/** Sets, Reps */}
       {diplaySetsReps && (
         <View>
-          <Text className="text-lg font-bold">Sets</Text>
-          <TextInput value={excercise.sets && `${excercise.sets}` || ''} onChangeText={text => {
-            //Update only if valid number was entered
-            if(text && !isNaN(Number(text))) {
-              const updatedExcercise = { ...excercise, sets: Number(text) };
-              setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
-            }
-            if(text === '') {
-              setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, sets: 0 } : ex)));
-            }
-          }} />
-          <Text className="text-lg font-bold">Reps</Text>
-          <TextInput value={excercise.reps && `${excercise.reps}` || ''} onChangeText={text => {
-            //Update only if valid number was entered
-            if(text && !isNaN(Number(text))) {
-              const updatedExcercise = { ...excercise, reps: Number(text) };
-              setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
-            }
-            if(text === '') {
-              setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, reps: 0 } : ex)));
-            }
-          }} />
+            <Text className="text-lg font-bold">Sets</Text>
+            {setsReps('sets')}
+            <Text className="text-lg font-bold">Reps</Text>
+            {setsReps('reps')}
           {/** Exercise Parts */}
           {excercise.exerciseParts && excercise.exerciseParts.map((part: any, idx: number) => (
             <View key={idx}>

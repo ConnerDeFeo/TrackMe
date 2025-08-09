@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, Text, TextInput, View, ScrollView } from "react-native";
 import ExcerciseCreation from "../../../components/coaches/workouts/ExcersiceCreation";
 import Exercise from "../../../types/Excersise";
 
@@ -12,7 +12,7 @@ const CreateWorkout = () => {
 
   console.log(excersies)
   return (
-    <View>
+    <ScrollView>
         <Text>Create workout</Text>
         <View className="border">
           <Text>Title</Text>
@@ -28,7 +28,9 @@ const CreateWorkout = () => {
           ))}
           <Button title="Create Excercise" onPress={() => setExcersies([...excersies, {name: '', id: excersies.length}])} />
         </View>
-    </View>
+        <Button title="Create"/>
+        <Text>asdfasdf</Text>
+    </ScrollView>
   );
 };
 

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button, Text, TextInput, View, ScrollView } from "react-native";
 import ExcerciseCreation from "../../../components/coaches/workouts/ExcersiceCreation";
 import Exercise from "../../../types/Excersise";
+import CoachWorkoutService from "../../../services/CoachWorkoutService";
+import UserService from "../../../services/UserService";
 
 //Page for workout creation by coaches
 const CreateWorkout = () => {
@@ -10,7 +12,18 @@ const CreateWorkout = () => {
   const [description, setDescription] = useState<string>("");
   const [excersies, setExcersies] = useState<Array<Exercise>>([]);
 
-  console.log(excersies)
+  const handleWorkoutCreation = async () => {
+    const coachId = await UserService.getUserId();
+    console.log(coachId)
+    const workoutData = {
+      'title': title,
+      'description': description,
+      'excersies': excersies,
+      'coach_id': coachId
+    };
+    const response = await CoachWorkoutService.createWorkout(workoutData);
+      
+  };
   return (
     <ScrollView>
         <Text>Create workout</Text>
@@ -28,52 +41,9 @@ const CreateWorkout = () => {
           ))}
           <Button title="Create Excercise" onPress={() => setExcersies([...excersies, {name: '', id: excersies.length}])} />
         </View>
-        <Button title="Create"/>
-        <Text>asdfasdf</Text>
+        <Button title="Create" onPress={handleWorkoutCreation}/>
     </ScrollView>
   );
 };
 
 export default CreateWorkout;
-
-/**
- * test_workout = {
-        "body": json.dumps({
-            'coach_id': '123',
-            'title': 'Test Workout',
-            'description': 'This is a test workout',
-            'excersies': [
-                {
-                    'name': 'Test name',
-                    'sets': 3,
-                    'reps': 10,
-                    'excersiesParts': [
-                        {
-                            'distance': 100,
-                            'measurement': 'meters'
-                        },
-                        {
-                            'distance': 50,
-                            'measurement': 'meters'
-                        }
-                    ],
-                    "inputs":True
-                },
-                {
-                    'name': 'Test name 2',
-                    'sets': 2,
-                    'reps': 15,
-                    'excersiesParts': [
-                        {
-                            'distance': 200,
-                            'measurement': 'meters'
-                        }
-                    ]
-                },
-                {
-                    'name': 'Warm-up',
-                }
-            ]
-        })
-    }
- */

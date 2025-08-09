@@ -31,7 +31,7 @@ Amplify.configure(awsConfig);
 
 const layouts = {
   'athlete': [['Groups', 'AthleteGroups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches']],
-  'coach': [['Groups', 'CoachGroups'], ['Athletes', 'Athletes'], ['Workouts', 'Workouts']]
+  'coach': [['Groups', 'CoachGroups'], ['Workouts', 'Workouts'], ['Athletes', 'Athletes']]
 }
 
 //Base page layout for all components

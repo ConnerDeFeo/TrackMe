@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import ExcerciseCreation from "../../../components/coaches/workouts/ExcersiceCreation";
+import Exercise from "../../../types/Excersise";
 
 //Page for workout creation by coaches
 const CreateWorkout = () => {
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [excersies, setExcersies] = useState<Array<any>>([]);
+  const [excersies, setExcersies] = useState<Array<Exercise>>([]);
 
+  console.log(excersies)
   return (
     <View>
         <Text>Create workout</Text>
@@ -24,7 +26,7 @@ const CreateWorkout = () => {
           {excersies.map((excersise, idx) => (
             <ExcerciseCreation key={idx} excercise={excersise} setExcersies={setExcersies} />
           ))}
-          <Button title="Add" onPress={() => setExcersies([...excersies, {name: '', id: excersies.length}])} />
+          <Button title="Create Excercise" onPress={() => setExcersies([...excersies, {name: '', id: excersies.length}])} />
         </View>
     </View>
   );

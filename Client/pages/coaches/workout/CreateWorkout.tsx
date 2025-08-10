@@ -14,14 +14,14 @@ const CreateWorkout = () => {
 
   const handleWorkoutCreation = async () => {
     const coachId = await UserService.getUserId();
-    console.log(coachId)
     const workoutData = {
       'title': title,
       'description': description,
       'excersies': excersies,
       'coach_id': coachId
     };
-    const response = await CoachWorkoutService.createWorkout(workoutData);
+    
+    await CoachWorkoutService.createWorkout(workoutData);
       
   };
   return (

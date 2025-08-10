@@ -5,6 +5,7 @@ from lambdas.athlete.input_group_time.input_group_time import input_group_time
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
+from lambdas.coach.get_workouts.get_workouts import get_workouts
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
@@ -131,3 +132,52 @@ def test_view_workout_coach():
     assert len(inputs) == 1
     assert inputs[0]['distance'] == 100
     assert inputs[0]['time'] == 10
+
+def test_get_workouts():
+    create_workout(TestData.test_workout, {})
+    create_workout({
+        'body': json.dumps({
+            "coach_id": "123",
+            "title": "Test Workout 2",
+            "description": "This is a test workout 2",
+            "excersies": [
+                {
+                "name": "Test name 3",
+                "sets": 3,
+                "reps": 10,
+                "excersiesParts": [
+                    {
+                        "distance": 100,
+                        "measurement": "meters"
+                    },
+                    {
+                        "distance": 50,
+                        "measurement": "meters"
+                    }
+                ],
+                "inputs": True
+            }
+        ]
+        })
+    }, {})
+    event = {
+        "queryStringParameters": {
+            "coach_id": "123"
+        }
+    }
+    response = get_workouts(event, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workouts = data['Items']
+    print(workouts)
+    assert len(workouts) == 2
+
+    workout1 = workouts[0]
+    assert workout1['coach_id'] == '123'
+    assert workout1['title'] == 'Test Workout'
+    assert workout1['description'] == 'This is a test workout'
+
+    workout2 = workouts[1]
+    assert workout2['coach_id'] == '123'
+    assert workout2['title'] == 'Test Workout 2'
+    assert workout2['description'] == 'This is a test workout 2'

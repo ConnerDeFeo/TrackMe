@@ -55,11 +55,11 @@ CREATE TABLE group_workouts (
     id SERIAL PRIMARY KEY,
     groupId INT REFERENCES groups(id) NOT NULL,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
-    title VARCHAR(255) NOT NULL,
-    UNIQUE (groupId, date, title)
+    workoutId VARCHAR(255) NOT NULL,
+    UNIQUE (groupId, date, workoutId)
 );
 --Indexes for faster lookups--
-CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, title);
+CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, workoutId);
 
 CREATE TABLE athlete_workout_inputs(
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,

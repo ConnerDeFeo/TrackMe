@@ -27,7 +27,7 @@ _connection.create_table(
             'KeyType': 'HASH'
         },
         {
-            'AttributeName': 'title',
+            'AttributeName': 'workout_id',
             'KeyType': 'RANGE'
         }
     ],
@@ -37,7 +37,7 @@ _connection.create_table(
             'AttributeType': 'S'
         },
         {
-            'AttributeName': 'title',
+            'AttributeName': 'workout_id',
             'AttributeType': 'S'
         }
     ],

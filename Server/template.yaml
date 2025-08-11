@@ -367,6 +367,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: DynamoDBLayer
+        - Ref: DecimalEncoderLayer
 
   SearchAthletesFunction:
     Type: AWS::Serverless::Function

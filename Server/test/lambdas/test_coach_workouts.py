@@ -34,7 +34,7 @@ def test_create_workout():
     response = create_workout(TestData.test_workout, {})
     assert response['statusCode'] == 200
 
-    data = get_item('Workouts', {'coach_id': '123', 'title': 'Test Workout'})
+    data = get_item('Workouts', {'coach_id': '123', 'workout_id': 'Test Workout'})
 
     #Bunch of ai generate asserts to check if the data is correct
     assert data is not None

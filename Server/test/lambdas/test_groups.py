@@ -35,7 +35,7 @@ def test_get_groups_coach():
     create_group({
         "body": json.dumps({
             "groupName": "Test Group 2",
-            "userId": "123"
+            "coachId": "123"
         })
     }, {})
     response = get_groups(TestData.test_get_group_coach, {})

@@ -122,14 +122,14 @@ class TestData:
 
     test_get_group_athlete = {
         "queryStringParameters":{
-            "athleteId": "1234",
+            "userId": "1234",
             "accountType": "Athlete"
         }
     }
 
     test_get_group_coach = {
         "queryStringParameters": {
-            "coachId": "123",
+            "userId": "123",
             "accountType": "Coach"
         }
     }

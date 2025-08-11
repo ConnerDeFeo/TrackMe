@@ -9,13 +9,15 @@ def create_group(event, context):
     try:
         body = json.loads(event['body'])
         group_name = body['groupName']
-        userId = body['coachId']
+        coachId = body['coachId']
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         # Create group in RDS with the current date
-        group_id = execute_commit_fetch_one('INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s) RETURNING id', (userId, group_name, today))
+        group_id = execute_commit_fetch_one(
+            """
+                INSERT INTO groups (coachId, name, dateCreated) VALUES (%s, %s, %s) RETURNING id
+            """, (coachId, group_name, today))
 
-        print(group_id)
         if group_id:
             return {
                 "statusCode": 200,

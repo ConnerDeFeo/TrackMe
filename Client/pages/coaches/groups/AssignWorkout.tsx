@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import DisplayWorkout from "../../../components/DisplayWorkout";
 
 //Page where coaches can assign workouts to athletes
 const AssignWorkout = ()=>{
     const route = useRoute();
-    const { groupId, groupName } = route.params as { groupId: string, groupName: string };
+    const navigation = useNavigation<any>();
+    const { groupId } = route.params as { groupId: string };
     const [workouts, setWorkouts] = useState<Array<any>>([]);
 
     //Fetch all workouts
@@ -26,9 +28,9 @@ const AssignWorkout = ()=>{
 
     const handleAssignWorkout = async (title:string) => {
         const coachId = await UserService.getUserId();
-        const response = await CoachWorkoutService.assignWorkoutToGroup(title, coachId!, groupName);
+        const response = await CoachWorkoutService.assignWorkoutToGroup(title, coachId!, groupId);
         if (response.ok) {
-            // Handle successful assignment
+            navigation.goBack();
         }
     };
 
@@ -36,7 +38,9 @@ const AssignWorkout = ()=>{
         <View>
             <Text>Assign Workout</Text>
             {workouts.map((workout, idx) => (
-                <Text key={idx} className="border my-2">{workout.title}</Text>
+                <TouchableOpacity key={idx} className="border my-2" onPress={() => handleAssignWorkout(workout.title)}>
+                    <DisplayWorkout workout={workout} />
+                </TouchableOpacity>
             ))}
         </View>
     );

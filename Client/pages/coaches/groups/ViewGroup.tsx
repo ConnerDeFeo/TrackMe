@@ -3,6 +3,7 @@ import { Text,View } from "react-native";
 import TrackMeButton from "../../../components/TrackMeButton";
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
+import CoachWorkoutService from "../../../services/CoachWorkoutService";
 
 //Page for viewing a given group
 const ViewGroup = () => {
@@ -12,6 +13,7 @@ const ViewGroup = () => {
 
   const [participants, setParticipants] = useState<string[]>([]);
 
+  //Grabs all athletes that are a part of the group
   const fetchParticipants = async () => {
       const resp = await CoachGroupService.getAthletesForGroup(groupId);
       if (resp.ok) {
@@ -20,8 +22,13 @@ const ViewGroup = () => {
       }
     }
 
+  const fetchWorkout = async () => {
+    
+  }
+
   useEffect(()=>{
     fetchParticipants();
+    fetchWorkout();
   },[])
 
   return (

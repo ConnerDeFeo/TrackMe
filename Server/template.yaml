@@ -336,6 +336,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: DynamoDBLayer
+        - Ref: RDSLayer
 
   InviteAthleteFunction:
     Type: AWS::Serverless::Function 

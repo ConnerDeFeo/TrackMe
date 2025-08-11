@@ -8,7 +8,7 @@ def view_workout_coach(event, context):
 
     try:
         date = body['date']
-        group_name = body['groupName']
+        group_name = body['groupId']
         coach_id = body['coachId']
 
 

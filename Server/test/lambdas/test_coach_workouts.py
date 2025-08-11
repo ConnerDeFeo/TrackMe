@@ -5,6 +5,7 @@ from lambdas.athlete.input_group_time.input_group_time import input_group_time
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
+from lambdas.coach.get_group_workout.get_group_workout import get_group_workout
 from lambdas.coach.get_workouts.get_workouts import get_workouts
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
@@ -181,3 +182,24 @@ def test_get_workouts():
     assert workout2['coach_id'] == '123'
     assert workout2['title'] == 'Test Workout 2'
     assert workout2['description'] == 'This is a test workout 2'
+
+def test_get_group_workout():
+    create_workout(TestData.test_workout, {})
+    assign_group_workout(TestData.test_assign_workout, {})
+
+    event = {
+        "queryStringParameters": {
+            "coachId": "123",
+            "groupId": "1",
+            "date": date
+        }
+    }
+    response = get_group_workout(event, {})
+    assert response['statusCode'] == 200
+
+    # Check if the data is valid
+    workout = json.loads(response['body'])
+    assert workout['title'] == 'Test Workout'
+    assert workout['coach_id'] == '123'
+    assert len(workout['excersies']) == 3
+    assert workout['description']=='This is a test workout'

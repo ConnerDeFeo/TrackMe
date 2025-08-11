@@ -216,6 +216,7 @@ Resources:
       Layers:
         - Ref: DynamoDBLayer
         - Ref: DecimalEncoderLayer
+        - Ref: RDSLayer
 
   GetWorkoutsFunction:
     Type: AWS::Serverless::Function

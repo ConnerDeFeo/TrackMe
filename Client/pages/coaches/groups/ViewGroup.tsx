@@ -25,13 +25,13 @@ const ViewGroup = () => {
       }
     }
 
+  //Fetches the workout for the current date
   const fetchWorkout = async () => {
     const userId = await UserService.getUserId();
     const date = new Date().toISOString().split("T")[0];
     const resp = await CoachWorkoutService.getGroupWorkout(userId!, groupId, date);
     if(resp.ok){
-      const data = await resp.json();
-      const workout = data['Items'] || []
+      const workout = await resp.json();
       setWorkout(workout);
     }
   }

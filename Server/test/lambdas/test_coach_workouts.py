@@ -102,11 +102,11 @@ def test_view_workout_coach():
     input_group_time(TestData.test_input_group_time, {})
 
     event = {
-        "body": json.dumps({
+        "queryStringParameters": {
             "date": date,
             "groupName": "Test Group",
             "coachId": "123"
-        })
+        }
     }
     response = view_workout_coach(event, {})
     assert response['statusCode'] == 200

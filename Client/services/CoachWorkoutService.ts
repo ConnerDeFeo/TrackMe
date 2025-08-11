@@ -10,6 +10,9 @@ const CoachWorkoutService = {
     },
     assignWorkoutToGroup: async (title:string, coachId: string, groupId:string) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout`, { title:title, userId:coachId, groupId: groupId });
+    },
+    viewCoachWorkout: async (coachId:string, groupName:string, date:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/view_workout?coach_id=${coachId}&group_name=${groupName}&date=${date}`);
     }
 }
 

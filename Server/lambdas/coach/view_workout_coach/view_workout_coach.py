@@ -4,12 +4,12 @@ from decimal_encoder import DecimalEncoder
 #Fetches workout from databse for a coach to view
 #Includes workout details and the times for all athletes in the group
 def view_workout_coach(event, context):
-    body = json.loads(event['body'])
+    query_params = event.get('queryStringParameters', {})
 
     try:
-        date = body['date']
-        group_name = body['groupId']
-        coach_id = body['coachId']
+        date = query_params['date']
+        group_name = query_params['groupName']
+        coach_id = query_params['coachId']
 
 
         #Fetch workout data from dynamodb

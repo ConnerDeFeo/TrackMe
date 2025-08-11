@@ -23,7 +23,7 @@ const ViewGroup = () => {
     }
 
   const fetchWorkout = async () => {
-    
+    const resp = await CoachWorkoutService.viewCoachWorkout("coachId","groupId","date");
   }
 
   useEffect(()=>{

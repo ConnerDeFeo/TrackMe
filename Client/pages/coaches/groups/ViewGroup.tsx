@@ -28,7 +28,7 @@ const ViewGroup = () => {
   const fetchWorkout = async () => {
     const userId = await UserService.getUserId();
     const date = new Date().toISOString().split("T")[0];
-    const resp = await CoachWorkoutService.viewCoachWorkout(userId!, groupName, date);
+    const resp = await CoachWorkoutService.getGroupWorkout(userId!, groupId, date);
     if(resp.ok){
       const data = await resp.json();
       const workout = data['Items'] || []

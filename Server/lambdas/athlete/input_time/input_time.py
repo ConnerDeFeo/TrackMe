@@ -8,7 +8,7 @@ def input_time(event, context):
 
     try:
         athlete_id = body['athleteId']
-        workout_title = body['workoutTitle']
+        workout_id = body['workoutId']
         coach_username = body['coachUsername']
         group_name = body['groupName']
         date = body['date']
@@ -25,16 +25,16 @@ def input_time(event, context):
                 FROM group_workouts gw
                 JOIN groups g ON gw.groupId = g.id
                 JOIN coaches c ON g.coachId = c.userId
-                WHERE gw.title = %s 
+                WHERE gw.workoutId = %s 
                 AND gw.date = %s 
                 AND g.name = %s 
                 AND c.username = %s
             )
             INSERT INTO athlete_workout_inputs (athleteId, groupWorkoutId, time, distance)
-            SELECT %s, wi.workout_id, %s, %s
+            SELECT %s, wi.workoutId, %s, %s
             FROM workout_info wi
             RETURNING (SELECT coach_id FROM workout_info)
-        """, (workout_title, date, group_name, coach_username, athlete_id, time, distance))
+        """, (workout_id, date, group_name, coach_username, athlete_id, time, distance))
 
         if not coach_id:
             raise ValueError("Invalid workout or group information provided.")

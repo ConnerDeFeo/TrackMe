@@ -8,7 +8,7 @@ def create_workout_group(event,context):
     try:
         leaderId = body['leaderId']
         athletes = body['athletes']
-        workout_title = body['workoutTitle']
+        workout_id = body['workoutId']
         coach_username = body['coachUsername']
         workout_group_name = body['workoutGroupName']
         group_name = body['groupName']
@@ -21,7 +21,7 @@ def create_workout_group(event,context):
                 FROM group_workouts gw
                 JOIN groups g ON gw.groupId = g.id
                 JOIN coaches c ON g.coachId = c.userId
-                WHERE gw.title = %s 
+                WHERE gw.workoutId = %s 
                 AND gw.date = %s 
                 AND g.name = %s 
                 AND c.username = %s
@@ -29,7 +29,7 @@ def create_workout_group(event,context):
             INSERT INTO workout_groups (leaderId, workoutId, workoutGroupName)
             VALUES (%s, (SELECT workout_id FROM workout_info),  %s)
             RETURNING id
-        """, (workout_title, date, group_name, coach_username, leaderId, workout_group_name))
+        """, (workout_id, date, group_name, coach_username, leaderId, workout_group_name))
 
         if not workout_group_id:
             return {

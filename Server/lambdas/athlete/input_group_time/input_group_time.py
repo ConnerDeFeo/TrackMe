@@ -10,7 +10,7 @@ def input_group_time(event, context):
         leader_id = body['leaderId']
         workout_group_name = body['workoutGroupName']
         group_name = body['groupName']
-        workout_title = body['workoutTitle']
+        workout_id = body['workoutId']
         date = body['date']
         distance = body['distance']
         time = body['time']
@@ -26,14 +26,14 @@ def input_group_time(event, context):
                 JOIN groups g ON gw.groupId = g.id
                 JOIN coaches c ON g.coachId = c.userId
                 WHERE wg.leaderId = %s AND wg.workoutGroupName = %s
-                AND gw.title = %s AND gw.date = %s
+                AND gw.workoutId = %s AND gw.date = %s
                 AND g.name = %s AND c.username = %s
             )
             INSERT INTO workout_group_inputs (workoutGroupId, distance, time)
             SELECT workout_group.wgid, %s, %s
             FROM workout_group
             RETURNING (SELECT coach_id FROM workout_group)
-        ''', (leader_id, workout_group_name, workout_title, date, group_name, coach_username, distance, time))
+        ''', (leader_id, workout_group_name, workout_id, date, group_name, coach_username, distance, time))
 
         if not coach_id:
             raise ValueError("Workout group not found or invalid parameters provided.")

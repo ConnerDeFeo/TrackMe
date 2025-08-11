@@ -1,15 +1,18 @@
 from dynamo import put_item
 import json
+import uuid
 
 def create_workout(event, context):
     body = json.loads(event['body'])
     try:
         title = body['title']
         coach_id = body['coach_id']
+        workout_id = str(uuid.uuid4())  # Generate a unique ID for the workout
 
         # Put item into DynamoDB
         put_item('Workouts', {
             'coach_id': coach_id,
+            'workout_id': workout_id,
             'title': title,
             'description': body.get('description', ''),
             'excersies': body.get('excersies', [])

@@ -4,15 +4,17 @@ import ExcerciseCreation from "../../../components/coaches/workouts/ExcersiceCre
 import Exercise from "../../../types/Excersise";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 //Page for workout creation by coaches
 const CreateWorkout = () => {
   const navigation = useNavigation<any>();
+  const route = useRoute();
+  const {workout} = route.params as { workout?: any };
 
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [excersies, setExcersies] = useState<Array<Exercise>>([]);
+  const [title, setTitle] = useState<string>(workout?.title || "");
+  const [description, setDescription] = useState<string>(workout?.description || "");
+  const [excersies, setExcersies] = useState<Array<Exercise>>(workout?.excersies || []);
 
   const handleWorkoutCreation = async () => {
     const coachId = await UserService.getUserId();

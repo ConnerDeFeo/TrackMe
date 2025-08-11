@@ -120,8 +120,9 @@ def execute_file(file_path, params={}):
             cursor.execute(sql, params)
             _connection.commit()
             return True
-        except:
+        except Exception as e:
             _connection.rollback()
+            print(f"Error executing SQL file {file_path}: {e}")
             return False
 
 

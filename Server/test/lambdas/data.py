@@ -11,7 +11,7 @@ class TestData:
     test_group = {
             "body": json.dumps({
                 "groupName": "Test Group",
-                "userId": "123"
+                "coachId": "123"
             })
         }
     test_athlete = {
@@ -77,8 +77,9 @@ class TestData:
     test_assign_workout = {
         "body": json.dumps({
             "title": "Test Workout",
-            "userId": "123",
-            "groupId": "1"
+            "coachId": "123",
+            "groupId": "1",
+            "workoutId": "workout123"
         })
     }
 
@@ -88,7 +89,7 @@ class TestData:
                 "athletes": ["test_athlete","test2", "test3"],
                 "groupName": "Test Group",
                 "workoutGroupName": "Test Workout Group",
-                "workoutTitle": "Test Workout",
+                "workoutId": "workout123",
                 "coachUsername": "testcoach",
                 "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
             })
@@ -97,7 +98,7 @@ class TestData:
     test_input_time = {
             "body": json.dumps({
                 "athleteId": "1234",
-                "workoutTitle": "Test Workout",
+                "workoutId": "workout123",
                 "coachUsername": "testcoach",
                 "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
                 "groupName": "Test Group",
@@ -109,7 +110,7 @@ class TestData:
     test_input_group_time = {
         "body": json.dumps({
             "leaderId": "1234",
-            "workoutTitle": "Test Workout",
+            "workoutId": "workout123",
             "workoutGroupName": "Test Workout Group",
             "coachUsername": "testcoach",
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
@@ -121,14 +122,14 @@ class TestData:
 
     test_get_group_athlete = {
         "queryStringParameters":{
-            "userId": "1234",
+            "athleteId": "1234",
             "accountType": "Athlete"
         }
     }
 
     test_get_group_coach = {
         "queryStringParameters": {
-            "userId": "123",
+            "coachId": "123",
             "accountType": "Coach"
         }
     }

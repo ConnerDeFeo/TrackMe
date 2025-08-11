@@ -32,8 +32,24 @@ def test_create_coach():
 def test_get_athletes():
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
+    
+    # Debug: Check how many athletes exist after creating one
+    from rds import fetch_all
+    athletes_after_create = fetch_all("SELECT userId, username FROM athletes", ())
+    print(f"Athletes after create_athlete: {athletes_after_create}")
+    
     invite_athlete(TestData.test_invite, {})
+    
+    # Debug: Check again after invite
+    athletes_after_invite = fetch_all("SELECT userId, username FROM athletes", ())
+    print(f"Athletes after invite_athlete: {athletes_after_invite}")
+    
     accept_coach_invite(TestData.test_accept_coach_invite, {})
+    
+    # Debug: Check again after accept
+    athletes_after_accept = fetch_all("SELECT userId, username FROM athletes", ())
+    print(f"Athletes after accept_coach_invite: {athletes_after_accept}")
+    
     event = {
         "queryStringParameters": {
             "coachId": "123"

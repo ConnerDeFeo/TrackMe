@@ -75,9 +75,9 @@ def test_assign_group_workout():
 
     event = {
         "body": json.dumps({
-            "userId": "123",
+            "coachId": "123",
             "groupId": "1",
-            "title": "Test Workout"
+            "workoutId": 'workout123'
         })
     }
     response = assign_group_workout(event, {})

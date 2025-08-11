@@ -5,7 +5,7 @@ from rds import fetch_all
 def get_athletes(event, context):
     query_params = event.get('queryStringParameters', {})
     try:
-        coach_id = query_params.get('coachId')
+        coach_id = query_params['coachId']
 
         #Fetch athletes from the database
         athletes = fetch_all("""

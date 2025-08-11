@@ -9,10 +9,10 @@ def assign_group_workout(event, context):
     body = json.loads(event['body'])
     try:
         #Check if workout exists
-        workout_title = body['title']
-        coach_id = body['userId']
+        workout_id = body['workoutId']
+        coach_id = body['coachId']
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
-        workout = get_item('Workouts', {'title': workout_title, 'coach_id': coach_id})
+        workout = get_item('Workouts', {'coach_id': coach_id, 'workout_id': workout_id})
         if not workout:
             return {
                 "statusCode": 404,
@@ -24,9 +24,9 @@ def assign_group_workout(event, context):
 
         # Create connection in RDS
         execute_commit("""
-            INSERT INTO group_workouts (groupId, date, title)
+            INSERT INTO group_workouts (groupId, date, workoutId)
             VALUES (%s, %s, %s)
-        """, (group_id, date, workout_title))
+        """, (group_id, date, workout_id))
         return {
             "statusCode": 200,
             "headers": {

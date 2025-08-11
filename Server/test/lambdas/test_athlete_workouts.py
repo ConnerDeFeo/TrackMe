@@ -33,6 +33,7 @@ def setup_before_each_test(): #This will run before each test
     assign_group_workout(TestData.test_assign_workout, {})
     yield
 
+
 def create_extra_athlete(username,id):
     extra_athlete = {
         "body": json.dumps({
@@ -41,7 +42,6 @@ def create_extra_athlete(username,id):
         })
     }
     create_athlete(extra_athlete, {})
-
 
 def test_view_workout_athlete():
     event = {

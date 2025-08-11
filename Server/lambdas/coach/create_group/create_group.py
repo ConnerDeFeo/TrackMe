@@ -9,7 +9,7 @@ def create_group(event, context):
     try:
         body = json.loads(event['body'])
         group_name = body['groupName']
-        userId = body['userId']
+        userId = body['coachId']
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         # Create group in RDS with the current date

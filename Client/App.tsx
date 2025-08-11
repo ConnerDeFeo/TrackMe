@@ -26,6 +26,7 @@ import Coaches from './pages/athletes/Coaches';
 import AssignAthletes from './pages/coaches/groups/AssignAthletes';
 import CreateWorkout from './pages/coaches/workout/CreateWorkout';
 import Workouts from './pages/coaches/workout/Workouts';
+import AssignWorkout from './pages/coaches/groups/AssignWorkout';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -83,7 +84,8 @@ const RootStack = createNativeStackNavigator({
     Coaches: UserLayout(<Coaches/>, 'athlete'),
     AssignAthletes: UserLayout(<AssignAthletes/>, 'coach'),
     CreateWorkout: UserLayout(<CreateWorkout/>, 'coach'),
-    Workouts: UserLayout(<Workouts/>, 'coach')
+    Workouts: UserLayout(<Workouts/>, 'coach'),
+    AssignWorkout: UserLayout(<AssignWorkout/>, 'coach')
   },
 });
 const Navigation = createStaticNavigation(RootStack);

@@ -20,13 +20,13 @@ def assign_group_workout(event, context):
                     "error": "Workout not found"
                 })
             }
-        group_name = body['groupName']
-        
+        group_id = body['groupId']
+
         # Create connection in RDS
         execute_commit("""
             INSERT INTO group_workouts (groupId, date, title)
-            VALUES ((SELECT id FROM groups WHERE name = %s AND coachId = %s), %s, %s)
-        """, (group_name, coach_id, date, workout_title))
+            VALUES (%s, %s, %s)
+        """, (group_id, date, workout_title))
         return {
             "statusCode": 200,
             "headers": {

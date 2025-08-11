@@ -28,7 +28,7 @@ const ViewGroup = () => {
     <View>
       <Text className="text-2xl font-bold">{groupName}</Text>
       <TrackMeButton title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})} />
-      <TrackMeButton title="Send Workout" onPress={() => navigation.navigate('CreateWorkout', { groupId: groupId })} />
+      <TrackMeButton title="Send Workout" onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName})} />
       {participants.map((participant) => (
         <Text key={participant[0]}>{participant[1]}</Text>
       ))}

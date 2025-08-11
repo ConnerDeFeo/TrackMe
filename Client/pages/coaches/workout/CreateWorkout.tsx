@@ -4,9 +4,11 @@ import ExcerciseCreation from "../../../components/coaches/workouts/ExcersiceCre
 import Exercise from "../../../types/Excersise";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
+import { useNavigation } from "@react-navigation/native";
 
 //Page for workout creation by coaches
 const CreateWorkout = () => {
+  const navigation = useNavigation<any>();
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -21,7 +23,10 @@ const CreateWorkout = () => {
       'coach_id': coachId
     };
     
-    await CoachWorkoutService.createWorkout(workoutData);
+    const resp = await CoachWorkoutService.createWorkout(workoutData);
+    if (resp.ok){
+      navigation.navigate('Workouts');
+    }
       
   };
   return (

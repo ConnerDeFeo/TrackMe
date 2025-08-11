@@ -78,7 +78,7 @@ class TestData:
         "body": json.dumps({
             "title": "Test Workout",
             "userId": "123",
-            "groupName": "Test Group"
+            "groupId": "1"
         })
     }
 

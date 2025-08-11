@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 
 //Each individual group display component

@@ -24,9 +24,10 @@ def assign_group_workout(event, context):
 
         # Create connection in RDS
         execute_commit("""
+            DELETE FROM group_workouts WHERE groupId = %s AND date = %s;
             INSERT INTO group_workouts (groupId, date, workoutId)
             VALUES (%s, %s, %s)
-        """, (group_id, date, workout_id))
+        """, (group_id, date, group_id, date, workout_id))
         return {
             "statusCode": 200,
             "headers": {

@@ -15,9 +15,10 @@ from lambdas.athlete.create_workout_group.create_workout_group import create_wor
 from lambdas.coach.view_workout_coach.view_workout_coach import view_workout_coach
 from testing_utils import reset_dynamo
 from data import TestData
-from rds import execute_file, fetch_one
+from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
 from dynamo import get_item
+from testing_utils import debug_table
 
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -96,6 +97,58 @@ def test_assign_group_workout():
     assert data[1] == 1
     assert data[2] == date
     assert data[3] == workout_id
+
+def test_assign_multiple_workouts():
+    response = create_workout(TestData.test_workout, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
+
+    event = {
+        "body": json.dumps({ 
+            "coachId": "123",
+            "groupId": "1",
+            "workoutId": workout_id,
+            "date": "2024-01-01" 
+        })
+    }
+    assign_group_workout(event, {})
+    #Assign a second one to make sure first was overriden
+    test_workout_2 = {
+        "body": json.dumps({
+            'coachId': '123',
+            'workoutId':"workout123",
+            'title': 'Test Workout 2',
+            'description': 'This is a test workout 2',
+            'excersies': [
+                {
+                    'name': 'lollygag',
+                }
+            ]
+        })
+    }
+    create_workout(test_workout_2, {})
+    event = {
+        "body": json.dumps({ 
+            "coachId": "123",
+            "groupId": "1",
+            "workoutId": "workout123",
+            "date": "2024-01-01" 
+        })
+    }
+    response = assign_group_workout(event, {})
+    assert response['statusCode'] == 200
+
+    #Check if workout exists in rds
+    data = fetch_all("SELECT * FROM group_workouts")
+    assert data is not None
+    assert len(data) == 1  # Only one workout should be assigned
+    data = data[0]  # Get the first row
+    assert data[0] == 2
+    assert data[1] == 1
+    assert data[2] == "2024-01-01" 
+    assert data[3] == "workout123"
+
 
 def test_view_workout_coach():
     reset_dynamo()

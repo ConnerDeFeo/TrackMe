@@ -15,8 +15,8 @@ def get_group_workout(event,context):
         #Get the workout title for the given date
         workout_id = fetch_one(
             """
-            SELECT workoutId FROM group_workouts
-            WHERE groupId = %s AND date = %s
+                SELECT workoutId FROM group_workouts
+                WHERE groupId = %s AND date = %s
             """,
             (group_id, date)
         )

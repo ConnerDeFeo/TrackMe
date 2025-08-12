@@ -56,7 +56,7 @@ CREATE TABLE group_workouts (
     groupId INT REFERENCES groups(id) NOT NULL,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
     workoutId VARCHAR(255) NOT NULL,
-    UNIQUE (groupId, date, workoutId)
+    UNIQUE (groupId, date)
 );
 --Indexes for faster lookups--
 CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, workoutId);

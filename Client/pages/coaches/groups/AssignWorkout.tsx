@@ -16,14 +16,13 @@ const AssignWorkout = ()=>{
     //Fetch all workouts
     useEffect(() => {
         const fetchWorkouts = async () => {
-        const coachId = await UserService.getUserId();
-        const response = await CoachWorkoutService.getWorkouts(coachId!);
-        if(response.ok) {
-            const workouts = await response.json();
-            setWorkouts(workouts['Items'] || []);
-        }
+            const coachId = await UserService.getUserId();
+            const response = await CoachWorkoutService.getWorkouts(coachId!);
+            if(response.ok) {
+                const workouts = await response.json();
+                setWorkouts(workouts['Items'] || []);
+            }
         };
-
         fetchWorkouts();
     }, []);
 

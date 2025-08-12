@@ -11,8 +11,10 @@ const AuthCheck=()=>{
     useEffect(() => {
         async function checkUser() {
             const accountType =await UserService.getAccountType();
+            const userId = await UserService.getUserId();
             if (accountType) {
                 AsyncStorage.setItem('accountType', accountType);
+                AsyncStorage.setItem('userId', userId!);
                 navigation.navigate(`${accountType}Groups`);
                 return;
             }

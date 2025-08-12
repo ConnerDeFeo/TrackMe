@@ -7,7 +7,7 @@ def create_workout(event, context):
     try:
         coach_id = body['coachId']
         title = body['title']
-        workout_id = str(uuid.uuid4())  # Generate a unique ID for the workout
+        workout_id = body.get('workoutId', str(uuid.uuid4()))  # Generate a unique ID for the workout
 
         # Put item into DynamoDB
         put_item('Workouts', {

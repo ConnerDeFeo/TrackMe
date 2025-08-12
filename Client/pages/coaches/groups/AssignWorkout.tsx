@@ -10,7 +10,7 @@ import TrackMeButton from "../../../components/TrackMeButton";
 const AssignWorkout = ()=>{
     const route = useRoute();
     const navigation = useNavigation<any>();
-    const { groupId } = route.params as { groupId: string };
+    const { groupId, fetchWorkout } = route.params as { groupId: string, fetchWorkout: ()=>void};
     const [workouts, setWorkouts] = useState<Array<any>>([]);
 
     //Fetch all workouts
@@ -31,6 +31,7 @@ const AssignWorkout = ()=>{
         const coachId = await UserService.getUserId();
         const response = await CoachWorkoutService.assignWorkoutToGroup(workoutId, coachId!, groupId);
         if (response.ok) {
+            fetchWorkout();
             navigation.goBack();
         }
     };

@@ -23,7 +23,8 @@ def assign_group_workout(event, context):
         group_id = body['groupId']
 
         # Create connection in RDS
-        execute_commit("""
+        execute_commit(
+        """
             DELETE FROM group_workouts WHERE groupId = %s AND date = %s;
             INSERT INTO group_workouts (groupId, date, workoutId)
             VALUES (%s, %s, %s)

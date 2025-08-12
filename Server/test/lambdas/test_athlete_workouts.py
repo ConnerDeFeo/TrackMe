@@ -22,6 +22,7 @@ date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
+    global workout_id
     print("Setting up before test...")
     execute_file('dev-setup/setup.sql')
     create_athlete(TestData.test_athlete, {})
@@ -29,8 +30,18 @@ def setup_before_each_test(): #This will run before each test
     create_group(TestData.test_group, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
-    create_workout(TestData.test_workout, {})
-    assign_group_workout(TestData.test_assign_workout, {})
+
+    response = create_workout(TestData.test_workout, {})
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
+
+    test_assign_workout = {
+        "body": json.dumps({
+            "workoutId": workout_id,
+            "groupId": "1"
+        })
+    }
+    assign_group_workout(test_assign_workout, {})
     yield
 
 
@@ -64,7 +75,20 @@ def test_view_workout_athlete():
 
 def test_input_time():
     reset_dynamo()
-    response = input_time(TestData.test_input_time, {})
+
+    test_input_time = {
+        "body": json.dumps({
+            "athleteId": "1234",
+            "workoutId": workout_id,
+            "coachUsername": "testcoach",
+            "groupName": "Test Group",
+            "date": date,
+            "time": 100,
+            "distance": 10
+        })
+    }
+
+    response = input_time(test_input_time, {})
     assert response['statusCode'] == 200
 
     #Make sure the input was recorded in the database
@@ -87,7 +111,15 @@ def test_create_workout_group():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
 
-    response = create_workout_group(TestData.test_workout_group, {})
+    test_workout_group = {
+        "body": json.dumps({
+            "groupName": "Test Workout Group",
+            "coachId": "1234",
+            "athleteIds": ["1234", "1235", "1236"]
+        })
+    }
+
+    response = create_workout_group(test_workout_group, {})
     assert response['statusCode'] == 200
 
     #Check group is created

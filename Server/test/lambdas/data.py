@@ -1,5 +1,4 @@
 import json
-from datetime import datetime, timezone
 
 class TestData:
     test_coach = {
@@ -72,52 +71,6 @@ class TestData:
                     'name': 'Warm-up',
                 }
             ]
-        })
-    }
-
-    test_assign_workout = {
-        "body": json.dumps({
-            "workout_id": "workout123",
-            "coachId": "123",
-            "groupId": "1",
-            "workoutId": "workout123"
-        })
-    }
-
-    test_workout_group = {
-            "body": json.dumps({
-                "leaderId": "1234",
-                "athletes": ["test_athlete","test2", "test3"],
-                "groupName": "Test Group",
-                "workoutGroupName": "Test Workout Group",
-                "workoutId": "workout123",
-                "coachUsername": "testcoach",
-                "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            })
-        }
-
-    test_input_time = {
-            "body": json.dumps({
-                "athleteId": "1234",
-                "workoutId": "workout123",
-                "coachUsername": "testcoach",
-                "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-                "groupName": "Test Group",
-                "time": 10,
-                "distance": 100
-            })
-        }
-
-    test_input_group_time = {
-        "body": json.dumps({
-            "leaderId": "1234",
-            "workoutId": "workout123",
-            "workoutGroupName": "Test Workout Group",
-            "coachUsername": "testcoach",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "groupName": "Test Group",
-            "time": 30,
-            "distance": 150
         })
     }
 

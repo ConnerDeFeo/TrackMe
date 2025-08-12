@@ -18,6 +18,10 @@ def input_time(event, context):
         # Insert workout time into database
         # To do this we need the group id, which we get by getting the group name and getting
         # the coach username thorugh the passed in username
+        
+        # Debug: Let's see what we're looking for
+        print(f"Looking for workout: {workout_id}, date: {date}, group: {group_name}, coach: {coach_username}")
+        
         coach_id = execute_commit_fetch_one(
         """
             WITH workout_info AS (

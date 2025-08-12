@@ -80,7 +80,7 @@ def test_assign_group_workout():
     workout_id = data['workout_id']
 
     event = {
-        "body": json.dumps({
+        "body": json.dumps({ 
             "coachId": "123",
             "groupId": "1",
             "workoutId": workout_id
@@ -102,11 +102,57 @@ def test_view_workout_coach():
     create_athlete(TestData.test_athlete, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
-    create_workout(TestData.test_workout, {})
-    assign_group_workout(TestData.test_assign_workout, {})
-    create_workout_group(TestData.test_workout_group, {})
-    input_time(TestData.test_input_time, {})
-    input_group_time(TestData.test_input_group_time, {})
+    response = create_workout(TestData.test_workout, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
+    test_assign_workout = {
+        "body": json.dumps({
+            "workoutId": workout_id,
+            "coachId": "123",
+            "groupId": "1"
+        })
+    }
+    assign_group_workout(test_assign_workout, {})
+
+    test_workout_group = {
+            "body": json.dumps({
+                "leaderId": "1234",
+                "athletes": ["test_athlete","test2", "test3"],
+                "groupName": "Test Group",
+                "workoutGroupName": "Test Workout Group",
+                "workoutId": workout_id,
+                "coachUsername": "testcoach",
+                "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            })
+        }
+    create_workout_group(test_workout_group, {})
+    test_input_time = {
+            "body": json.dumps({
+                "athleteId": "1234",
+                "workoutId": workout_id,
+                "coachUsername": "testcoach",
+                "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                "groupName": "Test Group",
+                "time": 10,
+                "distance": 100
+            })
+        }
+
+    test_input_group_time = {
+        "body": json.dumps({
+            "leaderId": "1234",
+            "workoutId": workout_id,
+            "workoutGroupName": "Test Workout Group",
+            "coachUsername": "testcoach",
+            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "groupName": "Test Group",
+            "time": 30,
+            "distance": 150
+        })
+    }
+    input_time(test_input_time, {})
+    input_group_time(test_input_group_time, {})
 
     event = {
         "queryStringParameters": {
@@ -190,8 +236,18 @@ def test_get_workouts():
     assert workout2['description'] == 'This is a test workout 2'
 
 def test_get_group_workout():
-    create_workout(TestData.test_workout, {})
-    assign_group_workout(TestData.test_assign_workout, {})
+    response = create_workout(TestData.test_workout, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
+    test_assign_workout = {
+        "body": json.dumps({
+            "workout_id": workout_id,
+            "coachId": "123",
+            "groupId": "1"
+        })
+    }
+    assign_group_workout(test_assign_workout, {})
 
     event = {
         "queryStringParameters": {

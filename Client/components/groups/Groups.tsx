@@ -3,6 +3,7 @@ import GeneralService from "../../services/GeneralService";
 import { useEffect, useState } from "react";
 import GroupDisplay from "./GroupDisplay";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "../../services/AsyncStorage";
 
 //View of all groups displayed in a list
 const Groups = () => {
@@ -25,10 +26,19 @@ const Groups = () => {
     fetchGroups();
   }, []);
 
+  const handleNavigation = async (groupName: string, groupId: string) => {
+    const accountType = await AsyncStorage.getData('accountType');
+    
+    if(accountType=='Athlete')
+      navigation.navigate("ViewGroupAthlete", { groupName, groupId });
+    else
+      navigation.navigate("ViewGroupCoach", { groupName, groupId });
+  };
+
   return (
     <View className="mt-10 w-[85%] mx-auto">
       {groups.map((group, index) => (
-        <GroupDisplay key={index} groupName={group[0]} navigateTo={() => navigation.navigate("ViewGroup", { groupName: group[0], groupId: group[1] })} />
+        <GroupDisplay key={index} groupName={group[0]} navigateTo={() => handleNavigation(group[0], group[1])} />
       ))}
     </View>
   );

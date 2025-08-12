@@ -12,7 +12,7 @@ def assign_group_workout(event, context):
         workout_id = body['workoutId']
         coach_id = body['coachId']
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
-        workout = get_item('Workouts', {'coach_id': coach_id, 'title': workout_id})
+        workout = get_item('Workouts', {'coach_id': coach_id, 'workout_id': workout_id})
         if not workout:
             return {
                 "statusCode": 404,

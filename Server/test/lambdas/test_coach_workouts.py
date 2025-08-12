@@ -33,17 +33,20 @@ def setup_before_each_test(): #This will run before each test
 def test_create_workout():
     response = create_workout(TestData.test_workout, {})
     assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
 
-    data = get_item('Workouts', {'coach_id': '123', 'workout_id': 'Test Workout'})
+    workout = get_item('Workouts', {'coach_id': '123', 'workout_id': workout_id})
+    print(workout)
 
     #Bunch of ai generate asserts to check if the data is correct
-    assert data is not None
-    assert data['title'] == 'Test Workout'
-    assert data['description'] == 'This is a test workout'
+    assert workout is not None
+    assert workout['title'] == 'Test Workout'
+    assert workout['description'] == 'This is a test workout'
 
-    assert len(data['excersies']) == 3
+    assert len(workout['excersies']) == 3
 
-    excersise1 = data['excersies'][0]
+    excersise1 = workout['excersies'][0]
     assert excersise1['name'] == 'Test name'
     assert excersise1['sets'] == 3
     assert excersise1['reps'] == 10
@@ -55,7 +58,7 @@ def test_create_workout():
     assert excersie1_parts[1]['measurement'] == 'meters'
     assert excersise1['inputs'] is True
 
-    excersise2 = data['excersies'][1]
+    excersise2 = workout['excersies'][1]
     assert excersise2['name'] == 'Test name 2'
     assert excersise2['sets'] == 2
     assert excersise2['reps'] == 15
@@ -64,20 +67,23 @@ def test_create_workout():
     assert excersie2_parts[0]['distance'] == 200
     assert excersie2_parts[0]['measurement'] == 'meters'
 
-    excersise3 = data['excersies'][2]
+    excersise3 = workout['excersies'][2]
     assert excersise3['name'] == 'Warm-up'
     assert 'sets' not in excersise3
     assert 'reps' not in excersise3
     assert 'excersiesParts' not in excersise3
 
 def test_assign_group_workout():
-    create_workout(TestData.test_workout, {})
+    response = create_workout(TestData.test_workout, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
 
     event = {
         "body": json.dumps({
             "coachId": "123",
             "groupId": "1",
-            "workoutId": 'workout123'
+            "workoutId": workout_id
         })
     }
     response = assign_group_workout(event, {})
@@ -89,7 +95,7 @@ def test_assign_group_workout():
     assert data[0] == 1
     assert data[1] == 1
     assert data[2] == date
-    assert data[3] == 'Test Workout'
+    assert data[3] == workout_id
 
 def test_view_workout_coach():
     reset_dynamo()
@@ -138,7 +144,7 @@ def test_get_workouts():
     create_workout(TestData.test_workout, {})
     create_workout({
         'body': json.dumps({
-            "coach_id": "123",
+            "coachId": "123",
             "title": "Test Workout 2",
             "description": "This is a test workout 2",
             "excersies": [

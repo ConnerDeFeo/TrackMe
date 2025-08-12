@@ -12,7 +12,7 @@ Globals:
         RDS_USER: postgres
         RDS_DBNAME: trackme
         RDS_PASSWORD: password
-        DYNAMODB_ENDPOINT: http://host.docker.internal:8000
+        DYNAMODB_ENDPOINT: http://host.docker.internal:8001
         DYNAMODB_REGION: us-west-1
         AWS_ACCESS_KEY_ID: fakeAccessKeyId
         AWS_SECRET_ACCESS_KEY: fakeSecretAccessKey

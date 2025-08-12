@@ -37,7 +37,8 @@ class TestData:
     test_workout = {
         "body": json.dumps({
             'coachId': '123',
-            'title': 'Test Workout',
+            'workoutId': 'workout123',
+            'title': 'Test Workout', 
             'description': 'This is a test workout',
             'excersies': [
                 {
@@ -76,7 +77,7 @@ class TestData:
 
     test_assign_workout = {
         "body": json.dumps({
-            "title": "Test Workout",
+            "workout_id": "workout123",
             "coachId": "123",
             "groupId": "1",
             "workoutId": "workout123"

@@ -5,8 +5,8 @@ import uuid
 def create_workout(event, context):
     body = json.loads(event['body'])
     try:
-        title = body['title']
         coach_id = body['coachId']
+        title = body['title']
         workout_id = str(uuid.uuid4())  # Generate a unique ID for the workout
 
         # Put item into DynamoDB
@@ -19,7 +19,7 @@ def create_workout(event, context):
         })
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': 'Workout created successfully', 'body': json.dumps(workout_id)})
+            'body': json.dumps({'message': 'Workout created successfully', 'workout_id': workout_id})
         }
 
     except Exception as e:
@@ -28,4 +28,5 @@ def create_workout(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': 'Invalid input', 'message': str(e)})
         }
+    
     

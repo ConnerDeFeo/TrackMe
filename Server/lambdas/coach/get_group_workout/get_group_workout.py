@@ -13,21 +13,21 @@ def get_group_workout(event,context):
         date = query_params['date']
 
         #Get the workout title for the given date
-        workout_title = fetch_one(
+        workout_id = fetch_one(
             """
-            SELECT title FROM group_workouts
+            SELECT workoutId FROM group_workouts
             WHERE groupId = %s AND date = %s
             """,
             (group_id, date)
         )
-        if not workout_title:
+        if not workout_id:
             return {
                 'statusCode': 404,
                 'body': json.dumps({'error': 'Workout not found'})
             }
         
         #Fetch workout from dynamo
-        workout = get_item('Workouts', {'title': workout_title[0], 'coach_id': coach_id})
+        workout = get_item('Workouts', {'workout_id': workout_id[0], 'coach_id': coach_id})
         return {
             'statusCode': 200,
             'body': json.dumps(workout, cls=DecimalEncoder)

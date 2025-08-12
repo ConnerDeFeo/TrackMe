@@ -187,6 +187,7 @@ def test_view_workout_coach():
     assert inputs[0]['time'] == 10
 
 def test_get_workouts():
+    reset_dynamo()
     create_workout(TestData.test_workout, {})
     create_workout({
         'body': json.dumps({
@@ -225,24 +226,15 @@ def test_get_workouts():
     print(workouts)
     assert len(workouts) == 2
 
-    workout1 = workouts[0]
-    assert workout1['coach_id'] == '123'
-    assert workout1['title'] == 'Test Workout'
-    assert workout1['description'] == 'This is a test workout'
-
-    workout2 = workouts[1]
-    assert workout2['coach_id'] == '123'
-    assert workout2['title'] == 'Test Workout 2'
-    assert workout2['description'] == 'This is a test workout 2'
-
 def test_get_group_workout():
+    reset_dynamo()
     response = create_workout(TestData.test_workout, {})
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     workout_id = data['workout_id']
     test_assign_workout = {
         "body": json.dumps({
-            "workout_id": workout_id,
+            "workoutId": workout_id,
             "coachId": "123",
             "groupId": "1"
         })

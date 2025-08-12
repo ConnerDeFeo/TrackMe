@@ -19,9 +19,6 @@ def input_time(event, context):
         # To do this we need the group id, which we get by getting the group name and getting
         # the coach username thorugh the passed in username
         
-        # Debug: Let's see what we're looking for
-        print(f"Looking for workout: {workout_id}, date: {date}, group: {group_name}, coach: {coach_username}")
-        
         coach_id = execute_commit_fetch_one(
         """
             WITH workout_info AS (
@@ -35,7 +32,7 @@ def input_time(event, context):
                 AND c.username = %s
             )
             INSERT INTO athlete_workout_inputs (athleteId, groupWorkoutId, time, distance)
-            SELECT %s, wi.workoutId, %s, %s
+            SELECT %s, wi.workout_id, %s, %s
             FROM workout_info wi
             RETURNING (SELECT coach_id FROM workout_info)
         """, (workout_id, date, group_name, coach_username, athlete_id, time, distance))

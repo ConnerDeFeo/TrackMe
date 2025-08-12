@@ -17,6 +17,7 @@ from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
 from testing_utils import reset_dynamo
 from dynamo import get_item
+from testing_utils import debug_table
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -38,11 +39,13 @@ def setup_before_each_test(): #This will run before each test
     test_assign_workout = {
         "body": json.dumps({
             "workoutId": workout_id,
+            'coachId':'123',
             "groupId": "1"
         })
     }
     assign_group_workout(test_assign_workout, {})
     yield
+
 
 
 def create_extra_athlete(username,id):
@@ -54,11 +57,12 @@ def create_extra_athlete(username,id):
     }
     create_athlete(extra_athlete, {})
 
+
 def test_view_workout_athlete():
     event = {
         "body": json.dumps({
-            "groupName": "Test Group",
-            "coachId": "123",
+            'groupId':"1",
+            'coachId':'123',
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
         })
     }
@@ -83,8 +87,8 @@ def test_input_time():
             "coachUsername": "testcoach",
             "groupName": "Test Group",
             "date": date,
-            "time": 100,
-            "distance": 10
+            "time": 10,
+            "distance": 100
         })
     }
 
@@ -106,6 +110,7 @@ def test_input_time():
     assert input['inputs'][0]['distance'] == 100
     assert input['inputs'][0]['time'] == 10
 
+
 def test_create_workout_group():
     reset_dynamo()
     create_extra_athlete("test2", "1235")
@@ -113,9 +118,14 @@ def test_create_workout_group():
 
     test_workout_group = {
         "body": json.dumps({
-            "groupName": "Test Workout Group",
-            "coachId": "1234",
-            "athleteIds": ["1234", "1235", "1236"]
+            'leaderId':'1234',
+            'athletes': ["test_athlete", "test2", "test3"],
+            'workoutId': workout_id,
+            'groupName': "Test Group",
+            'coachId': "1234",
+            'date': date,
+            'coachUsername': 'testcoach',
+            'workoutGroupName': 'Test Workout Group'
         })
     }
 
@@ -141,9 +151,33 @@ def test_input_group_time():
     reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-    create_workout_group(TestData.test_workout_group, {})
+    test_workout_group = {
+        "body": json.dumps({
+            'leaderId':'1234',
+            'athletes': ["test_athlete", "test2", "test3"],
+            'workoutId': workout_id,
+            'groupName': "Test Group",
+            'coachId': "1234",
+            'date': date,
+            'coachUsername': 'testcoach',
+            'workoutGroupName': 'Test Workout Group'
+        })
+    }
+    create_workout_group(test_workout_group, {})
 
-    response = input_group_time(TestData.test_input_group_time, {})
+    test_input_group_time = {
+        "body": json.dumps({
+            "leaderId": "1234",
+            "workoutId": workout_id,
+            "workoutGroupName": "Test Workout Group",
+            "coachUsername": "testcoach",
+            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "groupName": "Test Group",
+            "time": 30,
+            "distance": 150
+        })
+    }
+    response = input_group_time(test_input_group_time, {})
     assert response['statusCode'] == 200
 
     #Make sure the group was created
@@ -173,9 +207,46 @@ def test_view_workout_inputs():
     reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-    create_workout_group(TestData.test_workout_group, {})
-    input_time(TestData.test_input_time, {})
-    input_group_time(TestData.test_input_group_time, {})
+    test_workout_group = {
+        "body": json.dumps({
+            'leaderId':'1234',
+            'athletes': ["test_athlete", "test2", "test3"],
+            'workoutId': workout_id,
+            'groupName': "Test Group",
+            'coachId': "1234",
+            'date': date,
+            'coachUsername': 'testcoach',
+            'workoutGroupName': 'Test Workout Group'
+        })
+    }
+    create_workout_group(test_workout_group, {})
+
+    test_input_group_time = {
+        "body": json.dumps({
+            "leaderId": "1234",
+            "workoutId": workout_id,
+            "workoutGroupName": "Test Workout Group",
+            "coachUsername": "testcoach",
+            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "groupName": "Test Group",
+            "time": 30,
+            "distance": 150
+        })
+    }
+    response = input_group_time(test_input_group_time, {})
+
+    test_input_time = {
+        "body": json.dumps({
+            "athleteId": "1234",
+            "workoutId": workout_id,
+            "coachUsername": "testcoach",
+            "groupName": "Test Group",
+            "date": date,
+            "time": 10,
+            "distance": 100
+        })
+    }
+    input_time(test_input_time, {})
 
     event = {
         "body": json.dumps({

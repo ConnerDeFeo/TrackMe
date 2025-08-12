@@ -62,11 +62,10 @@ def test_view_workout_athlete():
     event = {
         "body": json.dumps({
             'groupId':"1",
-            'coachId':'123',
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
         })
     }
-
+    debug_table()
     response = view_workout_athlete(event, {})
 
     assert response['statusCode'] == 200

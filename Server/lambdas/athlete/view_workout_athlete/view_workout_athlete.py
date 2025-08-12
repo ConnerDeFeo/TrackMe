@@ -18,23 +18,25 @@ def view_workout_athlete(event, context):
     
     try:
         group_id = body['groupId']
-        coach_id = body['coachId']
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         # Grab the workout workoutId name from rds
-        workout_id = fetch_one("""
-            SELECT workoutId FROM group_workouts
+        ids = fetch_one(
+        """
+            SELECT workoutId, c.userId FROM group_workouts gw
+            JOIN groups g ON g.id = gw.groupId
+            JOIN coaches c ON c.userId = g.coachId
             WHERE groupId = %s
             AND date = %s
         """, (group_id, date))
 
         #Grab the workout, default ot empty string if not found
-        if not workout_id:
+        if not ids:
             return workout_not_found
         
         workout = get_item("Workouts", {
-            "coach_id": coach_id,
-            "workout_id": workout_id[0],
+            "coach_id": ids[1],
+            "workout_id": ids[0],
         })
 
         if workout:

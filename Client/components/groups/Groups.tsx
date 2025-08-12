@@ -30,9 +30,9 @@ const Groups = () => {
     const accountType = await AsyncStorage.getData('accountType');
     
     if(accountType=='Athlete')
-      navigation.navigate("ViewGroupAthlete", { groupName, groupId });
+      navigation.navigate("ViewGroupAthlete", { groupName: groupName, groupId: groupId });
     else
-      navigation.navigate("ViewGroupCoach", { groupName, groupId });
+      navigation.navigate("ViewGroupCoach", { groupName: groupName, groupId: groupId });
   };
 
   return (

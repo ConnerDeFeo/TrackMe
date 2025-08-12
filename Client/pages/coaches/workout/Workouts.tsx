@@ -16,6 +16,7 @@ const Workouts = () => {
       const response = await CoachWorkoutService.getWorkouts(coachId!);
       if(response.ok) {
         const workouts = await response.json();
+        console.log(workouts)
         setWorkouts(workouts['Items'] || []);
       }
     };

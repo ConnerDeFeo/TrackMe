@@ -10,7 +10,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const CreateWorkout = () => {
   const navigation = useNavigation<any>();
   const route = useRoute();
-  const {workout} = route.params as { workout?: any };
+  const { workout } = (route.params as { workout?: any }) || {};
 
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
@@ -18,12 +18,15 @@ const CreateWorkout = () => {
 
   const handleWorkoutCreation = async () => {
     const coachId = await UserService.getUserId();
-    const workoutData = {
+    const workoutData:Record<string, any> = {
       'title': title,
       'description': description,
       'excersies': excersies,
-      'coach_id': coachId
+      'coachId': coachId
     };
+    if(workout){
+      workoutData['workoutId'] = workout.workout_id; // Include workoutId if editing an existing workout
+    }
     
     const resp = await CoachWorkoutService.createWorkout(workoutData);
     if (resp.ok){

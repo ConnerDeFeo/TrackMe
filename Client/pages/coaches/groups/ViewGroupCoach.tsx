@@ -14,7 +14,7 @@ const ViewGroup = () => {
   const {groupName, groupId} = route.params as { groupName: string, groupId: string };
 
   const [participants, setParticipants] = useState<string[]>([]);
-  const [workout, setWorkout] = useState<Array<any>>([]);
+  const [workout, setWorkout] = useState<Array<any>>();
 
   //Grabs all athletes that are a part of the group
   const fetchParticipants = async () => {
@@ -40,6 +40,8 @@ const ViewGroup = () => {
     fetchParticipants();
     fetchWorkout();
   },[])
+
+  console.log(workout)
 
   return (
     <View>

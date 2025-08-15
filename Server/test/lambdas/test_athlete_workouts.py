@@ -65,7 +65,6 @@ def test_view_workout_athlete():
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
         }
     }
-    debug_table()
     response = view_workout_athlete(event, {})
 
     assert response['statusCode'] == 200

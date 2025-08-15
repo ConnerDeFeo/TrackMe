@@ -38,15 +38,15 @@ const Coaches = ()=>{
 
     //Fetch all requests on load
     useEffect(() => {
-        const fetchUserId = async () => {
+        const fetchData = async () => {
             const userId = await UserService.getUserId();
             if(userId){
                 setUserId(userId);
-            }
+            }    
+            reloadData();
         }
-        fetchUserId();
-        reloadData();
-    }, []);
+        fetchData();
+    }, [userId]);
 
     //When user hits the accept button for a coach
     async function handleCoachAcceptance(coachId: string){

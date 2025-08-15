@@ -60,10 +60,10 @@ def create_extra_athlete(username,id):
 
 def test_view_workout_athlete():
     event = {
-        "body": json.dumps({
+        "queryStringParameters": {
             'groupId':"1",
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        })
+        }
     }
     debug_table()
     response = view_workout_athlete(event, {})

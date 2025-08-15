@@ -5,7 +5,7 @@ from decimal_encoder import DecimalEncoder
 import json
 
 def view_workout_athlete(event, context):
-    body = json.loads(event['body'])
+    query_params = event.get('queryStringParameters', {})
     workout_not_found = {
                 'statusCode': 404,
                 'headers': {
@@ -17,8 +17,8 @@ def view_workout_athlete(event, context):
             }
     
     try:
-        group_id = body['groupId']
-        date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+        group_id = query_params['groupId']
+        date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         # Grab the workout workoutId name from rds
         ids = fetch_one(

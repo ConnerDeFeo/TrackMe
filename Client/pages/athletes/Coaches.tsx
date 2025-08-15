@@ -46,7 +46,7 @@ const Coaches = ()=>{
             reloadData();
         }
         fetchData();
-    }, [userId]);
+    }, [userId]); //userId needed in case of page switching back and forth
 
     //When user hits the accept button for a coach
     async function handleCoachAcceptance(coachId: string){

@@ -30,6 +30,7 @@ import AssignWorkout from './pages/coaches/groups/AssignWorkout';
 import ViewWorkoutCoach from './pages/coaches/groups/ViewWorkoutCoach';
 import ViewGroupCoach from './pages/coaches/groups/ViewGroupCoach';
 import ViewGroupAthlete from './pages/athletes/ViewGroupAthlete';
+import Inputs from './pages/athletes/Inputs';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -91,6 +92,7 @@ const RootStack = createNativeStackNavigator({
     AssignWorkout: UserLayout(<AssignWorkout/>, 'coach'),
     ViewWorkoutCoach: UserLayout(<ViewWorkoutCoach/>, 'coach'),
     ViewGroupAthlete: UserLayout(<ViewGroupAthlete/>, 'athlete'),
+    Inputs: UserLayout(<Inputs/>, 'athlete')
   },
 });
 const Navigation = createStaticNavigation(RootStack);

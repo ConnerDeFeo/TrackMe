@@ -2,6 +2,7 @@ import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import DisplayWorkout from "../../components/DisplayWorkout";
+import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 
 //Pages that displays an athletes groupp for a given date
 const ViewGroupAthlete = ()=>{
@@ -12,12 +13,10 @@ const ViewGroupAthlete = ()=>{
     useEffect(() => {
         // Fetch workout data for the group
         const fetchWorkout = async () => {
-            try {
-                const response = await fetch(`API_URL/groups/${groupId}/workouts`);
-                const data = await response.json();
-                setWorkout(data);
-            } catch (error) {
-                console.error("Error fetching workout data:", error);
+            const resp = await AthleteWorkoutService.viewWorkout(groupId);
+            if (resp.ok) {
+                const data = await resp.json();
+                setWorkout(data)
             }
         };
 

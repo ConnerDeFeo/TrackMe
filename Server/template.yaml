@@ -184,6 +184,8 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: DynamoDBLayer
+        - Ref: DecimalEncoderLayer
+        - Ref: RDSLayer
 
   ViewWorkoutInputsFunction:
     Type: AWS::Serverless::Function 

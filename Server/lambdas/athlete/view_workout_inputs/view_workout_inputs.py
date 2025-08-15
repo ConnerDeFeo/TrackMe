@@ -3,12 +3,12 @@ from datetime import datetime, timezone
 from rds import fetch_all
 
 def view_workout_inputs(event, context):
-    body = json.loads(event['body'])
+    query_params = event.get('queryStringParameters', {})
 
     try:
-        user_id = body['userId']
-        username = body['username']
-        date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+        user_id = query_params.get('userId')
+        username = query_params.get('username')
+        date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         data = []
         #The first querey will grab all workout group inputs that this person is a part of
@@ -25,7 +25,8 @@ def view_workout_inputs(event, context):
             JOIN workout_group_inputs wgi ON wgi.workoutGroupId = wg.id
             WHERE wgm.athleteUsername = %s AND gw.date = %s
         """, (username, date))
-        data.extend(group_workout_inputs)
+        if group_workout_inputs:
+            data.extend(group_workout_inputs)
 
         #Next grab all inputs for this athlete in the specified group, data should look like:
         # [[groupName, coachUsername, distance, time], [groupName, coachUsername, distance, time]]
@@ -38,26 +39,23 @@ def view_workout_inputs(event, context):
             JOIN athlete_workout_inputs agi ON agi.groupWorkoutId = gw.id
             WHERE agi.athleteId = %s AND gw.date = %s
         """, (user_id, date))
-        data.extend(athlete_inputs)
 
+        if athlete_inputs:
+            data.extend(athlete_inputs)
+
+        if len(data) > 0:
+            return {
+                'statusCode': 200,
+                'body': json.dumps(data)
+            }
         return {
-            'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': 'http://localhost:8081',
-                'Access-Control-Allow-Credentials': True,
-                "Content-Type": "application/json"
-            },
-            'body': json.dumps(data)
+            'statusCode': 404,
+            'body': json.dumps({"message": "No workout inputs found"})
         }
     except Exception as e:
         print(f"Error viewing inputs: {str(e)}")
         return {
             'statusCode': 500,
-            'headers': {
-                'Access-Control-Allow-Origin': 'http://localhost:8081',
-                'Access-Control-Allow-Credentials': True,
-                "Content-Type": "application/json"
-            },
             'body': json.dumps({"message": "Internal server error", "error": str(e)}),
         }
     

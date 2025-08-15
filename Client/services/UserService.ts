@@ -44,6 +44,15 @@ const UserService = {
       console.log("Error fetching user ID:", error);
       return null;
     }
+  },
+  getUsername: async () => {
+    try {
+      const user = await getCurrentUser();
+      return user.username;
+    } catch (error) {
+      console.log("Error fetching username:", error);
+      return null;
+    }
   }
 };
 

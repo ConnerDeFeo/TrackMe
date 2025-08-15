@@ -200,7 +200,7 @@ Resources:
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
+        - Ref: RDSLayer
 
   # COACH FUNCTIONS
   GetGroupWorkout:

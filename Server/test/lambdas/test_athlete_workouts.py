@@ -247,11 +247,11 @@ def test_view_workout_inputs():
     input_time(test_input_time, {})
 
     event = {
-        "body": json.dumps({
+        'queryStringParameters': {
             "userId": "1234",
             "username": "test_athlete",
             "date": date
-        })
+        }
     }
 
     response = view_workout_inputs(event, {})

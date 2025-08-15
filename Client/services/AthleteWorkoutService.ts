@@ -1,4 +1,5 @@
 import API from "./API";
+import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const AthleteWorkoutService = {
@@ -7,6 +8,12 @@ const AthleteWorkoutService = {
         if (date) {
             query += `&date=${date}`;
         }
+        return await API.get(query);
+    },
+    viewWorkoutInputs: async() =>{
+        const userId = await UserService.getUserId();
+        const username = await UserService.getUsername();
+        let query = `${EXPO_PUBLIC_API_URL}/athletes/view_workout_inputs?userId=${userId}&username=${username}`;
         return await API.get(query);
     }
 }

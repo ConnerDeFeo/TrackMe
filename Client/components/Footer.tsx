@@ -9,6 +9,7 @@ const images = {
     'Coaches': require('../images/Groups.png'),
     'Workouts': require('../images/Workouts.png'),
     'Athletes': require('../images/Athletes.png'),
+    'Profile': require('../images/Profile.png')
 };
 
 //Footer at bottom of the screen with navigation buttons

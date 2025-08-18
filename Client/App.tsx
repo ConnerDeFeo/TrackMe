@@ -11,7 +11,6 @@ import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
-import UserIcon from './components/UserIcon';
 import CoachGroups from './pages/coaches/groups/CoachGroups';
 import AthleteGroups from './pages/athletes/AthleteGroups';
 import CoachProfile from './pages/coaches/CoachProfile';
@@ -32,8 +31,8 @@ import Inputs from './pages/athletes/Inputs';
 Amplify.configure(awsConfig);
 
 const layouts = {
-  'athlete': [['Groups', 'AthleteGroups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches']],
-  'coach': [['Groups', 'CoachGroups'], ['Workouts', 'Workouts'], ['Athletes', 'Athletes']]
+  'athlete': [['Groups', 'AthleteGroups'], ['Inputs', 'Inputs'], ['Coaches', 'Coaches'], ['Profile', 'AthleteProfile']],
+  'coach': [['Groups', 'CoachGroups'], ['Workouts', 'Workouts'], ['Athletes', 'Athletes'], ['Profile', 'CoachProfile']]
 }
 
 //Base page layout for all components
@@ -54,7 +53,6 @@ function UserLayout(content: React.ReactElement, userType: 'athlete' | 'coach'):
     return(
       <>
         <View className='bg-white flex-1'>
-          <UserIcon />
           {content}
         </View>
         <Footer buttons={layouts[userType]} />

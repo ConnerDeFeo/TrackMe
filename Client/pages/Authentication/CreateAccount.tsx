@@ -9,8 +9,6 @@ import CoachService from "../../services/CoachService";
 import TrackMeButton from "../../components/TrackMeButton";
 import AuthenticationHeader from "../../components/AuthenticationHeader";
 
-//type used to grab username and password that were given along the route
-
 //Create account page
 const CreateAccount = ()=>{
     const navigation = useNavigation<any>();
@@ -84,26 +82,35 @@ const CreateAccount = ()=>{
     }
 
     return(
-        <View className="m-auto gap-y-10 w-[90%]">
+        <View className="relative h-full">
             <AuthenticationHeader />
-            <Text className="text-3xl text-red-500 text-center">{message}</Text>
-            <Picker
-                selectedValue={accountType}
-                onValueChange={itemValue => setAccountType(itemValue)}
-            >
-                <Picker.Item label="Athlete" value="Athlete" style = {selectStyling}/>
-                <Picker.Item label="Coach" value="Coach" style = {selectStyling}/>
-            </Picker>
-            <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
-            <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
-            <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
-            <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
-            <TrackMeButton title="Create Account" onPress={handleCreateAccount}/>
-            <View className="flex flex-row mx-auto">
-                <Text className="text-center">Already have an account? </Text>
-                <Pressable onPress={()=>navigation.navigate('SignIn')}>
-                    <Text className="underline text-blue-500">Sign In</Text>
-                </Pressable>
+            <View className="m-auto gap-y-10 w-[90%]">
+                {/**ERROR MESSAGE*/}
+                <Text className="text-red-500 text-center text-xl">{message}</Text>
+                
+                {/**CREATE ACCOUNT FORM*/}
+                <View className="gap-y-8 bg-red-200 rounded-xl p-6">
+                    <View className="bg-white rounded-lg p-2 h-12 justify-center">
+                        <Picker
+                            selectedValue={accountType}
+                            onValueChange={itemValue => setAccountType(itemValue)}
+                        >
+                            <Picker.Item label="Athlete" value="Athlete" style={selectStyling}/>
+                            <Picker.Item label="Coach" value="Coach" style={selectStyling}/>
+                        </Picker>
+                    </View>
+                    <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
+                    <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
+                    <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
+                    <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
+                    <TrackMeButton title="Create Account" onPress={handleCreateAccount} color="black"/>
+                </View>
+
+                {/**SIGN IN LINK*/}
+                <View className="gap-y-6">
+                    <Text className="text-center text-xl">Already have an account? </Text>
+                    <TrackMeButton title="Sign In" onPress={()=>navigation.navigate('SignIn')} color="#E63946"/>
+                </View>
             </View>
         </View>
     );

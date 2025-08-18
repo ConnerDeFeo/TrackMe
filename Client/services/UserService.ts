@@ -26,15 +26,11 @@ const UserService = {
   },
   //signs user in and navigates to their respective home page
   signIn: async (username: string, password: string) => {
-    try {
-      await signIn({ username, password });
-      const user = await getCurrentUser();
-      const accountType = await UserService.getAccountType();
-      AsyncStorage.storeData('accountType', accountType!);
-      AsyncStorage.storeData('userId', user.userId);
-    } catch (error) {
-      console.log("Error signing in:", error);
-    }
+    await signIn({ username, password });
+    const user = await getCurrentUser();
+    const accountType = await UserService.getAccountType();
+    AsyncStorage.storeData('accountType', accountType!);
+    AsyncStorage.storeData('userId', user.userId);
   },
   getUserId: async () => {
     try {

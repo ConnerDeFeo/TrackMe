@@ -1,8 +1,8 @@
 import { Button } from "react-native";
 
-const TrackMeButton: React.FC<{ title: string, onPress: () => void }> = ({ title, onPress }) => {
+const TrackMeButton: React.FC<{ title: string, onPress: () => void, color?: string }> = ({ title, onPress, color }) => {
   return (
-    <Button title={title} onPress={onPress} />
+    <Button title={title} onPress={onPress} color={color} />
   );
 };
 

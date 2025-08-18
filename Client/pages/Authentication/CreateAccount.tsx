@@ -7,6 +7,7 @@ import { signUp } from 'aws-amplify/auth';
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
 import TrackMeButton from "../../components/TrackMeButton";
+import AuthenticationHeader from "../../components/AuthenticationHeader";
 
 //type used to grab username and password that were given along the route
 
@@ -84,6 +85,7 @@ const CreateAccount = ()=>{
 
     return(
         <View className="m-auto gap-y-10 w-[90%]">
+            <AuthenticationHeader />
             <Text className="text-3xl text-red-500 text-center">{message}</Text>
             <Picker
                 selectedValue={accountType}

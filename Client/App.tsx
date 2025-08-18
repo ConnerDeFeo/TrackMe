@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 import './global.css'
-import Setup from './pages/authentication/Setup';
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ComponentType } from 'react';
@@ -10,7 +9,6 @@ import awsConfig from './aws-config';
 import ConfirmEmail from './pages/authentication/ConfirmEmail';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
-import AuthCheck from './pages/authentication/AuthCheck';
 import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
 import UserIcon from './components/UserIcon';
@@ -19,7 +17,6 @@ import AthleteGroups from './pages/athletes/AthleteGroups';
 import CoachProfile from './pages/coaches/CoachProfile';
 import AthleteProfile from './pages/athletes/AthleteProfile';
 import CreateGroup from './pages/coaches/groups/CreateGroup';
-import ViewGroup from './pages/coaches/groups/ViewGroupCoach';
 import AddAthlete from './pages/coaches/AddAthlete';
 import Athletes from './pages/coaches/Athletes';
 import Coaches from './pages/athletes/Coaches';
@@ -67,16 +64,14 @@ function UserLayout(content: React.ReactElement, userType: 'athlete' | 'coach'):
 }
 //Directory allowing page navigation
 const RootStack = createNativeStackNavigator({
-  initialRouteName: 'AuthCheck',
+  initialRouteName: 'SignIn',
   screenOptions: {
     headerShown: false
   },
   screens: {
-    Setup: BaseLayout(<Setup/>),
     CreateAccount: BaseLayout(<CreateAccount/>),
     SignIn: BaseLayout(<SignIn/>),
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),
-    AuthCheck:BaseLayout(<AuthCheck/>),
     CoachGroups: UserLayout(<CoachGroups/>, 'coach'),
     AthleteGroups: UserLayout(<AthleteGroups/>, 'athlete'),
     CoachProfile: UserLayout(<CoachProfile/>, 'coach'),

@@ -1,10 +1,12 @@
 import AuthInput from "../../components/AuthInput";
-import { Pressable, Text, View } from "react-native";
-import { useState } from "react";
+import { Image, Pressable, Text, View } from "react-native";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import TrackMeButton from "../../components/TrackMeButton";
+import AuthenticationHeader from "../../components/AuthenticationHeader";
+import AsyncStorage from "../../services/AsyncStorage";
 
 //Create account page
 const SignIn = ()=>{
@@ -28,17 +30,36 @@ const SignIn = ()=>{
         }
     }
 
+    useEffect(() => {
+        async function checkUser() {
+            const accountType =await UserService.getAccountType();
+            const userId = await UserService.getUserId();
+            if (accountType) {
+                AsyncStorage.storeData('accountType', accountType);
+                AsyncStorage.storeData('userId', userId!);
+                navigation.navigate(`${accountType}Groups`);
+                return;
+            }
+        }
+        checkUser();
+    }, [navigation]);
+
     return(
-        <View className="m-auto gap-y-10 w-[90%]">
-            <Text className="text-red-500 text-center">{error}</Text>
-            <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
-            <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
-            <TrackMeButton title="Sign In" onPress={handleSignIn}/>
-            <View className="flex flex-row mx-auto">
-                <Text className="text-center">Don't have an account? </Text>
-                <Pressable onPress={()=>navigation.navigate('CreateAccount')}>
-                    <Text className="underline text-blue-500">Create Account</Text>
-                </Pressable>
+        <View className="relative h-full">
+            <AuthenticationHeader/>
+            <View className="m-auto gap-y-10 w-[90%]">
+                {/**SIGN IN*/}
+                <Text className="text-red-500 text-center mt-100">{error}</Text>
+                <View className="gap-y-8 bg-red-200 rounded-xl p-6">
+                    <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
+                    <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
+                    <TrackMeButton title="Login" onPress={handleSignIn} color="black"/>
+                </View>
+                {/**CREATE NEW ACCOUNT*/}
+                <View className="gap-y-6">
+                    <Text className="text-center text-xl">Don't have an account? </Text>
+                    <TrackMeButton title="Create Account" onPress={()=>navigation.navigate('CreateAccount')} color="#E63946"/>
+                </View>
             </View>
         </View>
     );

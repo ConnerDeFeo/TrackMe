@@ -1,4 +1,4 @@
-import { Button, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import Groups from "../../../components/groups/Groups";
 import { useNavigation } from "@react-navigation/native";
 
@@ -7,12 +7,15 @@ const CoachGroups = () => {
   const navigation = useNavigation<any>();
 
   return (
-    <View>
+    <View className="mt-[4rem]">
+      <View className="flex-row justify-between items-center p-4">
+        <Text className="text-4xl font-bold">Groups</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('CreateGroup')}>
+          <Image source={require("../../../images/Add.png")} className="h-12 w-12 rounded-full border-3" />
+        </TouchableOpacity>
+      </View>
+
       <Groups />
-      <Button
-        title="Create Group"
-        onPress={() => navigation.navigate('CreateGroup')}
-      />
     </View>
   );
 }

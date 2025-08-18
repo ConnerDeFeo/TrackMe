@@ -1,9 +1,8 @@
 import { confirmSignUp } from "aws-amplify/auth";
 import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Button, Text, TextInput, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import UserService from "../../services/UserService";
-import TrackMeButton from "../../components/TrackMeButton";
 
 
 //Confirm Email page
@@ -43,7 +42,7 @@ const ConfirmEmail = () => {
                 value={verificationCode}
                 onChangeText={setVerificationCode}
             />
-            <TrackMeButton title="Confirm" onPress={handleConfirmEmail} />
+            <Button title="Confirm" onPress={handleConfirmEmail} />
         </View>
     );
 }

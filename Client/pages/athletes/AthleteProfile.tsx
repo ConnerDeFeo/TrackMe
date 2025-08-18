@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import UserService from "../../services/UserService";
-import TrackMeButton from "../../components/TrackMeButton";
 
 //Profile athletes see when they click on their icon
 const AthleteProfile = () => {
@@ -9,13 +8,13 @@ const AthleteProfile = () => {
 
   const handleLogout = async () => {
     await UserService.signOut();
-    navigation.navigate("Setup");
+    navigation.navigate("SignIn");
   }
 
   return (
     <View>
       <Text>Athlete Profile</Text>
-      <TrackMeButton title="Logout" onPress={handleLogout} />
+      <Button title={'Logout'} onPress={handleLogout}/>
     </View>
   );
 };

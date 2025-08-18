@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Button, Text, TouchableOpacity, View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DisplayWorkout from "../../../components/DisplayWorkout";
-import TrackMeButton from "../../../components/TrackMeButton";
 
 //Page where coaches can assign workouts to athletes
 const AssignWorkout = ()=>{
@@ -41,7 +40,7 @@ const AssignWorkout = ()=>{
             {workouts.map((workout, idx) => (
                 <View key={idx} className="my-2">
                     <DisplayWorkout workout={workout} />
-                    <TrackMeButton title="Assign" onPress={() => handleAssignWorkout(workout.workout_id)} />
+                    <Button title="Assign" onPress={() => handleAssignWorkout(workout.workout_id)} />
                 </View>
             ))}
         </View>

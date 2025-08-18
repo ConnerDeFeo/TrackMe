@@ -1,6 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Text,View } from "react-native";
-import TrackMeButton from "../../../components/TrackMeButton";
+import { Button, Text,View } from "react-native";
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
@@ -46,11 +45,11 @@ const ViewGroup = () => {
   return (
     <View>
       <Text className="text-2xl font-bold">{groupName}</Text>
-      <TrackMeButton title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})} />
-      <TrackMeButton title={workout ? "Update Workout" : "Send Workout"} onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})} />
+      <Button title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})} />
+      <Button title={workout ? "Update Workout" : "Send Workout"} onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})} />
       {workout && 
         <>
-          <TrackMeButton title="View Group Workout" onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })} />
+          <Button title="View Group Workout" onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })} />
           <DisplayWorkout workout={workout} />
         </>
       }

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View,  FlatList, Text} from 'react-native';
+import { View,  FlatList, Text, Button} from 'react-native';
 import CoachService from '../../services/CoachService';
 import SearchBar from '../../components/SearchBar';
 import UserService from '../../services/UserService';
-import TrackMeButton from '../../components/TrackMeButton';
 
 //Page for adding athletes to a coaches group
 const AddAthlete= () => {
@@ -66,7 +65,7 @@ const AddAthlete= () => {
                 joinedStatus = <Text className='text-gray-500'>Pending</Text>;
                 break;
             default:
-                joinedStatus = <TrackMeButton title='Invite' onPress={() => handleInvite(userId)} />;
+                joinedStatus = <Button title='Invite' onPress={() => handleInvite(userId)} />;
                 break;
         }
 

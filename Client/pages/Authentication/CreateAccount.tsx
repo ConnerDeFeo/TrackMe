@@ -1,12 +1,11 @@
 import AuthInput from "../../components/AuthInput";
-import { Pressable, Text, View } from "react-native";
+import { Button, Pressable, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { signUp } from 'aws-amplify/auth';
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
-import TrackMeButton from "../../components/TrackMeButton";
 import AuthenticationHeader from "../../components/AuthenticationHeader";
 
 //Create account page
@@ -103,13 +102,13 @@ const CreateAccount = ()=>{
                     <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
                     <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
                     <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
-                    <TrackMeButton title="Create Account" onPress={handleCreateAccount} color="black"/>
+                    <Button title="Create Account" onPress={handleCreateAccount} color="black"/>
                 </View>
 
                 {/**SIGN IN LINK*/}
                 <View className="gap-y-6">
                     <Text className="text-center text-xl">Already have an account? </Text>
-                    <TrackMeButton title="Sign In" onPress={()=>navigation.navigate('SignIn')} color="#E63946"/>
+                    <Button title="Sign In" onPress={()=>navigation.navigate('SignIn')} color="#E63946"/>
                 </View>
             </View>
         </View>

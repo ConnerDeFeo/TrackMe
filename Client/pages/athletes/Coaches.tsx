@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import AthleteService from "../../services/AthleteService";
 import UserService from "../../services/UserService";
-import TrackMeButton from "../../components/TrackMeButton";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
@@ -66,8 +65,8 @@ const Coaches = ()=>{
             {requests.map(request => (
                 <View key={request} className="w-[75%] mx-auto">
                     <Text className="text-xl border-b border-gray-200">{request[1]}</Text>
-                    <TrackMeButton title="accept" onPress={() => handleCoachAcceptance(request[0])}/>
-                    <TrackMeButton title="decline" onPress={() => console.log("Declined")}/>
+                    <Button title="accept" onPress={() => handleCoachAcceptance(request[0])}/>
+                    <Button title="decline" onPress={() => console.log("Declined")}/>
                 </View>
             ))}
         </View>

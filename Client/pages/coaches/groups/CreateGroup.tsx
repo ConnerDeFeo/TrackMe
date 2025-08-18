@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { TextInput, View } from "react-native";
+import { Button, TextInput, View } from "react-native";
 import AsyncStorage from "../../../services/AsyncStorage";
 import { useNavigation } from "@react-navigation/native";
 import CoachGroupService from "../../../services/CoachGroupService";
-import TrackMeButton from "../../../components/TrackMeButton";
 
 
 //Page where coaches can create a new group
@@ -44,7 +43,7 @@ const CreateGroup = () => {
                 onChangeText={setGroupName}
                 className="mx-auto"
             />
-            <TrackMeButton title="Create Group" onPress={handleCreateGroup} />
+            <Button title="Create Group" onPress={handleCreateGroup} />
         </View>
     );
 };

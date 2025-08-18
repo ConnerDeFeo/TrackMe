@@ -13,11 +13,11 @@ def view_workout_inputs(event, context):
         data = []
         #The first querey will grab all workout group inputs that this person is a part of
         # The data returned should look something like:
-        # [[groupName, coachUsername, workoutGroupName, distance, time], [groupName, coachUsername, workoutGroupName, distance, time],
+        # [[groupId, workoutGroupName, distance, time], [groupId, workoutGroupName, distance, time],
         group_workout_inputs = fetch_all(
         """
-            SELECT g.name, c.username, wg.workoutGroupName, wgi.distance, wgi.time
-            FROM groups g 
+            SELECT g.id, wg.workoutGroupName, wgi.distance, wgi.time
+            FROM groups g
             JOIN coaches c ON g.coachId = c.userId
             JOIN group_workouts gw ON gw.groupId = g.id
             JOIN workout_groups wg ON wg.workoutId = gw.id
@@ -28,11 +28,11 @@ def view_workout_inputs(event, context):
         if group_workout_inputs:
             data.extend(group_workout_inputs)
 
-        #Next grab all inputs for this athlete in the specified group, data should look like:
-        # [[groupName, coachUsername, distance, time], [groupName, coachUsername, distance, time]]
+        # Next grab all inputs for this athlete in the specified group, data should look like:
+        # [[groupId, distance, time], [groupId, distance, time]]
         athlete_inputs = fetch_all(
         """
-            SELECT g.name, c.username, agi.distance, agi.time
+            SELECT g.id, agi.distance, agi.time
             FROM groups g
             JOIN coaches c ON g.coachId = c.userId  
             JOIN group_workouts gw ON gw.groupId = g.id

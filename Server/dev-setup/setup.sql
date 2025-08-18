@@ -64,8 +64,8 @@ CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, workoutId);
 CREATE TABLE athlete_workout_inputs(
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupWorkoutId INT REFERENCES group_workouts(id) NOT NULL,
-    distance int DEFAULT 0,
-    time int DEFAULT 0
+    distance INT DEFAULT 0,
+    time INT DEFAULT 0
 );
 
 CREATE TABLE workout_groups (
@@ -84,8 +84,8 @@ CREATE TABLE workout_group_members(
 
 CREATE TABLE workout_group_inputs(
     workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
-    distance int DEFAULT 0,
-    time int DEFAULT 0
+    distance INT DEFAULT 0,
+    time INT DEFAULT 0
 );
 
 -- INSERT INTO coaches (userId, username) VALUES ('81cbd5d0-c0a1-709a-560f-ceb88b7d53d9', 'coachdefeo');

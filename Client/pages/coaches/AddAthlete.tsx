@@ -65,7 +65,7 @@ const AddAthlete= () => {
                 joinedStatus = <Text className='text-gray-500'>Pending</Text>;
                 break;
             default:
-                joinedStatus = <Button title='Invite' onPress={() => handleInvite(userId)} />;
+                joinedStatus = <Button title='Invite' color='black' onPress={() => handleInvite(userId)} />;
                 break;
         }
 
@@ -78,7 +78,7 @@ const AddAthlete= () => {
     };
 
     return (
-        <View className="flex-1 p-4 bg-white">
+        <View className="flex-1 p-4 bg-white mt-[4rem]">
             <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
             {loading ? (
                 <Text className="text-center text-gray-500 text-base mt-4">Searching...</Text>

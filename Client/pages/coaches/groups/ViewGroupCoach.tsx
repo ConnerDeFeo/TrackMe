@@ -41,7 +41,7 @@ const ViewGroup = () => {
   },[])
 
   return (
-    <View>
+    <View className="mt-[4rem]">
       <Text className="text-2xl font-bold">{groupName}</Text>
       <Button title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})} />
       <Button title={workout ? "Update Workout" : "Send Workout"} onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})} />

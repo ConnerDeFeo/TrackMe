@@ -14,14 +14,14 @@ const CreateWorkout = () => {
 
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
-  const [exercise, setexercise] = useState<Array<Exercise>>(workout?.exercise || []);
+  const [exercises, setExercises] = useState<Array<Exercise>>(workout?.exercises || []);
 
   const handleWorkoutCreation = async () => {
     const coachId = await UserService.getUserId();
     const workoutData:Record<string, any> = {
       'title': title,
       'description': description,
-      'exercise': exercise,
+      'exercises': exercises,
       'coachId': coachId
     };
     if(workout){
@@ -69,13 +69,13 @@ const CreateWorkout = () => {
       {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
       <View className="mx-4">
       {/* Render each exercise input */}
-      {exercise.map((exercise, idx) => (
-        <ExerciseCreation key={idx} excercise={exercise} setExercise={setexercise} />
+      {exercises.map((exercise, idx) => (
+        <ExerciseCreation key={idx} excercise={exercise} setExercise={setExercises} />
       ))}
       {/* Button to add a new exercise */}
       <TouchableOpacity
         className="bg-red-700 rounded-lg py-2 items-center mt-2 mb-4"
-        onPress={() => setexercise([...exercise, { name: '', id: exercise.length }])}
+        onPress={() => setExercises([...exercises, { name: '', id: exercises.length }])}
       >
         <Text className="text-white font-bold">Add exercise</Text>
       </TouchableOpacity>

@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 import Exercise from "../types/Exersise";
 
-const DisplayWorkout: React.FC<{ workout: any }> = ({ workout }) => {
+const DisplayWorkout: React.FC<{ workout: any, onRemove: (id: string) => void }> = ({ workout, onRemove }) => {
     const navigation = useNavigation<any>();
     // Extract exercises array from workout, defaulting to empty array if undefined
     const exercises: Array<Exercise> = workout.exercises || [];
@@ -10,7 +10,6 @@ const DisplayWorkout: React.FC<{ workout: any }> = ({ workout }) => {
     // Don't render anything if workout doesn't have a title
     if (!workout['title'])
         return <></>;
-    
     return (
         // Main touchable container that navigates to CreateWorkout screen when pressed
         <TouchableOpacity 
@@ -21,7 +20,12 @@ const DisplayWorkout: React.FC<{ workout: any }> = ({ workout }) => {
             <View className="bg-white border border-gray-200 shadow-md my-3 mx-2 p-5 rounded-xl">
                 {/* Workout header section with title and description */}
                 <View className="mb-4">
-                    <Text className="text-xl font-bold text-gray-800 mb-2">{workout.title}</Text>
+                    <View className="flex flex-row justify-between items-center">
+                        <Text className="text-xl font-bold text-gray-800 mb-2">{workout.title}</Text>
+                        <TouchableOpacity onPress={() => onRemove(workout.workout_id)}>
+                            <Text className="text-[#E63946] underline">Remove</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Text className="text-gray-600 text-sm leading-5">{workout.description}</Text>
                 </View>
                 

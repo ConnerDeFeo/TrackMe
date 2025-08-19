@@ -24,6 +24,10 @@ const Workouts = () => {
     fetchWorkouts();
   }, []);
 
+  const onRemove = (id: string) => {
+    console.log("Removing workout with id:", id);
+  };
+
   return (
     <ScrollView className="mt-[4rem]">
       <View className="flex-row justify-between items-center p-4">
@@ -33,7 +37,7 @@ const Workouts = () => {
         </TouchableOpacity>
       </View>
       {workouts.map((workout, idx) => (
-        <DisplayWorkout key={idx} workout={workout} />
+        <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} />
       ))}
     </ScrollView>
   );

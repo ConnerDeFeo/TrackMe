@@ -74,7 +74,7 @@ const CreateWorkout = () => {
       ))}
       {/* Button to add a new exercise */}
       <TouchableOpacity
-        className="bg-red-700 rounded-lg py-2 items-center mt-2 mb-4"
+        className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
         onPress={() => setExercises([...exercises, { name: '', id: exercises.length }])}
       >
         <Text className="text-white font-bold">Add exercise</Text>

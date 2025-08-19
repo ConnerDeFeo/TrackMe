@@ -2,6 +2,8 @@ import json
 from datetime import datetime, timezone
 from rds import fetch_all
 
+
+# What up
 def view_workout_inputs(event, context):
     query_params = event.get('queryStringParameters', {})
 

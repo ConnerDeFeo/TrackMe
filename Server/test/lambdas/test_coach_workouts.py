@@ -45,34 +45,34 @@ def test_create_workout():
     assert workout['title'] == 'Test Workout'
     assert workout['description'] == 'This is a test workout'
 
-    assert len(workout['exersies']) == 3
+    assert len(workout['exercises']) == 3
 
-    exersise1 = workout['exersies'][0]
+    exersise1 = workout['exercises'][0]
     assert exersise1['name'] == 'Test name'
     assert exersise1['sets'] == 3
     assert exersise1['reps'] == 10
-    assert len(exersise1['exersiesParts']) == 2
-    exersie1_parts = exersise1['exersiesParts']
+    assert len(exersise1['exerciseParts']) == 2
+    exersie1_parts = exersise1['exerciseParts']
     assert exersie1_parts[0]['distance'] == 100
     assert exersie1_parts[0]['measurement'] == 'meters'
     assert exersie1_parts[1]['distance'] == 50
     assert exersie1_parts[1]['measurement'] == 'meters'
     assert exersise1['inputs'] is True
 
-    exersise2 = workout['exersies'][1]
+    exersise2 = workout['exercises'][1]
     assert exersise2['name'] == 'Test name 2'
     assert exersise2['sets'] == 2
     assert exersise2['reps'] == 15
-    assert len(exersise2['exersiesParts']) == 1
-    exersie2_parts = exersise2['exersiesParts']
+    assert len(exersise2['exerciseParts']) == 1
+    exersie2_parts = exersise2['exerciseParts']
     assert exersie2_parts[0]['distance'] == 200
     assert exersie2_parts[0]['measurement'] == 'meters'
 
-    exersise3 = workout['exersies'][2]
+    exersise3 = workout['exercises'][2]
     assert exersise3['name'] == 'Warm-up'
     assert 'sets' not in exersise3
     assert 'reps' not in exersise3
-    assert 'exersiesParts' not in exersise3
+    assert 'exerciseParts' not in exersise3
 
 def test_assign_group_workout():
     response = create_workout(TestData.test_workout, {})
@@ -120,7 +120,7 @@ def test_assign_multiple_workouts():
             'workoutId':"workout123",
             'title': 'Test Workout 2',
             'description': 'This is a test workout 2',
-            'exersies': [
+            'exercise': [
                 {
                     'name': 'lollygag',
                 }
@@ -247,12 +247,12 @@ def test_get_workouts():
             "coachId": "123",
             "title": "Test Workout 2",
             "description": "This is a test workout 2",
-            "exersies": [
+            "exercise": [
                 {
                 "name": "Test name 3",
                 "sets": 3,
                 "reps": 10,
-                "exersiesParts": [
+                "exerciseParts": [
                     {
                         "distance": 100,
                         "measurement": "meters"
@@ -308,5 +308,5 @@ def test_get_group_workout():
     workout = json.loads(response['body'])
     assert workout['title'] == 'Test Workout'
     assert workout['coach_id'] == '123'
-    assert len(workout['exersies']) == 3
+    assert len(workout['exercises']) == 3
     assert workout['description']=='This is a test workout'

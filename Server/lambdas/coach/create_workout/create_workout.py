@@ -15,7 +15,7 @@ def create_workout(event, context):
             'workout_id': workout_id,
             'title': title,
             'description': body.get('description', ''),
-            'exersies': body.get('exersies', [])
+            'exercises': body.get('exercises', [])
         })
         return {
             'statusCode': 200,

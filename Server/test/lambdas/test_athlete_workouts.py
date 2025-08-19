@@ -72,7 +72,7 @@ def test_view_workout_athlete():
     assert body['coach_id'] == '123'
     assert body['title'] == 'Test Workout'
     assert body['description'] == 'This is a test workout'
-    assert len(body['exersies']) == 3
+    assert len(body['exercises']) == 3
 
 
 def test_input_time():

@@ -4,7 +4,7 @@ import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Exercise from "../../../types/Exersise";
-import ExerciseCreation from "../../../components/coaches/workouts/ExersiceCreation";
+import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
 
 //Page for workout creation by coaches
 const CreateWorkout = () => {
@@ -14,14 +14,14 @@ const CreateWorkout = () => {
 
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
-  const [exersies, setexersies] = useState<Array<Exercise>>(workout?.exersies || []);
+  const [exercise, setexercise] = useState<Array<Exercise>>(workout?.exercise || []);
 
   const handleWorkoutCreation = async () => {
     const coachId = await UserService.getUserId();
     const workoutData:Record<string, any> = {
       'title': title,
       'description': description,
-      'exersies': exersies,
+      'exercise': exercise,
       'coachId': coachId
     };
     if(workout){
@@ -69,13 +69,13 @@ const CreateWorkout = () => {
       {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
       <View className="mx-4">
       {/* Render each exercise input */}
-      {exersies.map((exercise, idx) => (
-        <ExerciseCreation key={idx} excercise={exercise} setExersies={setexersies} />
+      {exercise.map((exercise, idx) => (
+        <ExerciseCreation key={idx} excercise={exercise} setExercise={setexercise} />
       ))}
       {/* Button to add a new exercise */}
       <TouchableOpacity
         className="bg-red-700 rounded-lg py-2 items-center mt-2 mb-4"
-        onPress={() => setexersies([...exersies, { name: '', id: exersies.length }])}
+        onPress={() => setexercise([...exercise, { name: '', id: exercise.length }])}
       >
         <Text className="text-white font-bold">Add exercise</Text>
       </TouchableOpacity>

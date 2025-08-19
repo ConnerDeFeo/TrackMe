@@ -1,18 +1,18 @@
 import { Button, Text, TextInput, View } from "react-native";
-import Exercise from "../../../types/Excersise";
+import Exercise from "../../../types/Exersise";
 
 //Component for a single excercise in a workout
-const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dispatch<React.SetStateAction<Exercise[]>> }> = ({ excercise, setExcersies }) => {
+const ExerciseCreation: React.FC<{ excercise: Exercise; setExersies: React.Dispatch<React.SetStateAction<Exercise[]>> }> = ({ excercise, setExersies }) => {
   const diplaySetsReps = excercise.exerciseParts !==undefined; //Only display if parts are defined
 
-  //Handles creation of excersice component
+  //Handles creation of exersice component
   const handleExcerciseComponentCreation = () => {
     let excerciseParts = excercise.exerciseParts;
-    if (!excerciseParts){ //No excersices created yet, initialize list
+    if (!excerciseParts){ //No exersices created yet, initialize list
       excerciseParts = [];
     }
     excerciseParts.push({ 'distance': 0, 'measurement': '' });
-    setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, exerciseParts: excerciseParts } : ex)));
+    setExersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, exerciseParts: excerciseParts } : ex)));
   };
 
   //Generic function for displaying sets and reps
@@ -22,10 +22,10 @@ const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dis
         //Update only if valid number was entered
         if(text && !isNaN(Number(text))) {
           const updatedExcercise = { ...excercise, [field]: Number(text) };
-          setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
+          setExersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
         }
         if(text === '') {
-          setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, [field]: 0 } : ex)));
+          setExersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, [field]: 0 } : ex)));
         }
       }} />
     );
@@ -42,7 +42,7 @@ const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dis
         value={excercise.name} 
         onChangeText={text => {
         const updatedExcercise = { ...excercise, name: text };
-        setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
+        setExersies((prev) => prev.map((ex) => (ex.id === excercise.id ? updatedExcercise : ex)));
         }} 
       />
       </View>
@@ -73,7 +73,7 @@ const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dis
             if(text == '' || text && !isNaN(Number(text))) {
               const updatedParts = [...excercise.exerciseParts!];
               updatedParts[idx].distance = Number(text);
-              setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, exerciseParts: updatedParts } : ex)));
+              setExersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, exerciseParts: updatedParts } : ex)));
             }
             }} 
           />
@@ -86,7 +86,7 @@ const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dis
             onChangeText={text => {
             const updatedParts = [...excercise.exerciseParts!];
             updatedParts[idx].measurement = text;
-            setExcersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, exerciseParts: updatedParts } : ex)));
+            setExersies((prev) => prev.map((ex) => (ex.id === excercise.id ? { ...ex, exerciseParts: updatedParts } : ex)));
             }} 
           />
           </View>
@@ -105,4 +105,4 @@ const ExcerciseCreation: React.FC<{ excercise: Exercise; setExcersies: React.Dis
   );
 };
 
-export default ExcerciseCreation;
+export default ExerciseCreation;

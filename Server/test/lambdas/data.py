@@ -38,12 +38,12 @@ class TestData:
             'coachId': '123',
             'title': 'Test Workout', 
             'description': 'This is a test workout',
-            'excersies': [
+            'exersies': [
                 {
                     'name': 'Test name',
                     'sets': 3,
                     'reps': 10,
-                    'excersiesParts': [
+                    'exersiesParts': [
                         {
                             'distance': 100,
                             'measurement': 'meters'
@@ -59,7 +59,7 @@ class TestData:
                     'name': 'Test name 2',
                     'sets': 2,
                     'reps': 15,
-                    'excersiesParts': [
+                    'exersiesParts': [
                         {
                             'distance': 200,
                             'measurement': 'meters'

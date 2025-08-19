@@ -72,7 +72,7 @@ def test_view_workout_athlete():
     assert body['coach_id'] == '123'
     assert body['title'] == 'Test Workout'
     assert body['description'] == 'This is a test workout'
-    assert len(body['excersies']) == 3
+    assert len(body['exersies']) == 3
 
 
 def test_input_time():
@@ -266,21 +266,17 @@ def test_view_workout_inputs():
     #   [groupName, coachUsername, username, distance, time]
     # ]
     body = json.loads(response['body'])
-
-    print(body)
     assert len(body) == 2
     group_inputs = body[0]
     athlete_inputs = body[1]
 
-    assert len(group_inputs) == 5  # groupName, coachUsername, workoutGroupName, distance, time
-    assert group_inputs[0] == 'Test Group'
-    assert group_inputs[1] == 'testcoach'
-    assert group_inputs[2] == 'Test Workout Group'
-    assert group_inputs[3] == 150
-    assert group_inputs[4] == 30
+    assert len(group_inputs) == 4  # groupId, workoutGroupName, distance, time
+    assert group_inputs[0] == 1  # groupId
+    assert group_inputs[1] == 'Test Workout Group'
+    assert group_inputs[2] == 150
+    assert group_inputs[3] == 30
 
-    assert len(athlete_inputs) == 4  # groupName, coachUsername, distance, time
-    assert athlete_inputs[0] == 'Test Group'
-    assert athlete_inputs[1] == 'testcoach'
-    assert athlete_inputs[2] == 100
-    assert athlete_inputs[3] == 10
+    assert len(athlete_inputs) == 3  # groupId, distance, time
+    assert athlete_inputs[0] == 1  # groupId
+    assert athlete_inputs[1] == 100
+    assert athlete_inputs[2] == 10

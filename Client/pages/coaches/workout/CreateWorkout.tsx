@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button, Text, TextInput, View, ScrollView, TouchableOpacity, Image } from "react-native";
+import { Button, Text, TextInput, View, ScrollView, TouchableOpacity } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Exercise from "../../../types/Exersise";
-import ExcerciseCreation from "../../../components/coaches/workouts/ExcersiceCreation";
+import ExerciseCreation from "../../../components/coaches/workouts/ExersiceCreation";
 
 //Page for workout creation by coaches
 const CreateWorkout = () => {
@@ -69,15 +69,15 @@ const CreateWorkout = () => {
       {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
       <View className="mx-4">
       {/* Render each exercise input */}
-      {exersies.map((exersise, idx) => (
-        <ExcerciseCreation key={idx} excercise={exersise} setExcersies={setexersies} />
+      {exersies.map((exercise, idx) => (
+        <ExerciseCreation key={idx} excercise={exercise} setExersies={setexersies} />
       ))}
       {/* Button to add a new exercise */}
       <TouchableOpacity
         className="bg-red-700 rounded-lg py-2 items-center mt-2 mb-4"
         onPress={() => setexersies([...exersies, { name: '', id: exersies.length }])}
       >
-        <Text className="text-white font-bold">Create exercise</Text>
+        <Text className="text-white font-bold">Add exercise</Text>
       </TouchableOpacity>
       </View>
 

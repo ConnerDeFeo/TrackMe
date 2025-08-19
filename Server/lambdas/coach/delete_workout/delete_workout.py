@@ -3,11 +3,11 @@ import json
 
 #Removes a coaches workout
 def delete_workout(event, context):
-    body = json.loads(event['body'])
+    query_params = event.get('queryStringParameters', {})
 
     try:
-        workout_id = body['workoutId']
-        coach_id = body['coachId']
+        workout_id = query_params['workoutId']
+        coach_id = query_params['coachId']
 
         #Update the table to soft delete the workout
         update_item(

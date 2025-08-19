@@ -24,8 +24,12 @@ const Workouts = () => {
     fetchWorkouts();
   }, []);
 
-  const onRemove = (id: string) => {
-    console.log("Removing workout with id:", id);
+  const onRemove = async (workoutId: string) => {
+    const coachId = await UserService.getUserId();
+    const resp = await CoachWorkoutService.deleteWorkout(workoutId, coachId!);
+    if (resp.ok) {
+      setWorkouts(workouts.filter(workout => workout.workout_id !== workoutId));
+    }
   };
 
   return (

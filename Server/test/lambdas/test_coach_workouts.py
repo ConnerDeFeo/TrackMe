@@ -280,10 +280,10 @@ def test_get_workouts():
 
     #Test to see if filtering works
     delete_workout({
-        "body": json.dumps({
+        "queryStringParameters": {
             "workoutId": workouts[0]['workout_id'],
             "coachId": "123"
-        })
+        }
     },{})
 
     response = get_workouts(event, {})
@@ -292,7 +292,6 @@ def test_get_workouts():
     workouts = data['Items']
     assert len(workouts) == 1
     
-
 def test_get_group_workout():
     reset_dynamo()
     response = create_workout(TestData.test_workout, {})
@@ -333,10 +332,10 @@ def test_delete_workout():
     workout_id = data['workout_id']
 
     event = {
-        "body": json.dumps({
+        "queryStringParameters": {
             "workoutId": workout_id,
             "coachId": "123"
-        })
+        }
     }
     response = delete_workout(event, {})
     assert response['statusCode'] == 200

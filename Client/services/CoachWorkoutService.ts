@@ -18,6 +18,9 @@ const CoachWorkoutService = {
     viewWorkoutCoach: async (coachId:string, groupId:string, date:string) => {
         let request = `${EXPO_PUBLIC_API_URL}/coaches/view_workout_coach?coachId=${coachId}&groupId=${groupId}&date=${date}`;
         return await API.get(request);
+    },
+    deleteWorkout: async (workoutId:string, coachId:string) => {
+        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_workout?workoutId=${workoutId}&coachId=${coachId}`);
     }
 }
 

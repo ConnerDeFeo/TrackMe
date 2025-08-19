@@ -65,6 +65,7 @@ Resources:
       BuildMethod: python3.12
 
   # ATHLETE FUNCTIONS
+
   GetCoachesFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -203,6 +204,21 @@ Resources:
         - Ref: RDSLayer
 
   # COACH FUNCTIONS
+  DeleteWorkoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/coach/delete_workout/
+      Handler: delete_workout.delete_workout
+      Events:
+        DeleteWorkoutApi:
+          Type: Api
+          Properties:
+            Path: /coaches/delete_workout/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: DynamoDBLayer
+
   GetGroupWorkout:
     Type: AWS::Serverless::Function
     Properties:

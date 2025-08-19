@@ -40,8 +40,6 @@ const ViewGroup = () => {
     fetchWorkout();
   },[])
 
-  console.log(workout)
-
   return (
     <View>
       <Text className="text-2xl font-bold">{groupName}</Text>
@@ -50,7 +48,7 @@ const ViewGroup = () => {
       {workout && 
         <>
           <Button title="View Group Workout" onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })} />
-          <DisplayWorkout workout={workout} />
+          <DisplayWorkout workout={workout} onRemove={() => {}}/>
         </>
       }
       {participants.map((participant) => (

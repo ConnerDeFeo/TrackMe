@@ -10,7 +10,7 @@ def get_workouts(event, context):
         coach_id = query_params['coach_id']
 
         #Grab all workouts accosiated with the coach_id
-        workouts = query_items('Workouts', key_condition_expression="coach_id = :cid", expression_attribute_values={":cid": coach_id})
+        workouts = query_items('Workouts', key_condition_expression="coach_id = :cid", filter_expression="deleted = :deleted", expression_attribute_values={":cid": coach_id, ":deleted": False})
 
         if workouts:
             return {

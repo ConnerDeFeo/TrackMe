@@ -5,6 +5,7 @@ from lambdas.athlete.input_group_time.input_group_time import input_group_time
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
+from lambdas.coach.delete_workout.delete_workout import delete_workout
 from lambdas.coach.get_group_workout.get_group_workout import get_group_workout
 from lambdas.coach.get_workouts.get_workouts import get_workouts
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
@@ -149,7 +150,6 @@ def test_assign_multiple_workouts():
     assert data[2] == "2024-01-01" 
     assert data[3] == "workout123"
 
-
 def test_view_workout_coach():
     reset_dynamo()
     create_athlete(TestData.test_athlete, {})
@@ -276,8 +276,22 @@ def test_get_workouts():
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     workouts = data['Items']
-    print(workouts)
     assert len(workouts) == 2
+
+    #Test to see if filtering works
+    delete_workout({
+        "body": json.dumps({
+            "workoutId": workouts[0]['workout_id'],
+            "coachId": "123"
+        })
+    },{})
+
+    response = get_workouts(event, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workouts = data['Items']
+    assert len(workouts) == 1
+    
 
 def test_get_group_workout():
     reset_dynamo()
@@ -310,3 +324,21 @@ def test_get_group_workout():
     assert workout['coach_id'] == '123'
     assert len(workout['exercises']) == 3
     assert workout['description']=='This is a test workout'
+
+def test_delete_workout():
+    reset_dynamo()
+    response = create_workout(TestData.test_workout, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
+
+    event = {
+        "body": json.dumps({
+            "workoutId": workout_id,
+            "coachId": "123"
+        })
+    }
+    response = delete_workout(event, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    assert data['message'] == 'Workout deleted successfully'

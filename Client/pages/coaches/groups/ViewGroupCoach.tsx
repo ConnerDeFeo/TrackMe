@@ -67,8 +67,8 @@ const ViewGroup = () => {
       </TouchableOpacity>
       {workout && 
         <TouchableOpacity 
-        onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })}
-        className="bg-purple-600 rounded-lg py-3 px-4"
+          onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })}
+          className="bg-black rounded-lg py-3 px-4 mt-2"
         >
           <Text className="text-white font-semibold text-center">View Group Workout</Text>
         </TouchableOpacity>

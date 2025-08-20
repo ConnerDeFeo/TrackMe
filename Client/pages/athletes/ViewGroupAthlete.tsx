@@ -24,10 +24,9 @@ const ViewGroupAthlete = ()=>{
     }, [groupId]);
 
     return(
-        <View>
-            <Text>Group Name: {groupName}</Text>
-            <Text>Group ID: {groupId}</Text>
-            {workout && <DisplayWorkout workout={workout} />}
+        <View className="mt-[4rem]">
+            <Text className="text-2xl font-bold text-center">{groupName}</Text>
+            {workout && <DisplayWorkout workout={workout} onPress={() => {}} />}
         </View>
     );
 }

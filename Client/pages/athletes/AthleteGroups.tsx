@@ -1,13 +1,11 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import Groups from "../../components/groups/Groups";
-import { useNavigation } from "@react-navigation/native";
 
 //Athlete view when they are looking at all ther groups
 const AthleteGroups = () => {
-  const navigation = useNavigation<any>();
-
   return (
-    <View className="mt-10 w-[85%] mx-auto">
+    <View className="mt-[4rem] w-[85%] mx-auto">
+      <Text className="text-4xl font-bold mb-2">Groups</Text>
       <Groups/>
     </View>
   );

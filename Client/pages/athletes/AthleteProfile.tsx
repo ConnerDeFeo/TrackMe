@@ -12,9 +12,9 @@ const AthleteProfile = () => {
   }
 
   return (
-    <View>
-      <Text>Athlete Profile</Text>
-      <Button title={'Logout'} onPress={handleLogout}/>
+    <View className="mt-[4rem]">
+      <Text className="text-4xl font-bold ml-4">Profile</Text>
+      <Button title={'Logout'} onPress={handleLogout} color={'#E63946'}/>
     </View>
   );
 };

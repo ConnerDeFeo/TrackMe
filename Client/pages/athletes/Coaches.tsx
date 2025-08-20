@@ -56,19 +56,52 @@ const Coaches = ()=>{
     }
 
     return (
-        <View>
-            <Text className="text-lg font-bold text-center">Coaches</Text>
-            {coaches.map(coach => (
-                <Text key={coach} className="text-center border-b border-gray-200">{coach[1]}</Text>
-            ))}
-            <Text className="text-lg font-bold text-center mt-10 mb-5">Coach Requests</Text>
-            {requests.map(request => (
-                <View key={request} className="w-[75%] mx-auto">
-                    <Text className="text-xl border-b border-gray-200">{request[1]}</Text>
-                    <Button title="accept" onPress={() => handleCoachAcceptance(request[0])}/>
-                    <Button title="decline" onPress={() => console.log("Declined")}/>
+        <View className="flex-1 px-6 py-8 mt-[4rem]">
+            <Text className="text-2xl font-bold text-center text-gray-800 mb-8">Coaches</Text>
+            
+            <View className="bg-white rounded-lg shadow-sm p-4 mb-6">
+            {coaches.length > 0 ? (
+                coaches.map(coach => (
+                <View key={coach} className="py-3 border-b border-gray-100 last:border-b-0">
+                    <Text className="text-lg text-gray-700 text-center">{coach[1]}</Text>
                 </View>
-            ))}
+                ))
+            ) : (
+                <Text className="text-gray-500 text-center py-4">No coaches yet</Text>
+            )}
+            </View>
+
+            <Text className="text-2xl font-bold text-center text-gray-800 mb-6">Coach Requests</Text>
+            
+            <View className="space-y-4">
+            {requests.length > 0 ? (
+                requests.map(request => (
+                <View key={request} className="bg-white rounded-lg shadow-sm p-4 mx-auto w-full max-w-sm">
+                    <Text className="text-lg font-medium text-gray-800 text-center mb-4">{request[1]}</Text>
+                    <View className="flex-row space-x-3">
+                    <View className="flex-1">
+                        <Button 
+                        title="Accept" 
+                        onPress={() => handleCoachAcceptance(request[0])}
+                        color="#10B981"
+                        />
+                    </View>
+                    <View className="flex-1">
+                        <Button 
+                        title="Decline" 
+                        onPress={() => console.log("Declined")}
+                        color="#EF4444"
+                        />
+                    </View>
+                    </View>
+                </View>
+                ))
+            ) : (
+                <View className="bg-white rounded-lg shadow-sm p-6">
+                <Text className="text-gray-500 text-center">No pending requests</Text>
+                </View>
+            )}
+            </View>
         </View>
     )
 }

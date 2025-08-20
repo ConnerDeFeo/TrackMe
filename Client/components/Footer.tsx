@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 // Import all images statically
 const images = {
     'Groups': require('../images/Groups.png'),
-    'Inputs': require('../images/Groups.png'),
-    'Coaches': require('../images/Groups.png'),
+    'Inputs': require('../images/RecordTimes.png'),
+    'Coaches': require('../images/Coaches.png'),
     'Workouts': require('../images/Workouts.png'),
     'Athletes': require('../images/Athletes.png'),
     'Profile': require('../images/Profile.png')

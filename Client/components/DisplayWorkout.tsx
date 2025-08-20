@@ -37,16 +37,11 @@ const DisplayWorkout: React.FC<{ workout: any, onPress:()=>void, onRemove?: (id:
                         <View key={index} className="bg-gray-50 p-4 rounded-lg border-l-4 border-l-red-500">
                             {/* Exercise number header */}
                             <Text className="font-semibold text-red-600 mb-3 text-base">
-                                Exercise {index + 1}
+                                {exercise.name}
                             </Text>
                             
                             {/* Exercise details container */}
                             <View className="space-y-2">
-                                {/* Exercise name */}
-                                <Text className="text-gray-800 font-medium">
-                                    <Text className="text-gray-500">Name: </Text>
-                                    {exercise.name}
-                                </Text>
                                 {/* Number of sets */}
                                 <Text className="text-gray-800">
                                     <Text className="text-gray-500">Sets: </Text>

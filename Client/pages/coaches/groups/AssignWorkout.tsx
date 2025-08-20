@@ -35,12 +35,11 @@ const AssignWorkout = ()=>{
     };
 
     return (
-        <View>
-            <Text>Assign Workout</Text>
+        <View className="mt-[4rem]">
+            <Text className="text-4xl font-bold">Assign Workout</Text>
             {workouts.map((workout, idx) => (
                 <View key={idx} className="my-2">
-                    <DisplayWorkout workout={workout} />
-                    <Button title="Assign" onPress={() => handleAssignWorkout(workout.workout_id)} />
+                    <DisplayWorkout workout={workout} onPress={() => handleAssignWorkout(workout.workout_id)} />
                 </View>
             ))}
         </View>

@@ -41,7 +41,7 @@ const Workouts = () => {
         </TouchableOpacity>
       </View>
       {workouts.map((workout, idx) => (
-        <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} />
+        <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigation.navigate('CreateWorkout', { workout })} />
       ))}
     </ScrollView>
   );

@@ -75,12 +75,7 @@ const ViewGroup = () => {
       }
       </View>
 
-      {workout && 
-        <View className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <Text className="text-lg font-semibold text-gray-900 mb-3">Current Workout</Text>
-          <DisplayWorkout workout={workout} onRemove={() => {}}/>
-        </View>
-      }
+      {workout && <DisplayWorkout workout={workout} onPress={() => navigation.navigate('CreateWorkout', { workout })} />}
 
       <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
         <View className="flex flex-row justify-between items-center mb-4">

@@ -37,17 +37,27 @@ const AssignAthletes = ()=>{
     };
 
     return (
-        <View>
-            <View>
-                <Button title="Back" onPress={() => navigation.goBack()}/>
-                <Text className="font-bold text-center mb-5">Assign Athletes</Text>
+        <View className="flex-1 p-4 mt-[4rem]">
+            <View className="flex-row items-center justify-between mb-6">
+                <Button title="Back" onPress={() => navigation.goBack()} color={'black'}/>
+                <Text className="text-2xl font-bold text-gray-800 flex-1 text-center">Assign Athletes</Text>
+                <View className="w-16" />
             </View>
+            <View className="space-y-3">
             {athletes.map(athlete => (
-                <View key={athlete[0]}>
-                    <Text>{athlete[1]}</Text>
-                    {athlete[2] ? <Text>Assigned</Text> : <Button title="Assign" onPress={() => handleAssignAthlete(athlete[0])} />}
+                <View key={athlete[0]} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center justify-between">
+                    <Text className="text-lg font-medium text-gray-800 flex-1">{athlete[1]}</Text>
+                    {athlete[2] ? 
+                        <View className="bg-green-100 px-3 py-1 rounded-full">
+                            <Text className="text-green-800 font-medium">Assigned</Text>
+                        </View> : 
+                        <View className="bg-blue-500 px-4 py-2 rounded-lg">
+                            <Button title="Assign" onPress={() => handleAssignAthlete(athlete[0])} />
+                        </View>
+                    }
                 </View>
             ))}
+            </View>
         </View>
     );
 }

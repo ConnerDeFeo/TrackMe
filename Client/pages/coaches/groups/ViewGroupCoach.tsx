@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Text,View } from "react-native";
+import { Button, Image, Text,TouchableOpacity,View } from "react-native";
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
@@ -41,19 +41,61 @@ const ViewGroup = () => {
   },[])
 
   return (
-    <View className="mt-[4rem]">
-      <Text className="text-2xl font-bold">{groupName}</Text>
-      <Button title="Add Athletes" onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})} />
-      <Button title={workout ? "Update Workout" : "Send Workout"} onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})} />
+    <View className="flex-1 bg-gray-50 px-6 pt-16">
+      <View className="mb-8">
+        <Text className="text-3xl font-bold text-gray-900 mb-2">{groupName}</Text>
+        <Text className="text-gray-600">Manage your group and workouts</Text>
+      </View>
+
+      <View className="space-y-4 mb-8">
+      <TouchableOpacity 
+        onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})}
+        className="bg-[#E63946] rounded-lg py-3 px-4"
+      >
+        <Text className="text-white font-semibold text-center">{workout ? "Update Workout" : "Send Workout"}</Text>
+      </TouchableOpacity>
       {workout && 
-        <>
-          <Button title="View Group Workout" onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })} />
-          <DisplayWorkout workout={workout} onRemove={() => {}}/>
-        </>
+        <TouchableOpacity 
+        onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })}
+        className="bg-purple-600 rounded-lg py-3 px-4"
+        >
+          <Text className="text-white font-semibold text-center">View Group Workout</Text>
+        </TouchableOpacity>
       }
-      {participants.map((participant) => (
-        <Text key={participant[0]}>{participant[1]}</Text>
-      ))}
+      </View>
+
+      {workout && 
+        <View className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <Text className="text-lg font-semibold text-gray-900 mb-3">Current Workout</Text>
+          <DisplayWorkout workout={workout} onRemove={() => {}}/>
+        </View>
+      }
+
+      <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <View className="flex flex-row justify-between items-center mb-4">
+          <Text className="text-lg font-semibold text-gray-900">
+            Athletes ({participants.length})
+          </Text>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})}
+            className="flex items-center"
+          >
+            <Text className="text-[#E63946] underline">Add Athletes</Text>
+          </TouchableOpacity>
+        </View>
+        {participants.length > 0 ? (
+          participants.map((participant) => (
+            <View key={participant[0]} className="py-2 border-b border-gray-100 last:border-b-0 flex flex-row justify-between items-center">
+              <Text className="text-gray-800 font-medium">{participant[1]}</Text>
+              <TouchableOpacity>
+                <Text className="text-[#E63946] underline text-md">Remove</Text>
+              </TouchableOpacity>
+            </View>
+        ))
+        ) : (
+        <Text className="text-gray-500 italic">No athletes assigned yet</Text>
+        )}
+      </View>
     </View>
   );
 };

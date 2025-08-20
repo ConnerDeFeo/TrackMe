@@ -30,7 +30,7 @@ const Athletes = () => {
     return (
         <ScrollView className="flex-1 bg-gray-50 p-4 mt-[4rem]">
             <View className="mb-6">
-                <Text className="text-2xl font-bold text-gray-800 mb-4">My Athletes</Text>
+                <Text className="text-4xl font-bold text-gray-800 mb-4">My Athletes</Text>
                 <TouchableOpacity
                     className="bg-[#E63946] py-3 px-6 rounded-lg shadow-sm"
                     onPress={() => navigation.navigate("AddAthlete")}

@@ -8,7 +8,7 @@ const CoachGroups = () => {
 
   return (
     <View className="mt-[4rem]">
-      <View className="flex-row justify-between items-center p-4">
+      <View className="flex-row justify-between items-center p-4 mb-2">
         <Text className="text-4xl font-bold">Groups</Text>
         <TouchableOpacity onPress={() => navigation.navigate('CreateGroup')}>
           <Image source={require("../../../images/Add.png")} className="h-12 w-12 rounded-full border-3" />

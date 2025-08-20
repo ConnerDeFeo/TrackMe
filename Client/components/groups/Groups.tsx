@@ -36,7 +36,7 @@ const Groups = () => {
   };
 
   return (
-    <View className="mt-10 w-full mx-auto">
+    <View className="w-full mx-auto">
       {groups.map((group, index) => (
         <GroupDisplay key={index} groupName={group[0]} navigateTo={() => handleNavigation(group[0], group[1])} />
       ))}

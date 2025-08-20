@@ -14,9 +14,9 @@ const CoachProfile = () => {
   }
   
   return (
-    <View>
-      <Text>Coach Profile</Text>
-      <Button title="Logout" onPress={handleLogout} />
+    <View className="mt-[4rem]">
+      <Text className="text-4xl font-bold text-gray-800 mb-4">Profile</Text>
+      <Button title="Logout" onPress={handleLogout} color={'#E63946'}/>
     </View>
   );
 };

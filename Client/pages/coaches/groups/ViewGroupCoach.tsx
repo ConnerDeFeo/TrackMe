@@ -22,6 +22,9 @@ const ViewGroup = () => {
         const data = await resp.json();
         setParticipants(data);
       }
+      else{
+        setParticipants([]);
+      }
     }
 
   //Fetches the workout for the current date
@@ -39,6 +42,14 @@ const ViewGroup = () => {
     fetchParticipants();
     fetchWorkout();
   },[])
+
+  const removeAthleteFromGroup = async (athleteId: string) => {
+    const resp = await CoachGroupService.removeAthleteFromGroup(athleteId, groupId);
+    
+    if (resp.ok) {
+      await fetchParticipants(); // Add await here
+    }
+  }
 
   return (
     <View className="flex-1 bg-gray-50 px-6 pt-16">
@@ -87,7 +98,7 @@ const ViewGroup = () => {
           participants.map((participant) => (
             <View key={participant[0]} className="py-2 border-b border-gray-100 last:border-b-0 flex flex-row justify-between items-center">
               <Text className="text-gray-800 font-medium">{participant[1]}</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => removeAthleteFromGroup(participant[0])}>
                 <Text className="text-[#E63946] underline text-md">Remove</Text>
               </TouchableOpacity>
             </View>

@@ -17,16 +17,30 @@ def add_athlete_to_group(event, context):
             WHERE athleteId = %s AND coachId = %s
         """, (athlete_id, coach_id))
         if connection_active:
-            # Insert the athlete into the group
-            execute_commit(
+            # Check if they were previously a part of the group
+            previous_group = fetch_one(
             """
-                INSERT INTO athlete_groups (athleteId, groupId)
-                VALUES (%s, %s)
+                SELECT * FROM athlete_groups
+                WHERE athleteId = %s AND groupId = %s AND removed = TRUE
             """, (athlete_id, group_id))
+            if previous_group:
+                execute_commit(
+                """
+                    UPDATE athlete_groups
+                    SET removed = FALSE
+                    WHERE athleteId = %s AND groupId = %s
+                """, (athlete_id, group_id))
+            else:
+                execute_commit(
+                """
+                    INSERT INTO athlete_groups (athleteId, groupId)
+                    VALUES (%s, %s)
+                """, (athlete_id, group_id))
             return {
                 'statusCode': 200,
                 'body': json.dumps({'message': 'Athlete added to group successfully'})
             }
+
         return {
             'statusCode': 400,
             'body': json.dumps({'message': 'Athlete is not associated with this coach'})

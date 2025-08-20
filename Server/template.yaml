@@ -204,6 +204,21 @@ Resources:
         - Ref: RDSLayer
 
   # COACH FUNCTIONS
+  RemoveGroupAthleteFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/remove_group_athlete/
+      Handler: remove_group_athlete.remove_group_athlete
+      Events:
+        RemoveGroupAthleteApi:
+          Type: Api
+          Properties:
+            Path: /coaches/remove_group_athlete/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   DeleteWorkoutFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -10,6 +10,7 @@ from lambdas.coach.get_athletes_for_group.get_athletes_for_group import get_athl
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 import json
 from data import TestData
+from lambdas.coach.remove_group_athlete.remove_group_athlete import remove_group_athlete
 from rds import execute_file, fetch_one
 from testing_utils import debug_table
 
@@ -143,3 +144,41 @@ def test_get_absent_group_athletes():
 
     assert body[0][0] == "1235"
     assert body[0][1] == "testathlete2"
+
+def test_remove_group_athlete():
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
+
+    event = {
+        "queryStringParameters": {
+            "groupId": "1",
+            "athleteId": "1234"
+        }
+    }
+
+    response = remove_group_athlete(event, {})
+    assert response['statusCode'] == 200
+
+    # Check if athlete is removed from group
+    event = {
+        "queryStringParameters": {
+            "groupId": "1"
+        }
+    }
+
+    response = get_athletes_for_group(event, {})
+    assert response['statusCode'] == 404
+
+    event = {
+        "queryStringParameters": {
+            "groupId": "1",
+            "coachId": "123"
+        }
+    }
+
+    response = get_absent_group_athletes(event, {})
+    assert response['statusCode'] == 200
+    assert json.loads(response['body']) == [['1234', "test_athlete"]]

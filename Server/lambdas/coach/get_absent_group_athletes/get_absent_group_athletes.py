@@ -21,6 +21,7 @@ def get_absent_group_athletes(event, context):
                 ON a.userId = ag.athleteId
                 AND ag.groupId = %s
             WHERE ag.athleteId IS NULL
+            OR ag.removed = TRUE
         """, (coach_id, group_id))
 
         if absent_athletes:

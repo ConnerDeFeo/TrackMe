@@ -24,6 +24,9 @@ const CoachGroupService = {
                 'coachId': coachId
             }
         );
+    },
+    removeAthleteFromGroup: async (athleteId:string, groupId:string) => {
+        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/remove_group_athlete?athleteId=${athleteId}&groupId=${groupId}`);
     }
 
 }

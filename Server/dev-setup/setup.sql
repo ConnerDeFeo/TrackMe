@@ -1,15 +1,14 @@
-DROP TABLE IF EXISTS 
-coaches, 
-athletes, 
-groups, 
-athlete_groups, 
-athlete_coaches, 
-athlete_coach_invites, 
-group_workouts, 
-athlete_workout_inputs, 
-workout_groups, 
-workout_group_members, 
-workout_group_inputs CASCADE;
+DROP TABLE IF EXISTS workout_group_inputs CASCADE;
+DROP TABLE IF EXISTS workout_group_members CASCADE;
+DROP TABLE IF EXISTS workout_groups CASCADE;
+DROP TABLE IF EXISTS athlete_workout_inputs CASCADE;
+DROP TABLE IF EXISTS group_workouts CASCADE;
+DROP TABLE IF EXISTS athlete_coach_invites CASCADE;
+DROP TABLE IF EXISTS athlete_coaches CASCADE;
+DROP TABLE IF EXISTS athlete_groups CASCADE;
+DROP TABLE IF EXISTS groups CASCADE;
+DROP TABLE IF EXISTS athletes CASCADE;
+DROP TABLE IF EXISTS coaches CASCADE;
 
 
 --User and user relation related tables--
@@ -34,7 +33,8 @@ CREATE TABLE groups (
 CREATE TABLE athlete_groups (
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupId INT REFERENCES groups(id) NOT NULL,
-    PRIMARY KEY (athleteId, groupId)
+    PRIMARY KEY (athleteId, groupId),
+    removed BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE athlete_coaches (
@@ -56,7 +56,7 @@ CREATE TABLE group_workouts (
     groupId INT REFERENCES groups(id) NOT NULL,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
     workoutId VARCHAR(255) NOT NULL,
-    UNIQUE (groupId, date)
+    UNIQUE (groupId, date, workoutId)
 );
 --Indexes for faster lookups--
 CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, workoutId);

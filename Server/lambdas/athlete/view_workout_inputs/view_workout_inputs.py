@@ -12,7 +12,7 @@ def view_workout_inputs(event, context):
         username = query_params.get('username')
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
-        data = []
+        grouped_data = {}
         #The first querey will grab all workout group inputs that this person is a part of
         # The data returned should look something like:
         # [[groupId, workoutGroupName, distance, time], [groupId, workoutGroupName, distance, time],
@@ -27,8 +27,15 @@ def view_workout_inputs(event, context):
             JOIN workout_group_inputs wgi ON wgi.workoutGroupId = wg.id
             WHERE wgm.athleteUsername = %s AND gw.date = %s
         """, (username, date))
+
+        #Convert data into groupId:  Array<{ distance: number, time: number }
         if group_workout_inputs:
-            data.extend(group_workout_inputs)
+            grouped_data['groups'] = {}
+            for input in group_workout_inputs:
+                id = input[0]
+                if id not in grouped_data['groups']:
+                    grouped_data['groups'][id] = []
+                grouped_data['groups'][id].append({"distance": input[2], "time": input[3]})
 
         # Next grab all inputs for this athlete in the specified group, data should look like:
         # [[groupId, distance, time], [groupId, distance, time]]
@@ -43,12 +50,17 @@ def view_workout_inputs(event, context):
         """, (user_id, date))
 
         if athlete_inputs:
-            data.extend(athlete_inputs)
+            grouped_data['individuals'] = {}
+            for input in athlete_inputs:
+                id = input[0]
+                if id not in grouped_data['individuals']:
+                    grouped_data['individuals'][id] = []
+                grouped_data['individuals'][id].append({"distance": input[1], "time": input[2]})
 
-        if len(data) > 0:
+        if len(grouped_data) > 0:
             return {
                 'statusCode': 200,
-                'body': json.dumps(data)
+                'body': json.dumps(grouped_data)
             }
         return {
             'statusCode': 404,

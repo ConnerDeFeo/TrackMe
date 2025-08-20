@@ -29,9 +29,11 @@ const Inputs = ()=>{
     },[]);
 
     return (
-        <View>
+        <View className="mt-[4rem] px-6">
             {groups.map(group => (
-                <Text key={group[1]} className="border my-5">{group[0]}</Text>
+                <View key={group[1]}>
+                    <Text className="my-5">{group[0]}</Text>
+                </View>
             ))}
         </View>
     );

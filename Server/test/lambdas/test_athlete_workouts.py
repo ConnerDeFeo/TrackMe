@@ -257,26 +257,11 @@ def test_view_workout_inputs():
     response = view_workout_inputs(event, {})
     assert response['statusCode'] == 200
 
-    ##
-    # The data returned should look something like:
-    # [
-    #   [groupName, coachUsername, workoutGroupName, distance, time], 
-    #   [groupName, coachUsername, workoutGroupName, distance, time],
-    #   [groupName, coachUsername, username, distance, time], 
-    #   [groupName, coachUsername, username, distance, time]
-    # ]
     body = json.loads(response['body'])
     assert len(body) == 2
-    group_inputs = body[0]
-    athlete_inputs = body[1]
+    group_inputs = body['groups']
+    athlete_inputs = body['individuals']
 
-    assert len(group_inputs) == 4  # groupId, workoutGroupName, distance, time
-    assert group_inputs[0] == 1  # groupId
-    assert group_inputs[1] == 'Test Workout Group'
-    assert group_inputs[2] == 150
-    assert group_inputs[3] == 30
+    assert group_inputs['1'] == [{'distance': 150, 'time': 30}]
 
-    assert len(athlete_inputs) == 3  # groupId, distance, time
-    assert athlete_inputs[0] == 1  # groupId
-    assert athlete_inputs[1] == 100
-    assert athlete_inputs[2] == 10
+    assert athlete_inputs['1'] == [{'distance': 100, 'time': 10}]

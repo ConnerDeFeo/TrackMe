@@ -42,6 +42,20 @@ Resources:
       BuildMethod: python3.12
 
   # ATHLETE FUNCTIONS
+  ViewWorkoutsAthleteFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/view_workouts_athlete/
+      Handler: view_workouts_athlete.view_workouts_athlete
+      Events:
+        ViewWorkoutsAthleteApi:
+          Type: Api
+          Properties:
+            Path: /athletes/view_workouts_athlete/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
 
   GetCoachesFunction:
     Type: AWS::Serverless::Function 

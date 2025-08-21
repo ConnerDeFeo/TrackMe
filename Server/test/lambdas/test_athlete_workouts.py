@@ -51,7 +51,7 @@ def create_extra_athlete(username,id):
     create_athlete(extra_athlete, {})
 
 
-def test_view_workout_athlete():
+def test_view_workouts_athlete():
     event = {
         "queryStringParameters": {
             'groupId':"1",
@@ -68,7 +68,6 @@ def test_view_workout_athlete():
     assert workout[2] == 'This is a test workout'
     assert len(workout[3]) == 3
 
-
 def test_input_time():
 
     print(TestData.test_input_time)
@@ -83,7 +82,6 @@ def test_input_time():
     assert input[1] == 1
     assert input[2] == 100  # time
     assert input[3] == 10
-
 
 def test_create_workout_group():
     create_extra_athlete("test2", "1235")

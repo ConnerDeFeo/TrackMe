@@ -19,9 +19,15 @@ def get_group_workout(event,context):
             """,
             (group_id, date)
         )
+        if workouts:
+            
+            return {
+                'statusCode': 200,
+                'body': json.dumps(workouts)
+            }
         return {
-            'statusCode': 200,
-            'body': json.dumps(workouts)
+            'statusCode': 404,
+            'body': json.dumps({'error': 'No workouts found'})
         }
 
     except Exception as e:

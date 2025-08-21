@@ -159,24 +159,23 @@ def test_get_workouts():
             "coachId": "123",
             "title": "Test Workout 2",
             "description": "This is a test workout 2",
-            "exercise": [
+            "exercises": [
                 {
-                "name": "Test name 3",
-                "sets": 3,
-                "reps": 10,
-                "exerciseParts": [
-                    {
-                        "distance": 100,
-                        "measurement": "meters"
-                    },
-                    {
-                        "distance": 50,
-                        "measurement": "meters"
-                    }
-                ],
-                "inputs": True
-            }
-        ]
+                    "name": "Test name 3",
+                    "sets": 3,
+                    "reps": 10,
+                    "exerciseParts": [
+                        {
+                            "distance": 100,
+                            "measurement": "meters"
+                        },
+                        {
+                            "distance": 50,
+                            "measurement": "meters"
+                        }
+                    ]
+                }
+            ]
         })
     }, {})
     event = {

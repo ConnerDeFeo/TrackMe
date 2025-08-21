@@ -11,15 +11,25 @@ def get_workouts(event, context):
         #Grab all workouts accosiated with the coach_id
         workouts = fetch_all(
             """
-                SELECT * FROM workouts
+                SELECT id, title, description, exercises FROM workouts
                 WHERE coachId = %s AND deleted = %s
             """,
             (coach_id, False)
         )
+        
         if workouts:
+            converted_workouts = []
+            for workout in workouts:
+                converted_workout = {
+                    'workoutId': workout[0],
+                    'title': workout[1],
+                    'description': workout[2],
+                    'exercises': workout[3]
+                }
+                converted_workouts.append(converted_workout)
             return {
                 "statusCode": 200,
-                "body": json.dumps(workouts)
+                "body": json.dumps(converted_workouts)
             }
         return {
             "statusCode": 404,

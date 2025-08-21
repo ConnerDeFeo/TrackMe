@@ -5,18 +5,39 @@ import uuid
 def create_workout(event, context):
     body = json.loads(event['body'])
     try:
+        workout_id = body.get('workoutId', '')
         coach_id = body['coachId']
         title = body['title']
+        description = body.get('description', '')
+        exercises = body.get('exercises', [])
 
-        workout_id = execute_commit_fetch_one(
-            """
-                INSERT INTO workouts (coachId, title, description, exercises)
-                VALUES (%s, %s, %s, %s)
-                RETURNING id
-            """,
-            (coach_id, title, body.get('description', ''), json.dumps(body.get('exercises', [])))
-        )
-        if not workout_id or not workout_id[0]:
+        # If given workout id, edit current workout
+        if workout_id:
+            # Update existing workout
+            execute_commit_fetch_one(
+                """
+                    UPDATE workouts
+                    SET title = %s, description = %s, exercises = %s
+                    WHERE id = %s
+                """,
+                (title, description, json.dumps(exercises), workout_id)
+            )
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'message': 'Workout created successfully'})
+            }
+
+        # Else create new workout
+        else:
+            workout_id = execute_commit_fetch_one(
+                """
+                    INSERT INTO workouts (coachId, title, description, exercises)
+                    VALUES (%s, %s, %s, %s)
+                    RETURNING id
+                """,
+                (coach_id, title, description, json.dumps(exercises))
+            )
+        if not workout_id:
             return {
                 'statusCode': 409,
                 'body': json.dumps({'error': 'Conflict creating workout'})

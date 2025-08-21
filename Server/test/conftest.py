@@ -8,9 +8,7 @@ sys.path.insert(0, server_root)
 # Add each layer's python directory to the path
 layers_root = os.path.join(server_root, 'layers')
 layer_python_dirs = [
-    os.path.join(layers_root, 'rds', 'python'),
-    os.path.join(layers_root, 'dynamo', 'python'),
-    os.path.join(layers_root, 'decimal_encoder', 'python')
+    os.path.join(layers_root, 'rds', 'python')
 ]
 
 for layer_dir in layer_python_dirs:

@@ -30,35 +30,12 @@ Resources:
         AllowOrigin: "'http://localhost:8081'"
         AllowCredentials: true
 
-  # Layers
-  DynamoDBLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: DynamoDBLayer
-      Description: DynamoDBLayer utilities
-      ContentUri: layers/dynamo/python/
-      CompatibleRuntimes:
-        - python3.12
-    Metadata:
-      BuildMethod: python3.12
-
   RDSLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
       LayerName: RDSLayer
       Description: RDSLayer utilities
       ContentUri: layers/rds/python/
-      CompatibleRuntimes:
-        - python3.12
-    Metadata:
-      BuildMethod: python3.12
-
-  DecimalEncoderLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: DecimalEncoderLayer
-      Description: DecimalEncoderLayer utilities
-      ContentUri: layers/decimal_encoder/python/
       CompatibleRuntimes:
         - python3.12
     Metadata:
@@ -167,21 +144,6 @@ Resources:
           Properties:
             Path: /athletes/input_group_time/
             Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
-  ViewWorkoutsAthleteFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/view_workouts_athlete/
-      Handler: view_workouts_athlete.view_workouts_athlete
-      Events:
-        ViewWorkoutsAthleteApi:
-          Type: Api
-          Properties:
-            Path: /athletes/view_workouts_athlete/
-            Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer

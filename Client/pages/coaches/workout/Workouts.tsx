@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Button, Text, View, ScrollView, TouchableOpacity, Image } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity, Image } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
@@ -16,8 +16,8 @@ const Workouts = () => {
       const response = await CoachWorkoutService.getWorkouts(coachId!);
       if(response.ok) {
         const workouts = await response.json();
-        console.log(workouts)
-        setWorkouts(workouts['Items'] || []);
+        console.log(workouts);
+        setWorkouts(workouts || []);
       }
     };
 
@@ -28,7 +28,7 @@ const Workouts = () => {
     const coachId = await UserService.getUserId();
     const resp = await CoachWorkoutService.deleteWorkout(workoutId, coachId!);
     if (resp.ok) {
-      setWorkouts(workouts.filter(workout => workout.workout_id !== workoutId));
+      setWorkouts(workouts.filter(workout => workout.workoutId !== workoutId));
     }
   };
 
@@ -40,9 +40,11 @@ const Workouts = () => {
           <Image source={require("../../../images/Add.png")} className="h-12 w-12 rounded-full border-3" />
         </TouchableOpacity>
       </View>
-      {workouts.map((workout, idx) => (
-        <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigation.navigate('CreateWorkout', { workout })} />
-      ))}
+      {workouts.map((workout, idx) => {
+        return (
+          <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigation.navigate('CreateWorkout', { workout: workout })} />
+        );
+      })}
     </ScrollView>
   );
 };

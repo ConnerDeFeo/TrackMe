@@ -13,7 +13,7 @@ const ViewGroupAthlete = ()=>{
     useEffect(() => {
         // Fetch workout data for the group
         const fetchWorkout = async () => {
-            const resp = await AthleteWorkoutService.viewWorkout(groupId);
+            const resp = await AthleteWorkoutService.viewWorkouts(groupId);
             if (resp.ok) {
                 const data = await resp.json();
                 setWorkout(data)

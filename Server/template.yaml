@@ -171,16 +171,16 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  ViewWorkoutAthleteFunction:
+  ViewWorkoutsAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/view_workout_athlete/
-      Handler: view_workout_athlete.view_workout_athlete
+      CodeUri: lambdas/athlete/view_workouts_athlete/
+      Handler: view_workouts_athlete.view_workouts_athlete
       Events:
-        ViewWorkoutAthleteApi:
+        ViewWorkoutsAthleteApi:
           Type: Api
           Properties:
-            Path: /athletes/view_workout_athlete/
+            Path: /athletes/view_workouts_athlete/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:

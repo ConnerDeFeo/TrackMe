@@ -7,7 +7,7 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
-from lambdas.athlete.view_workout_athlete.view_workout_athlete import view_workout_athlete
+from lambdas.athlete.view_workouts_athlete.view_workouts_athlete import view_workouts_athlete
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.create_workout_group.create_workout_group import create_workout_group
@@ -15,15 +15,12 @@ from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout
 from data import TestData
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
-from testing_utils import reset_dynamo
-from dynamo import get_item
 from testing_utils import debug_table
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
-    global workout_id
     print("Setting up before test...")
     execute_file('dev-setup/setup.sql')
     create_athlete(TestData.test_athlete, {})
@@ -31,14 +28,10 @@ def setup_before_each_test(): #This will run before each test
     create_group(TestData.test_group, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
-
-    response = create_workout(TestData.test_workout, {})
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
-
+    create_workout(TestData.test_workout, {})
     test_assign_workout = {
         "body": json.dumps({
-            "workoutId": workout_id,
+            "workoutId": 1,
             'coachId':'123',
             "groupId": "1"
         })
@@ -65,31 +58,22 @@ def test_view_workout_athlete():
             "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
         }
     }
-    response = view_workout_athlete(event, {})
+    response = view_workouts_athlete(event, {})
 
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
-    assert body['coach_id'] == '123'
-    assert body['title'] == 'Test Workout'
-    assert body['description'] == 'This is a test workout'
-    assert len(body['exercises']) == 3
+    workout = body[0]
+    assert workout[0] == '123'
+    assert workout[1] == 'Test Workout'
+    assert workout[2] == 'This is a test workout'
+    assert len(workout[3]) == 3
 
 
 def test_input_time():
-    reset_dynamo()
 
-    test_input_time = {
-        "body": json.dumps({
-            "athleteId": "1234",
-            "coachUsername": "testcoach",
-            "groupName": "Test Group",
-            "date": date,
-            "time": 10,
-            "distance": 100
-        })
-    }
+    print(TestData.test_input_time)
 
-    response = input_time(test_input_time, {})
+    response = input_time(TestData.test_input_time, {})
     assert response['statusCode'] == 200
 
     #Make sure the input was recorded in the database
@@ -100,33 +84,12 @@ def test_input_time():
     assert input[2] == 100  # time
     assert input[3] == 10
 
-    #Check dynamoDB for the input
-    input = get_item("WorkoutInputs", {"group_date_identifier": f"123#Test Group#{date}", "input_type": "individual#1234"})
-    assert input is not None
-    assert len(input['inputs']) == 1
-    assert input['inputs'][0]['distance'] == 100
-    assert input['inputs'][0]['time'] == 10
-
 
 def test_create_workout_group():
-    reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
 
-    test_workout_group = {
-        "body": json.dumps({
-            'leaderId':'1234',
-            'athletes': ["test_athlete", "test2", "test3"],
-            'workoutId': workout_id,
-            'groupName': "Test Group",
-            'coachId': "1234",
-            'date': date,
-            'coachUsername': 'testcoach',
-            'workoutGroupName': 'Test Workout Group'
-        })
-    }
-
-    response = create_workout_group(test_workout_group, {})
+    response = create_workout_group(TestData.test_workout_group, {})
     assert response['statusCode'] == 200
 
     #Check group is created
@@ -143,38 +106,12 @@ def test_create_workout_group():
         assert member[0] == 1
         assert member[1] in ["test_athlete", "test2", "test3"]
 
-
 def test_input_group_time():
-    reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-    test_workout_group = {
-        "body": json.dumps({
-            'leaderId':'1234',
-            'athletes': ["test_athlete", "test2", "test3"],
-            'workoutId': workout_id,
-            'groupName': "Test Group",
-            'coachId': "1234",
-            'date': date,
-            'coachUsername': 'testcoach',
-            'workoutGroupName': 'Test Workout Group'
-        })
-    }
-    create_workout_group(test_workout_group, {})
+    create_workout_group(TestData.test_workout_group, {})
 
-    test_input_group_time = {
-        "body": json.dumps({
-            "leaderId": "1234",
-            "workoutId": workout_id,
-            "workoutGroupName": "Test Workout Group",
-            "coachUsername": "testcoach",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "groupName": "Test Group",
-            "time": 30,
-            "distance": 150
-        })
-    }
-    response = input_group_time(test_input_group_time, {})
+    response = input_group_time(TestData.test_input_group_time, {})
     assert response['statusCode'] == 200
 
     #Make sure the group was created
@@ -191,60 +128,14 @@ def test_input_group_time():
     assert inputs[0][1] == 150
     assert inputs[0][2] == 30
 
-    #Cheack dynamoDB for the input
-    input = get_item("WorkoutInputs", {"group_date_identifier": f"123#Test Group#{date}", "input_type": "group#Test Workout Group"})
-    assert input is not None
-    assert len(input['inputs']) == 1
-    assert input['inputs'][0]['distance'] == 150
-    assert input['inputs'][0]['time'] == 30
-    assert input['leader_id'] == '1234'
-
-
 def test_view_workout_inputs():
-    reset_dynamo()
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-    test_workout_group = {
-        "body": json.dumps({
-            'leaderId':'1234',
-            'athletes': ["test_athlete", "test2", "test3"],
-            'workoutId': workout_id,
-            'groupName': "Test Group",
-            'coachId': "1234",
-            'date': date,
-            'coachUsername': 'testcoach',
-            'workoutGroupName': 'Test Workout Group'
-        })
-    }
-    create_workout_group(test_workout_group, {})
+    create_workout_group(TestData.test_workout_group, {})
+    input_group_time(TestData.test_input_group_time, {})
+    input_time(TestData.test_input_time, {})
 
-    test_input_group_time = {
-        "body": json.dumps({
-            "leaderId": "1234",
-            "workoutId": workout_id,
-            "workoutGroupName": "Test Workout Group",
-            "coachUsername": "testcoach",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "groupName": "Test Group",
-            "time": 30,
-            "distance": 150
-        })
-    }
-    response = input_group_time(test_input_group_time, {})
-
-    test_input_time = {
-        "body": json.dumps({
-            "athleteId": "1234",
-            "workoutId": workout_id,
-            "coachUsername": "testcoach",
-            "groupName": "Test Group",
-            "date": date,
-            "time": 10,
-            "distance": 100
-        })
-    }
-    input_time(test_input_time, {})
-
+    debug_table()
     event = {
         'queryStringParameters': {
             "userId": "1234",

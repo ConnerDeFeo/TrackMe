@@ -13,22 +13,18 @@ def view_workout_inputs(event, context):
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         grouped_data = {}
-        #The first querey will grab all workout group inputs that this person is a part of
-        # The data returned should look something like:
-        # [[groupId, workoutGroupName, distance, time], [groupId, workoutGroupName, distance, time],
+
         group_workout_inputs = fetch_all(
         """
             SELECT g.id, wg.workoutGroupName, wgi.distance, wgi.time
             FROM groups g
-            JOIN coaches c ON g.coachId = c.userId
-            JOIN group_workouts gw ON gw.groupId = g.id
-            JOIN workout_groups wg ON wg.workoutId = gw.id
+            JOIN workout_groups wg ON wg.groupId = g.id
             JOIN workout_group_members wgm ON wgm.workoutGroupId = wg.id
             JOIN workout_group_inputs wgi ON wgi.workoutGroupId = wg.id
-            WHERE wgm.athleteUsername = %s AND gw.date = %s
+            WHERE wgm.athleteUsername = %s AND wg.date = %s
         """, (username, date))
 
-        #Convert data into groupId:  Array<{ distance: number, time: number }
+       
         if group_workout_inputs:
             grouped_data['groups'] = {}
             for input in group_workout_inputs:
@@ -37,16 +33,13 @@ def view_workout_inputs(event, context):
                     grouped_data['groups'][id] = []
                 grouped_data['groups'][id].append({"distance": input[2], "time": input[3]})
 
-        # Next grab all inputs for this athlete in the specified group, data should look like:
-        # [[groupId, distance, time], [groupId, distance, time]]
+        
         athlete_inputs = fetch_all(
         """
             SELECT g.id, agi.distance, agi.time
             FROM groups g
-            JOIN coaches c ON g.coachId = c.userId  
-            JOIN group_workouts gw ON gw.groupId = g.id
-            JOIN athlete_workout_inputs agi ON agi.groupWorkoutId = gw.id
-            WHERE agi.athleteId = %s AND gw.date = %s
+            JOIN athlete_workout_inputs agi ON agi.groupId = g.id
+            WHERE agi.athleteId = %s AND agi.date = %s
         """, (user_id, date))
 
         if athlete_inputs:

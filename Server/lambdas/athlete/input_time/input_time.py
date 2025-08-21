@@ -15,9 +15,9 @@ def input_time(event, context):
         #Insert time into rds
         execute_commit(
         """
-            INSERT INTO athlete_workout_inputs (athleteId, groupId, time, distance, date)
+            INSERT INTO athlete_workout_inputs (athleteId, groupId, distance, time, date)
             VALUES (%s, %s, %s, %s, %s)
-        """, (athlete_id, group_id, time, distance, date))
+        """, (athlete_id, group_id, distance, time, date))
 
         return {
             'statusCode': 200,

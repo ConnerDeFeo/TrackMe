@@ -8,12 +8,7 @@ def view_workout_athlete(event, context):
     query_params = event.get('queryStringParameters', {})
     workout_not_found = {
                 'statusCode': 404,
-                'headers': {
-                    'Access-Control-Allow-Origin': 'http://localhost:8081',
-                    'Access-Control-Allow-Credentials': True,
-                    "Content-Type": "application/json"
-                },
-                'body': json.dumps({"message": "Workout not found"}),
+                'body': json.dumps({"message": "Workout not found"})
             }
     
     try:
@@ -42,11 +37,6 @@ def view_workout_athlete(event, context):
         if workout:
             return {
                 'statusCode': 200,
-                'headers': {
-                    'Access-Control-Allow-Origin': 'http://localhost:8081',
-                    'Access-Control-Allow-Credentials': True,
-                    "Content-Type": "application/json"
-                },
                 'body': json.dumps(workout, cls=DecimalEncoder)
             }
         else:
@@ -55,10 +45,5 @@ def view_workout_athlete(event, context):
         print(f"Error retrieving workout: {str(e)}")
         return {
             'statusCode': 500,
-            'headers': {
-                'Access-Control-Allow-Origin': 'http://localhost:8081',
-                'Access-Control-Allow-Credentials': True,
-                "Content-Type": "application/json"
-            },
-            'body': json.dumps({"message": "Internal server error", "error": str(e)}),
+            'body': json.dumps({"message": "Internal server error", "error": str(e)})
         }

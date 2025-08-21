@@ -1,4 +1,4 @@
-from dynamo import update_item
+from rds import execute_commit
 import json
 
 #Removes a coaches workout
@@ -10,11 +10,13 @@ def delete_workout(event, context):
         coach_id = query_params['coachId']
 
         #Update the table to soft delete the workout
-        update_item(
-            "Workouts", 
-            key={'workout_id':workout_id, 'coach_id':coach_id}, 
-            update_expression="SET deleted = :deleted",
-            expression_attribute_values={":deleted": True}
+        execute_commit(
+            """
+                UPDATE workouts
+                SET deleted = TRUE
+                WHERE id = %s AND coachId = %s
+            """,
+            (workout_id, coach_id)
         )
 
         return {

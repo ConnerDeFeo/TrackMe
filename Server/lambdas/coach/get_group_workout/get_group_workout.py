@@ -1,9 +1,7 @@
-from dynamo import get_item
-from decimal_encoder import DecimalEncoder
-from rds import fetch_one
+from rds import fetch_all
 import json
 
-#Gets a workout for a given group for a given date
+#Gets all workouts for a given group for a given date
 def get_group_workout(event,context):
     query_params = event.get('queryStringParameters', {})
 
@@ -13,24 +11,17 @@ def get_group_workout(event,context):
         date = query_params['date']
 
         #Get the workout title for the given date
-        workout_id = fetch_one(
+        workouts = fetch_all(
             """
-                SELECT workoutId FROM group_workouts
-                WHERE groupId = %s AND date = %s
+                SELECT w.id, w.title, w.description, w.exercises FROM group_workouts gw
+                JOIN workouts w ON gw.workoutId = w.id
+                WHERE gw.groupId = %s AND gw.date = %s
             """,
             (group_id, date)
         )
-        if not workout_id:
-            return {
-                'statusCode': 404,
-                'body': json.dumps({'error': 'Workout not found'})
-            }
-        
-        #Fetch workout from dynamo
-        workout = get_item('Workouts', {'workout_id': workout_id[0], 'coach_id': coach_id})
         return {
             'statusCode': 200,
-            'body': json.dumps(workout, cls=DecimalEncoder)
+            'body': json.dumps(workouts)
         }
 
     except Exception as e:

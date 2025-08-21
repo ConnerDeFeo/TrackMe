@@ -1,21 +1,25 @@
 import json
-from dynamo import query_items
-from decimal_encoder import DecimalEncoder
+from rds import fetch_all
 
 #Fetches all of a given coaches workouts
 def get_workouts(event, context):
     query_params = event.get('queryStringParameters', {})
 
     try:
-        coach_id = query_params['coach_id']
+        coach_id = query_params['coachId']
 
         #Grab all workouts accosiated with the coach_id
-        workouts = query_items('Workouts', key_condition_expression="coach_id = :cid", filter_expression="deleted = :deleted", expression_attribute_values={":cid": coach_id, ":deleted": False})
-
+        workouts = fetch_all(
+            """
+                SELECT * FROM workouts
+                WHERE coachId = %s AND deleted = %s
+            """,
+            (coach_id, False)
+        )
         if workouts:
             return {
                 "statusCode": 200,
-                "body": json.dumps(workouts, cls=DecimalEncoder)
+                "body": json.dumps(workouts)
             }
         return {
             "statusCode": 404,

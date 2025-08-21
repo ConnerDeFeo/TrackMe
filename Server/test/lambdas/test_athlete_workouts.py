@@ -81,7 +81,6 @@ def test_input_time():
     test_input_time = {
         "body": json.dumps({
             "athleteId": "1234",
-            "workoutId": workout_id,
             "coachUsername": "testcoach",
             "groupName": "Test Group",
             "date": date,
@@ -263,5 +262,4 @@ def test_view_workout_inputs():
     athlete_inputs = body['individuals']
 
     assert group_inputs['1'] == [{'distance': 150, 'time': 30}]
-
     assert athlete_inputs['1'] == [{'distance': 100, 'time': 10}]

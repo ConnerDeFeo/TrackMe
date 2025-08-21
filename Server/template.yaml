@@ -154,7 +154,7 @@ Resources:
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
+        - Ref: RDSLayer
 
   InputGroupTimeFunction:
     Type: AWS::Serverless::Function 
@@ -169,7 +169,7 @@ Resources:
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
+        - Ref: RDSLayer
 
   ViewWorkoutAthleteFunction:
     Type: AWS::Serverless::Function 
@@ -184,8 +184,6 @@ Resources:
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
-        - Ref: DecimalEncoderLayer
         - Ref: RDSLayer
 
   ViewWorkoutInputsFunction:
@@ -232,7 +230,7 @@ Resources:
             Method: delete
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
+        - Ref: RDSLayer
 
   GetGroupWorkout:
     Type: AWS::Serverless::Function
@@ -247,8 +245,6 @@ Resources:
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
-        - Ref: DecimalEncoderLayer
         - Ref: RDSLayer
 
   GetWorkoutsFunction:
@@ -264,8 +260,7 @@ Resources:
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
-        - Ref: DecimalEncoderLayer
+        - Ref: RDSLayer
 
   GetAbsentGroupAthletesFunction:
     Type: AWS::Serverless::Function 
@@ -370,7 +365,7 @@ Resources:
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
+        - Ref: RDSLayer
 
   AssignGroupWorkoutFunction:
     Type: AWS::Serverless::Function 
@@ -385,7 +380,6 @@ Resources:
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
         - Ref: RDSLayer
 
   InviteAthleteFunction:
@@ -416,8 +410,7 @@ Resources:
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
-        - Ref: DynamoDBLayer
-        - Ref: DecimalEncoderLayer
+        - Ref: RDSLayer
 
   SearchAthletesFunction:
     Type: AWS::Serverless::Function

@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS athlete_groups CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS athletes CASCADE;
 DROP TABLE IF EXISTS coaches CASCADE;
+DROP TABLE IF EXISTS workouts CASCADE;
+
 
 
 --User and user relation related tables--
@@ -51,29 +53,38 @@ CREATE TABLE athlete_coach_invites (
     UNIQUE (athleteId, coachId)
 );
 
+CREATE TABLE workouts(
+    id SERIAL PRIMARY KEY,
+    coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    exercises JSONB,
+    deleted BOOLEAN DEFAULT FALSE
+);
+
 CREATE TABLE group_workouts (
     id SERIAL PRIMARY KEY,
     groupId INT REFERENCES groups(id) NOT NULL,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
-    workoutId VARCHAR(255) NOT NULL,
+    workoutId INT REFERENCES workouts(id) NOT NULL,
     UNIQUE (groupId, date, workoutId)
 );
---Indexes for faster lookups--
-CREATE INDEX idx_group_workouts ON group_workouts (groupId, date, workoutId);
 
 CREATE TABLE athlete_workout_inputs(
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
-    groupWorkoutId INT REFERENCES group_workouts(id) NOT NULL,
+    groupId INT REFERENCES groups(id) NOT NULL,
     distance INT DEFAULT 0,
-    time INT DEFAULT 0
+    time INT DEFAULT 0,
+    date VARCHAR(10) DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE workout_groups (
     id SERIAL PRIMARY KEY,
     leaderId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
-    workoutId INT REFERENCES group_workouts(id) NOT NULL,
+    groupId INT REFERENCES groups(id) NOT NULL,
     workoutGroupName VARCHAR(255) NOT NULL,
-    UNIQUE (workoutId, workoutGroupName)
+    UNIQUE (groupId, workoutGroupName),
+    date VARCHAR(10) DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE workout_group_members(
@@ -88,5 +99,3 @@ CREATE TABLE workout_group_inputs(
     time INT DEFAULT 0
 );
 
--- INSERT INTO coaches (userId, username) VALUES ('81cbd5d0-c0a1-709a-560f-ceb88b7d53d9', 'coachdefeo');
--- INSERT INTO athletes (userId, username) VALUES ('91cbd5d0-c0a1-709a-560f-ceb88b7d53d9', 'athletedefeo');

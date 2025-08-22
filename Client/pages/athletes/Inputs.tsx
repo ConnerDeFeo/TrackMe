@@ -3,6 +3,7 @@ import { Text,ScrollView, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import usePersistentState from "../../hooks/usePersistentState";
 import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
+import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -11,10 +12,15 @@ const Inputs = ()=>{
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [currentInputs, setCurrentInputs] = 
     usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('current', {});
-    const [submittedInputs, setSubmittedInputs] = useState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>({});
+    const [submittedInputs, setSubmittedInputs] = useState<Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>({});
 
     const fetchSubmittedInputs = async () => {
-        
+        const resp = await AthleteWorkoutService.viewWorkoutInputs();
+        if (resp.ok){
+            const inputs = await resp.json();
+            console.log(inputs);
+            setSubmittedInputs(inputs);
+        }
     };
 
     // Grab all current inputs on load
@@ -27,6 +33,7 @@ const Inputs = ()=>{
             }
         };
         fetchGroups();
+        fetchSubmittedInputs();
     },[]);
 
     const handleTimeChange = (groupId:string, idx: number, value: string)=>{
@@ -57,6 +64,7 @@ const Inputs = ()=>{
                 <Text className="text-2xl font-bold text-gray-800 mb-6">Inputs</Text>
                 {groups.map(group => (
                     <RenderGroupInputs
+                        submitedInputs={submittedInputs}
                         groupName={group[0]}
                         key={group[1]}
                         groupId={group[1]}

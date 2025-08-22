@@ -24,8 +24,9 @@ const RenderGroupInputs: React.FC<
         currentInputs:Record<string, { time?: string | undefined; distance?: string | undefined}[]>,
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>
-    }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs})=>{
+        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
+        submitedInputs: Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>
+    }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs, submitedInputs})=>{
 
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
@@ -47,6 +48,17 @@ const RenderGroupInputs: React.FC<
                 <TouchableOpacity>
                     <Text className="text-[#E63946] underline">Create Group</Text>
                 </TouchableOpacity>
+            </View>
+
+            {/**Submitted inputs that will be displayed */}
+            <View>
+                {submitedInputs['individuals'] && submitedInputs['individuals'][groupId] && 
+                submitedInputs['individuals'][groupId].map((input, idx) => (
+                    <View key={idx} className="flex flex-row justify-between items-center mb-2">
+                        <Text className="text-gray-600">Time: {input.time}</Text>
+                        <Text className="text-gray-600">Distance: {input.distance}</Text>
+                    </View>
+                ))}
             </View>
             
             {/* Render all existing input pairs for this group */}

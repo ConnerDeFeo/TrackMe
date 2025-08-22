@@ -50,7 +50,6 @@ const ViewGroup = () => {
     }
   }
 
-  console.log(workouts)
   return (
     <View className="flex-1 bg-gray-50 px-6 pt-16 pb-12">
       <View className="mb-8">

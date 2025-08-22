@@ -1,26 +1,20 @@
 import { useEffect, useState } from "react";
-import { Text,ScrollView, View, TextInput, TouchableOpacity } from "react-native";
+import { Text,ScrollView, View, TextInput, TouchableOpacity, Button } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import GeneralService from "../../services/GeneralService";
+import usePersistentState from "../../hooks/usePersistentState";
+import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
 
 //Page where athletes input times
 const Inputs = ()=>{
     const [groups,setGroups] = useState<string[][]>([]);
-    const [workoutInputs, setWorkoutInputs] = useState<Record<string, any>>({});
 
-    // Track current input values for each given group { groupId : time/distance }
-    const [currentTime, setCurrentTime] = useState<Record<string, string | undefined>>({});
-    const [currentDistance, setCurrentDistance] = useState<Record<string, string | undefined>>({});
+    // Track current input values for each given group { groupId : [time/distance, time/distance] }
+    const [currentInputs, setCurrentInputs] = 
+    usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('current', {});
 
     // Grab all current inputs on load
     useEffect(()=>{
-        const fetchWorkoutInputs = async () => {
-            const resp = await AthleteWorkoutService.viewWorkoutInputs();
-            if (resp.ok){
-                const data = await resp.json();
-                setWorkoutInputs(data);
-            }
-        };
         const fetchGroups = async () => {
             const resp = await GeneralService.getGroups();
             if (resp.ok){
@@ -28,30 +22,29 @@ const Inputs = ()=>{
                 setGroups(groups);
             }
         };
-        fetchWorkoutInputs();
         fetchGroups();
     },[]);
 
-    const handleTimeChange = (groupId: string, value: string) => {
-        if(value===''){
-            setCurrentTime(prev => ({ ...prev, [groupId]: undefined }));
-            return;
+    const handleTimeChange = (groupId:string, idx: number, value: string)=>{
+        let updatedValue = ''
+        if(!isNaN(Number(value)) || value === ''){
+            updatedValue = value
         }
-        if (isNaN(Number(value))) {
-            return;
-        }
-        setCurrentTime(prev => ({ ...prev, [groupId]: value }));
+        setCurrentInputs(prev => {
+            const updatedGroup = prev[groupId]?.map((input, i) => i === idx ? { ...input, time: updatedValue } : input) || [];
+            return { ...prev, [groupId]: updatedGroup };
+        });
     }
 
-    const handleDistanceChange = (groupId: string, value: string) => {
-        if(value===''){
-            setCurrentDistance(prev => ({ ...prev, [groupId]: undefined }));
-            return;
+    const handleDistanceChange = (groupId:string, idx: number, value: string)=>{
+        let updatedValue = ''
+        if(!isNaN(Number(value)) || value === ''){
+            updatedValue = value
         }
-        if (isNaN(Number(value))) {
-            return;
-        }
-        setCurrentDistance(prev => ({ ...prev, [groupId]: value }));
+        setCurrentInputs(prev => {
+            const updatedGroup = prev[groupId]?.map((input, i) => i === idx ? { ...input, distance: updatedValue } : input) || [];
+            return { ...prev, [groupId]: updatedGroup };
+        });
     }
 
     return (
@@ -59,19 +52,15 @@ const Inputs = ()=>{
             <View className="mt-16 px-6 pb-8">
                 <Text className="text-2xl font-bold text-gray-800 mb-6">Inputs</Text>
                 {groups.map(group => (
-                    <View key={group[1]} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4">
-                        <View className="flex flex-row justify-between items-center">
-                            <Text className="text-lg font-semibold text-gray-700">{group[0]}</Text>
-                            <TouchableOpacity>
-                                <Text className="text-[#E63946] underline">Create Group</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View className="flex flex-row justify-between items-center">
-                            <TextInput placeholder="Enter time" value={currentTime[group[1]] || ''} onChangeText={text => handleTimeChange(group[1], text)} />
-                            <TextInput placeholder="Enter distance" value={currentDistance[group[1]] || ''} onChangeText={text => handleDistanceChange(group[1], text)} />
-                            <Text>Meters</Text>
-                        </View>
-                    </View>
+                    <RenderGroupInputs
+                        groupName={group[0]}
+                        key={group[1]}
+                        groupId={group[1]}
+                        currentInputs={currentInputs}
+                        handleTimeChange={handleTimeChange}
+                        handleDistanceChange={handleDistanceChange}
+                        setCurrentInputs={setCurrentInputs}
+                    />
                 ))}
             </View>
         </ScrollView>

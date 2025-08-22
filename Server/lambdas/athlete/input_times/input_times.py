@@ -1,23 +1,26 @@
 import json
-from rds import execute_commit
+from rds import execute_commit_many
 
-#Inserts an athlets workout time into the database for a given date and group
-def input_time(event, context):
+#Inserts all of an athletes input times for a given group into db
+def input_times(event, context):
     body = json.loads(event['body'])
 
     try:
-        athlete_id = body['athleteId']
-        group_id = body['groupId']
+        inputs = body['inputs']  # Expecting a list of input dicts
         date = body['date']
-        time = body['time']
-        distance = body['distance']
-    
+        athleteId = body['athleteId']
+        groupId = body['groupId']
+
+        params = []
+        for input in inputs:
+            params.append((athleteId, groupId, input['distance'], input['time'], date))
+
         #Insert time into rds
-        execute_commit(
+        execute_commit_many(
         """
             INSERT INTO athlete_workout_inputs (athleteId, groupId, distance, time, date)
             VALUES (%s, %s, %s, %s, %s)
-        """, (athlete_id, group_id, distance, time, date))
+        """, params)
 
         return {
             'statusCode': 200,

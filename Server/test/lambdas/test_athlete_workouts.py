@@ -1,6 +1,6 @@
 import json
 import pytest
-from lambdas.athlete.input_time.input_time import input_time
+from lambdas.athlete.input_times.input_times import input_times
 from lambdas.athlete.input_group_time.input_group_time import input_group_time
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.create_group.create_group import create_group
@@ -39,8 +39,6 @@ def setup_before_each_test(): #This will run before each test
     assign_group_workout(test_assign_workout, {})
     yield
 
-
-
 def create_extra_athlete(username,id):
     extra_athlete = {
         "body": json.dumps({
@@ -49,7 +47,6 @@ def create_extra_athlete(username,id):
         })
     }
     create_athlete(extra_athlete, {})
-
 
 def test_view_workouts_athlete():
     workout2 = {
@@ -93,20 +90,29 @@ def test_view_workouts_athlete():
     assert workout2['title'] == 'Test Workout2'
     assert workout2['description'] == 'This is a test workout2'
 
-def test_input_time():
+def test_input_times():
 
-    print(TestData.test_input_time)
+    print(TestData.test_input_times)
 
-    response = input_time(TestData.test_input_time, {})
+    response = input_times(TestData.test_input_times, {})
     assert response['statusCode'] == 200
 
     #Make sure the input was recorded in the database
-    input = fetch_one("SELECT * FROM athlete_workout_inputs")
-    assert input is not None
-    assert input[0] == '1234'  # athleteId
-    assert input[1] == 1
-    assert input[2] == 100  # time
-    assert input[3] == 10
+    inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
+    assert inputs is not None
+    assert len(inputs) == 2  # Two inputs recorded
+
+    input1 = inputs[0]
+    assert input1[0] == '1234'  # athleteId
+    assert input1[1] == 1
+    assert input1[2] == 100  # distance
+    assert input1[3] == 10   # time
+
+    input2 = inputs[1]
+    assert input2[0] == '1234'  # athleteId
+    assert input2[1] == 1
+    assert input2[2] == 200  # distance
+    assert input2[3] == 30   # time
 
 def test_create_workout_group():
     create_extra_athlete("test2", "1235")
@@ -156,7 +162,7 @@ def test_view_workout_inputs():
     create_extra_athlete("test3", "1236")
     create_workout_group(TestData.test_workout_group, {})
     input_group_time(TestData.test_input_group_time, {})
-    input_time(TestData.test_input_time, {})
+    input_times(TestData.test_input_times, {})
 
     debug_table()
     event = {
@@ -176,4 +182,4 @@ def test_view_workout_inputs():
     athlete_inputs = body['individuals']
 
     assert group_inputs['1'] == [{'distance': 150, 'time': 30}]
-    assert athlete_inputs['1'] == [{'distance': 100, 'time': 10}]
+    assert athlete_inputs['1'] == [{'distance': 100,'time': 10}, {'distance': 200,'time': 30}]

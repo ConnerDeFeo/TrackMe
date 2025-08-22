@@ -25,9 +25,13 @@ const RenderGroupInputs: React.FC<
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>
     }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs})=>{
+
+    const handleInputSubmission = () => {
+        // Handle submission logic here
+    }
     return(
         // Main container for the group with styling for card appearance
-        <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4">
+        <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 gap-y-4">
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
@@ -59,7 +63,7 @@ const RenderGroupInputs: React.FC<
             ))}
             
             {/* Button to add new input pair to the group */}
-            <Button title="add input" onPress={() => {
+            <Button title="add input" color="#E63946" onPress={() => {
                 // Initialize or update the inputs array for this group
                 let updatedInputs: { time?: string; distance?: string }[] = [];
                 
@@ -73,6 +77,11 @@ const RenderGroupInputs: React.FC<
                 
                 // Update state with new inputs array for this group
                 setCurrentInputs(prev => ({ ...prev, [groupId]: updatedInputs }));
+            }} />
+
+            {/* Submit the current inputs for the current group */}
+            <Button title="Submit" color="black" onPress={() => {
+                // Handle submission logic here
             }} />
         </View>
     );

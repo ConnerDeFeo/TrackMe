@@ -132,16 +132,16 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  InputTimeFunction:
+  InputTimesFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/input_time/
-      Handler: input_time.input_time
+      CodeUri: lambdas/athlete/input_times/
+      Handler: input_times.input_times
       Events:
         InputTimeApi:
           Type: Api
           Properties:
-            Path: /athletes/input_time/
+            Path: /athletes/input_times/
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:

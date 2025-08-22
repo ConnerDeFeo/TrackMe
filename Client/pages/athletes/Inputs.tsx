@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text,ScrollView, View, TextInput, TouchableOpacity, Button } from "react-native";
-import AthleteWorkoutService from "../../services/AthleteWorkoutService";
+import { Text,ScrollView, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import usePersistentState from "../../hooks/usePersistentState";
 import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";

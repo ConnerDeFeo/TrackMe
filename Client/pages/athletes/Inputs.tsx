@@ -9,8 +9,8 @@ const Inputs = ()=>{
     const [workoutInputs, setWorkoutInputs] = useState<Record<string, any>>({});
 
     // Track current input values for each given group { groupId : time/distance }
-    const [currentTime, setCurrentTime] = useState<Record<string, number | undefined>>({});
-    const [currentDistance, setCurrentDistance] = useState<Record<string, number | undefined>>({});
+    const [currentTime, setCurrentTime] = useState<Record<string, string | undefined>>({});
+    const [currentDistance, setCurrentDistance] = useState<Record<string, string | undefined>>({});
 
     // Grab all current inputs on load
     useEffect(()=>{
@@ -32,8 +32,30 @@ const Inputs = ()=>{
         fetchGroups();
     },[]);
 
+    const handleTimeChange = (groupId: string, value: string) => {
+        if(value===''){
+            setCurrentTime(prev => ({ ...prev, [groupId]: undefined }));
+            return;
+        }
+        if (isNaN(Number(value))) {
+            return;
+        }
+        setCurrentTime(prev => ({ ...prev, [groupId]: value }));
+    }
+
+    const handleDistanceChange = (groupId: string, value: string) => {
+        if(value===''){
+            setCurrentDistance(prev => ({ ...prev, [groupId]: undefined }));
+            return;
+        }
+        if (isNaN(Number(value))) {
+            return;
+        }
+        setCurrentDistance(prev => ({ ...prev, [groupId]: value }));
+    }
+
     return (
-        <ScrollView className="flex-1 bg-gray-50">
+        <ScrollView className="flex-1">
             <View className="mt-16 px-6 pb-8">
                 <Text className="text-2xl font-bold text-gray-800 mb-6">Inputs</Text>
                 {groups.map(group => (
@@ -45,8 +67,8 @@ const Inputs = ()=>{
                             </TouchableOpacity>
                         </View>
                         <View className="flex flex-row justify-between items-center">
-                            <TextInput placeholder="Enter time"/>
-                            <TextInput placeholder="Enter distance"/>
+                            <TextInput placeholder="Enter time" value={currentTime[group[1]] || ''} onChangeText={text => handleTimeChange(group[1], text)} />
+                            <TextInput placeholder="Enter distance" value={currentDistance[group[1]] || ''} onChangeText={text => handleDistanceChange(group[1], text)} />
                             <Text>Meters</Text>
                         </View>
                     </View>

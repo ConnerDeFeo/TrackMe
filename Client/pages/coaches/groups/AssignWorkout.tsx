@@ -19,7 +19,7 @@ const AssignWorkout = ()=>{
             const response = await CoachWorkoutService.getWorkouts(coachId!);
             if(response.ok) {
                 const workouts = await response.json();
-                setWorkouts(workouts['Items'] || []);
+                setWorkouts(workouts || []);
             }
         };
         fetchWorkouts();
@@ -36,10 +36,10 @@ const AssignWorkout = ()=>{
 
     return (
         <View className="mt-[4rem]">
-            <Text className="text-4xl font-bold">Assign Workout</Text>
+            <Text className="text-4xl font-bold pl-4">Assign Workout</Text>
             {workouts.map((workout, idx) => (
                 <View key={idx} className="my-2">
-                    <DisplayWorkout workout={workout} onPress={() => handleAssignWorkout(workout.workout_id)} />
+                    <DisplayWorkout workout={workout} onPress={() => handleAssignWorkout(workout.workoutId)} />
                 </View>
             ))}
         </View>

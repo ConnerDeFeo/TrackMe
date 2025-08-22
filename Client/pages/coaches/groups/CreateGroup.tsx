@@ -36,14 +36,22 @@ const CreateGroup = () => {
     };
 
     return (
-        <View>
+        <View className="flex-1 justify-center items-center px-6 bg-gray-50">
+            <View className="w-full max-w-sm space-y-4">
             <TextInput
-                placeholder="Group Name"
+                placeholder="Enter Group Name"
                 value={groupName}
                 onChangeText={setGroupName}
-                className="mx-auto"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-800 placeholder-gray-400 shadow-sm"
             />
-            <Button title="Create Group" onPress={handleCreateGroup} />
+            <View className="mt-6">
+                <Button 
+                title="Create Group" 
+                onPress={handleCreateGroup}
+                color="#E63946"
+                />
+            </View>
+            </View>
         </View>
     );
 };

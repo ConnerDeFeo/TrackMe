@@ -52,6 +52,27 @@ def create_extra_athlete(username,id):
 
 
 def test_view_workouts_athlete():
+    workout2 = {
+        "body": json.dumps({
+            'coachId': '123',
+            'title': 'Test Workout2', 
+            'description': 'This is a test workout2',
+            'exercises': [
+                {
+                    'name': 'Warm-up',
+                }
+            ]
+        })
+    }
+    create_workout(workout2, {})
+    test_assign_workout = {
+        "body": json.dumps({
+            "workoutId": 2,
+            'coachId':'123',
+            "groupId": "1"
+        })
+    }
+    assign_group_workout(test_assign_workout, {})
     event = {
         "queryStringParameters": {
             'groupId':"1",
@@ -62,11 +83,15 @@ def test_view_workouts_athlete():
 
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
-    workout = body[0]
-    assert workout[0] == '123'
-    assert workout[1] == 'Test Workout'
-    assert workout[2] == 'This is a test workout'
-    assert len(workout[3]) == 3
+    workout1 = body[0]
+    assert len(workout1['exercises']) == 3
+    assert workout1['title'] == 'Test Workout'
+    assert workout1['description'] == 'This is a test workout'
+
+    workout2 = body[1]
+    assert len(workout2['exercises']) == 1
+    assert workout2['title'] == 'Test Workout2'
+    assert workout2['description'] == 'This is a test workout2'
 
 def test_input_time():
 

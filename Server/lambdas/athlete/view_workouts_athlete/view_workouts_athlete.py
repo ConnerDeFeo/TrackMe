@@ -12,16 +12,24 @@ def view_workouts_athlete(event, context):
 
         workouts = fetch_all(
             """
-                SELECT w.coachId, w.title, w.description, w.exercises FROM workouts w
+                SELECT w.title, w.description, w.exercises FROM workouts w
                 JOIN group_workouts gw ON gw.workoutId = w.id
-                WHERE gw.groupId = %s
+                JOIN groups g ON g.id = gw.groupId
+                WHERE g.id = %s
                 AND gw.date = %s
             """, (group_id, date))
 
         if workouts:
+            converted_workouts = []
+            for workout in workouts:
+                converted_workouts.append({
+                    'title': workout[0],
+                    'description': workout[1],
+                    'exercises': workout[2]
+                })
             return {
                 'statusCode': 200,
-                'body': json.dumps(workouts)
+                'body': json.dumps(converted_workouts)
             }
         return {
                 'statusCode': 404,

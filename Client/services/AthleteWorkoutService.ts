@@ -15,6 +15,15 @@ const AthleteWorkoutService = {
         const username = await UserService.getUsername();
         let query = `${EXPO_PUBLIC_API_URL}/athletes/view_workout_inputs?userId=${userId}&username=${username}`;
         return await API.get(query);
+    },
+    inputTimes: async ( groupId:string, date:string, inputs: { time?: string; distance?: string }[]) => {
+        const athleteId = await UserService.getUserId();
+        return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/input_times`, {
+            'athleteId': athleteId,
+            'groupId': groupId,
+            'date': date,
+            'inputs': inputs
+        });
     }
 }
 

@@ -11,6 +11,11 @@ const Inputs = ()=>{
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [currentInputs, setCurrentInputs] = 
     usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('current', {});
+    const [submittedInputs, setSubmittedInputs] = useState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>({});
+
+    const fetchSubmittedInputs = async () => {
+        
+    };
 
     // Grab all current inputs on load
     useEffect(()=>{

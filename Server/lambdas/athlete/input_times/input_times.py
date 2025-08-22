@@ -13,7 +13,7 @@ def input_times(event, context):
 
         params = []
         for input in inputs:
-            params.append((athleteId, groupId, input['distance'], input['time'], date))
+            params.append((athleteId, groupId, input.get('distance',0), input.get('time',0), date))
 
         #Insert time into rds
         execute_commit_many(

@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 
 //Component used to render input fields for a specific group
 /**
@@ -26,8 +27,16 @@ const RenderGroupInputs: React.FC<
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>
     }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs})=>{
 
-    const handleInputSubmission = () => {
-        // Handle submission logic here
+    const handleInputSubmission = async () => {
+        const date = new Date().toISOString().split("T")[0];
+        const resp = await AthleteWorkoutService.inputTimes(groupId, date, currentInputs[groupId]);
+        //If response ok, reset current inputs
+        if(resp.ok){
+            setCurrentInputs(prev => ({
+                ...prev,
+                [groupId]: []
+            }));
+        }
     }
     return(
         // Main container for the group with styling for card appearance
@@ -46,7 +55,7 @@ const RenderGroupInputs: React.FC<
                     {/* Time input field */}
                     <TextInput
                         placeholder="Enter time"
-                        value={currentInputs[groupId][idx]?.time}
+                        value={input?.time}
                         className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
                         onChangeText={text => handleTimeChange(groupId, idx, text)}
                     />
@@ -54,7 +63,7 @@ const RenderGroupInputs: React.FC<
                     <TextInput
                         placeholder="Enter distance"
                         className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
-                        value={currentInputs[groupId][idx]?.distance}
+                        value={input?.distance}
                         onChangeText={text => handleDistanceChange(groupId, idx, text)}
                     />
                     {/* Units label */}
@@ -80,9 +89,7 @@ const RenderGroupInputs: React.FC<
             }} />
 
             {/* Submit the current inputs for the current group */}
-            <Button title="Submit" color="black" onPress={() => {
-                // Handle submission logic here
-            }} />
+            <Button title="Submit" color="black" onPress={handleInputSubmission} />
         </View>
     );
 }

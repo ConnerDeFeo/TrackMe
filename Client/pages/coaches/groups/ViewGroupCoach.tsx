@@ -34,6 +34,7 @@ const ViewGroup = () => {
     const resp = await CoachWorkoutService.getGroupWorkout(userId!, groupId, date);
     if(resp.ok){
       const workout = await resp.json();
+      console.log(workout)
       setWorkout(workout);
     }
   }

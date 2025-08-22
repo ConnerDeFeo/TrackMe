@@ -227,12 +227,11 @@ def test_get_group_workout():
 
     # Check if the data is valid
     workout = json.loads(response['body'])
-    print(workout)
     workout = workout[0]
-    assert workout[0] == 1
-    assert workout[1] == 'Test Workout'
-    assert workout[2] == 'This is a test workout'
-    assert len(workout[3]) == 3
+    assert workout['workoutId'] == 1
+    assert workout['title'] == 'Test Workout'
+    assert workout['description'] == 'This is a test workout'
+    assert len(workout['exercises']) == 3
 
 def test_delete_workout():
     response = create_workout(TestData.test_workout, {})

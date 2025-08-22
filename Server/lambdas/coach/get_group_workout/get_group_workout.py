@@ -6,7 +6,6 @@ def get_group_workout(event,context):
     query_params = event.get('queryStringParameters', {})
 
     try:
-        coach_id = query_params['coachId']
         group_id = query_params['groupId']
         date = query_params['date']
 
@@ -20,10 +19,17 @@ def get_group_workout(event,context):
             (group_id, date)
         )
         if workouts:
-            
+            converted_workouts = []
+            for workout in workouts:
+                converted_workouts.append({
+                    'workoutId': workout[0],
+                    'title': workout[1],
+                    'description': workout[2],
+                    'exercises': workout[3]
+                })
             return {
                 'statusCode': 200,
-                'body': json.dumps(workouts)
+                'body': json.dumps(converted_workouts)
             }
         return {
             'statusCode': 404,

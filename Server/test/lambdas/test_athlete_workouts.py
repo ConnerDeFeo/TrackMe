@@ -106,7 +106,7 @@ def test_input_times():
     assert input1[0] == '1234'  # athleteId
     assert input1[1] == 1
     assert input1[2] == 100  # distance
-    assert input1[3] == 10   # time
+    assert input1[3] == 10.8   # time
 
     input2 = inputs[1]
     assert input2[0] == '1234'  # athleteId
@@ -182,4 +182,4 @@ def test_view_workout_inputs():
     athlete_inputs = body['individuals']
 
     assert group_inputs['1'] == [{'distance': 150, 'time': 30}]
-    assert athlete_inputs['1'] == [{'distance': 100,'time': 10}, {'distance': 200,'time': 30}]
+    assert athlete_inputs['1'] == [{'distance': 100,'time': 10.8}, {'distance': 200,'time': 30}]

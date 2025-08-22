@@ -11,18 +11,21 @@ class TestData:
                 'username': "testcoach",
             })
         }
+    
     test_group = {
             "body": json.dumps({
                 "groupName": "Test Group",
                 "coachId": "123"
             })
         }
+    
     test_athlete = {
             "body": json.dumps({
                 "userId": "1234",
                 "username": "test_athlete"
             })
         }
+    
     test_invite = {
         "body": json.dumps({
             "athleteId": "1234",
@@ -107,7 +110,7 @@ class TestData:
             'inputs': [
                 {
                     'distance': 100,
-                    'time': 10
+                    'time': 10.8
                 },
                 {
                     'distance': 200,

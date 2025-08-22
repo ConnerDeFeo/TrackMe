@@ -74,7 +74,7 @@ CREATE TABLE athlete_workout_inputs(
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupId INT REFERENCES groups(id) NOT NULL,
     distance INT DEFAULT 0,
-    time INT DEFAULT 0,
+    time FLOAT DEFAULT 0,
     date VARCHAR(10) DEFAULT CURRENT_DATE
 );
 
@@ -96,6 +96,6 @@ CREATE TABLE workout_group_members(
 CREATE TABLE workout_group_inputs(
     workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
     distance INT DEFAULT 0,
-    time INT DEFAULT 0
+    time FLOAT DEFAULT 0
 );
 

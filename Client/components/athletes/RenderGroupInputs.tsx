@@ -25,8 +25,9 @@ const RenderGroupInputs: React.FC<
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
-        submitedInputs: Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>
-    }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs, submitedInputs})=>{
+        submitedInputs: Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>,
+        onSubmit: () => void
+    }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs, submitedInputs, onSubmit})=>{
 
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
@@ -37,6 +38,7 @@ const RenderGroupInputs: React.FC<
                 ...prev,
                 [groupId]: []
             }));
+            onSubmit();
         }
     }
     return(
@@ -52,9 +54,10 @@ const RenderGroupInputs: React.FC<
 
             {/**Submitted inputs that will be displayed */}
             <View>
+                <Text className="my-2">Submitted Inputs:</Text>
                 {submitedInputs['individuals'] && submitedInputs['individuals'][groupId] && 
                 submitedInputs['individuals'][groupId].map((input, idx) => (
-                    <View key={idx} className="flex flex-row justify-between items-center mb-2">
+                    <View key={idx} className="flex flex-row justify-between items-center mb-2 ml-2">
                         <Text className="text-gray-600">Time: {input.time}</Text>
                         <Text className="text-gray-600">Distance: {input.distance}</Text>
                     </View>

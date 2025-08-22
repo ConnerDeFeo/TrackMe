@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import './global.css'
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -39,11 +39,9 @@ const layouts = {
 function BaseLayout(content: React.ReactElement): ComponentType<any>{
   return ()=>{
     return(
-      <>
         <View className='bg-white flex-1'>
           {content}
         </View>
-      </>
     ); 
   }
 }
@@ -52,9 +50,9 @@ function UserLayout(content: React.ReactElement, userType: 'athlete' | 'coach'):
   return ()=>{
     return(
       <>
-        <View className='bg-white flex-1'>
+        <ScrollView className='bg-white flex-1'>
           {content}
-        </View>
+        </ScrollView>
         <Footer buttons={layouts[userType]} />
       </>
     ); 

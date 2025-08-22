@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Image, Text,TouchableOpacity,View } from "react-native";
+import { ScrollView, Text,TouchableOpacity,View } from "react-native";
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
@@ -13,7 +13,7 @@ const ViewGroup = () => {
   const {groupName, groupId} = route.params as { groupName: string, groupId: string };
 
   const [participants, setParticipants] = useState<string[]>([]);
-  const [workout, setWorkout] = useState<Array<any>>();
+  const [workouts, setWorkouts] = useState<Array<any>>([]);
 
   //Grabs all athletes that are a part of the group
   const fetchParticipants = async () => {
@@ -33,9 +33,8 @@ const ViewGroup = () => {
     const date = new Date().toISOString().split("T")[0];
     const resp = await CoachWorkoutService.getGroupWorkout(userId!, groupId, date);
     if(resp.ok){
-      const workout = await resp.json();
-      console.log(workout)
-      setWorkout(workout);
+      const workouts = await resp.json();
+      setWorkouts(workouts);
     }
   }
 
@@ -46,14 +45,14 @@ const ViewGroup = () => {
 
   const removeAthleteFromGroup = async (athleteId: string) => {
     const resp = await CoachGroupService.removeAthleteFromGroup(athleteId, groupId);
-    
     if (resp.ok) {
       await fetchParticipants(); // Add await here
     }
   }
 
+  console.log(workouts)
   return (
-    <View className="flex-1 bg-gray-50 px-6 pt-16">
+    <View className="flex-1 bg-gray-50 px-6 pt-16 pb-12">
       <View className="mb-8">
         <Text className="text-3xl font-bold text-gray-900 mb-2">{groupName}</Text>
         <Text className="text-gray-600">Manage your group and workouts</Text>
@@ -64,9 +63,9 @@ const ViewGroup = () => {
         onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})}
         className="bg-[#E63946] rounded-lg py-3 px-4"
       >
-        <Text className="text-white font-semibold text-center">{workout ? "Update Workout" : "Send Workout"}</Text>
+        <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Update Workout" : "Send Workout"}</Text>
       </TouchableOpacity>
-      {workout && 
+      {workouts.length > 0 && 
         <TouchableOpacity 
           onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })}
           className="bg-black rounded-lg py-3 px-4 mt-2"
@@ -76,7 +75,9 @@ const ViewGroup = () => {
       }
       </View>
 
-      {workout && <DisplayWorkout workout={workout} onPress={() => navigation.navigate('CreateWorkout', { workout })} />}
+      {workouts.map((workout) => (
+        <DisplayWorkout key={workout.workoutId} workout={workout} onPress={() => navigation.navigate('CreateWorkout', { workout })} />
+      ))}
 
       <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
         <View className="flex flex-row justify-between items-center mb-4">

@@ -12,7 +12,7 @@ def view_workouts_athlete(event, context):
 
         workouts = fetch_all(
             """
-                SELECT w.title, w.description, w.exercises FROM workouts w
+                SELECT w.id, w.title, w.description, w.exercises FROM workouts w
                 JOIN group_workouts gw ON gw.workoutId = w.id
                 JOIN groups g ON g.id = gw.groupId
                 WHERE g.id = %s
@@ -23,9 +23,10 @@ def view_workouts_athlete(event, context):
             converted_workouts = []
             for workout in workouts:
                 converted_workouts.append({
-                    'title': workout[0],
-                    'description': workout[1],
-                    'exercises': workout[2]
+                    'id': workout[0],
+                    'title': workout[1],
+                    'description': workout[2],
+                    'exercises': workout[3]
                 })
             return {
                 'statusCode': 200,

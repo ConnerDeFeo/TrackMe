@@ -59,7 +59,7 @@ const RenderGroupInputs: React.FC<
                 submitedInputs['individuals'][groupId].map((input, idx) => (
                     <View key={idx} className="flex flex-row justify-between items-center mb-2 ml-2">
                         <Text className="text-gray-600">Time: {input.time}</Text>
-                        <Text className="text-gray-600">Distance: {input.distance}</Text>
+                        <Text className="text-gray-600">Distance: {input.distance}m</Text>
                     </View>
                 ))}
             </View>
@@ -85,23 +85,41 @@ const RenderGroupInputs: React.FC<
                     <Text>Meters</Text>
                 </View>
             ))}
-            
-            {/* Button to add new input pair to the group */}
-            <Button title="add input" color="#E63946" onPress={() => {
-                // Initialize or update the inputs array for this group
-                let updatedInputs: { time?: string; distance?: string }[] = [];
-                
-                // Check if group has existing inputs, if not create first input
-                if (currentInputs[groupId] === undefined) {
-                    updatedInputs = [{ time: '', distance: '' }];
-                } else {
-                    // Add new empty input to existing inputs
-                    updatedInputs = [...currentInputs[groupId], { time: '', distance: '' }];
-                }
-                
-                // Update state with new inputs array for this group
-                setCurrentInputs(prev => ({ ...prev, [groupId]: updatedInputs }));
-            }} />
+            <View className="flex flex-row items-center justify-between">
+                {/* Button to remove last input */}
+                <TouchableOpacity 
+                    className="bg-[#E63946] rounded-lg p-2 w-[45%]"
+                    onPress={() => {
+                    setCurrentInputs(prev => {
+                        const updatedGroup = prev[groupId]?.slice(0, -1) || [];
+                        return { ...prev, [groupId]: updatedGroup };
+                    });
+                }}>
+                    <Text className="text-white text-center">Remove</Text>
+                </TouchableOpacity>
+
+                {/* Button to add new input pair to the group */}
+                <TouchableOpacity 
+                    className="bg-[#E63946] rounded-lg p-2 w-[45%]"
+                    onPress={() => {
+                        // Initialize or update the inputs array for this group
+                        let updatedInputs: { time?: string; distance?: string }[] = [];
+                        
+                        // Check if group has existing inputs, if not create first input
+                        if (currentInputs[groupId] === undefined) {
+                            updatedInputs = [{ time: '', distance: '' }];
+                        } else {
+                            // Add new empty input to existing inputs
+                            updatedInputs = [...currentInputs[groupId], { time: '', distance: '' }];
+                        }
+                        
+                        // Update state with new inputs array for this group
+                        setCurrentInputs(prev => ({ ...prev, [groupId]: updatedInputs }));
+                    }
+                }>
+                    <Text className="text-white text-center">Add</Text>
+                </TouchableOpacity>
+            </View>
 
             {/* Submit the current inputs for the current group */}
             <Button title="Submit" color="black" onPress={handleInputSubmission} />

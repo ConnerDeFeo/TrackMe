@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
+import { useNavigation } from "@react-navigation/native";
 
 //Component used to render input fields for a specific group
 /**
@@ -29,6 +30,7 @@ const RenderGroupInputs: React.FC<
         onSubmit: () => void
     }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs, submitedInputs, onSubmit})=>{
 
+    const navigation = useNavigation<any>();
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
         const resp = await AthleteWorkoutService.inputTimes(groupId, date, currentInputs[groupId]);
@@ -47,7 +49,7 @@ const RenderGroupInputs: React.FC<
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', {groupId: groupId})}>
                     <Text className="text-[#E63946] underline">Create Group</Text>
                 </TouchableOpacity>
             </View>

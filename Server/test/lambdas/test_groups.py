@@ -1,6 +1,7 @@
 import json
 import pytest
 from lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.general.get_groups.get_groups import get_groups
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
@@ -47,3 +48,43 @@ def test_get_groups_coach():
     assert groups[0][1] == 1
     assert groups[1][0] == 'Test Group 2'
     assert groups[1][1] == 2
+
+def test_get_athletes_for_group():
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
+    create_athlete({
+        "body": json.dumps({
+            "userId": "1235",
+            "username": "testathlete2"
+        })
+    }, {})
+    invite_athlete({
+        "body": json.dumps({
+            "athleteId": "1235",
+            "coachId": "123"
+        })
+    }, {})
+    accept_coach_invite({
+        "body": json.dumps({
+            "athleteId": "1235",
+            "coachId": "123"
+        })
+    }, {})
+
+    event = {
+        "queryStringParameters": {
+            "groupId": "1"
+        }
+    }
+
+    response = get_athletes_for_group(event, {})
+    assert response['statusCode'] == 200
+
+    body = json.loads(response['body'])
+    assert len(body) == 1
+
+    assert body[0][0] == "1234"
+    assert body[0][1] == "test_athlete"

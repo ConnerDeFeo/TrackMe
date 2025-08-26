@@ -6,7 +6,7 @@ from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.get_absent_group_athletes.get_absent_group_athletes import get_absent_group_athletes
-from lambdas.coach.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
+from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 import json
 from data import TestData
@@ -107,24 +107,6 @@ def setup_get_tests():
             "coachId": "123"
         })
     }, {})
-
-def test_get_athletes_for_group():
-    setup_get_tests()
-
-    event = {
-        "queryStringParameters": {
-            "groupId": "1"
-        }
-    }
-
-    response = get_athletes_for_group(event, {})
-    assert response['statusCode'] == 200
-
-    body = json.loads(response['body'])
-    assert len(body) == 1
-
-    assert body[0][0] == "1234"
-    assert body[0][1] == "test_athlete"
 
 def test_get_absent_group_athletes():
     setup_get_tests()

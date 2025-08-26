@@ -89,8 +89,8 @@ CREATE TABLE workout_groups (
 
 CREATE TABLE workout_group_members(
     workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
-    athleteUsername VARCHAR(255),
-    PRIMARY KEY (workoutGroupId, athleteUsername)
+    athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
+    PRIMARY KEY (workoutGroupId, athleteId)
 );
 
 CREATE TABLE workout_group_inputs(

@@ -24,6 +24,16 @@ const AthleteWorkoutService = {
             'date': date,
             'inputs': inputs
         });
+    },
+    createWorkoutGroup: async (athletes: string[], groupId:string, date:string, workoutGroupName:string ) => {
+        const userId = await UserService.getUserId();
+        return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/create_workout_group`, {
+            'leaderId': userId,
+            'athletes': athletes,
+            'groupId': groupId,
+            'workoutGroupName': workoutGroupName,
+            'date': date
+        });
     }
 }
 

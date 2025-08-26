@@ -133,7 +133,7 @@ def test_create_workout_group():
     assert len(group_members) == 3
     for member in group_members:
         assert member[0] == 1
-        assert member[1] in ["test_athlete", "test2", "test3"]
+        assert member[1] in ["1234",'1235','1236']
 
 def test_input_group_time():
     create_extra_athlete("test2", "1235")

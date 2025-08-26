@@ -123,12 +123,9 @@ class TestData:
     test_workout_group = {
         "body": json.dumps({
             'leaderId':'1234',
-            'athletes': ["test_athlete", "test2", "test3"],
-            'workoutId': 1,
-            'groupName': "Test Group",
-            'coachId': "123",
+            'athleteIds': ["1234", "1235", "1236"],
+            'groupId': 1,
             'date': date,
-            'coachUsername': 'testcoach',
             'workoutGroupName': 'Test Workout Group'
         })
     }

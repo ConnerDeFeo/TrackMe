@@ -58,8 +58,9 @@ def view_workout_inputs(event, context):
             FROM groups g
             JOIN workout_groups wg ON wg.groupId = g.id
             JOIN workout_group_members wgm ON wgm.workoutGroupId = wg.id
+            JOIN athletes a ON a.userId = wgm.athleteId
             JOIN workout_group_inputs wgi ON wgi.workoutGroupId = wg.id
-            WHERE wgm.athleteUsername = %s AND wg.date = %s
+            WHERE a.username = %s AND wg.date = %s
         """, (username, date))
 
         # Process group workout inputs if any exist

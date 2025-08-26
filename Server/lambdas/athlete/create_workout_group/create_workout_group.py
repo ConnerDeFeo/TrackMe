@@ -7,8 +7,8 @@ def create_workout_group(event,context):
 
     try:
         leaderId = body['leaderId']
-        athletes = body['athletes']
-        workout_id = body['workoutId']
+        athleteIds = body['athleteIds']
+        group_id = body['groupId']
         workout_group_name = body['workoutGroupName']
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
@@ -17,7 +17,7 @@ def create_workout_group(event,context):
             INSERT INTO workout_groups (leaderId, groupId, workoutGroupName, date)
             VALUES (%s, %s,  %s, %s)
             RETURNING id
-        """, (leaderId, workout_id, workout_group_name, date))
+        """, (leaderId, group_id, workout_group_name, date))
 
         if not workout_group_id:
             return {
@@ -29,11 +29,11 @@ def create_workout_group(event,context):
 
         #Insert all athletes into the group
         params = []
-        for athlete in athletes:
-            params.append((athlete, workout_group_id))
+        for id in athleteIds:
+            params.append((id, workout_group_id))
 
         execute_commit_many("""
-            INSERT INTO workout_group_members (athleteUsername, workoutGroupId)
+            INSERT INTO workout_group_members (athleteId, workoutGroupId)
             VALUES (%s, %s)
         """, params)
         return {

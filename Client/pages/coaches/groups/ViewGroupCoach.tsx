@@ -5,6 +5,7 @@ import CoachGroupService from "../../../services/CoachGroupService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
+import GeneralService from "../../../services/GeneralService";
 
 //Page for viewing a given group
 const ViewGroup = () => {
@@ -17,7 +18,7 @@ const ViewGroup = () => {
 
   //Grabs all athletes that are a part of the group
   const fetchParticipants = async () => {
-      const resp = await CoachGroupService.getAthletesForGroup(groupId);
+      const resp = await GeneralService.getAthletesForGroup(groupId);
       if (resp.ok) {
         const data = await resp.json();
         setParticipants(data);

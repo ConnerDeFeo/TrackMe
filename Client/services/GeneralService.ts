@@ -10,6 +10,9 @@ const GeneralService = {
     const accountType = userAttributes['custom:accountType'];
     return API.get(`${EXPO_PUBLIC_API_URL}/general/get_groups?userId=${userId}&accountType=${accountType}`);
   },
+  getAthletesForGroup: async (groupId:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_athletes_for_group?groupId=${groupId}`);
+    },
 };
 
 export default GeneralService;

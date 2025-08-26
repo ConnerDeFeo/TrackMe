@@ -72,6 +72,7 @@ const RenderGroupInputs: React.FC<
                     {/* Time input field */}
                     <TextInput
                         placeholder="Enter time"
+                        keyboardType="numeric"
                         value={input?.time}
                         className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
                         onChangeText={text => handleTimeChange(groupId, idx, text)}
@@ -79,6 +80,7 @@ const RenderGroupInputs: React.FC<
                     {/* Distance input field */}
                     <TextInput
                         placeholder="Enter distance"
+                        keyboardType="numeric"
                         className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
                         value={input?.distance}
                         onChangeText={text => handleDistanceChange(groupId, idx, text)}

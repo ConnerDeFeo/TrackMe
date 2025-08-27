@@ -27,10 +27,23 @@ const RenderGroupInputs: React.FC<
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
         submitedInputs: Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>,
-        onSubmit: () => void
-    }> = ({groupId, groupName, currentInputs, handleTimeChange, handleDistanceChange, setCurrentInputs, submitedInputs, onSubmit})=>{
+        onSubmit: () => void,
+        workoutGroups: Record<string, { members: string[], workoutGroupName: string }>
+    }> = (
+        {
+            groupId, 
+            groupName, 
+            currentInputs, 
+            handleTimeChange, 
+            handleDistanceChange, 
+            setCurrentInputs, 
+            submitedInputs, 
+            onSubmit, 
+            workoutGroups
+        })=>{
 
     const navigation = useNavigation<any>();
+    const workoutGroup = workoutGroups[groupId];
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
         const resp = await AthleteWorkoutService.inputTimes(groupId, date, currentInputs[groupId]);
@@ -54,6 +67,15 @@ const RenderGroupInputs: React.FC<
                 </TouchableOpacity>
             </View>
 
+            {/**Current workout group and their inputs */}
+            {workoutGroup && (
+                <View>
+                    <Text className="my-2">Current Group:</Text>
+                    {workoutGroup.members.map((member, idx) => (
+                        <Text key={idx} className="text-gray-600">{member}</Text>
+                    ))}
+                </View>
+            )}
             {/**Submitted inputs that will be displayed */}
             <View>
                 <Text className="my-2">Submitted Inputs:</Text>

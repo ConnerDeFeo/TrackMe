@@ -5,16 +5,16 @@ from datetime import datetime, timezone
 #Gets all workout groups for a given leader on a given date
 #Returns {groupId: [workout group members, groupname]}
 def get_workout_groups(event, context):
-    body = json.loads(event['body'])
+    query_params = event.get('queryStringParameters', {})
 
     try:
-        leader_id = body['leaderId']
-        date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+        leader_id = query_params.get('leaderId')
+        date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         #Fetch all workout groups for the given leader
         workout_groups = fetch_all(
             """
-                SELECT g.id, a.username, wg.workoutGroupName
+                SELECT g.id, a.username
                 FROM workout_groups wg
                 JOIN workout_group_members wgm ON wg.id = wgm.workoutGroupId
                 JOIN athletes a ON wgm.athleteId = a.userId
@@ -29,11 +29,8 @@ def get_workout_groups(event, context):
             for group in workout_groups:
                 group_id = group[0]
                 if group_id not in parsed_groups:
-                    parsed_groups[group_id] = {
-                        "members": [],
-                        "workoutGroupName": group[2]
-                    }
-                parsed_groups[group_id]["members"].append(group[1])
+                    parsed_groups[group_id] = []
+                parsed_groups[group_id].append(group[1])
 
             return {
                 "statusCode": 200,

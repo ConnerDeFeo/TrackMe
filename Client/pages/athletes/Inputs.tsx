@@ -12,9 +12,10 @@ const Inputs = ()=>{
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [currentInputs, setCurrentInputs] = 
     usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('current', {});
-    
+    const [workoutGroups, setWorkoutGroups] = useState<Record<string, {members: string[], workoutGroupName:string}>>({});
+
     // Store previously submitted workout inputs organized by date and group
-    const [submittedInputs, setSubmittedInputs] = useState<Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>({});
+    const [submittedInputs, setSubmittedInputs] = useState<Record<number, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>({});
 
     // Fetch previously submitted workout inputs from the server
     const fetchSubmittedInputs = async () => {
@@ -34,7 +35,15 @@ const Inputs = ()=>{
                 setGroups(groups);
             }
         };
+        const fetchWorkoutGroups = async () => {
+            const resp = await AthleteWorkoutService.getWorkoutGroups();
+            if (resp.ok) {
+                const workGroups = await resp.json();
+                setWorkoutGroups(workGroups);
+            }
+        };
         fetchGroups();
+        fetchWorkoutGroups();
         fetchSubmittedInputs();
     },[]);
 
@@ -65,7 +74,6 @@ const Inputs = ()=>{
             return { ...prev, [groupId]: updatedGroup };
         });
     }
-
     return (
         <ScrollView className="flex-1">
             <View className="mt-16 px-6 pb-8">
@@ -82,6 +90,7 @@ const Inputs = ()=>{
                         handleTimeChange={handleTimeChange}
                         handleDistanceChange={handleDistanceChange}
                         setCurrentInputs={setCurrentInputs}
+                        workoutGroups={workoutGroups}
                     />
                 ))}
             </View>

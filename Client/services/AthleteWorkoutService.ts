@@ -34,6 +34,14 @@ const AthleteWorkoutService = {
             'workoutGroupName': workoutGroupName,
             'date': date
         });
+    },
+    getWorkoutGroups: async (date?:string) => {
+        const leaderId = await UserService.getUserId();
+        let query = `${EXPO_PUBLIC_API_URL}/athletes/get_workout_groups?leaderId=${leaderId}`;
+        if (date) {
+            query += `&date=${date}`;
+        }
+        return await API.get(query);
     }
 }
 

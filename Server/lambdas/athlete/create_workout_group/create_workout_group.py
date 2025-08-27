@@ -9,15 +9,14 @@ def create_workout_group(event,context):
         leaderId = body['leaderId']
         athleteIds = body['athleteIds']
         group_id = body['groupId']
-        workout_group_name = body.get('workoutGroupName','')
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         #Create a workout group 
         workout_group_id = execute_commit_fetch_one("""
-            INSERT INTO workout_groups (leaderId, groupId, workoutGroupName, date)
-            VALUES (%s, %s,  %s, %s)
+            INSERT INTO workout_groups (leaderId, groupId, date)
+            VALUES (%s, %s,  %s)
             RETURNING id
-        """, (leaderId, group_id, workout_group_name, date))
+        """, (leaderId, group_id, date))
 
         if not workout_group_id:
             return {

@@ -54,7 +54,7 @@ def view_workout_inputs(event, context):
         # Fetch group workout inputs for the athlete
         group_workout_inputs = fetch_all(
         """
-            SELECT g.id, wg.workoutGroupName, wgi.distance, wgi.time
+            SELECT g.id, wgi.distance, wgi.time
             FROM groups g
             JOIN workout_groups wg ON wg.groupId = g.id
             JOIN workout_group_members wgm ON wgm.workoutGroupId = wg.id
@@ -70,7 +70,7 @@ def view_workout_inputs(event, context):
                 id = input[0]
                 if id not in grouped_data['groups']:
                     grouped_data['groups'][id] = []
-                grouped_data['groups'][id].append({"distance": input[2], "time": input[3]})
+                grouped_data['groups'][id].append({"distance": input[1], "time": input[2]})
 
         
         athlete_inputs = fetch_all(

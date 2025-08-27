@@ -125,8 +125,7 @@ class TestData:
             'leaderId':'1234',
             'athleteIds': ["1234", "1235", "1236"],
             'groupId': 1,
-            'date': date,
-            'workoutGroupName': 'Test Workout Group'
+            'date': date
         })
     }
 

@@ -125,7 +125,6 @@ def test_create_workout_group():
     #Check group is created
     workout_group = fetch_one("SELECT * FROM workout_groups")
     assert workout_group is not None
-    assert 'Test Workout Group' in workout_group
     assert '1234' in workout_group 
 
     #Check other athletes are added to the group
@@ -145,9 +144,8 @@ def test_input_group_time():
     assert response['statusCode'] == 200
 
     #Make sure the group was created
-    group = fetch_one("SELECT leaderId, workoutGroupName FROM workout_groups")
+    group = fetch_one("SELECT leaderId FROM workout_groups")
     assert group is not None
-    assert group[1] == 'Test Workout Group'
     assert group[0] == '1234'
 
     #Check that the inputs for all athletes in the group were recorded
@@ -201,17 +199,16 @@ def test_get_workout_groups():
         'body': json.dumps({
             'leaderId': '1234',
             'groupId': 2,
-            'athleteIds': ['1234'],
-            'workoutGroupName': 'Test Workout Group2'
+            'athleteIds': ['1234']
         })
     },{})
 
     response = get_workout_groups({
-        'body': json.dumps({
+        'queryStringParameters': {
             'leaderId': '1234',
             'date': date
-        })
-    },{})
+        }
+    }, {})
     debug_table()
 
     assert response['statusCode'] == 200
@@ -221,8 +218,6 @@ def test_get_workout_groups():
     group1 = body['1']
     group2 = body['2']
 
-    assert group1['workoutGroupName'] == 'Test Workout Group'
-    assert group1['members'] == ['test_athlete','test2','test3']
+    assert group1 == ['test_athlete','test2','test3']
 
-    assert group2['workoutGroupName'] == 'Test Workout Group2'
-    assert group2['members'] == ['test_athlete']
+    assert group2 == ['test_athlete']

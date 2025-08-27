@@ -9,7 +9,7 @@ def create_workout_group(event,context):
         leaderId = body['leaderId']
         athleteIds = body['athleteIds']
         group_id = body['groupId']
-        workout_group_name = body['workoutGroupName']
+        workout_group_name = body.get('workoutGroupName','')
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         #Create a workout group 

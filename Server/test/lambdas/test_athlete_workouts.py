@@ -1,5 +1,6 @@
 import json
 import pytest
+from lambdas.athlete.get_workout_groups.get_workout_groups import get_workout_groups
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.athlete.input_group_time.input_group_time import input_group_time
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
@@ -185,4 +186,43 @@ def test_view_workout_inputs():
     assert athlete_inputs['1'] == [{'distance': 100,'time': 10.8}, {'distance': 200,'time': 30}]
 
 def test_get_workout_groups():
-    pass
+    create_extra_athlete("test2", "1235")
+    create_extra_athlete("test3", "1236")
+    create_workout_group(TestData.test_workout_group, {})
+
+    create_group({
+        'body': json.dumps({
+            'groupName': 'group2',
+            'coachId':'123'
+        })
+    },{})
+
+    create_workout_group({
+        'body': json.dumps({
+            'leaderId': '1234',
+            'groupId': 2,
+            'athleteIds': ['1234'],
+            'workoutGroupName': 'Test Workout Group2'
+        })
+    },{})
+
+    response = get_workout_groups({
+        'body': json.dumps({
+            'leaderId': '1234',
+            'date': date
+        })
+    },{})
+    debug_table()
+
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 2
+    
+    group1 = body['1']
+    group2 = body['2']
+
+    assert group1['workoutGroupName'] == 'Test Workout Group'
+    assert group1['members'] == ['test_athlete','test2','test3']
+
+    assert group2['workoutGroupName'] == 'Test Workout Group2'
+    assert group2['members'] == ['test_athlete']

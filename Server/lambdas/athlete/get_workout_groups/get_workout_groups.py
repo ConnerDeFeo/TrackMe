@@ -1,32 +1,52 @@
 import json
 from rds import fetch_one, fetch_all
+from datetime import datetime, timezone
 
-def get_workout_group(event, context):
-    # Extract the groupId from the event
-    group_id = event.get("queryStringParameters", {}).get("groupId")
+#Gets all workout groups for a given leader on a given date
+#Returns {groupId: [workout group members, groupname]}
+def get_workout_groups(event, context):
+    body = json.loads(event['body'])
 
-    if not group_id:
-        return {
-            "statusCode": 400,
-            "body": json.dumps({"error": "Missing groupId"})
-        }
+    try:
+        leader_id = body['leaderId']
+        date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
-    # Fetch the workout group from the database
-    workout_group = fetch_one("SELECT * FROM workout_groups WHERE id = %s", (group_id,))
+        #Fetch all workout groups for the given leader
+        workout_groups = fetch_all(
+            """
+                SELECT g.id, a.username, wg.workoutGroupName
+                FROM workout_groups wg
+                JOIN workout_group_members wgm ON wg.id = wgm.workoutGroupId
+                JOIN athletes a ON wgm.athleteId = a.userId
+                JOIN groups g ON wg.groupId = g.id
+                WHERE wg.leaderId = %s AND wg.date = %s
+            """,
+        (leader_id, date))
 
-    if not workout_group:
+        #Convert to more parsable input
+        if workout_groups:
+            parsed_groups = {}
+            for group in workout_groups:
+                group_id = group[0]
+                if group_id not in parsed_groups:
+                    parsed_groups[group_id] = {
+                        "members": [],
+                        "workoutGroupName": group[2]
+                    }
+                parsed_groups[group_id]["members"].append(group[1])
+
+            return {
+                "statusCode": 200,
+                "body": json.dumps(parsed_groups)
+            }
         return {
             "statusCode": 404,
-            "body": json.dumps({"error": "Workout group not found"})
+            "body": json.dumps({"error": "No workout groups found"})
         }
 
-    # Fetch the members of the workout group
-    group_members = fetch_all("SELECT * FROM workout_group_members WHERE groupId = %s", (group_id,))
-
-    return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "group": workout_group,
-            "members": group_members
-        })
-    }
+    except Exception as e:
+        print(f"Error fetching workout groups: {e}")
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
+        }

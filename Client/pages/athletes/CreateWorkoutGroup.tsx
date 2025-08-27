@@ -36,34 +36,54 @@ const CreateWorkoutGroup = ()=>{
     }
 
     return (
-        <View className="mt-[4rem]">
-            <Text>Create Workout Group</Text>
+        <View className="mt-16 px-6 bg-white min-h-screen">
+            <Text className="text-3xl font-bold text-black mb-8 text-center">Create Workout Group</Text>
+            
             <TextInput
                 placeholder="Workout Group Name"
                 value={workoutGroupName}
                 onChangeText={setWorkoutGroupName}
-                className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
+                className="border-2 border-gray-200 rounded-xl p-4 mb-6 text-black bg-white shadow-sm"
+                placeholderTextColor="#666"
             />
-            {
-            groupMembers.map((athlete, index)=>{
-                return (
-                    <View key={index} className="flex flex-row justify-between items-center">
-                        <Text>{athlete[1]}</Text>
-                        <TouchableOpacity onPress={() => {
-                            setSelectedAthletes(prev => {
-                                if (prev.includes(athlete[0])) {
-                                    return prev.filter(id => id !== athlete[0]);
-                                } else {
-                                    return [...prev, athlete[0]];
-                                }
-                            });
-                        }}>
-                            <Text>{selectedAthletes.includes(athlete[0]) ? "Deselect" : "Select"}</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            })}
-            <Button title="Create Group" onPress={onGroupCreation} />
+            
+            <Text className="text-xl font-semibold text-black mb-4">Select Athletes</Text>
+            
+            <View className="mb-8">
+                {groupMembers.map((athlete, index) => {
+                    const isSelected = selectedAthletes.includes(athlete[0]);
+                    return (
+                        <View key={athlete[0]} className="flex flex-row justify-between items-center bg-white p-4 mb-3 rounded-xl shadow-sm border border-gray-100">
+                            <Text className="text-lg text-black font-medium">{athlete[1]}</Text>
+                            <TouchableOpacity 
+                                onPress={() => {
+                                    setSelectedAthletes(prev => {
+                                        if (prev.includes(athlete[0])) {
+                                            return prev.filter(id => id !== athlete[0]);
+                                        } else {
+                                            return [...prev, athlete[0]];
+                                        }
+                                    });
+                                }}
+                                className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'bg-red-500'}`}
+                                style={{backgroundColor: isSelected ? '#f3f4f6' : '#E63946'}}
+                            >
+                                <Text className={`font-semibold ${isSelected ? 'text-black' : 'text-white'}`}>
+                                    {isSelected ? "Deselect" : "Select"}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    );
+                })}
+            </View>
+            
+            <TouchableOpacity 
+                onPress={onGroupCreation}
+                className="p-4 rounded-xl shadow-lg"
+                style={{backgroundColor: '#E63946'}}
+            >
+                <Text className="text-white text-xl font-bold text-center">Create Group</Text>
+            </TouchableOpacity>
         </View>
     )
 }

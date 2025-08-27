@@ -25,11 +25,11 @@ const AthleteWorkoutService = {
             'inputs': inputs
         });
     },
-    createWorkoutGroup: async (athletes: string[], groupId:string, date:string, workoutGroupName:string ) => {
+    createWorkoutGroup: async (athleteIds: string[], groupId:string, date:string, workoutGroupName:string ) => {
         const userId = await UserService.getUserId();
         return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/create_workout_group`, {
             'leaderId': userId,
-            'athletes': athletes,
+            'athleteIds': athleteIds,
             'groupId': groupId,
             'workoutGroupName': workoutGroupName,
             'date': date

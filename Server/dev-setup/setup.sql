@@ -82,8 +82,7 @@ CREATE TABLE workout_groups (
     id SERIAL PRIMARY KEY,
     leaderId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupId INT REFERENCES groups(id) NOT NULL,
-    workoutGroupName VARCHAR(255) NOT NULL,
-    UNIQUE (groupId, workoutGroupName),
+    workoutGroupName VARCHAR(255),
     date VARCHAR(10) DEFAULT CURRENT_DATE
 );
 

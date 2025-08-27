@@ -28,7 +28,7 @@ const RenderGroupInputs: React.FC<
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
         submitedInputs: Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>,
         onSubmit: () => void,
-        workoutGroups: Record<string, { members: string[], workoutGroupName: string }>
+        workoutGroup: string[] | undefined
     }> = (
         {
             groupId, 
@@ -39,11 +39,10 @@ const RenderGroupInputs: React.FC<
             setCurrentInputs, 
             submitedInputs, 
             onSubmit, 
-            workoutGroups
+            workoutGroup
         })=>{
 
     const navigation = useNavigation<any>();
-    const workoutGroup = workoutGroups[groupId];
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
         const resp = await AthleteWorkoutService.inputTimes(groupId, date, currentInputs[groupId]);
@@ -69,11 +68,13 @@ const RenderGroupInputs: React.FC<
 
             {/**Current workout group and their inputs */}
             {workoutGroup && (
-                <View>
-                    <Text className="my-2">Current Group:</Text>
-                    {workoutGroup.members.map((member, idx) => (
-                        <Text key={idx} className="text-gray-600">{member}</Text>
-                    ))}
+                <View className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                    <Text className="text-base font-medium text-gray-800 mb-2">Current Group:</Text>
+                    <View className="flex flex-row flex-wrap gap-2">
+                        {workoutGroup.map((member, idx) => (
+                            <Text key={idx} className="text-white text-sm font-medium bg-[#E63946] rounded-full px-3 py-1">{member}</Text>
+                        ))}
+                    </View>
                 </View>
             )}
             {/**Submitted inputs that will be displayed */}

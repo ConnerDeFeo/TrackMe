@@ -12,7 +12,7 @@ const Inputs = ()=>{
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [currentInputs, setCurrentInputs] = 
     usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('current', {});
-    const [workoutGroups, setWorkoutGroups] = useState<Record<string, {members: string[], workoutGroupName:string}>>({});
+    const [workoutGroups, setWorkoutGroups] = useState<Record<string, string[]>>({});
 
     // Store previously submitted workout inputs organized by date and group
     const [submittedInputs, setSubmittedInputs] = useState<Record<number, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>({});
@@ -25,6 +25,13 @@ const Inputs = ()=>{
             setSubmittedInputs(inputs);
         }
     };
+    const fetchWorkoutGroups = async () => {
+        const resp = await AthleteWorkoutService.getWorkoutGroups();
+        if (resp.ok) {
+            const workGroups = await resp.json();
+            setWorkoutGroups(workGroups);
+        }
+    };
 
     // Initialize component by fetching groups and submitted inputs on mount
     useEffect(()=>{
@@ -33,13 +40,6 @@ const Inputs = ()=>{
             if (resp.ok){
                 const groups = await resp.json();
                 setGroups(groups);
-            }
-        };
-        const fetchWorkoutGroups = async () => {
-            const resp = await AthleteWorkoutService.getWorkoutGroups();
-            if (resp.ok) {
-                const workGroups = await resp.json();
-                setWorkoutGroups(workGroups);
             }
         };
         fetchGroups();
@@ -90,7 +90,7 @@ const Inputs = ()=>{
                         handleTimeChange={handleTimeChange}
                         handleDistanceChange={handleDistanceChange}
                         setCurrentInputs={setCurrentInputs}
-                        workoutGroups={workoutGroups}
+                        workoutGroup={workoutGroups[group[1]]}
                     />
                 ))}
             </View>

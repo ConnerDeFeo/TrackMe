@@ -183,3 +183,6 @@ def test_view_workout_inputs():
 
     assert group_inputs['1'] == [{'distance': 150, 'time': 30}]
     assert athlete_inputs['1'] == [{'distance': 100,'time': 10.8}, {'distance': 200,'time': 30}]
+
+def test_get_workout_groups():
+    pass

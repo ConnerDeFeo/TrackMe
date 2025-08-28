@@ -45,8 +45,13 @@ const CreateWorkoutGroup = ()=>{
     // Navigation and routing setup
     const navigation = useNavigation<any>();
     const route = useRoute();
-    const {groupId} = route.params as {groupId: string};
-    
+    const {groupId, workoutGroup, setWorkoutGroup} = route.params as 
+        {
+            groupId: string, 
+            workoutGroup: {id: string, username: string}[], 
+            setWorkoutGroup: React.Dispatch<React.SetStateAction<{id: string, username: string}[]>>
+        };
+
     // State management for component data
     const [workoutGroupName, setWorkoutGroupName] = useState<string>(""); // User-defined name for the workout group
     const [groupMembers, setGroupMembers] = useState<string[]>([]); // All available athletes from the source group
@@ -69,14 +74,6 @@ const CreateWorkoutGroup = ()=>{
         }
         fetchGroupAthletes();
     },[]);
-
-    /**
-     * Handles the creation of a new workout group
-     * Creates workout group with selected athletes and current date, then navigates back
-     */
-    const onGroupCreation = async ()=>{
-        
-    }
 
     return (
         <View className="mt-16 px-6 bg-white min-h-screen">
@@ -129,11 +126,11 @@ const CreateWorkoutGroup = ()=>{
             
             {/* Create Group Action Button */}
             <TouchableOpacity 
-                onPress={onGroupCreation}
+                onPress={()=>navigation.goBack()}
                 className="p-4 rounded-xl shadow-lg"
                 style={{backgroundColor: '#E63946'}}
             >
-                <Text className="text-white text-xl font-bold text-center">Create Group</Text>
+                <Text className="text-white text-xl font-bold text-center">Finish</Text>
             </TouchableOpacity>
         </View>
     )

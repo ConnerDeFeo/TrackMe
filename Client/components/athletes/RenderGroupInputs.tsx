@@ -3,6 +3,7 @@ import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
+import usePersistentState from "../../hooks/usePersistentState";
 
 //Component used to render input fields for a specific group
 /**
@@ -38,10 +39,13 @@ const RenderGroupInputs: React.FC<
             handleDistanceChange, 
             setCurrentInputs, 
             submitedInputs, 
-            onSubmit
+            onSubmit,
         })=>{
 
     const navigation = useNavigation<any>();
+    //Current workout group members
+    const [workoutGroup, setWorkoutGroup] = usePersistentState<{id: string, username: string}[]>('workoutGroup', []);
+       
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
         const userId = await UserService.getUserId();
@@ -62,7 +66,13 @@ const RenderGroupInputs: React.FC<
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', {groupId: groupId})}>
+                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', 
+                    {
+                        groupId: groupId, 
+                        workoutGroup: workoutGroup, 
+                        setWorkoutGroup:setWorkoutGroup
+                    })}
+                >
                     <Text className="text-[#E63946] underline">Create Group</Text>
                 </TouchableOpacity>
             </View>

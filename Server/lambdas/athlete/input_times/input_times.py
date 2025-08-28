@@ -6,23 +6,25 @@ def input_times(event, context):
     body = json.loads(event['body'])
 
     try:
-        inputs = body['inputs']  # Expecting a list of input dicts
+        inputs = body['inputs'] #inputs in {time: float, distance: int}
+        athleteIds = body['athleteIds'] # list of athleteIds
         date = body['date']
-        athleteId = body['athleteId']
         groupId = body['groupId']
 
+        #Create all inputs
         params = []
-        for input in inputs:
-            time = input['time']
-            distance = input['distance']
-            if time == '' or distance == '':
-                continue
-            params.append((athleteId, groupId, distance, time, date))
+        for athleteId in athleteIds:
+            for input in inputs:
+                time = input['time']
+                distance = input['distance']
+                if time == '' or distance == '':
+                    continue
+                params.append((athleteId, groupId, distance, time, date))
 
         #Insert time into rds
         execute_commit_many(
         """
-            INSERT INTO athlete_workout_inputs (athleteId, groupId, distance, time, date)
+            INSERT INTO athlete_inputs (athleteId, groupId, distance, time, date)
             VALUES (%s, %s, %s, %s, %s)
         """, params)
 

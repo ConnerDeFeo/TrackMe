@@ -69,7 +69,7 @@ const RenderGroupInputs: React.FC<
             {/**Current workout group and their inputs */}
             {workoutGroup && (
                 <View className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                    <Text className="text-base font-medium text-gray-800 mb-2">Current Group:</Text>
+                    <Text className="text-base font-medium text-gray-800 mb-2">Current Workout Group:</Text>
                     <View className="flex flex-row flex-wrap gap-2">
                         {workoutGroup.map((member, idx) => (
                             <Text key={idx} className="text-white text-sm font-medium bg-[#E63946] rounded-full px-3 py-1">{member}</Text>
@@ -78,16 +78,17 @@ const RenderGroupInputs: React.FC<
                 </View>
             )}
             {/**Submitted inputs that will be displayed */}
-            <View>
-                <Text className="my-2">Submitted Inputs:</Text>
-                {submitedInputs['individuals'] && submitedInputs['individuals'][groupId] && 
-                submitedInputs['individuals'][groupId].map((input, idx) => (
-                    <View key={idx} className="flex flex-row justify-between items-center mb-2 ml-2">
-                        <Text className="text-gray-600">Time: {input.time}</Text>
-                        <Text className="text-gray-600">Distance: {input.distance}m</Text>
-                    </View>
-                ))}
-            </View>
+            {submitedInputs['individuals'] && submitedInputs['individuals'][groupId] &&
+                <View>
+                    <Text className="my-2">Submitted Inputs:</Text>
+                    {submitedInputs['individuals'][groupId].map((input, idx) => (
+                        <View key={idx} className="flex flex-row justify-between items-center mb-2 ml-2">
+                            <Text className="text-gray-600">Time: {input.time}</Text>
+                            <Text className="text-gray-600">Distance: {input.distance}m</Text>
+                        </View>
+                    ))}
+                </View>
+            }
             
             {/* Render all existing input pairs for this group */}
             {currentInputs[groupId]?.map((input, idx) => (

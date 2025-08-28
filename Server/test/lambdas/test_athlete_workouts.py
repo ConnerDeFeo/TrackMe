@@ -1,8 +1,6 @@
 import json
 import pytest
-from lambdas.athlete.get_workout_groups.get_workout_groups import get_workout_groups
 from lambdas.athlete.input_times.input_times import input_times
-from lambdas.athlete.input_group_time.input_group_time import input_group_time
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
@@ -11,7 +9,6 @@ from lambdas.coach.assign_group_workout.assign_group_workout import assign_group
 from lambdas.athlete.view_workouts_athlete.view_workouts_athlete import view_workouts_athlete
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
-from lambdas.athlete.create_workout_group.create_workout_group import create_workout_group
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
 from data import TestData
 from rds import execute_file, fetch_one, fetch_all
@@ -99,7 +96,7 @@ def test_input_times():
     assert response['statusCode'] == 200
 
     #Make sure the input was recorded in the database
-    inputs = fetch_all("SELECT * FROM athlete_workout_inputs")
+    inputs = fetch_all("SELECT * FROM athlete_inputs")
     assert inputs is not None
     assert len(inputs) == 2  # Two inputs recorded
 
@@ -115,59 +112,14 @@ def test_input_times():
     assert input2[2] == 200  # distance
     assert input2[3] == 30   # time
 
-def test_create_workout_group():
-    create_extra_athlete("test2", "1235")
-    create_extra_athlete("test3", "1236")
-
-    response = create_workout_group(TestData.test_workout_group, {})
-    assert response['statusCode'] == 200
-
-    #Check group is created
-    workout_group = fetch_one("SELECT * FROM workout_groups")
-    assert workout_group is not None
-    assert '1234' in workout_group 
-
-    #Check other athletes are added to the group
-    group_members = fetch_all("SELECT * FROM workout_group_members")
-    assert group_members is not None
-    assert len(group_members) == 3
-    for member in group_members:
-        assert member[0] == 1
-        assert member[1] in ["1234",'1235','1236']
-
-def test_input_group_time():
-    create_extra_athlete("test2", "1235")
-    create_extra_athlete("test3", "1236")
-    create_workout_group(TestData.test_workout_group, {})
-
-    response = input_group_time(TestData.test_input_group_time, {})
-    assert response['statusCode'] == 200
-
-    #Make sure the group was created
-    group = fetch_one("SELECT leaderId FROM workout_groups")
-    assert group is not None
-    assert group[0] == '1234'
-
-    #Check that the inputs for all athletes in the group were recorded
-    inputs = fetch_all("SELECT * FROM workout_group_inputs")
-    assert inputs is not None
-    assert len(inputs) == 1  # One for each athlete in the group
-    assert inputs[0][0] == 1
-    assert inputs[0][1] == 150
-    assert inputs[0][2] == 30
-
 def test_view_workout_inputs():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
-    create_workout_group(TestData.test_workout_group, {})
-    input_group_time(TestData.test_input_group_time, {})
     input_times(TestData.test_input_times, {})
 
-    debug_table()
     event = {
         'queryStringParameters': {
-            "userId": "1234",
-            "username": "test_athlete",
+            "athleteId": "1234",
             "date": date
         }
     }
@@ -176,48 +128,9 @@ def test_view_workout_inputs():
     assert response['statusCode'] == 200
 
     body = json.loads(response['body'])
-    assert len(body) == 2
-    group_inputs = body['groups']
-    athlete_inputs = body['individuals']
+    assert len(body) == 1
+    inputs = body['1'] # GroupId
 
-    assert group_inputs['1'] == [{'distance': 150, 'time': 30}]
-    assert athlete_inputs['1'] == [{'distance': 100,'time': 10.8}, {'distance': 200,'time': 30}]
-
-def test_get_workout_groups():
-    create_extra_athlete("test2", "1235")
-    create_extra_athlete("test3", "1236")
-    create_workout_group(TestData.test_workout_group, {})
-
-    create_group({
-        'body': json.dumps({
-            'groupName': 'group2',
-            'coachId':'123'
-        })
-    },{})
-
-    create_workout_group({
-        'body': json.dumps({
-            'leaderId': '1234',
-            'groupId': 2,
-            'athleteIds': ['1234']
-        })
-    },{})
-
-    response = get_workout_groups({
-        'queryStringParameters': {
-            'leaderId': '1234',
-            'date': date
-        }
-    }, {})
-    debug_table()
-
-    assert response['statusCode'] == 200
-    body = json.loads(response['body'])
-    assert len(body) == 2
-    
-    group1 = body['1']
-    group2 = body['2']
-
-    assert group1 == ['test_athlete','test2','test3']
-
-    assert group2 == ['test_athlete']
+    assert len(inputs) == 2
+    assert {"distance": 100, "time": 10.8} in inputs
+    assert {"distance": 200, "time": 30} in inputs

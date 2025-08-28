@@ -1,7 +1,4 @@
-DROP TABLE IF EXISTS workout_group_inputs CASCADE;
-DROP TABLE IF EXISTS workout_group_members CASCADE;
-DROP TABLE IF EXISTS workout_groups CASCADE;
-DROP TABLE IF EXISTS athlete_workout_inputs CASCADE;
+DROP TABLE IF EXISTS athlete_inputs CASCADE;
 DROP TABLE IF EXISTS group_workouts CASCADE;
 DROP TABLE IF EXISTS athlete_coach_invites CASCADE;
 DROP TABLE IF EXISTS athlete_coaches CASCADE;
@@ -70,31 +67,11 @@ CREATE TABLE group_workouts (
     UNIQUE (groupId, date, workoutId)
 );
 
-CREATE TABLE athlete_workout_inputs(
+CREATE TABLE athlete_inputs(
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupId INT REFERENCES groups(id) NOT NULL,
     distance INT DEFAULT 0,
     time FLOAT DEFAULT 0,
     date VARCHAR(10) DEFAULT CURRENT_DATE
-);
-
-CREATE TABLE workout_groups (
-    id SERIAL PRIMARY KEY,
-    leaderId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
-    groupId INT REFERENCES groups(id) NOT NULL,
-    date VARCHAR(10) DEFAULT CURRENT_DATE,
-    UNIQUE(leaderId, date, groupId)
-);
-
-CREATE TABLE workout_group_members(
-    workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
-    athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
-    PRIMARY KEY (workoutGroupId, athleteId)
-);
-
-CREATE TABLE workout_group_inputs(
-    workoutGroupId INT REFERENCES workout_groups(id) NOT NULL,
-    distance INT DEFAULT 0,
-    time FLOAT DEFAULT 0
 );
 

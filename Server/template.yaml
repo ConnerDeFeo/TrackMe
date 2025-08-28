@@ -42,20 +42,6 @@ Resources:
       BuildMethod: python3.12
 
   # ATHLETE FUNCTIONS
-  GetWorkoutGroups:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/athlete/get_workout_groups/
-      Handler: get_workout_groups.get_workout_groups
-      Events:
-        GetWorkoutGroupsApi:
-          Type: Api
-          Properties:
-            Path: /athletes/get_workout_groups/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
 
   ViewWorkoutsAthleteFunction:
     Type: AWS::Serverless::Function 
@@ -117,21 +103,6 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  CreateWorkoutGroupFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/create_workout_group/
-      Handler: create_workout_group.create_workout_group
-      Events:
-        CreateWorkoutGroupApi:
-          Type: Api
-          Properties:
-            Path: /athletes/create_workout_group/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
   AcceptCoachInviteFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -157,21 +128,6 @@ Resources:
           Type: Api
           Properties:
             Path: /athletes/input_times/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
-  InputGroupTimeFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/input_group_time/
-      Handler: input_group_time.input_group_time
-      Events:
-        InputGroupTimeApi:
-          Type: Api
-          Properties:
-            Path: /athletes/input_group_time/
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:

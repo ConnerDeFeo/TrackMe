@@ -104,7 +104,7 @@ class TestData:
 
     test_input_times = {
         "body": json.dumps({
-            "athleteId": "1234",
+            "athleteIds": ["1234"],
             'groupId': 1,
             "date": date,
             'inputs': [
@@ -117,22 +117,5 @@ class TestData:
                     'time': 30
                 }
             ]
-        })
-    }
-
-    test_workout_group = {
-        "body": json.dumps({
-            'leaderId':'1234',
-            'athleteIds': ["1234", "1235", "1236"],
-            'groupId': 1,
-            'date': date
-        })
-    }
-
-    test_input_group_time = {
-        "body": json.dumps({
-            "workoutGroupId": 1,
-            "time": 30,
-            "distance": 150
         })
     }

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { useNavigation } from "@react-navigation/native";
+import UserService from "../../services/UserService";
 
 //Component used to render input fields for a specific group
 /**
@@ -26,9 +27,8 @@ const RenderGroupInputs: React.FC<
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
-        submitedInputs: Record<string, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>,
-        onSubmit: () => void,
-        workoutGroup: string[] | undefined
+        submitedInputs: Record<string, { time?: string | undefined; distance?: string | undefined}[]>,
+        onSubmit: () => void
     }> = (
         {
             groupId, 
@@ -38,14 +38,15 @@ const RenderGroupInputs: React.FC<
             handleDistanceChange, 
             setCurrentInputs, 
             submitedInputs, 
-            onSubmit, 
-            workoutGroup
+            onSubmit
         })=>{
 
     const navigation = useNavigation<any>();
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
-        const resp = await AthleteWorkoutService.inputTimes(groupId, date, currentInputs[groupId]);
+        const userId = await UserService.getUserId();
+        const athleteIds = [userId!]
+        const resp = await AthleteWorkoutService.inputTimes(athleteIds, groupId, date, currentInputs[groupId]);
         //If response ok, reset current inputs
         if(resp.ok){
             setCurrentInputs(prev => ({
@@ -67,7 +68,7 @@ const RenderGroupInputs: React.FC<
             </View>
 
             {/**Current workout group and their inputs */}
-            {workoutGroup && (
+            {/* {workoutGroup && (
                 <View className="bg-gray-50 rounded-lg p-3 border border-gray-100">
                     <Text className="text-base font-medium text-gray-800 mb-2">Current Workout Group:</Text>
                     <View className="flex flex-row flex-wrap gap-2">
@@ -76,12 +77,12 @@ const RenderGroupInputs: React.FC<
                         ))}
                     </View>
                 </View>
-            )}
+            )} */}
             {/**Submitted inputs that will be displayed */}
-            {submitedInputs['individuals'] && submitedInputs['individuals'][groupId] &&
+            {submitedInputs[groupId] &&
                 <View>
                     <Text className="my-2">Submitted Inputs:</Text>
-                    {submitedInputs['individuals'][groupId].map((input, idx) => (
+                    {submitedInputs[groupId].map((input, idx) => (
                         <View key={idx} className="flex flex-row justify-between items-center mb-2 ml-2">
                             <Text className="text-gray-600">Time: {input.time}</Text>
                             <Text className="text-gray-600">Distance: {input.distance}m</Text>

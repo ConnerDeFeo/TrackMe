@@ -12,36 +12,16 @@ const AthleteWorkoutService = {
     },
     viewWorkoutInputs: async() =>{
         const userId = await UserService.getUserId();
-        const username = await UserService.getUsername();
-        let query = `${EXPO_PUBLIC_API_URL}/athletes/view_workout_inputs?userId=${userId}&username=${username}`;
+        let query = `${EXPO_PUBLIC_API_URL}/athletes/view_workout_inputs?athleteId=${userId}`;
         return await API.get(query);
     },
-    inputTimes: async ( groupId:string, date:string, inputs: { time?: string; distance?: string }[]) => {
-        const athleteId = await UserService.getUserId();
+    inputTimes: async ( athleteIds:string[], groupId:string, date:string, inputs: { time?: string; distance?: string }[]) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/input_times`, {
-            'athleteId': athleteId,
+            'athleteIds': athleteIds,
             'groupId': groupId,
             'date': date,
             'inputs': inputs
         });
-    },
-    createWorkoutGroup: async (athleteIds: string[], groupId:string, date:string, workoutGroupName:string ) => {
-        const userId = await UserService.getUserId();
-        return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/create_workout_group`, {
-            'leaderId': userId,
-            'athleteIds': athleteIds,
-            'groupId': groupId,
-            'workoutGroupName': workoutGroupName,
-            'date': date
-        });
-    },
-    getWorkoutGroups: async (date?:string) => {
-        const leaderId = await UserService.getUserId();
-        let query = `${EXPO_PUBLIC_API_URL}/athletes/get_workout_groups?leaderId=${leaderId}`;
-        if (date) {
-            query += `&date=${date}`;
-        }
-        return await API.get(query);
     }
 }
 

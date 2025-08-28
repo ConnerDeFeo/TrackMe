@@ -12,24 +12,17 @@ const Inputs = ()=>{
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [currentInputs, setCurrentInputs] = 
     usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('current', {});
-    const [workoutGroups, setWorkoutGroups] = useState<Record<string, string[]>>({});
 
     // Store previously submitted workout inputs organized by date and group
-    const [submittedInputs, setSubmittedInputs] = useState<Record<number, Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>({});
+    const [submittedInputs, setSubmittedInputs] = useState<Record<number, { time?: string; distance?: string }[]>>({});
 
     // Fetch previously submitted workout inputs from the server
     const fetchSubmittedInputs = async () => {
         const resp = await AthleteWorkoutService.viewWorkoutInputs();
         if (resp.ok){
             const inputs = await resp.json();
+            console.log(inputs)
             setSubmittedInputs(inputs);
-        }
-    };
-    const fetchWorkoutGroups = async () => {
-        const resp = await AthleteWorkoutService.getWorkoutGroups();
-        if (resp.ok) {
-            const workGroups = await resp.json();
-            setWorkoutGroups(workGroups);
         }
     };
 
@@ -43,7 +36,6 @@ const Inputs = ()=>{
             }
         };
         fetchGroups();
-        fetchWorkoutGroups();
         fetchSubmittedInputs();
     },[]);
 
@@ -90,7 +82,6 @@ const Inputs = ()=>{
                         handleTimeChange={handleTimeChange}
                         handleDistanceChange={handleDistanceChange}
                         setCurrentInputs={setCurrentInputs}
-                        workoutGroup={workoutGroups[group[1]]}
                     />
                 ))}
             </View>

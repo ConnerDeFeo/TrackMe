@@ -75,11 +75,7 @@ const CreateWorkoutGroup = ()=>{
      * Creates workout group with selected athletes and current date, then navigates back
      */
     const onGroupCreation = async ()=>{
-        const date = new Date().toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-        const resp = await AthleteWorkoutService.createWorkoutGroup(selectedAthletes, groupId, date, workoutGroupName);
-        if (resp.ok) {
-            navigation.goBack(); // Return to previous screen on success
-        } 
+        
     }
 
     return (

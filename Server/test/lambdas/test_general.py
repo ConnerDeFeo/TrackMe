@@ -114,3 +114,6 @@ def test_view_group_inputs():
     assert inputed_times[0]['time'] == 10.8
     assert inputed_times[1]['distance'] == 200
     assert inputed_times[1]['time'] == 30
+
+def test_get_user():
+    pass

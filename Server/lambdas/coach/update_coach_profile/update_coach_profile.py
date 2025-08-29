@@ -18,7 +18,8 @@ def update_coach_profile(event, context):
         execute_commit(
             """
                 UPDATE coaches
-                SET bio = %s, firstName = %s, lastName = %s, tffrsUrl = %s, gender = %s, profilePictureUrl = %s
+                SET bio = %s, firstName = %s, lastName = %s, 
+                tffrsUrl = %s, gender = %s, profilePictureUrl = %s
                 WHERE userId = %s
             """,
             (bio, firstName, lastName, tffrsUrl, gender, profilePictureUrl, coachId)

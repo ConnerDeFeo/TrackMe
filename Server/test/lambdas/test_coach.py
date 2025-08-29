@@ -7,7 +7,8 @@ from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.get_athletes.get_athletes import get_athletes
 from lambdas.coach.search_athletes.search_athletes import search_athletes
-from rds import execute_file
+from lambdas.coach.update_coach_profile.update_coach_profile import update_coach_profile
+from rds import execute_file, fetch_one
 from data import TestData
 
 @pytest.fixture(autouse=True)
@@ -121,3 +122,27 @@ def test_seach_with_term_athletes():
     assert athletes[1][0] == 'testathlete2'
     assert athletes[1][1] == '5678'
     assert athletes[1][2] == 'Pending'
+
+def test_update_athlete_profile():
+    create_coach(TestData.test_coach, {})
+    event = {
+        "body": json.dumps({
+            "coachId": '123',
+            "bio": "Updated bio",
+            "firstName": "Updated",
+            "lastName": "Name",
+            "tffrsUrl": "http://updated.url",
+            "gender": "Non-binary",
+            "profilePictureUrl": None
+        })
+    }
+    response = update_coach_profile(event, {})
+    assert response['statusCode'] == 200
+    data = fetch_one("SELECT * FROM coaches WHERE userId = %s", ('123',))
+    assert data
+    assert data[2] == "Updated bio"
+    assert data[3] == "Updated"
+    assert data[4] == "Name"
+    assert data[5] == "http://updated.url"
+    assert data[6] == "Non-binary"
+    assert data[7] is None

@@ -42,6 +42,20 @@ Resources:
       BuildMethod: python3.12
 
   # ATHLETE FUNCTIONS
+  UpdateAthleteProfileFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/update_athlete_profile/
+      Handler: update_athlete_profile.update_athlete_profile
+      Events:
+        UpdateAthleteProfileApi:
+          Type: Api
+          Properties:
+            Path: /athletes/update_athlete_profile/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
 
   ViewWorkoutsAthleteFunction:
     Type: AWS::Serverless::Function 

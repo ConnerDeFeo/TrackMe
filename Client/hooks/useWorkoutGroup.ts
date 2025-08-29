@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "../services/AsyncStorage";
-import UserService from "../services/UserService";
 
 const globalSubscribers: { [key: string]: (() => void)[] } = {};
 
 export const useWorkoutGroup = (groupId:string, ) =>{
     const [workoutGroup, setWorkoutGroup] = useState<{id: string, username: string}[]>([]);
     const [loading, setLoading] = useState(true);
-    const [hasInitialized, setHasInitialized] = useState(false);
     const key = `WorkoutGroup-${groupId}`;
 
     // Function to notify all subscribers for this group
@@ -24,16 +22,6 @@ export const useWorkoutGroup = (groupId:string, ) =>{
             const stored = await AsyncStorage.getData(key);
         if (stored) {
             setWorkoutGroup(JSON.parse(stored));
-        }
-        else if (!hasInitialized) {
-            const userId = await UserService.getUserId();
-            const username = await UserService.getUsername();
-            if(userId && username){
-                const defaultGroup = [{ id: userId, username }];
-                await AsyncStorage.storeData(key, JSON.stringify(defaultGroup));
-                setWorkoutGroup(defaultGroup);
-            }
-            setHasInitialized(true);
         }
         } catch (error) {
             console.error('Error loading workout group:', error);

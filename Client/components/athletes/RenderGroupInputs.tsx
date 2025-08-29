@@ -50,14 +50,19 @@ const RenderGroupInputs: React.FC<
 
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
-        const resp = await AthleteWorkoutService.inputTimes(workoutGroup.map(athlete => athlete.id), groupId, date, currentInputs[groupId]);
-        //If response ok, reset current inputs
-        if(resp.ok){
-            setCurrentInputs(prev => ({
-                ...prev,
-                [groupId]: []
-            }));
-            onSubmit();
+        const userId = await UserService.getUserId();
+        if(userId){
+            //All athletes in workout group plus the logged in user
+            const athletes = [...workoutGroup.map(athlete => athlete.id), userId];
+            const resp = await AthleteWorkoutService.inputTimes(athletes, groupId, date, currentInputs[groupId]);
+            //If response ok, reset current inputs
+            if(resp.ok){
+                setCurrentInputs(prev => ({
+                    ...prev,
+                    [groupId]: []
+                }));
+                onSubmit();
+            }
         }
     }
 

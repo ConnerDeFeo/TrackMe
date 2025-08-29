@@ -49,7 +49,8 @@ const CreateWorkoutGroup = ()=>{
     const {groupId} = route.params as { groupId: string };
     const [groupMembers, setGroupMembers] = useState<string[]>([]); // All available athletes from the source group
     // Selected athletes for the workout group
-    const {workoutGroup, addAthlete, removeAthlete} = useWorkoutGroup(groupId);
+    const {workoutGroup, addAthlete, removeAthlete} = useWorkoutGroup(groupId); 
+    const [userId, setUserId] = useState<string>('');
 
     // Fetch group athletes on component mount
     useEffect(()=>{
@@ -62,6 +63,7 @@ const CreateWorkoutGroup = ()=>{
             const userId = await UserService.getUserId();
             if (resp.ok && userId) {
                 const data = await resp.json();
+                setUserId(userId);
                 setGroupMembers(data); // Populate available athletes
             }
         }
@@ -88,6 +90,9 @@ const CreateWorkoutGroup = ()=>{
             {/* Athletes List with Selection Toggle */}
             <View className="mb-8">
                 {groupMembers.map((athlete) => {
+                    if(athlete[0] === userId) {
+                        return;
+                    }
                     const isSelected = workoutGroup.some(member => member.id === athlete[0]);
                     return (
                         <View key={athlete[0]} className="flex flex-row justify-between items-center bg-white p-4 mb-3 rounded-xl shadow-sm border border-gray-100">

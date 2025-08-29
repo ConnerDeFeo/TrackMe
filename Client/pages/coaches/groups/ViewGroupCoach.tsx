@@ -52,7 +52,7 @@ const ViewGroup = () => {
   }
 
   return (
-    <View className="flex-1 bg-gray-50 px-6 pt-16 pb-12">
+    <View className="flex-1 px-6 pt-16 pb-12">
       <View className="mb-8">
         <Text className="text-3xl font-bold text-gray-900 mb-2">{groupName}</Text>
         <Text className="text-gray-600">Manage your group and workouts</Text>

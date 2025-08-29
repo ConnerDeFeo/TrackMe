@@ -39,35 +39,37 @@ const DisplayWorkout: React.FC<{ workout: any, onPress:()=>void, onRemove?: (id:
                             <Text className="font-semibold text-red-600 mb-3 text-base">
                                 {exercise.name}
                             </Text>
-                            
+
                             {/* Exercise details container */}
-                            <View className="space-y-2">
-                                {/* Number of sets */}
-                                <Text className="text-gray-800">
-                                    <Text className="text-gray-500">Sets: </Text>
-                                    {exercise.sets}
-                                </Text>
-                                {/* Number of reps */}
-                                <Text className="text-gray-800">
-                                    <Text className="text-gray-500">Reps: </Text>
-                                    {exercise.reps}
-                                </Text>
-                                
-                                {/* Exercise parts section (if any exist) */}
-                                {exercise.exerciseParts && exercise.exerciseParts.length > 0 && (
-                                    <View className="mt-3">
-                                        <Text className="text-gray-500 font-medium mb-2">Parts:</Text>
-                                        {exercise.exerciseParts.map((part, partIndex) => (
-                                            /* Individual exercise part with distance and measurement */
-                                            <View key={partIndex} className="ml-3 py-1">
-                                                <Text className="text-gray-700">
-                                                    • Distance: {part.distance} {part.measurement}
-                                                </Text>
-                                            </View>
-                                        ))}
-                                    </View>
-                                )}
-                            </View>
+                            {exercise.sets && exercise.reps && (
+                                <View className="space-y-2">
+                                    {/* Number of sets */}
+                                    <Text className="text-gray-800">
+                                        <Text className="text-gray-500">Sets: </Text>
+                                        {exercise.sets}
+                                    </Text>
+                                    {/* Number of reps */}
+                                    <Text className="text-gray-800">
+                                        <Text className="text-gray-500">Reps: </Text>
+                                        {exercise.reps}
+                                    </Text>
+                                    
+                                    {/* Exercise parts section (if any exist) */}
+                                    {exercise.exerciseParts && exercise.exerciseParts.length > 0 && (
+                                        <View className="mt-3">
+                                            <Text className="text-gray-500 font-medium mb-2">Parts:</Text>
+                                            {exercise.exerciseParts.map((part, partIndex) => (
+                                                /* Individual exercise part with distance and measurement */
+                                                <View key={partIndex} className="ml-3 py-1">
+                                                    <Text className="text-gray-700">
+                                                        • Distance: {part.distance} {part.measurement}
+                                                    </Text>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    )}
+                                </View>
+                            )}
                         </View>
                     ))}
                 </View>

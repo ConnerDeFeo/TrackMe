@@ -17,6 +17,7 @@ def get_groups(event, context):
                     JOIN groups g ON ag.groupId = g.id
                     JOIN coaches c ON g.coachId = c.userId
                     WHERE ag.athleteId = %s
+                    AND ag.removed = FALSE
                 """,
                 (userId,)
             )

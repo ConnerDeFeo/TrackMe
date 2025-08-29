@@ -18,14 +18,14 @@ const UserService = {
   signOut: async () => {
     try {
       await signOut();
-      await AsyncStorage.removeData("accountType");
-      await AsyncStorage.removeData("userId");
+      await AsyncStorage.clear();
     } catch (error) {
       console.log("Error signing out:", error);
     }
   },
   //signs user in and navigates to their respective home page
   signIn: async (username: string, password: string) => {
+    await AsyncStorage.clear();
     await signIn({ username, password });
     const user = await getCurrentUser();
     const accountType = await UserService.getAccountType();

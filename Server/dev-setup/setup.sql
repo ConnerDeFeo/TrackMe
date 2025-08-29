@@ -13,12 +13,26 @@ DROP TABLE IF EXISTS workouts CASCADE;
 --User and user relation related tables--
 CREATE TABLE coaches (
     userId VARCHAR(255) PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE
+    username VARCHAR(255) NOT NULL UNIQUE,
+    bio TEXT,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255),
+    tffrsUrl VARCHAR(255),
+    gender VARCHAR(10),
+    profilePictureUrl VARCHAR(255)
 );
 
 CREATE TABLE athletes (
     userId VARCHAR(255) PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE
+    username VARCHAR(255) NOT NULL UNIQUE,
+    bio TEXT,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255),
+    tffrsUrl VARCHAR(255),
+    gender VARCHAR(10),
+    profilePictureUrl VARCHAR(255),
+    dateOfBirth VARCHAR(10),
+    weight FLOAT
 );
 
 CREATE TABLE groups (

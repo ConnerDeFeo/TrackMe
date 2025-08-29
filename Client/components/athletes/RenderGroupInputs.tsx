@@ -78,7 +78,7 @@ const RenderGroupInputs: React.FC<
             </View>
 
             {/**Current workout group and their inputs */}
-            {workoutGroup && (
+            {workoutGroup.length > 0 && (
                 <View className="bg-gray-50 rounded-lg p-3 border border-gray-100">
                     <Text className="text-base font-medium text-gray-800 mb-2">Current Workout Group:</Text>
                     <View className="flex flex-row flex-wrap gap-2">

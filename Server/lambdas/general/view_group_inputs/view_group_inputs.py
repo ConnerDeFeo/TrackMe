@@ -2,8 +2,8 @@ from datetime import datetime,timezone
 import json
 from rds import fetch_all
 
-#Grabs all user inpuots for a given date and groupId
-def view_inputs_coach(event, context):
+#Grabs all user inputs for a given date and groupId
+def view_group_inputs(event, context):
     query_params = event.get("queryStringParameters", {})
 
     try:

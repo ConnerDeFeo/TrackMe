@@ -67,10 +67,10 @@ const ViewGroup = () => {
       </TouchableOpacity>
       {workouts.length > 0 && 
         <TouchableOpacity 
-          onPress={() => navigation.navigate('ViewWorkoutCoach', { groupName:groupName })}
+          onPress={() => navigation.navigate('ViewGroupInputsCoach', { groupId:groupId })}
           className="bg-black rounded-lg py-3 px-4 mt-2"
         >
-          <Text className="text-white font-semibold text-center">View Group Workout</Text>
+          <Text className="text-white font-semibold text-center">View Group Inputs</Text>
         </TouchableOpacity>
       }
       </View>

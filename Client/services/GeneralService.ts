@@ -11,8 +11,15 @@ const GeneralService = {
     return API.get(`${EXPO_PUBLIC_API_URL}/general/get_groups?userId=${userId}&accountType=${accountType}`);
   },
   getAthletesForGroup: async (groupId:string) => {
-        return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_athletes_for_group?groupId=${groupId}`);
-    },
+      return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_athletes_for_group?groupId=${groupId}`);
+  },
+  viewGroupInputs: async (groupId:string, date?:string) => {
+      let query = `${EXPO_PUBLIC_API_URL}/general/view_group_inputs?groupId=${groupId}`;
+      if(date){
+          query += `&date=${date}`;
+      }
+      return await API.get(query);
+  }
 };
 
 export default GeneralService;

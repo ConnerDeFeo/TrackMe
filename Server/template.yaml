@@ -329,21 +329,6 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  ViewWorkoutCoachFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/view_workout_coach/
-      Handler: view_workout_coach.view_workout_coach
-      Events:
-        ViewWorkoutCoachApi:
-          Type: Api
-          Properties:
-            Path: /coaches/view_workout_coach/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
   SearchAthletesFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -360,6 +345,21 @@ Resources:
         - Ref: RDSLayer
 
   # GENERAL FUNCTIONS
+  ViewGroupInputsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/view_group_inputs/
+      Handler: view_group_inputs.view_group_inputs
+      Events:
+        ViewGroupInputsApi:
+          Type: Api
+          Properties:
+            Path: /general/view_group_inputs/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   GetAthletesForGroupFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
 import usePersistentState from "../../hooks/usePersistentState";
+import AsyncStorage from "../../services/AsyncStorage";
+import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 
 //Component used to render input fields for a specific group
 /**
@@ -44,13 +46,11 @@ const RenderGroupInputs: React.FC<
 
     const navigation = useNavigation<any>();
     //Current workout group members
-    const [workoutGroup, setWorkoutGroup] = usePersistentState<{id: string, username: string}[]>('workoutGroup', []);
-       
+    const {workoutGroup} = useWorkoutGroup(groupId);
+
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
-        const userId = await UserService.getUserId();
-        const athleteIds = [userId!]
-        const resp = await AthleteWorkoutService.inputTimes(athleteIds, groupId, date, currentInputs[groupId]);
+        const resp = await AthleteWorkoutService.inputTimes(workoutGroup.map(athlete => athlete.id), groupId, date, currentInputs[groupId]);
         //If response ok, reset current inputs
         if(resp.ok){
             setCurrentInputs(prev => ({
@@ -60,34 +60,29 @@ const RenderGroupInputs: React.FC<
             onSubmit();
         }
     }
+
     return(
         // Main container for the group with styling for card appearance
         <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 gap-y-4">
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', 
-                    {
-                        groupId: groupId, 
-                        workoutGroup: workoutGroup, 
-                        setWorkoutGroup:setWorkoutGroup
-                    })}
-                >
+                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId: groupId})}>
                     <Text className="text-[#E63946] underline">Create Group</Text>
                 </TouchableOpacity>
             </View>
 
             {/**Current workout group and their inputs */}
-            {/* {workoutGroup && (
+            {workoutGroup && (
                 <View className="bg-gray-50 rounded-lg p-3 border border-gray-100">
                     <Text className="text-base font-medium text-gray-800 mb-2">Current Workout Group:</Text>
                     <View className="flex flex-row flex-wrap gap-2">
                         {workoutGroup.map((member, idx) => (
-                            <Text key={idx} className="text-white text-sm font-medium bg-[#E63946] rounded-full px-3 py-1">{member}</Text>
+                            <Text key={idx} className="text-white text-sm font-medium bg-[#E63946] rounded-full px-3 py-1">{member.username}</Text>
                         ))}
                     </View>
                 </View>
-            )} */}
+            )}
             {/**Submitted inputs that will be displayed */}
             {submitedInputs[groupId] &&
                 <View>

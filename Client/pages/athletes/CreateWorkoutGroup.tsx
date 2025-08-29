@@ -1,9 +1,10 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import UserService from "../../services/UserService";
-import AthleteWorkoutService from "../../services/AthleteWorkoutService";
+import usePersistentState from "../../hooks/usePersistentState";
+import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 
 //Create workout group for a given group
 /**
@@ -45,17 +46,10 @@ const CreateWorkoutGroup = ()=>{
     // Navigation and routing setup
     const navigation = useNavigation<any>();
     const route = useRoute();
-    const {groupId, workoutGroup, setWorkoutGroup} = route.params as 
-        {
-            groupId: string, 
-            workoutGroup: {id: string, username: string}[], 
-            setWorkoutGroup: React.Dispatch<React.SetStateAction<{id: string, username: string}[]>>
-        };
-
-    // State management for component data
-    const [workoutGroupName, setWorkoutGroupName] = useState<string>(""); // User-defined name for the workout group
+    const {groupId} = route.params as { groupId: string };
     const [groupMembers, setGroupMembers] = useState<string[]>([]); // All available athletes from the source group
-    const [selectedAthletes, setSelectedAthletes] = useState<string[]>([]); // Athletes selected for the workout group
+    // Selected athletes for the workout group
+    const {workoutGroup, addAthlete, removeAthlete} = useWorkoutGroup(groupId);
 
     // Fetch group athletes on component mount
     useEffect(()=>{
@@ -68,50 +62,40 @@ const CreateWorkoutGroup = ()=>{
             const userId = await UserService.getUserId();
             if (resp.ok && userId) {
                 const data = await resp.json();
-                setSelectedAthletes([userId]); // Auto-select current user
                 setGroupMembers(data); // Populate available athletes
             }
         }
         fetchGroupAthletes();
     },[]);
 
+    const handleWorkoutGroupChange =(athlete: {id: string, username: string}) => {
+        
+        if (workoutGroup.some(member => member.id === athlete.id)) {
+            removeAthlete(athlete.id);
+        } else {
+            addAthlete(athlete);
+        }
+    }
+
     return (
         <View className="mt-16 px-6 bg-white min-h-screen">
             {/* Header Section */}
             <Text className="text-3xl font-bold text-black mb-8 text-center">Create Workout Group</Text>
-            
-            {/* Workout Group Name Input Section */}
-            <TextInput
-                placeholder="Workout Group Name"
-                value={workoutGroupName}
-                onChangeText={setWorkoutGroupName}
-                className="border-2 border-gray-200 rounded-xl p-4 mb-6 text-black bg-white shadow-sm"
-                placeholderTextColor="#666"
-            />
             
             {/* Athletes Selection Section */}
             <Text className="text-xl font-semibold text-black mb-4">Select Athletes</Text>
             
             {/* Athletes List with Selection Toggle */}
             <View className="mb-8">
-                {groupMembers.map((athlete, index) => {
-                    const isSelected = selectedAthletes.includes(athlete[0]);
+                {groupMembers.map((athlete) => {
+                    const isSelected = workoutGroup.some(member => member.id === athlete[0]);
                     return (
                         <View key={athlete[0]} className="flex flex-row justify-between items-center bg-white p-4 mb-3 rounded-xl shadow-sm border border-gray-100">
                             {/* Athlete name display */}
                             <Text className="text-lg text-black font-medium">{athlete[1]}</Text>
                             {/* Selection toggle button */}
                             <TouchableOpacity 
-                                onPress={() => {
-                                    // Toggle athlete selection - add if not selected, remove if selected
-                                    setSelectedAthletes(prev => {
-                                        if (prev.includes(athlete[0])) {
-                                            return prev.filter(id => id !== athlete[0]); // Remove from selection
-                                        } else {
-                                            return [...prev, athlete[0]]; // Add to selection
-                                        }
-                                    });
-                                }}
+                                onPress={() => handleWorkoutGroupChange({id: athlete[0], username: athlete[1]})}
                                 className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'bg-red-500'}`}
                                 style={{backgroundColor: isSelected ? '#f3f4f6' : '#E63946'}}
                             >

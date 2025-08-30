@@ -7,7 +7,7 @@ import UserService from '../../services/UserService';
 //Page for adding athletes to a coaches group
 const AddAthlete= () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [results, setResults] = useState<string[][]>([]);
+    const [athletes, setAthletes] = useState<string[][]>([]);
     const [loading, setLoading] = useState(false);
 
     // Function to handle search input and fetch results
@@ -18,7 +18,7 @@ const AddAthlete= () => {
         const res = await CoachService.searchAthletes(searchTerm, userId!);
         if(res.ok){
             const athletes:string[][] = await res.json();
-            setResults(athletes);
+            setAthletes(athletes);
         }
         setLoading(false);
     };
@@ -41,7 +41,7 @@ const AddAthlete= () => {
             const res = await CoachService.searchAthletes('', userId!);
             if(res.ok){
                 const athletes:string[][] = await res.json();
-                setResults(athletes);
+                setAthletes(athletes);
             }
             setLoading(false);
         };
@@ -70,7 +70,7 @@ const AddAthlete= () => {
         }
 
         return (
-            <View className="flex-row justify-between items-center p-4 border-b border-gray-200 bg-white">
+            <View className="flex-row justify-between items-center p-4 border-b border-gray-200 bg-white" key={userId}>
                 <Text className="text-lg font-medium text-gray-800">{username}</Text>
                 {joinedStatus}
             </View>
@@ -79,20 +79,15 @@ const AddAthlete= () => {
 
     return (
         <View className="flex-1 p-4 bg-white mt-[4rem]">
-            <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
+            <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} placeholder='Search athletes...' />
             {loading ? (
                 <Text className="text-center text-gray-500 text-base mt-4">Searching...</Text>
             ) : (
-                <FlatList
-                    data={results}
-                    keyExtractor={item => item[0]}
-                    renderItem={({ item }) => renderAthlete({ item })}
-                    ListEmptyComponent={
-                        <Text className="text-center text-gray-400 text-base mt-8">
-                            No athletes found.
-                        </Text>
-                    }
-                />
+                <View className="space-y-3">
+                    {athletes.map((athlete) => (
+                        renderAthlete({ item: athlete })
+                    ))}
+                </View>
             )}
         </View>
     );

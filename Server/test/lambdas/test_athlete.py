@@ -1,4 +1,5 @@
 import json
+from lambdas.athlete.request_coach.request_coach import request_coach
 from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
 from rds import execute_file
 import pytest
@@ -73,3 +74,15 @@ def test_update_athlete_profile():
     assert data[5] == "Male"
     assert data[6] is None
     assert data[7] == 70 
+
+def test_request_coach():
+    create_athlete(TestData.test_athlete, {})
+    create_coach(TestData.test_coach, {})
+    event = {
+        "body": json.dumps({
+            "athleteId": "1234",
+            "coachId": "5678"
+        })
+    }
+    response = request_coach(event, {})
+    assert response['statusCode'] == 200

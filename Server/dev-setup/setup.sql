@@ -1,14 +1,13 @@
 DROP TABLE IF EXISTS athlete_inputs CASCADE;
 DROP TABLE IF EXISTS group_workouts CASCADE;
 DROP TABLE IF EXISTS athlete_coach_invites CASCADE;
+DROP TABLE IF EXISTS athlete_coach_requests CASCADE;
 DROP TABLE IF EXISTS athlete_coaches CASCADE;
 DROP TABLE IF EXISTS athlete_groups CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS athletes CASCADE;
 DROP TABLE IF EXISTS coaches CASCADE;
 DROP TABLE IF EXISTS workouts CASCADE;
-
-
 
 --User and user relation related tables--
 CREATE TABLE coaches (
@@ -56,6 +55,13 @@ CREATE TABLE athlete_coaches (
 );
 
 CREATE TABLE athlete_coach_invites (
+    id SERIAL PRIMARY KEY,
+    athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
+    coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
+    UNIQUE (athleteId, coachId)
+);
+
+CREATE TABLE athlete_coach_requests (
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,

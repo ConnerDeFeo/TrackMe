@@ -163,6 +163,21 @@ Resources:
         - Ref: RDSLayer
 
   # COACH FUNCTIONS
+  UpdateCoachFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/update_coach/
+      Handler: update_coach.update_coach
+      Events:
+        UpdateCoachApi:
+          Type: Api
+          Properties:
+            Path: /coaches/update_coach/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   RemoveGroupAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:

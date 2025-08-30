@@ -13,8 +13,6 @@ import SignIn from './pages/authentication/SignIn';
 import Footer from './components/Footer';
 import CoachGroups from './pages/coaches/groups/CoachGroups';
 import AthleteGroups from './pages/athletes/AthleteGroups';
-import CoachProfile from './pages/coaches/CoachProfile';
-import AthleteProfile from './pages/athletes/AthleteProfile';
 import CreateGroup from './pages/coaches/groups/CreateGroup';
 import AddAthlete from './pages/coaches/AddAthlete';
 import Athletes from './pages/coaches/Athletes';
@@ -28,6 +26,7 @@ import ViewGroupCoach from './pages/coaches/groups/ViewGroupCoach';
 import ViewGroupAthlete from './pages/athletes/ViewGroupAthlete';
 import Inputs from './pages/athletes/Inputs';
 import CreateWorkoutGroup from './pages/athletes/CreateWorkoutGroup';
+import Profile from './components/Profile';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -71,8 +70,8 @@ const RootStack = createNativeStackNavigator({
     ConfirmEmail: BaseLayout(<ConfirmEmail/>),
     CoachGroups: UserLayout(<CoachGroups/>, 'coach'),
     AthleteGroups: UserLayout(<AthleteGroups/>, 'athlete'),
-    CoachProfile: UserLayout(<CoachProfile/>, 'coach'),
-    AthleteProfile: UserLayout(<AthleteProfile/>, 'athlete'),
+    CoachProfile: UserLayout(<Profile/>, 'coach'),
+    AthleteProfile: UserLayout(<Profile/>, 'athlete'),
     CreateGroup: UserLayout(<CreateGroup/>, 'coach'),
     ViewGroupCoach: UserLayout(<ViewGroupCoach/>, 'coach'),
     AddAthlete: UserLayout(<AddAthlete/>, 'coach'),

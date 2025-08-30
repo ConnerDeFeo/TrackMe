@@ -24,6 +24,9 @@ const GeneralService = {
   getUser: async (userId: string) => {
     const accountType = await AsyncStorage.getData('accountType');
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_user?userId=${userId}&accountType=${accountType}`);
+  },
+  updateUserProfile: async (userData: Record<string, any>, accountType: string) => {
+    return await API.post(`${EXPO_PUBLIC_API_URL}/${accountType}/update_${accountType}_profile`, userData);
   }
 };
 

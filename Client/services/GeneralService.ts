@@ -26,7 +26,16 @@ const GeneralService = {
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_user?userId=${userId}&accountType=${accountType}`);
   },
   updateUserProfile: async (userData: Record<string, any>, accountType: string) => {
-    return await API.post(`${EXPO_PUBLIC_API_URL}/${accountType}/update_${accountType}_profile`, userData);
+    accountType = accountType.toLowerCase();
+    const userId = await UserService.getUserId();
+    if(userId){
+      userData[`${accountType}Id`] = userId;
+    }
+    const routeMapping:Record<string,string> = {
+      'athlete': 'athletes',
+      'coach': 'coaches'
+    };
+    return await API.post(`${EXPO_PUBLIC_API_URL}/${routeMapping[accountType]}/update_${accountType}_profile`, userData);
   }
 };
 

@@ -33,7 +33,7 @@ const Profile = () => {
         const accountType = await UserService.getAccountType();
         if(!accountType) 
             return;
-        const resp = await GeneralService.updateUserProfile(userData, accountType.toLocaleLowerCase());
+        const resp = await GeneralService.updateUserProfile(userData, accountType);
     }
 
     return (

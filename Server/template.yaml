@@ -163,16 +163,16 @@ Resources:
         - Ref: RDSLayer
 
   # COACH FUNCTIONS
-  UpdateCoachFunction:
+  UpdateCoachProfileFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/update_coach/
-      Handler: update_coach.update_coach
+      CodeUri: lambdas/coach/update_coach_profile/
+      Handler: update_coach_profile.update_coach_profile
       Events:
         UpdateCoachApi:
           Type: Api
           Properties:
-            Path: /coaches/update_coach/
+            Path: /coaches/update_coach_profile/
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:

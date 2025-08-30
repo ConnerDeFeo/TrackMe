@@ -142,16 +142,31 @@ def test_accept_coach_invite():
 def test_search_empty_coaches():
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
-    request_coach(TestData.test_invite, {})
+
+    # Added athlete
+    invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
-    generate_coach("testcoach2", "5678")
-    generate_coach("2test_coach3", "91011")
-    request_coach({
+
+    #Invited Athlete
+    generate_coach("testInviteCoach2", "5678")
+    invite_athlete({
         "body": json.dumps({
-            "coachId": "123",
-            "athleteId": "5678"
+            "coachId": "5678",
+            "athleteId": "1234"
         })
     }, {})
+
+    #Athlete Requested
+    generate_coach("testRequestCoach", "1000")
+    request_coach({
+        "body": json.dumps({
+            "coachId": "1000",
+            "athleteId": "1234"
+        })
+    }, {})
+
+    #Neither
+    generate_coach("2test_coach3", "91011")
 
     event = {
         "queryStringParameters": {
@@ -161,11 +176,12 @@ def test_search_empty_coaches():
     response = search_coaches(event, {})
     assert response['statusCode'] == 200
 
-    coaches = json.loads(response['body'])
-    for coach in coaches:
-        assert coach[0] in ['testcoach', 'testcoach2', '2test_coach3']
-        assert coach[1] in ['123', '5678', '91011']
-        assert coach[2] in ['Added', 'Pending', 'Not Added']
+    athletes = json.loads(response['body'])
+    print(athletes)
+    mappings = {'testcoach':'Added', 'testInviteCoach2':'Invited', 'testRequestCoach':'Pending', '2test_coach3':'Not Added'}
+    assert len(athletes) == 4
+    for athlete in athletes:
+        assert athlete[2] == mappings[athlete[0]]
 
 def test_search_with_term_coaches():
     create_coach(TestData.test_coach, {})
@@ -190,10 +206,11 @@ def test_search_with_term_coaches():
     response = search_coaches(event, {})
     assert response['statusCode'] == 200
     coaches = json.loads(response['body'])
+    print(coaches)
     assert len(coaches) == 2
-    assert coaches[0][0] == 'testcoach'
-    assert coaches[0][1] == '123'
-    assert coaches[0][2] == 'Added'
-    assert coaches[1][0] == 'testcoach2'
-    assert coaches[1][1] == '5678'
-    assert coaches[1][2] == 'Pending'
+    assert coaches[0][0] == 'testcoach2'
+    assert coaches[0][1] == '5678'
+    assert coaches[0][2] == 'Pending'
+    assert coaches[1][0] == 'testcoach'
+    assert coaches[1][1] == '123'
+    assert coaches[1][2] == 'Added'

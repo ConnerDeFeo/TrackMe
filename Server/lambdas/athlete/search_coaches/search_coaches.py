@@ -12,12 +12,14 @@ def search_coaches(event, context):
             SELECT c.username, c.userId,
                 CASE 
                     WHEN ac.coachId IS NOT NULL THEN 'Added'
+                    WHEN aci.athleteId IS NOT NULL THEN 'Invited'
                     WHEN acr.coachId IS NOT NULL THEN 'Pending'
                     ELSE 'Not Added'
                 END as invitation_status
             FROM coaches c
             LEFT JOIN athlete_coaches ac ON c.userId = ac.coachId AND ac.athleteId = %s
             LEFT JOIN athlete_coach_requests acr ON c.userId = acr.coachId AND acr.athleteId = %s
+            LEFT JOIN athlete_coach_invites aci ON c.userId = aci.coachId
         """
 
         # If search term is empty, return 10 random coaches

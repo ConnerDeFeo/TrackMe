@@ -71,16 +71,31 @@ def test_get_athletes():
 def test_search_empty_athletes():
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
+
+    # Added athlete
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
+
+    #Invited Athlete
     generate_athlete("testathlete2", "5678")
-    generate_athlete("2test_athlete3", "91011")
     invite_athlete({
         "body": json.dumps({
             "coachId": "123",
             "athleteId": "5678"
         })
     }, {})
+
+    #Athlete Requested
+    generate_athlete("testRequestAthlete", "1000")
+    request_coach({
+        "body": json.dumps({
+            "coachId": "123",
+            "athleteId": "1000"
+        })
+    }, {})
+
+    #Neither
+    generate_athlete("2test_athlete3", "91011")
 
     event = {
         "queryStringParameters": {
@@ -91,12 +106,13 @@ def test_search_empty_athletes():
     assert response['statusCode'] == 200
 
     athletes = json.loads(response['body'])
+    print(athletes)
+    mappings = {'test_athlete':'Added', 'testathlete2':'Pending', 'testRequestAthlete':'Requested', '2test_athlete3':'Not Added'}
+    assert len(athletes) == 4
     for athlete in athletes:
-        assert athlete[0] in ['test_athlete', 'testathlete2', '2test_athlete3']
-        assert athlete[1] in ['1234', '5678', '91011']
-        assert athlete[2] in ['Added', 'Pending', 'Not Added']
+        assert athlete[2] == mappings[athlete[0]]
 
-def test_seach_with_term_athletes():
+def test_search_with_term_athletes():
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
     invite_athlete(TestData.test_invite, {})

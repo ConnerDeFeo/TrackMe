@@ -3,11 +3,12 @@ from rds import fetch_one
 
 def get_user(event, context):
     body = json.loads(event['body'])
+    mapping = {"Athlete": "athletes", "Coach": "coaches"}
 
     try:
         user_id = body['userId']
-        account_type = body['account_type']
-        data = fetch_one("SELECT * FROM %s WHERE userId = %s", (account_type.lower(), user_id))
+        account_type = body['accountType']
+        data = fetch_one(f"SELECT * FROM {mapping[account_type]} WHERE userId = %s", (user_id,))
         if data:
             return {
                 "statusCode": 200,

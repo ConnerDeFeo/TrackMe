@@ -2,6 +2,7 @@ import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.coach.update_coach_profile.update_coach_profile import update_coach_profile
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.general.get_groups.get_groups import get_groups
 from lambdas.coach.create_group.create_group import create_group
@@ -12,9 +13,12 @@ from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
+from lambdas.general.get_user.get_user import get_user
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
 from rds import execute_file
 from data import TestData
+from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
+from testing_utils import debug_table
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
@@ -116,4 +120,56 @@ def test_view_group_inputs():
     assert inputed_times[1]['time'] == 30
 
 def test_get_user():
-    pass
+    create_athlete(TestData.test_athlete, {})
+    event = {
+        "body": json.dumps({
+            "athleteId": '1234',
+            "bio": "Updated bio",
+            "firstName": "Updated",
+            "lastName": "Name",
+            "tffrsUrl": "http://updated.url",
+            "gender": "Non-binary",
+            "profilePictureUrl": None,
+            'dateOfBirth': '2000-01-01',
+            'weight': 70
+        })
+    }
+    update_athlete_profile(event, {})
+    create_coach(TestData.test_coach, {})
+    event = {
+        "body": json.dumps({
+            "coachId": '123',
+            "bio": "Updated bio",
+            "firstName": "Updated",
+            "lastName": "Name",
+            "tffrsUrl": "http://updated.url",
+            "gender": "Non-binary",
+            "profilePictureUrl": None
+        })
+    }
+    update_coach_profile(event, {})
+
+    athlete_response = get_user({
+        "body": json.dumps({
+            "userId": "1234",
+            "accountType": "Athlete"
+        })
+    }, {})
+    coach_response = get_user({
+        "body": json.dumps({
+            "userId": "123",
+            "accountType": "Coach"
+        })
+    }, {})
+
+    debug_table()
+    assert athlete_response['statusCode'] == 200
+    assert coach_response['statusCode'] == 200
+
+    athlete_data = json.loads(athlete_response['body'])
+    coach_data = json.loads(coach_response['body'])
+
+    assert athlete_data[0] == "1234"
+    assert athlete_data[1] == "test_athlete"
+    assert coach_data[0] == "123"
+    assert coach_data[1] == "testcoach"

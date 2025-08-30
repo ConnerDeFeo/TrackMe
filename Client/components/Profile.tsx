@@ -12,19 +12,23 @@ const Profile = () => {
     const [userData, setUserData] = useState<Record<string, any>>([]);
     // State to track original data for comparison to detect changes
     const [originalUserData, setOriginalUserData] = useState<Record<string, any>>([]);
+    //Account type used to potentially render more input fields for athletes
+    const [accountType, setAccountType] = useState<string | null>(null);
 
     // Fetch user data when component mounts
     useEffect(()=>{
         const fetchUserData = async () => {
-        const userId = await UserService.getUserId();
-        if(userId) {
-            const resp = await GeneralService.getUser(userId);
-            if(resp){
-            const data = await resp.json();
-            setUserData(data);
-            setOriginalUserData(data); // Store original data for change detection
+            const accountType = await UserService.getAccountType();
+            setAccountType(accountType!);
+            const userId = await UserService.getUserId();
+            if(userId) {
+                const resp = await GeneralService.getUser(userId);
+                if(resp){
+                const data = await resp.json();
+                setUserData(data);
+                setOriginalUserData(data); // Store original data for change detection
+                }
             }
-        }
         };
         fetchUserData();
     },[])
@@ -54,7 +58,7 @@ const Profile = () => {
     return (
         <View className="flex-1 bg-gray-50 px-6 pt-16">
             {/* Profile Picture Section */}
-            <View className="items-center mb-8">
+            <View className="items-center mb-8 ">
                 {/* Placeholder profile picture with gradient background */}
                 <View className="h-32 w-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full items-center justify-center shadow-lg mb-4">
                     <Text className="text-white text-lg font-semibold">PFP</Text>
@@ -63,10 +67,10 @@ const Profile = () => {
                 <Text className="text-2xl font-bold text-gray-800 mb-2">{userData.firstName} {userData.lastName}</Text>
                 {/* Display username */}
                 <Text className="text-gray-500 text-base">@{userData.username}</Text>
-                </View>
+            </View>
 
-                {/* Profile Form */}
-                <View className="space-y-4">
+            {/* Profile Form */}
+            <View className="gap-y-4">
                 {/* Bio input field - multiline text area */}
                 <View>
                     <Text className="text-gray-700 font-medium mb-2">Bio</Text>
@@ -82,7 +86,7 @@ const Profile = () => {
                 </View>
 
                 {/* First and Last name inputs in a row */}
-                <View className="flex-row space-x-3">
+                <View className="flex-row gap-x-3">
                     <View className="flex-1">
                         <Text className="text-gray-700 font-medium mb-2">First Name</Text>
                         <TextInput
@@ -116,6 +120,21 @@ const Profile = () => {
                         onBlur={() => handleUpdateProfile('gender', userData.gender)} // Save on blur
                     />
                 </View>
+
+                {/* Additional fields for athletes */}
+                {accountType==="Athlete" && (
+                    <View>
+                        <Text className="text-gray-700 font-medium mb-2">Body Weight</Text>
+                        <TextInput
+                            className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm"
+                            placeholder="lbs"
+                            keyboardType="numeric"
+                            value={userData.bodyWeight}
+                            onChangeText={(text) => setUserData({ ...userData, bodyWeight: text })}
+                            onBlur={() => handleUpdateProfile('bodyWeight', userData.bodyWeight)} // Save on blur
+                        />
+                    </View>
+                )}
 
                 {/* Logout button */}
                 <View className="mt-8">

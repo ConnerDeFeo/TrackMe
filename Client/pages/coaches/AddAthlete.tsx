@@ -48,6 +48,7 @@ const AddAthlete= () => {
         fetchAllAthletes();
     }, []);
 
+    console.log(athletes)
     //Renders each athlete in the list
     const renderAthlete = ({ item }: { item: string[] }) => {
         const username = item[0];
@@ -63,6 +64,9 @@ const AddAthlete= () => {
                 break;
             case 'Pending':
                 joinedStatus = <Text className='text-gray-500'>Pending</Text>;
+                break;
+            case 'Requested':
+                joinedStatus = <Text className='text-blue-500'>Awating Response</Text>;
                 break;
             default:
                 joinedStatus = <Button title='Invite' color='black' onPress={() => handleInvite(userId)} />;

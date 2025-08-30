@@ -59,6 +59,9 @@ const RequestCoaches = () => {
             case 'Pending':
                 joinedStatus = <Text className='text-gray-500'>Pending</Text>;
                 break;
+            case 'Invited':
+                joinedStatus = <Text className='text-blue-500'>Awaiting Response</Text>;
+                break;
             default:
                 joinedStatus = <Button title='Request' color='black' onPress={() => handleRequest(userId)} />;
                 break;

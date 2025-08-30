@@ -8,8 +8,12 @@ import { useState } from "react";
 //Profile page for both coaches and athletes
 const Profile = () => {
     const navigation = useNavigation<any>();
+    // State to hold current user data being displayed/edited
     const [userData, setUserData] = useState<Record<string, any>>([]);
+    // State to track original data for comparison to detect changes
+    const [originalUserData, setOriginalUserData] = useState<Record<string, any>>([]);
 
+    // Fetch user data when component mounts
     useEffect(()=>{
         const fetchUserData = async () => {
         const userId = await UserService.getUserId();
@@ -18,37 +22,52 @@ const Profile = () => {
             if(resp){
             const data = await resp.json();
             setUserData(data);
+            setOriginalUserData(data); // Store original data for change detection
             }
         }
         };
         fetchUserData();
     },[])
 
+    // Handle user logout and navigate to sign in screen
     const handleLogout = async () => {
         await UserService.signOut();
         navigation.navigate("SignIn");
     }
 
-    const handleUpdateProfile = async ()=>{
-        const accountType = await UserService.getAccountType();
-        if(!accountType) 
-            return;
-        const resp = await GeneralService.updateUserProfile(userData, accountType);
+    // Update user profile only if field value has changed
+    const handleUpdateProfile = async (field: string, value: string) => {
+        // Only update if the value has actually changed
+        if (originalUserData[field] !== value) {
+            const accountType = await UserService.getAccountType();
+            if(!accountType) 
+                return;
+            const resp = await GeneralService.updateUserProfile(userData, accountType);
+            
+            // Update original data after successful update to prevent duplicate calls
+            if (resp) {
+                setOriginalUserData({ ...originalUserData, [field]: value });
+            }
+        }
     }
 
     return (
         <View className="flex-1 bg-gray-50 px-6 pt-16">
             {/* Profile Picture Section */}
             <View className="items-center mb-8">
+                {/* Placeholder profile picture with gradient background */}
                 <View className="h-32 w-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full items-center justify-center shadow-lg mb-4">
                     <Text className="text-white text-lg font-semibold">PFP</Text>
                 </View>
+                {/* Display user's full name */}
                 <Text className="text-2xl font-bold text-gray-800 mb-2">{userData.firstName} {userData.lastName}</Text>
+                {/* Display username */}
                 <Text className="text-gray-500 text-base">@{userData.username}</Text>
                 </View>
 
                 {/* Profile Form */}
                 <View className="space-y-4">
+                {/* Bio input field - multiline text area */}
                 <View>
                     <Text className="text-gray-700 font-medium mb-2">Bio</Text>
                     <TextInput
@@ -58,10 +77,11 @@ const Profile = () => {
                         onChangeText={(text) => setUserData({ ...userData, bio: text })}
                         multiline
                         numberOfLines={3}
-                        onBlur={handleUpdateProfile}
+                        onBlur={() => handleUpdateProfile('bio', userData.bio)} // Save on blur
                     />
                 </View>
 
+                {/* First and Last name inputs in a row */}
                 <View className="flex-row space-x-3">
                     <View className="flex-1">
                         <Text className="text-gray-700 font-medium mb-2">First Name</Text>
@@ -70,7 +90,7 @@ const Profile = () => {
                             placeholder="First name"
                             value={userData.firstName}
                             onChangeText={(text) => setUserData({ ...userData, firstName: text })}
-                            onBlur={handleUpdateProfile}
+                            onBlur={() => handleUpdateProfile('firstName', userData.firstName)} // Save on blur
                         />
                     </View>
                     <View className="flex-1">
@@ -80,11 +100,12 @@ const Profile = () => {
                             placeholder="Last name"
                             value={userData.lastName}
                             onChangeText={(text) => setUserData({ ...userData, lastName: text })}
-                            onBlur={handleUpdateProfile}
+                            onBlur={() => handleUpdateProfile('lastName', userData.lastName)} // Save on blur
                         />
                     </View>
                 </View>
 
+                {/* Gender input field */}
                 <View>
                     <Text className="text-gray-700 font-medium mb-2">Gender</Text>
                     <TextInput
@@ -92,10 +113,11 @@ const Profile = () => {
                         placeholder="Gender"
                         value={userData.gender}
                         onChangeText={(text) => setUserData({ ...userData, gender: text })}
-                        onBlur={handleUpdateProfile}
+                        onBlur={() => handleUpdateProfile('gender', userData.gender)} // Save on blur
                     />
                 </View>
 
+                {/* Logout button */}
                 <View className="mt-8">
                     <Button 
                     title="Sign Out" 

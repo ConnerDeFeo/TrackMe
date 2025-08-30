@@ -143,9 +143,9 @@ def test_view_athlete_requests():
     create_athlete(TestData.test_athlete, {})
     request_coach(TestData.test_invite, {})
     event = {
-        'body': json.dumps({
+        'queryStringParameters': {
             'userId': '123'
-        })
+        }
     }
 
     response = view_athlete_requests(event, {})
@@ -153,7 +153,8 @@ def test_view_athlete_requests():
 
     requests = json.loads(response['body'])
     assert len(requests) == 1
-    assert requests[0][0] == 'test_athlete'
+    assert requests[0][0] == '1234'
+    assert requests[0][1] == 'test_athlete'
 
 def test_accept_athlete_request():
     create_coach(TestData.test_coach, {})

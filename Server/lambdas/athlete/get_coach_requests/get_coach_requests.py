@@ -11,7 +11,7 @@ def get_coach_requests(event,context):
         #Fetch all coaches from the db that have made a request to the athlete
         coaches = fetch_all(
         """
-            SELECT *
+            SELECT c.userId, c.username
             FROM coaches c
             JOIN athlete_coach_invites aci ON c.userId = aci.coachId
             WHERE aci.athleteId = %s

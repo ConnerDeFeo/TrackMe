@@ -10,9 +10,7 @@ const Athletes = () => {
     const [athletes, setAthletes] = useState<string[][]>([]);
     const navigation = useNavigation<any>();
 
-    //Fetch athletes for the current coach
-    useEffect(() => {
-        const fetchAthletes = async () => {
+    const fetchAthletes = async () => {
             try {
                 const userId = await UserService.getUserId();
                 const resp = await CoachService.getAthletes(userId!);
@@ -24,6 +22,9 @@ const Athletes = () => {
                 console.error("Failed to fetch athletes:", error);
             }
         };
+
+    //Fetch athletes for the current coach
+    useEffect(() => {
         fetchAthletes();
     }, []);
 
@@ -32,7 +33,7 @@ const Athletes = () => {
             <Text className="text-4xl font-bold">My Athletes</Text>
             <View className="my-6 flex flex-row justify-between items-center">
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("AthleteRequests")}
+                    onPress={() => navigation.navigate("AthleteRequests", {fetchAthletes:fetchAthletes})}
                 >
                     <Text className="text-[#E63946] font-semibold underline">Requests</Text>
                 </TouchableOpacity>

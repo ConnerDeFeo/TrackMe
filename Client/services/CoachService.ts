@@ -24,6 +24,17 @@ const CoachService = {
     },
     getAthletes: async (coachId:string) => {
         return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/get_athletes?coachId=${coachId}`);
+    },
+    getAthleteRequests: async (userId:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/view_athlete_requests?userId=${userId}`);
+    },
+    acceptAthleteRequest: async (coachId:string, athleteId:string) => {
+        return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/accept_athlete_request`, 
+            { 
+                'coachId': coachId,
+                'athleteId': athleteId
+            }
+        );
     }
 }
 

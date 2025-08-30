@@ -27,7 +27,7 @@ import ViewGroupAthlete from './pages/athletes/ViewGroupAthlete';
 import Inputs from './pages/athletes/Inputs';
 import CreateWorkoutGroup from './pages/athletes/CreateWorkoutGroup';
 import Profile from './components/Profile';
-import CoachRequests from './components/athletes/CoachRequests';
+import CoachRequests from './pages/athletes/CoachRequests';
 import AthleteRequests from './pages/coaches/AthleteRequests';
 import RequestCoaches from './pages/athletes/RequestCoaches';
 //Root component used to render everything

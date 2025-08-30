@@ -42,6 +42,21 @@ Resources:
       BuildMethod: python3.12
 
   # ATHLETE FUNCTIONS
+  SearchCoachesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/athlete/search_coaches/
+      Handler: search_coaches.search_coaches
+      Events:
+        SearchCoachesApi:
+          Type: Api
+          Properties:
+            Path: /athletes/search_coaches/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   RequestCoachFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -193,20 +208,20 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-    AcceptAthleteRequestFunction:
-      Type: AWS::Serverless::Function 
-      Properties:
-        CodeUri: lambdas/coach/accept_athlete_request/
-        Handler: accept_athlete_request.accept_athlete_request
-        Events:
-          AcceptAthleteRequestApi:
-            Type: Api
-            Properties:
-              Path: /coaches/accept_athlete_request/
-              Method: post
-              RestApiId: !Ref ApiGatewayApi
-        Layers:
-          - Ref: RDSLayer
+  AcceptAthleteRequestFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/accept_athlete_request/
+      Handler: accept_athlete_request.accept_athlete_request
+      Events:
+        AcceptAthleteRequestApi:
+          Type: Api
+          Properties:
+            Path: /coaches/accept_athlete_request/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
 
   UpdateCoachProfileFunction:
     Type: AWS::Serverless::Function 

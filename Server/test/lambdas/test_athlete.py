@@ -63,25 +63,13 @@ def test_get_coach_requests():
 
 def test_update_athlete_profile():
     create_athlete(TestData.test_athlete, {})
-    event = {
-        "body": json.dumps({
-            "athleteId": '1234',
-            "bio": "Updated bio",
-            "firstName": "Updated",
-            "lastName": "Name",
-            "tffrsUrl": "http://updated.url",
-            "gender": "Non-binary",
-            "profilePictureUrl": None
-        })
-    }
-    response = update_athlete_profile(event, {})
+    response = update_athlete_profile(TestData.test_update_athlete_profile, {})
     assert response['statusCode'] == 200
     data = fetch_one("SELECT * FROM athletes WHERE userId = %s", ('1234',))
-    print(data)
     assert data
     assert data[2] == "Updated bio"
     assert data[3] == "Updated"
     assert data[4] == "Name"
-    assert data[5] == "http://updated.url"
-    assert data[6] == "Non-binary"
-    assert data[7] is None
+    assert data[5] == "Male"
+    assert data[6] is None
+    assert data[7] == 70 

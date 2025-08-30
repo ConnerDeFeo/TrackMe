@@ -10,6 +10,20 @@ def get_user(event, context):
         account_type = query_params['accountType']
         data = fetch_one(f"SELECT * FROM {mapping[account_type]} WHERE userId = %s", (user_id,))
         if data:
+            if account_type == "Athlete":
+                return {
+                    "statusCode": 200,
+                    "body": json.dumps({
+                        "username": data[1],
+                        "bio": data[2],
+                        "firstName": data[3],
+                        "lastName": data[4],
+                        "gender": data[5],
+                        "profilePictureUrl": data[6],
+                        "bodyWeight": data[7],
+                        "tffrsUrl": data[8]
+                })
+            }
             return {
                 "statusCode": 200,
                 "body": json.dumps({
@@ -17,9 +31,8 @@ def get_user(event, context):
                     "bio": data[2],
                     "firstName": data[3],
                     "lastName": data[4],
-                    "tffrsUrl": data[5],
-                    "gender": data[6],
-                    "profilePictureUrl": data[7]
+                    "gender": data[5],
+                    "profilePictureUrl": data[6]
                 })
             }
         return {

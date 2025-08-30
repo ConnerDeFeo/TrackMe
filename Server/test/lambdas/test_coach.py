@@ -125,24 +125,11 @@ def test_seach_with_term_athletes():
 
 def test_update_athlete_profile():
     create_coach(TestData.test_coach, {})
-    event = {
-        "body": json.dumps({
-            "coachId": '123',
-            "bio": "Updated bio",
-            "firstName": "Updated",
-            "lastName": "Name",
-            "tffrsUrl": "http://updated.url",
-            "gender": "Non-binary",
-            "profilePictureUrl": None
-        })
-    }
-    response = update_coach_profile(event, {})
+    response = update_coach_profile(TestData.test_update_coach_profile, {})
     assert response['statusCode'] == 200
     data = fetch_one("SELECT * FROM coaches WHERE userId = %s", ('123',))
     assert data
     assert data[2] == "Updated bio"
     assert data[3] == "Updated"
     assert data[4] == "Name"
-    assert data[5] == "http://updated.url"
-    assert data[6] == "Non-binary"
-    assert data[7] is None
+    assert data[5] == "Female"

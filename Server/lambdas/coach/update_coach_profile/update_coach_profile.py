@@ -10,7 +10,6 @@ def update_coach_profile(event, context):
         bio = body.get('bio')
         firstName = body.get('firstName')
         lastName = body.get('lastName')
-        tffrsUrl = body.get('tffrsUrl')
         gender = body.get('gender')
         profilePictureUrl = body.get('profilePictureUrl')
 
@@ -19,10 +18,10 @@ def update_coach_profile(event, context):
             """
                 UPDATE coaches
                 SET bio = %s, firstName = %s, lastName = %s, 
-                tffrsUrl = %s, gender = %s, profilePictureUrl = %s
+                gender = %s, profilePictureUrl = %s
                 WHERE userId = %s
             """,
-            (bio, firstName, lastName, tffrsUrl, gender, profilePictureUrl, coachId)
+            (bio, firstName, lastName, gender, profilePictureUrl, coachId)
         )
         return {
             "statusCode": 200,

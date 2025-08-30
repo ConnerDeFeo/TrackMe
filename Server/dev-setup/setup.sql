@@ -17,7 +17,6 @@ CREATE TABLE coaches (
     bio TEXT,
     firstName VARCHAR(255),
     lastName VARCHAR(255),
-    tffrsUrl VARCHAR(255),
     gender VARCHAR(10),
     profilePictureUrl VARCHAR(255)
 );
@@ -28,9 +27,10 @@ CREATE TABLE athletes (
     bio TEXT,
     firstName VARCHAR(255),
     lastName VARCHAR(255),
-    tffrsUrl VARCHAR(255),
     gender VARCHAR(10),
-    profilePictureUrl VARCHAR(255)
+    profilePictureUrl VARCHAR(255),
+    bodyWeight INT,
+    tffrsUrl VARCHAR(255)
 );
 
 CREATE TABLE groups (

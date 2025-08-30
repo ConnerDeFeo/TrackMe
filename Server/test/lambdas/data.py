@@ -119,3 +119,29 @@ class TestData:
             ]
         })
     }
+
+    test_update_athlete_profile = {
+        "body": json.dumps({
+            "athleteId": '1234',
+            "bio": "Updated bio",
+            "firstName": "Updated",
+            "lastName": "Name",
+            "tffrsUrl": "http://updated.url",
+            "gender": "Male",
+            "profilePictureUrl": None,
+            'tffrsUrl':"someurl",
+            'bodyWeight': 70
+        })
+    }
+
+    test_update_coach_profile = {
+        "body": json.dumps({
+            "coachId": '123',
+            "bio": "Updated bio",
+            "firstName": "Updated",
+            "lastName": "Name",
+            "tffrsUrl": "http://updated.url",
+            "gender": "Female",
+            "profilePictureUrl": None
+        })
+    }

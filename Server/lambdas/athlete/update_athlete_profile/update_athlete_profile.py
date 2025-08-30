@@ -8,21 +8,24 @@ def update_athlete_profile(event, context):
     try:
         athleteId = body['athleteId']
         bio = body.get('bio')
-        firstName = body.get('firstName')
-        lastName = body.get('lastName')
-        tffrsUrl = body.get('tffrsUrl')
+        first_name = body.get('firstName')
+        last_name = body.get('lastName')
         gender = body.get('gender')
-        profilePictureUrl = body.get('profilePictureUrl')
+        profile_picture_url = body.get('profilePictureUrl')
+        tffrs_url = body.get('tffrsUrl')
+        body_weight = body.get('bodyWeight')
+
 
         # Update athlete profile in the database
         execute_commit(
             """
                 UPDATE athletes
                 SET bio = %s, firstName = %s, lastName = %s, 
-                tffrsUrl = %s, gender = %s, profilePictureUrl = %s
+                gender = %s, profilePictureUrl = %s,
+                bodyWeight = %s, tffrsUrl = %s
                 WHERE userId = %s
             """,
-            (bio, firstName, lastName, tffrsUrl, gender, profilePictureUrl, athleteId)
+            (bio, first_name, last_name, gender, profile_picture_url, body_weight, tffrs_url, athleteId)
         )
         return {
             "statusCode": 200,

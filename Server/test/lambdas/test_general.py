@@ -121,31 +121,9 @@ def test_view_group_inputs():
 
 def test_get_user():
     create_athlete(TestData.test_athlete, {})
-    event = {
-        "body": json.dumps({
-            "athleteId": '1234',
-            "bio": "Updated bio",
-            "firstName": "Updated",
-            "lastName": "Name",
-            "tffrsUrl": "http://updated.url",
-            "gender": "Non-binary",
-            "profilePictureUrl": None
-        })
-    }
-    update_athlete_profile(event, {})
+    update_athlete_profile(TestData.test_update_athlete_profile, {})
     create_coach(TestData.test_coach, {})
-    event = {
-        "body": json.dumps({
-            "coachId": '123',
-            "bio": "Updated bio",
-            "firstName": "Updated",
-            "lastName": "Name",
-            "tffrsUrl": "http://updated.url",
-            "gender": "Non-binary",
-            "profilePictureUrl": None
-        })
-    }
-    update_coach_profile(event, {})
+    update_coach_profile(TestData.test_update_coach_profile, {})
 
     athlete_response = get_user({
         "queryStringParameters": {
@@ -171,14 +149,14 @@ def test_get_user():
     assert athlete_data['bio'] == "Updated bio"
     assert athlete_data['firstName'] == "Updated"
     assert athlete_data['lastName'] == "Name"
-    assert athlete_data['tffrsUrl'] == "http://updated.url"
-    assert athlete_data['gender'] == "Non-binary"
+    assert athlete_data['gender'] == "Male"
     assert athlete_data['profilePictureUrl'] is None
+    assert athlete_data['bodyWeight'] == 70
+    assert athlete_data['tffrsUrl'] == "someurl"
 
     assert coach_data['username'] == "testcoach"
     assert coach_data['bio'] == "Updated bio"
     assert coach_data['firstName'] == "Updated"
     assert coach_data['lastName'] == "Name"
-    assert coach_data['tffrsUrl'] == "http://updated.url"
-    assert coach_data['gender'] == "Non-binary"
+    assert coach_data['gender'] == "Female"
     assert coach_data['profilePictureUrl'] is None

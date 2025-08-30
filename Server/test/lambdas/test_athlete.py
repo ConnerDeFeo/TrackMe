@@ -10,6 +10,7 @@ from lambdas.athlete.get_coaches.get_coaches import get_coaches
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.athlete.get_coach_requests.get_coach_requests import get_coach_requests
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
+from lambdas.athlete.view_coach_invites.view_coach_invites import view_coach_invites
 from rds import fetch_one
 
 
@@ -81,8 +82,50 @@ def test_request_coach():
     event = {
         "body": json.dumps({
             "athleteId": "1234",
-            "coachId": "5678"
+            "coachId": "123"
         })
     }
     response = request_coach(event, {})
     assert response['statusCode'] == 200
+
+    data = fetch_one("SELECT * FROM athlete_coach_requests WHERE athleteId = %s AND coachId = %s", ('1234', '123'))
+    assert data is not None
+    assert data[1] == '1234'
+    assert data[2] == '123'
+
+def test_view_coach_invites():
+    create_coach(TestData.test_coach, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    event = {
+        'body': json.dumps({
+            'userId': '1234'
+        })
+    }
+
+    response = view_coach_invites(event, {})
+    assert response['statusCode'] == 200
+
+    invites = json.loads(response['body'])
+    assert len(invites) == 1
+    print(invites)
+    assert invites[0][0] == 'testcoach'
+
+def test_accept_coach_invite():
+    create_coach(TestData.test_coach, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    event = {
+        'body': json.dumps({
+            'athleteId': '1234',
+            'coachId': '123'
+        })
+    }
+
+    response = accept_coach_invite(event, {})
+    assert response['statusCode'] == 200
+
+    data = fetch_one("SELECT * FROM athlete_coaches WHERE athleteId = %s AND coachId = %s", ('1234', '123'))
+    assert data is not None
+    assert data[1] == '1234'
+    assert data[2] == '123'

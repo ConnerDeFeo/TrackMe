@@ -2,12 +2,16 @@ import json
 
 import pytest
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
+from lambdas.coach.accept_athlete_request.accept_athlete_request import accept_athlete_request
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.get_athletes.get_athletes import get_athletes
 from lambdas.coach.search_athletes.search_athletes import search_athletes
 from lambdas.coach.update_coach_profile.update_coach_profile import update_coach_profile
+from lambdas.coach.accept_athlete_request.accept_athlete_request import accept_athlete_request
+from lambdas.athlete.request_coach.request_coach import request_coach
+from lambdas.coach.view_athlete_requests.view_athlete_requests import view_athlete_requests
 from rds import execute_file, fetch_one
 from data import TestData
 
@@ -133,3 +137,39 @@ def test_update_athlete_profile():
     assert data[3] == "Updated"
     assert data[4] == "Name"
     assert data[5] == "Female"
+
+def test_view_athlete_requests():
+    create_coach(TestData.test_coach, {})
+    create_athlete(TestData.test_athlete, {})
+    request_coach(TestData.test_invite, {})
+    event = {
+        'body': json.dumps({
+            'userId': '123'
+        })
+    }
+
+    response = view_athlete_requests(event, {})
+    assert response['statusCode'] == 200
+
+    requests = json.loads(response['body'])
+    assert len(requests) == 1
+    assert requests[0][0] == 'test_athlete'
+
+def test_accept_athlete_request():
+    create_coach(TestData.test_coach, {})
+    create_athlete(TestData.test_athlete, {})
+    request_coach(TestData.test_invite, {})
+    event = {
+        'body': json.dumps({
+            'athleteId': '1234',
+            'coachId': '123'
+        })
+    }
+
+    response = accept_athlete_request(event, {})
+    assert response['statusCode'] == 200
+
+    data = fetch_one("SELECT * FROM athlete_coaches WHERE athleteId = %s AND coachId = %s", ('1234', '123'))
+    assert data is not None
+    assert data[1] == '1234'
+    assert data[2] == '123'

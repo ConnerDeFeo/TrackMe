@@ -71,14 +71,13 @@ def test_update_athlete_profile():
             "lastName": "Name",
             "tffrsUrl": "http://updated.url",
             "gender": "Non-binary",
-            "profilePictureUrl": None,
-            'dateOfBirth': '2000-01-01',
-            'weight': 70
+            "profilePictureUrl": None
         })
     }
     response = update_athlete_profile(event, {})
     assert response['statusCode'] == 200
     data = fetch_one("SELECT * FROM athletes WHERE userId = %s", ('1234',))
+    print(data)
     assert data
     assert data[2] == "Updated bio"
     assert data[3] == "Updated"
@@ -86,5 +85,3 @@ def test_update_athlete_profile():
     assert data[5] == "http://updated.url"
     assert data[6] == "Non-binary"
     assert data[7] is None
-    assert data[8] == '2000-01-01'
-    assert data[9] == 70

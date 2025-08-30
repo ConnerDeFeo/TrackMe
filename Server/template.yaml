@@ -359,6 +359,21 @@ Resources:
         - Ref: RDSLayer
 
   # GENERAL FUNCTIONS
+  GetUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/get_user/
+      Handler: get_user.get_user
+      Events:
+        GetUserApi:
+          Type: Api
+          Properties:
+            Path: /general/get_user/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   ViewGroupInputsFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -129,9 +129,7 @@ def test_get_user():
             "lastName": "Name",
             "tffrsUrl": "http://updated.url",
             "gender": "Non-binary",
-            "profilePictureUrl": None,
-            'dateOfBirth': '2000-01-01',
-            'weight': 70
+            "profilePictureUrl": None
         })
     }
     update_athlete_profile(event, {})
@@ -150,16 +148,16 @@ def test_get_user():
     update_coach_profile(event, {})
 
     athlete_response = get_user({
-        "body": json.dumps({
+        "queryStringParameters": {
             "userId": "1234",
             "accountType": "Athlete"
-        })
+        }
     }, {})
     coach_response = get_user({
-        "body": json.dumps({
+        "queryStringParameters": {
             "userId": "123",
             "accountType": "Coach"
-        })
+        }
     }, {})
 
     debug_table()
@@ -169,7 +167,18 @@ def test_get_user():
     athlete_data = json.loads(athlete_response['body'])
     coach_data = json.loads(coach_response['body'])
 
-    assert athlete_data[0] == "1234"
-    assert athlete_data[1] == "test_athlete"
-    assert coach_data[0] == "123"
-    assert coach_data[1] == "testcoach"
+    assert athlete_data['username'] == "test_athlete"
+    assert athlete_data['bio'] == "Updated bio"
+    assert athlete_data['firstName'] == "Updated"
+    assert athlete_data['lastName'] == "Name"
+    assert athlete_data['tffrsUrl'] == "http://updated.url"
+    assert athlete_data['gender'] == "Non-binary"
+    assert athlete_data['profilePictureUrl'] is None
+
+    assert coach_data['username'] == "testcoach"
+    assert coach_data['bio'] == "Updated bio"
+    assert coach_data['firstName'] == "Updated"
+    assert coach_data['lastName'] == "Name"
+    assert coach_data['tffrsUrl'] == "http://updated.url"
+    assert coach_data['gender'] == "Non-binary"
+    assert coach_data['profilePictureUrl'] is None

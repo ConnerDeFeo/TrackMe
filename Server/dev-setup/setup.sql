@@ -30,9 +30,7 @@ CREATE TABLE athletes (
     lastName VARCHAR(255),
     tffrsUrl VARCHAR(255),
     gender VARCHAR(10),
-    profilePictureUrl VARCHAR(255),
-    dateOfBirth VARCHAR(10),
-    weight FLOAT
+    profilePictureUrl VARCHAR(255)
 );
 
 CREATE TABLE groups (

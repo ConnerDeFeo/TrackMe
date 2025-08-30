@@ -13,19 +13,16 @@ def update_athlete_profile(event, context):
         tffrsUrl = body.get('tffrsUrl')
         gender = body.get('gender')
         profilePictureUrl = body.get('profilePictureUrl')
-        dateOfBirth = body.get('dateOfBirth')
-        weight = body.get('weight')
 
         # Update athlete profile in the database
         execute_commit(
             """
                 UPDATE athletes
                 SET bio = %s, firstName = %s, lastName = %s, 
-                tffrsUrl = %s, gender = %s, profilePictureUrl = %s,
-                dateOfBirth = %s, weight = %s
+                tffrsUrl = %s, gender = %s, profilePictureUrl = %s
                 WHERE userId = %s
             """,
-            (bio, firstName, lastName, tffrsUrl, gender, profilePictureUrl, dateOfBirth, weight, athleteId)
+            (bio, firstName, lastName, tffrsUrl, gender, profilePictureUrl, athleteId)
         )
         return {
             "statusCode": 200,

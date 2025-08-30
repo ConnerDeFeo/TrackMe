@@ -1,6 +1,7 @@
 import { fetchUserAttributes } from "aws-amplify/auth";
 import API from "./API";
 import UserService from "./UserService";
+import AsyncStorage from "./AsyncStorage";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const GeneralService = {
@@ -19,6 +20,10 @@ const GeneralService = {
           query += `&date=${date}`;
       }
       return await API.get(query);
+  },
+  getUser: async (userId: string) => {
+    const accountType = await AsyncStorage.getData('accountType');
+    return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_user?userId=${userId}&accountType=${accountType}`);
   }
 };
 

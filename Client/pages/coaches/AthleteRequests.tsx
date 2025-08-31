@@ -44,14 +44,9 @@ const AthleteRequests = () =>{
     }
     
     return(
-        <View className="mt-[4rem] w-[95%] mx-auto">
+        <View className="mt-[4rem]">
             {/* Header with back button and title */}
-            <View className="flex-row items-center">
-                <TouchableOpacity  onPress={() => navigation.goBack()}>
-                    <Image source={require("../../images/Back.png")} className="w-12 h-12 mx-auto" />
-                </TouchableOpacity>
-                <Text className="text-2xl font-bold text-gray-800 text-center">Athlete Requests</Text>
-            </View>
+            <Text className="text-4xl font-bold text-gray-800 p-4">Athlete Requests</Text>
             
             {/* Requests list or empty state */}
             <View className="space-y-4">

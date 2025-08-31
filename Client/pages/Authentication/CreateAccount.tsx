@@ -83,7 +83,7 @@ const CreateAccount = ()=>{
     return(
         <View className="relative h-full">
             <AuthenticationHeader />
-            <View className="m-auto gap-y-10 w-[90%]">
+            <View className="m-auto gap-y-10">
                 {/**ERROR MESSAGE*/}
                 <Text className="text-red-500 text-center text-xl">{message}</Text>
                 

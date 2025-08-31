@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text,ScrollView, View } from "react-native";
+import { Text, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import usePersistentState from "../../hooks/usePersistentState";
 import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
@@ -67,25 +67,23 @@ const Inputs = ()=>{
         });
     }
     return (
-        <ScrollView className="flex-1">
-            <View className="mt-16 px-6 pb-8">
-                <Text className="text-2xl font-bold text-gray-800 mb-6">Inputs</Text>
-                {/* Render input components for each group */}
-                {groups.map(group => (
-                    <RenderGroupInputs
-                        onSubmit={fetchSubmittedInputs}
-                        submitedInputs={submittedInputs}
-                        groupName={group[0]}
-                        key={group[1]}
-                        groupId={group[1]}
-                        currentInputs={currentInputs}
-                        handleTimeChange={handleTimeChange}
-                        handleDistanceChange={handleDistanceChange}
-                        setCurrentInputs={setCurrentInputs}
-                    />
-                ))}
-            </View>
-        </ScrollView>
+        <View className="mt-[4rem]">
+            <Text className="text-4xl font-bold text-gray-800 mb-6">Inputs</Text>
+            {/* Render input components for each group */}
+            {groups.map(group => (
+                <RenderGroupInputs
+                    onSubmit={fetchSubmittedInputs}
+                    submitedInputs={submittedInputs}
+                    groupName={group[0]}
+                    key={group[1]}
+                    groupId={group[1]}
+                    currentInputs={currentInputs}
+                    handleTimeChange={handleTimeChange}
+                    handleDistanceChange={handleDistanceChange}
+                    setCurrentInputs={setCurrentInputs}
+                />
+            ))}
+        </View>
     );
 }
 

@@ -3,9 +3,14 @@ import { Text, TouchableOpacity, View } from "react-native";
 //Each individual group display component
 const GroupDisplay: React.FC<{ groupName:string, navigateTo: ()=>void }> = ({ groupName, navigateTo }) => {
     return (
-        <View className="bg-red-200 rounded w-[95%] mx-auto p-4 my-2">
-            <TouchableOpacity onPress={navigateTo}>
-                <Text className="text-lg font-bold">{groupName}</Text>
+        <View className="bg-white rounded-xl w-[95%] mx-auto p-5 my-3 shadow-md border-l-4 border-l-red-500">
+            <TouchableOpacity 
+            onPress={navigateTo}
+            className="active:opacity-70"
+            >
+            <Text className="text-xl font-semibold text-gray-800 ml-4">
+                {groupName}
+            </Text>
             </TouchableOpacity>
         </View>
     );

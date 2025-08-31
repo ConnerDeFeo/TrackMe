@@ -55,6 +55,7 @@ const Profile = () => {
         }
     }
 
+    console.log(userData)
     return (
         <View className="flex-1 bg-gray-50 px-6 pt-16">
             {/* Profile Picture Section */}
@@ -129,7 +130,7 @@ const Profile = () => {
                             className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm"
                             placeholder="lbs"
                             keyboardType="numeric"
-                            value={userData.bodyWeight}
+                            value={userData.bodyWeight?.toString()}
                             onChangeText={(text) => setUserData({ ...userData, bodyWeight: text })}
                             onBlur={() => handleUpdateProfile('bodyWeight', userData.bodyWeight)} // Save on blur
                         />

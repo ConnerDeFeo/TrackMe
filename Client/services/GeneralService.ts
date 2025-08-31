@@ -36,6 +36,14 @@ const GeneralService = {
       'coach': 'coaches'
     };
     return await API.post(`${EXPO_PUBLIC_API_URL}/${routeMapping[accountType]}/update_${accountType}_profile`, userData);
+  },
+  removeCoachAthlete: async (targetId:string) => {
+    const userId = await UserService.getUserId();
+    const accountType = await AsyncStorage.getData('accountType');
+    if(accountType === 'Coach'){
+      return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?coachId=${userId}&athleteId=${targetId}`);
+    }
+    return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${userId}&coachId=${targetId}`);
   }
 };
 

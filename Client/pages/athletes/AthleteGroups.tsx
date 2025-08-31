@@ -5,7 +5,7 @@ import Groups from "../../components/groups/Groups";
 const AthleteGroups = () => {
   return (
     <View className="mt-[4rem]">
-      <Text className="text-4xl font-bold mb-2">Groups</Text>
+      <Text className="text-4xl font-bold mb-2 p-4">Groups</Text>
       <Groups/>
     </View>
   );

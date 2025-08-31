@@ -16,7 +16,6 @@ const RequestCoaches = () => {
         setSearchTerm(term);
         setLoading(true);
         const userId = await UserService.getUserId();
-        console.log('RequestCoaches', userId, searchTerm)
         const res = await AthleteService.searchCoaches(userId!,searchTerm);
         if(res.ok){
             const coaches:string[][] = await res.json();

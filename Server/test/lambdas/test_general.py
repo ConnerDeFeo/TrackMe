@@ -164,10 +164,10 @@ def test_get_user():
 
 def test_remove_coach_athlete():
     response = remove_coach_athlete({
-        "body": json.dumps({
+        "queryStringParameters": {
             "coachId": "123",
             "athleteId": "1234"
-        })
+        }
     }, {})
     assert response['statusCode'] == 200
     relationships = fetch_one("""

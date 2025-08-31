@@ -2,10 +2,10 @@ import json
 from rds import execute_commit
 
 def remove_coach_athlete(event, context):
-    body = json.loads(event.get("body", "{}"))
+    query_params = event.get("queryStringParameters", {})
     try:
-        coach_id = body['coachId']
-        athlete_id = body['athleteId']
+        coach_id = query_params['coachId']
+        athlete_id = query_params['athleteId']
 
         # Remove relation from db
         execute_commit("""

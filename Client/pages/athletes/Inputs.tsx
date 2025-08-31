@@ -68,7 +68,7 @@ const Inputs = ()=>{
     }
     return (
         <View className="mt-[4rem]">
-            <Text className="text-4xl font-bold text-gray-800 mb-6">Inputs</Text>
+            <Text className="text-4xl font-bold text-gray-800 mb-6 p-4">Inputs</Text>
             {/* Render input components for each group */}
             {groups.map(group => (
                 <RenderGroupInputs

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import CoachService from "../../services/CoachService";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
+import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
 
 //All of a given coach's athletes
 const Athletes = () => {
@@ -44,11 +45,9 @@ const Athletes = () => {
                 </TouchableOpacity>
             </View>
             
-            <View className="space-y-3">
+            <View className="gap-y-3">
                 {athletes.map((athlete) => (
-                    <View key={athlete[0]} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                        <Text className="text-lg font-medium">{athlete[1]}</Text>
-                    </View>
+                    <CoachAthleteRelationship key={athlete[0]} user={athlete} fetchUsers={fetchAthletes} />
                 ))}
             </View>
         </ScrollView>

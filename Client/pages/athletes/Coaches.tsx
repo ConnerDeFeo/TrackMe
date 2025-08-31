@@ -3,11 +3,12 @@ import { Text, TouchableOpacity, View } from "react-native";
 import AthleteService from "../../services/AthleteService";
 import UserService from "../../services/UserService";
 import { useNavigation } from "@react-navigation/native";
+import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
     const [userId, setUserId] = useState<string>('');
-    const [coaches, setCoaches] = useState<string[]>([]);
+    const [coaches, setCoaches] = useState<string[][]>([]);
     const navigation = useNavigation<any>();
 
     //Fetches all current coaches for a given user
@@ -16,6 +17,9 @@ const Coaches = ()=>{
         if (requestsResponse.ok) {
             const data = await requestsResponse.json();
             setCoaches(data);
+        }
+        else{
+            setCoaches([])
         }
     }
 
@@ -42,12 +46,10 @@ const Coaches = ()=>{
                     <Text className="text-[#E63946] font-semibold underline">Add Coaches</Text>
                 </TouchableOpacity>
             </View>
-            <View className="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <View className="bg-white rounded-lg p-4 mb-6">
             {coaches.length > 0 ? (
                 coaches.map(coach => (
-                <View key={coach} className="py-3 border-b border-gray-100 last:border-b-0">
-                    <Text className="text-lg text-gray-700 text-center">{coach[1]}</Text>
-                </View>
+                    <CoachAthleteRelationship key={coach[0]} user={coach} fetchUsers={fetchCoaches} />
                 ))
             ) : (
                 <Text className="text-gray-500 text-center py-4">No coaches yet</Text>

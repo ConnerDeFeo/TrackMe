@@ -434,6 +434,21 @@ Resources:
         - Ref: RDSLayer
 
   # GENERAL FUNCTIONS
+  RemoveCoachAthlete:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/remove_coach_athlete/
+      Handler: remove_coach_athlete.remove_coach_athlete
+      Events:
+        RemoveCoachAthleteApi:
+          Type: Api
+          Properties:
+            Path: /general/remove_coach_athlete/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   GetUserFunction:
     Type: AWS::Serverless::Function
     Properties:

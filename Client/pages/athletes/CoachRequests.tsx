@@ -45,33 +45,31 @@ const CoachRequests = () =>{
     return(
         <View className="mt-[4rem]">
             {/* Header with back button and title */}
-            <Text className="text-4xl font-bold text-gray-800">Coach Requests</Text>
+            <Text className="text-4xl font-bold p-4">Coach Requests</Text>
             
             {/* Requests list or empty state */}
-            <View className="space-y-4">
+            <View className="gap-y-4">
                 {invites.length > 0 ? (
                     // Render each athlete request with accept/decline buttons
                     invites.map(invite => (
-                    <View key={invite} className="bg-white rounded-lg shadow-sm p-4 mx-auto w-full max-w-sm">
-                        {/* Display athlete name (assuming invite[1] is the athlete name) */}
-                        <Text className="text-lg font-medium text-gray-800 text-center mb-4">{invite[1]}</Text>
-                        <View className="flex-row space-x-3">
-                        <View className="flex-1">
-                            {/* Accept button - calls handleAthleteAcceptance with athlete ID */}
-                            <Button 
-                            title="Accept" 
-                            onPress={() => handleCoachAcceptance(invite[0])}
-                            color="#10B981"
-                            />
-                        </View>
-                        <View className="flex-1">
-                            {/* Decline button - currently only logs to console */}
-                            <Button 
-                            title="Decline" 
-                            onPress={() => console.log("Declined")}
-                            color="#E63946"
-                            />
-                        </View>
+                    <View key={invite} className="bg-white rounded-lg p-4 mx-auto w-[90%]">
+                        <View className="flex-row items-center justify-between">
+                            {/* Display athlete name */}
+                            <Text className="text-xl font-medium flex-1">{invite[1]}</Text>
+                            <View className="flex-row gap-x-2">
+                                <TouchableOpacity 
+                                    className="bg-black rounded-lg py-2 px-3"
+                                    onPress={() => handleCoachAcceptance(invite[0])}
+                                >
+                                    <Text className="text-white font-semibold text-center">Accept</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity 
+                                    className="bg-red-500 rounded-lg py-2 px-3"
+                                    onPress={() => console.log("Declined")}
+                                >
+                                    <Text className="text-white font-semibold text-center">Decline</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                     ))

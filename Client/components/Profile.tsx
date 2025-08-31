@@ -55,7 +55,6 @@ const Profile = () => {
         }
     }
 
-    console.log(userData)
     return (
         <View className="flex-1 bg-gray-50 px-6 pt-16">
             {/* Profile Picture Section */}

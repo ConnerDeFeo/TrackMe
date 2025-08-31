@@ -44,9 +44,9 @@ const SignIn = ()=>{
     }, [navigation]);
 
     return(
-        <View className="relative h-full">
+        <View className="relative h-full w-[85%] mx-auto">
             <AuthenticationHeader/>
-            <View className="m-auto gap-y-10">
+            <View className="m-auto gap-y-10 w-full">
                 {/**SIGN IN*/}
                 <Text className="text-red-500 text-center mt-100">{error}</Text>
                 <View className="gap-y-8 bg-red-200 rounded-xl p-6">

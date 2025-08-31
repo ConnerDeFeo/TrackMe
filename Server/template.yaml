@@ -45,8 +45,8 @@ Resources:
   SearchCoachesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: search_coaches
+      CodeUri: lambdas/athlete/search_coaches/
+      Handler: search_coaches.search_coaches
       Events:
         SearchCoachesApi:
           Type: Api
@@ -60,8 +60,8 @@ Resources:
   RequestCoachFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: request_coach
+      CodeUri: lambdas/athlete/request_coach/
+      Handler: request_coach.request_coach
       Events:
         RequestCoachApi:
           Type: Api
@@ -75,8 +75,8 @@ Resources:
   UpdateAthleteProfileFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: update_athlete_profile
+      CodeUri: lambdas/athlete/update_athlete_profile/
+      Handler: update_athlete_profile.update_athlete_profile
       Events:
         UpdateAthleteProfileApi:
           Type: Api
@@ -90,8 +90,8 @@ Resources:
   ViewWorkoutsAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: view_workouts_athlete
+      CodeUri: lambdas/athlete/view_workouts_athlete/
+      Handler: view_workouts_athlete.view_workouts_athlete
       Events:
         ViewWorkoutsAthleteApi:
           Type: Api
@@ -105,8 +105,8 @@ Resources:
   GetCoachesFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: get_coaches
+      CodeUri: lambdas/athlete/get_coaches/
+      Handler: get_coaches.get_coaches
       Events:
         GetCoachesApi:
           Type: Api
@@ -120,8 +120,8 @@ Resources:
   GetCoachRequestsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: get_coach_requests
+      CodeUri: lambdas/athlete/get_coach_requests/
+      Handler: get_coach_requests.get_coach_requests
       Events:
         GetCoachRequestsApi:
           Type: Api
@@ -135,8 +135,8 @@ Resources:
   CreateAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: create_athlete
+      CodeUri: lambdas/athlete/create_athlete/
+      Handler: create_athlete.create_athlete
       Events:
         CreateAthleteApi:
           Type: Api
@@ -150,8 +150,8 @@ Resources:
   AcceptCoachInviteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: accept_coach_invite
+      CodeUri: lambdas/athlete/accept_coach_invite/
+      Handler: accept_coach_invite.accept_coach_invite
       Events:
         AcceptGroupInviteApi:
           Type: Api
@@ -165,8 +165,8 @@ Resources:
   InputTimesFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: input_times
+      CodeUri: lambdas/athlete/input_times/
+      Handler: input_times.input_times
       Events:
         InputTimeApi:
           Type: Api
@@ -180,8 +180,8 @@ Resources:
   ViewWorkoutInputsFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/athlete/
-      Handler: view_workout_inputs
+      CodeUri: lambdas/athlete/view_workout_inputs/
+      Handler: view_workout_inputs.view_workout_inputs
       Events:
         ViewWorkoutInputsApi:
           Type: Api
@@ -196,8 +196,8 @@ Resources:
   ViewAthleteRequestsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: view_athlete_requests
+      CodeUri: lambdas/coach/view_athlete_requests/
+      Handler: view_athlete_requests.view_athlete_requests
       Events:
         ViewAthleteRequestsApi:
           Type: Api
@@ -211,8 +211,8 @@ Resources:
   AcceptAthleteRequestFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: accept_athlete_request
+      CodeUri: lambdas/coach/accept_athlete_request/
+      Handler: accept_athlete_request.accept_athlete_request
       Events:
         AcceptAthleteRequestApi:
           Type: Api
@@ -226,8 +226,8 @@ Resources:
   UpdateCoachProfileFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: update_coach_profile
+      CodeUri: lambdas/coach/update_coach_profile/
+      Handler: update_coach_profile.update_coach_profile
       Events:
         UpdateCoachApi:
           Type: Api
@@ -241,8 +241,8 @@ Resources:
   RemoveGroupAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: remove_group_athlete
+      CodeUri: lambdas/coach/remove_group_athlete/
+      Handler: remove_group_athlete.remove_group_athlete
       Events:
         RemoveGroupAthleteApi:
           Type: Api
@@ -256,8 +256,8 @@ Resources:
   DeleteWorkoutFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: delete_workout
+      CodeUri: lambdas/coach/delete_workout/
+      Handler: delete_workout.delete_workout
       Events:
         DeleteWorkoutApi:
           Type: Api
@@ -271,8 +271,8 @@ Resources:
   GetGroupWorkout:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: get_group_workout
+      CodeUri: lambdas/coach/get_group_workout/
+      Handler: get_group_workout.get_group_workout
       Events:
         GetGroupWorkoutApi:
           Type: Api
@@ -286,8 +286,8 @@ Resources:
   GetWorkoutsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: get_workouts
+      CodeUri: lambdas/coach/get_workouts/
+      Handler: get_workouts.get_workouts
       Events:
         GetWorkoutsApi:
           Type: Api
@@ -301,8 +301,8 @@ Resources:
   GetAbsentGroupAthletesFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: get_absent_group_athletes
+      CodeUri: lambdas/coach/get_absent_group_athletes/
+      Handler: get_absent_group_athletes.get_absent_group_athletes
       Events:
         GetAbsentGroupAthletesApi:
           Type: Api
@@ -316,8 +316,8 @@ Resources:
   AddAthleteToGroupFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: add_athlete_to_group
+      CodeUri: lambdas/coach/add_athlete_to_group/
+      Handler: add_athlete_to_group.add_athlete_to_group
       Events:
         AddAthleteToGroupApi:
           Type: Api
@@ -331,8 +331,8 @@ Resources:
   GetAthletesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: get_athletes
+      CodeUri: lambdas/coach/get_athletes/
+      Handler: get_athletes.get_athletes
       Events:
         GetAthletesApi:
           Type: Api
@@ -346,8 +346,8 @@ Resources:
   CreateCoachFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: create_coach
+      CodeUri: lambdas/coach/create_coach/
+      Handler: create_coach.create_coach
       Events:
         CreateCoachApi:
           Type: Api
@@ -361,8 +361,8 @@ Resources:
   CreateGroupFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: create_group
+      CodeUri: lambdas/coach/create_group/
+      Handler: create_group.create_group
       Events:
         CreateGroupApi:
           Type: Api
@@ -376,8 +376,8 @@ Resources:
   CreateWorkoutFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: create_workout
+      CodeUri: lambdas/coach/create_workout/
+      Handler: create_workout.create_workout
       Events:
         CreateWorkoutApi:
           Type: Api
@@ -391,8 +391,8 @@ Resources:
   AssignGroupWorkoutFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: assign_group_workout
+      CodeUri: lambdas/coach/assign_group_workout/
+      Handler: assign_group_workout.assign_group_workout
       Events:
         AssignGroupWorkoutApi:
           Type: Api
@@ -406,8 +406,8 @@ Resources:
   InviteAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: invite_athlete
+      CodeUri: lambdas/coach/invite_athlete/
+      Handler: invite_athlete.invite_athlete
       Events:
         InviteAthleteApi:
           Type: Api
@@ -421,8 +421,8 @@ Resources:
   SearchAthletesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/
-      Handler: search_athletes
+      CodeUri: lambdas/coach/search_athletes/
+      Handler: search_athletes.search_athletes
       Events:
         SearchAthletesApi:
           Type: Api
@@ -437,8 +437,8 @@ Resources:
   RemoveCoachAthlete:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/general/
-      Handler: remove_coach_athlete
+      CodeUri: lambdas/general/remove_coach_athlete/
+      Handler: remove_coach_athlete.remove_coach_athlete
       Events:
         RemoveCoachAthleteApi:
           Type: Api
@@ -452,8 +452,8 @@ Resources:
   GetUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/general/
-      Handler: get_user
+      CodeUri: lambdas/general/get_user/
+      Handler: get_user.get_user
       Events:
         GetUserApi:
           Type: Api
@@ -467,8 +467,8 @@ Resources:
   ViewGroupInputsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/general/
-      Handler: view_group_inputs
+      CodeUri: lambdas/general/view_group_inputs/
+      Handler: view_group_inputs.view_group_inputs
       Events:
         ViewGroupInputsApi:
           Type: Api
@@ -482,8 +482,8 @@ Resources:
   GetAthletesForGroupFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/general/
-      Handler: get_athletes_for_group
+      CodeUri: lambdas/general/get_athletes_for_group/
+      Handler: get_athletes_for_group.get_athletes_for_group
       Events:
         GetAthletesForGroupApi:
           Type: Api
@@ -497,8 +497,8 @@ Resources:
   GetGroupsFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/general/
-      Handler: get_groups
+      CodeUri: lambdas/general/get_groups/
+      Handler: get_groups.get_groups
       Events:
         GetGroupsApi:
           Type: Api

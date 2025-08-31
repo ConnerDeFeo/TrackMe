@@ -14,8 +14,9 @@ from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.general.get_user.get_user import get_user
+from lambdas.general.remove_coach_athlete.remove_coach_athlete import remove_coach_athlete
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
-from rds import execute_file
+from rds import execute_file, fetch_one
 from data import TestData
 from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
 from testing_utils import debug_table
@@ -160,3 +161,16 @@ def test_get_user():
     assert coach_data['lastName'] == "Name"
     assert coach_data['gender'] == "Female"
     assert coach_data['profilePictureUrl'] is None
+
+def test_remove_coach_athlete():
+    response = remove_coach_athlete({
+        "body": json.dumps({
+            "coachId": "123",
+            "athleteId": "1234"
+        })
+    }, {})
+    assert response['statusCode'] == 200
+    relationships = fetch_one("""
+        SELECT * FROM athlete_coaches WHERE coachId = %s AND athleteId = %s
+    """, ("123", "1234"))
+    assert relationships is None

@@ -1,7 +1,5 @@
 import json
 from rds import execute_commit
-
-
 #Create athlete
 def create_athlete(event, context):
     body = json.loads(event['body']) 

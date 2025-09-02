@@ -14,7 +14,10 @@ resource "aws_lambda_function" "create_athlete" {
   source_code_hash = data.archive_file.create_athlete.output_base64sha256
   depends_on       = [aws_iam_role_policy_attachment.lambda_rds_auth, aws_db_instance.default]
 
-  layers = [aws_lambda_layer_version.rds.arn]
+  layers = [
+    aws_lambda_layer_version.rds.arn,
+    
+  ]
 
   environment {
     variables = {

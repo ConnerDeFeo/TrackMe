@@ -1,5 +1,5 @@
-version: '3.9'
-
+#Installs psycopg2 for amazon linux
+#docker compose -f docker-compose-dependencies.yml up -d
 services:
   aws-linux:
     image: public.ecr.aws/lambda/python:3.12  # or your runtime
@@ -7,4 +7,6 @@ services:
     volumes:
       - ./layers/rds/python:/var/task/layers/rds/python
     entrypoint: ""
-    command: sh -c "pip install psycopg2-binary -t /var/task/layers/rds/python"
+    command: >
+      sh -c "pip install psycopg2-binary -t /var/task/layers/rds/python && 
+      pip install python-dotenv -t /var/task/layers/rds/python"

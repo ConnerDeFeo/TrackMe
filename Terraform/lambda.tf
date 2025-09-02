@@ -5,7 +5,6 @@ resource "aws_lambda_layer_version" "rds" {
   compatible_runtimes = ["python3.12"]
   source_code_hash = data.archive_file.rds_layer.output_base64sha256
 }
-
 resource "aws_lambda_function" "create_athlete" {
   function_name    = "create_athlete"
   role             = aws_iam_role.lambda_role.arn

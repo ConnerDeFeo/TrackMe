@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  aws-linux:
+    image: public.ecr.aws/lambda/python:3.12  # or your runtime
+    container_name: aws-linux-runtime
+    volumes:
+      - ./layers/rds/python:/var/task/layers/rds/python
+    entrypoint: ""
+    command: sh -c "pip install psycopg2-binary -t /var/task/layers/rds/python"

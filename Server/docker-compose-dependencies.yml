@@ -8,5 +8,4 @@ services:
       - ./layers/rds/python:/var/task/layers/rds/python
     entrypoint: ""
     command: >
-      sh -c "pip install psycopg2-binary -t /var/task/layers/rds/python && 
-      pip install python-dotenv -t /var/task/layers/rds/python"
+      sh -c "pip install psycopg2-binary -t /var/task/layers/rds/python

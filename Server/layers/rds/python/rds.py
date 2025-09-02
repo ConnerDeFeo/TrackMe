@@ -1,8 +1,12 @@
 import os
+#If in development, force use regular package
+if not os.getenv("ENVIRONMENT") == "production":
+    import sys
+    sys.path.insert(0, r"C:\Users\cjack\AppData\Local\Programs\Python\Python312\Lib\site-packages")
+
+
 import psycopg2
-
 _connection = None
-
 def connect():
     global _connection
     if _connection is None:

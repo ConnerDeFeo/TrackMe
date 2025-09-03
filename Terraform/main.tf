@@ -43,3 +43,14 @@ resource "aws_db_instance" "default" {
   db_subnet_group_name = aws_db_subnet_group.rds_private.name
   skip_final_snapshot  = true
 }
+
+resource "aws_instance" "rds_viewer"{
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = "t4g.nano"
+  subnet_id     = aws_subnet.private_subnet1.id
+  iam_instance_profile = aws_iam_instance_profile.ssm_role.name
+
+  tags = {
+    Name = "RDS Viewer"
+  }
+}

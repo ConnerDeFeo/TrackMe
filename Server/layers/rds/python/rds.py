@@ -1,34 +1,24 @@
 import os
 import logging
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-#If in development, force use regular package
 if not os.getenv("ENVIRONMENT") == "production":
     import sys
     sys.path.insert(0, r"C:\Users\cjack\AppData\Local\Programs\Python\Python312\Lib\site-packages")
-
 import psycopg2
+
 _connection = None
 def connect():
     global _connection
     if _connection is None:
-        logger.info(f"Environment: {os.getenv('ENVIRONMENT')}")
         #If in production, connect to RDS using boto3 to generate a token
         if os.getenv("ENVIRONMENT") == "production":
 
             _ENDPOINT=os.getenv("RDS_ENDPOINT")
-            logger.info(f"RDS Endpoint: {_ENDPOINT}")
             _PORT=os.getenv("RDS_PORT")
-            logger.info(f"RDS Port: {_PORT}")
             _USER=os.getenv("RDS_USER")
-            logger.info(f"RDS User: {_USER}")
             _DBNAME=os.getenv("RDS_DBNAME")
-            logger.info(f"RDS DBName: {_DBNAME}")
             _REGION=os.getenv("RDS_REGION")
-            logger.info(f"RDS Region: {_REGION}")
             _PASSWORD=os.getenv("RDS_PASSWORD")
-            logger.info(f"RDS Password: {'*' * len(_PASSWORD) if _PASSWORD else 'Not Set'}")
             _connection = psycopg2.connect(
                 host=_ENDPOINT, 
                 port=_PORT, 
@@ -37,7 +27,6 @@ def connect():
                 password=_PASSWORD, 
                 sslmode='require'  # Changed from sslrootcert
             )
-            logger.info("Connected to RDS")
         #Else connect locally
         else:
             #Load vars from env file

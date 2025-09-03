@@ -1,3 +1,11 @@
+data "aws_vpc" "default" {
+  default = true
+}
+
+data  "aws_availability_zones" "available" {
+  state = "available"
+}
+
 data "archive_file" "rds_layer" {
   type        = "zip"
   source_dir  = "${path.module}/../server/layers/rds/"

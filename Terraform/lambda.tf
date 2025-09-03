@@ -1,10 +1,11 @@
-# Layer definition
+// Layer definition
 resource "aws_lambda_layer_version" "rds" {
   filename         = data.archive_file.rds_layer.output_path
   layer_name       = "rds"
   compatible_runtimes = ["python3.12"]
   source_code_hash = data.archive_file.rds_layer.output_base64sha256
 }
+
 resource "aws_lambda_function" "create_athlete" {
   function_name    = "create_athlete"
   role             = aws_iam_role.lambda_role.arn
@@ -16,7 +17,6 @@ resource "aws_lambda_function" "create_athlete" {
 
   layers = [
     aws_lambda_layer_version.rds.arn,
-    
   ]
 
   environment {
@@ -28,5 +28,11 @@ resource "aws_lambda_function" "create_athlete" {
       RDS_REGION    = var.aws_region
       ENVIRONMENT   = "production"
     }
+  }
+  timeout = 10
+
+  vpc_config {
+    subnet_ids         = [aws_subnet.private_subnet1.id, aws_subnet.private_subnet2.id]
+    security_group_ids = [aws_security_group.lambda_sg.id]
   }
 }

@@ -1,3 +1,34 @@
+// Private subnets
+resource "aws_subnet" "private_subnet1" {
+  vpc_id                  = data.aws_vpc.default.id
+  cidr_block              = var.private_subnet_cidr[0]
+  availability_zone       = data.aws_availability_zones.available.names[0]
+
+  tags = {
+    Name = "trackme-private-subnet-1"
+    type = "private"
+  }
+}
+resource "aws_subnet" "private_subnet2" {
+  vpc_id                  = data.aws_vpc.default.id
+  cidr_block              = var.private_subnet_cidr[1]
+  availability_zone       = data.aws_availability_zones.available.names[1]
+
+  tags = {
+    Name = "trackme-private-subnet-2"
+    type = "private"
+  }
+}
+
+resource "aws_db_subnet_group" "rds_private" {
+  name       = "trackme-db-subnet-group"
+  subnet_ids = [aws_subnet.private_subnet1.id, aws_subnet.private_subnet2.id]
+
+  tags = {
+    Name = "trackme-db-subnet-group"
+  }
+}
+
 // RDS instance
 resource "aws_db_instance" "default" {
   identifier           = "trackmedb"
@@ -8,35 +39,7 @@ resource "aws_db_instance" "default" {
   username             = "trackme_admin"
   password             = var.db_password
   db_name              = "trackme"
+
+  db_subnet_group_name = aws_db_subnet_group.rds_private.name
   skip_final_snapshot  = true
-}
-
-// IAM role for Lambda
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda_role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-        Effect = "Allow"
-      }
-    ]
-  })
-}
-
-// Attach AWSLambdaBasicExecutionRole so it can log to CloudWatch
-resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role       = aws_iam_role.lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-// Attach AWS managed RDS access policy
-resource "aws_iam_role_policy_attachment" "lambda_rds_auth" {
-  role       = aws_iam_role.lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }

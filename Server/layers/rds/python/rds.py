@@ -1,6 +1,5 @@
 import os
 import logging
-import boto3
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -28,23 +27,14 @@ def connect():
             logger.info(f"RDS DBName: {_DBNAME}")
             _REGION=os.getenv("RDS_REGION")
             logger.info(f"RDS Region: {_REGION}")
-
-            logger.info("Generating auth token")
-            # Remove profile - Lambda uses execution role automatically
-            _client = boto3.client('rds', region_name=_REGION)
-            token = _client.generate_db_auth_token(
-                DBHostname=_ENDPOINT, 
-                Port=_PORT, 
-                DBUsername=_USER, 
-                Region=_REGION
-            )
-            logger.info("Auth token generated")
+            _PASSWORD=os.getenv("RDS_PASSWORD")
+            logger.info(f"RDS Password: {'*' * len(_PASSWORD) if _PASSWORD else 'Not Set'}")
             _connection = psycopg2.connect(
                 host=_ENDPOINT, 
                 port=_PORT, 
                 database=_DBNAME, 
                 user=_USER, 
-                password=token, 
+                password=_PASSWORD, 
                 sslmode='require'  # Changed from sslrootcert
             )
             logger.info("Connected to RDS")

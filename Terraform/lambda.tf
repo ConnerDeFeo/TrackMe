@@ -25,6 +25,7 @@ resource "aws_lambda_function" "create_athlete" {
       RDS_DBNAME    = aws_db_instance.default.db_name
       RDS_USER      = aws_db_instance.default.username
       RDS_PORT      = aws_db_instance.default.port
+      RDS_PASSWORD  = aws_db_instance.default.password
       RDS_REGION    = var.aws_region
       ENVIRONMENT   = "production"
     }

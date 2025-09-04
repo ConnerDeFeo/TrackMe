@@ -10,3 +10,8 @@ output "bastion_host_public_ip" {
   description = "The public IP address of the bastion host"
   value       = aws_instance.bastion_host.public_ip
 }
+
+# output "api_gateway_url" {
+#   description = "Base URL of the API Gateway"
+#   value       = "https://${aws_api_gateway_rest_api.main.id}.execute-api.${var.aws_region}.amazonaws.com/${aws_api_gateway_stage.main.stage_name}"
+# }

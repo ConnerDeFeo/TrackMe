@@ -70,13 +70,9 @@ resource "null_resource" "setup_rds_table" {
       "sudo amazon-linux-extras install postgresql13 -y",
       "echo 'File uploaded successfully:'",
       "ls -la /tmp/setup.sql",
-      "echo 'First 10 lines of setup.sql:'",
-      "head -10 /tmp/setup.sql",
       "echo 'Running database setup...'",
       "export PGPASSWORD='${var.db_password}'",
-      "psql -h ${aws_db_instance.default.address} -p 5432 -U trackme_admin -d trackme -f /tmp/setup.sql -v ON_ERROR_STOP=1",
-      "echo 'Setup completed, checking tables:'",
-      "psql -h ${aws_db_instance.default.address} -p 5432 -U trackme_admin -d trackme -c '\\dt'"
+      "psql -h ${aws_db_instance.default.address} -p 5432 -U trackme_admin -d trackme -f /tmp/setup.sql"
     ]
   }
 

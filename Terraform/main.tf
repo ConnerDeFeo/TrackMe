@@ -1,4 +1,4 @@
-// Private subnets
+# Private subnet 1
 resource "aws_subnet" "private_subnet1" {
   vpc_id                  = data.aws_vpc.default.id
   cidr_block              = var.private_subnet_cidr[0]
@@ -9,6 +9,7 @@ resource "aws_subnet" "private_subnet1" {
     type = "private"
   }
 }
+# Private subnet 2
 resource "aws_subnet" "private_subnet2" {
   vpc_id                  = data.aws_vpc.default.id
   cidr_block              = var.private_subnet_cidr[1]
@@ -20,6 +21,7 @@ resource "aws_subnet" "private_subnet2" {
   }
 }
 
+# Private subnet group for RDS instance
 resource "aws_db_subnet_group" "rds_private" {
   name       = "trackme-db-subnet-group"
   subnet_ids = [aws_subnet.private_subnet1.id, aws_subnet.private_subnet2.id]
@@ -29,7 +31,7 @@ resource "aws_db_subnet_group" "rds_private" {
   }
 }
 
-// RDS instance
+# RDS instance for TrackMe application
 resource "aws_db_instance" "default" {
   identifier           = "trackmedb"
   engine               = "postgres"
@@ -42,15 +44,4 @@ resource "aws_db_instance" "default" {
 
   db_subnet_group_name = aws_db_subnet_group.rds_private.name
   skip_final_snapshot  = true
-}
-
-resource "aws_instance" "rds_viewer"{
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = "t4g.nano"
-  subnet_id     = aws_subnet.private_subnet1.id
-  iam_instance_profile = aws_iam_instance_profile.ssm_role.name
-
-  tags = {
-    Name = "RDS Viewer"
-  }
 }

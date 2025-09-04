@@ -47,23 +47,3 @@ resource "aws_iam_role_policy_attachment" "lambda_rds_auth" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
-
-//Allows ec2 instance to connect to SSM
-resource "aws_iam_role" "ssm_role" {
-  name = "ec2-ssm-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-    }]
-  })
-}
-
-resource "aws_iam_instance_profile" "ssm_role" {
-  name = "ec2-ssm-profile"
-  role = aws_iam_role.ssm_role.name
-}

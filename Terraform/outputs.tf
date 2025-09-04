@@ -1,5 +1,5 @@
 # ssh -i key_pair_name.pem -L 5433:rds_endpoint:5432 ec2-user@bastion_host_public_ip
-# psql -h localhost -p 5433 -U trackme_admin -d trackme
+# psql -h rds_endpoint -p 5433 -U trackme_admin -d trackme
 
 output "rds_endpoint" {
   description = "The endpoint of the RDS instance for TrackMe application"

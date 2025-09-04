@@ -32,11 +32,17 @@ data "archive_file" "rds_layer" {
 data "archive_file" "create_athlete" {
   type        = "zip"
   source_dir  = "${path.module}/../server/lambdas/athlete/create_athlete"
-  output_path = "${path.module}/../server/lambdas/athlete/create_athlete.zip"
+  output_path = "${path.module}/../server/lambdas/athlete/zips/create_athlete.zip"
 }
 
 data "archive_file" "create_coach" {
   type        = "zip"
   source_dir  = "${path.module}/../server/lambdas/coach/create_coach"
-  output_path = "${path.module}/../server/lambdas/coach/create_coach.zip"
+  output_path = "${path.module}/../server/lambdas/coach/zips/create_coach.zip"
+}
+
+data "archive_file" "create_group" {
+  type        = "zip"
+  source_dir  = "${path.module}/../server/lambdas/coach/create_group"
+  output_path = "${path.module}/../server/lambdas/coach/zips/create_group.zip"
 }

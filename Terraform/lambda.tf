@@ -30,3 +30,4 @@ locals {
     role       = aws_iam_role.lambda_role.arn
   }
 }
+

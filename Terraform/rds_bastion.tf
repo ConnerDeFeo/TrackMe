@@ -1,3 +1,29 @@
+# Public Ip address of the machine running Terraform for use in security group rules
+data "http" "myip" {
+  url = "https://ipv4.icanhazip.com"
+}
+
+# Get the latest Amazon Linux 2 AMI
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-arm64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["arm64"]
+  }
+}
+
 # Create a public subnet
 resource "aws_subnet" "bastion_subnet" {
   vpc_id                  = data.aws_vpc.default.id
@@ -59,5 +85,26 @@ resource "aws_security_group" "bastion_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Bastion host EC2 instance
+resource "aws_instance" "bastion_host" {
+  ami                         = data.aws_ami.amazon_linux.id
+  instance_type               = "t4g.micro"
+  subnet_id                   = aws_subnet.bastion_subnet.id
+  vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
+  associate_public_ip_address = true
+  key_name                    = var.keypair_name
+
+  # Install PostgreSQL client automatically
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install -y postgresql
+              EOF
+
+  tags = {
+    Name = "trackme-bastion-host"
   }
 }

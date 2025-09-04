@@ -82,6 +82,5 @@ resource "null_resource" "setup_rds_table" {
 
   triggers = {
     schema_hash = filemd5("../Server/setup.sql")
-    timestamp   = timestamp()
   }
 }

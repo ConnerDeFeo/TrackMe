@@ -25,7 +25,7 @@ test_coach = {
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
-    execute_file('dev-setup/setup.sql')
+    execute_file('./setup.sql')
     create_coach(test_coach, {})
     yield
 

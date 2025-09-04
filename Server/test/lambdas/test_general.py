@@ -24,7 +24,7 @@ from testing_utils import debug_table
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
-    execute_file('dev-setup/setup.sql')
+    execute_file('./setup.sql')
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
     create_group(TestData.test_group, {})

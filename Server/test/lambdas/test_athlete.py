@@ -18,7 +18,7 @@ from rds import fetch_one
 @pytest.fixture(autouse=True)
 def setup_before_each_test():
     print("Setting up before test...")
-    execute_file('dev-setup/setup.sql')
+    execute_file('./setup.sql')
     yield
 
 def generate_coach(username, userId):

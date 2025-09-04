@@ -15,7 +15,7 @@ from rds import execute_file
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
-    execute_file('dev-setup/setup.sql')
+    execute_file('./setup.sql')
     yield
 
 def test_add_athlete_to_group():

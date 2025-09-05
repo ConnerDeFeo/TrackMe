@@ -8,26 +8,75 @@ resource "aws_lambda_layer_version" "rds" {
 
 # Local variables to be reused in multiple lambda functions
 locals {
-  lambda_environment_variables = {
-    RDS_ENDPOINT = aws_db_instance.default.address
-    RDS_DBNAME   = aws_db_instance.default.db_name
-    RDS_USER     = aws_db_instance.default.username
-    RDS_PORT     = aws_db_instance.default.port
-    RDS_PASSWORD = aws_db_instance.default.password
-    RDS_REGION   = var.aws_region
-    ENVIRONMENT  = "production"
+  # Used for lambda for each creation
+  lambda_names = [
+    # Athlete Lambdas
+    "create_athlete",
+    "accept_coach_invite",
+    "get_coaches",
+    "get_coach_requests",
+    "input_times",
+    "request_coach",
+    "search_coaches",
+    "update_athlete_profile",
+    "view_coach_invites",
+    "view_workouts_athlete",
+    "view_workout_inputs",
+
+    # Coach Lambdas
+    "create_coach",
+    "create_group",
+    "accept_athlete_request",
+    "add_athlete_to_group",
+    "assign_group_workout",
+    "create_workout",
+    "delete_workout",
+    "get_absent_group_athletes",
+    "get_athletes",
+    "get_group_workout",
+    "get_workouts",
+    "invite_athlete",
+    "remove_group_athlete",
+    "search_athletes",
+    "update_coach_profile",
+    "view_athlete_requests",
+
+    # General Lambdas
+    "get_athletes_for_group",
+    "get_groups",
+    "get_user",
+    "remove_coach_athlete",
+    "view_group_inputs"
+  ]
+}
+
+resource "aws_lambda_function" "lambdas" {
+  for_each = toset(local.lambda_names)
+
+  function_name    = each.value
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "${each.value}.${each.value}"
+  runtime          = "python3.12"
+  filename         = data.archive_file.lambda_archives[each.value].output_path
+  source_code_hash = data.archive_file.lambda_archives[each.value].output_base64sha256
+  depends_on       = [aws_iam_role_policy_attachment.lambda_rds_auth, aws_db_instance.default]
+  layers           = [aws_lambda_layer_version.rds.arn]
+  timeout          = 5
+
+  environment {
+    variables = {
+      RDS_ENDPOINT = aws_db_instance.default.address
+      RDS_DBNAME   = aws_db_instance.default.db_name
+      RDS_USER     = aws_db_instance.default.username
+      RDS_PORT     = aws_db_instance.default.port
+      RDS_PASSWORD = aws_db_instance.default.password
+      RDS_REGION   = var.aws_region
+      ENVIRONMENT  = "production"
+    }
   }
 
-  lambda_vpc_config = {
+  vpc_config {
     subnet_ids         = [aws_subnet.private_subnet1.id, aws_subnet.private_subnet2.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
-
-  lambda_common_config = {
-    layers     = [aws_lambda_layer_version.rds.arn]
-    runtime    = "python3.12"
-    timeout    = 5
-    role       = aws_iam_role.lambda_role.arn
-  }
 }
-

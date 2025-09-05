@@ -22,205 +22,160 @@ data "aws_security_group" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 
-# rds layer archive file for use in Lambda functions
+# Rds layer for lambda functions to connect to RDS database
 data "archive_file" "rds_layer" {
+  
   type        = "zip"
-  source_dir  = "${path.module}/../server/layers/rds/"
-  output_path = "${path.module}/../server/layers/rds/rds.zip"
+  source_dir  = "${path.module}/../Server/layers/rds/"
+  output_path = "${path.module}/../Server/layers/rds/rds.zip"
 }
 
-data "archive_file" "create_athlete" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/create_athlete"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/create_athlete.zip"
+# Mapping lambda function names to their locations for archive creation
+locals {
+  lambda_function_locations = {
+    # Core functions
+    "create_athlete" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/create_athlete"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/create_athlete.zip"
+    }
+    "create_coach" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/create_coach"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/create_coach.zip"
+    }
+    "create_group" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/create_group"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/create_group.zip"
+    }
+    
+    # Athlete Lambdas
+    "accept_coach_invite" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/accept_coach_invite"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/accept_coach_invite.zip"
+    }
+    "get_coaches" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/get_coaches"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/get_coaches.zip"
+    }
+    "get_coach_requests" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/get_coach_requests"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/get_coach_requests.zip"
+    }
+    "input_times" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/input_times"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/input_times.zip"
+    }
+    "request_coach" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/request_coach"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/request_coach.zip"
+    }
+    "search_coaches" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/search_coaches"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/search_coaches.zip"
+    }
+    "update_athlete_profile" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/update_athlete_profile"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/update_athlete_profile.zip"
+    }
+    "view_coach_invites" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/view_coach_invites"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/view_coach_invites.zip"
+    }
+    "view_workouts_athlete" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/view_workouts_athlete"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/view_workouts_athlete.zip"
+    }
+    "view_workout_inputs" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/view_workout_inputs"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/view_workout_inputs.zip"
+    }
+    
+    # Coach Lambdas
+    "accept_athlete_request" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/accept_athlete_request"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/accept_athlete_request.zip"
+    }
+    "add_athlete_to_group" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/add_athlete_to_group"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/add_athlete_to_group.zip"
+    }
+    "assign_group_workout" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/assign_group_workout"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/assign_group_workout.zip"
+    }
+    "create_workout" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/create_workout"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/create_workout.zip"
+    }
+    "delete_workout" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/delete_workout"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/delete_workout.zip"
+    }
+    "get_absent_group_athletes" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/get_absent_group_athletes"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/get_absent_group_athletes.zip"
+    }
+    "get_athletes" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/get_athletes"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/get_athletes.zip"
+    }
+    "get_group_workout" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/get_group_workout"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/get_group_workout.zip"
+    }
+    "get_workouts" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/get_workouts"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/get_workouts.zip"
+    }
+    "invite_athlete" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/invite_athlete"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/invite_athlete.zip"
+    }
+    "remove_group_athlete" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/remove_group_athlete"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/remove_group_athlete.zip"
+    }
+    "search_athletes" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/search_athletes"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/search_athletes.zip"
+    }
+    "update_coach_profile" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/update_coach_profile"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/update_coach_profile.zip"
+    }
+    "view_athlete_requests" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/view_athlete_requests"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/view_athlete_requests.zip"
+    }
+    
+    # General Lambdas
+    "get_athletes_for_group" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_athletes_for_group"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_athletes_for_group.zip"
+    }
+    "get_groups" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_groups"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_groups.zip"
+    }
+    "get_user" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_user"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_user.zip"
+    }
+    "remove_coach_athlete" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/remove_coach_athlete"
+      output_path = "${path.module}/../Server/lambdas/general/zips/remove_coach_athlete.zip"
+    }
+    "view_group_inputs" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/view_group_inputs"
+      output_path = "${path.module}/../Server/lambdas/general/zips/view_group_inputs.zip"
+    }
+  }
 }
 
-data "archive_file" "create_coach" {
+# Archive files using for_each
+data "archive_file" "lambda_archives" {
+  for_each = local.lambda_function_locations
+  
   type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/create_coach"
-  output_path = "${path.module}/../server/lambdas/coach/zips/create_coach.zip"
+  source_dir  = each.value.source_dir
+  output_path = each.value.output_path
 }
-
-data "archive_file" "create_group" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/create_group"
-  output_path = "${path.module}/../server/lambdas/coach/zips/create_group.zip"
-}
-
-# Athlete Lambdas
-data "archive_file" "accept_coach_invite" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/accept_coach_invite"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/accept_coach_invite.zip"
-}
-
-data "archive_file" "get_coaches" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/get_coaches"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/get_coaches.zip"
-}
-
-data "archive_file" "get_coach_requests" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/get_coach_requests"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/get_coach_requests.zip"
-}
-
-data "archive_file" "input_times" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/input_times"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/input_times.zip"
-}
-
-data "archive_file" "request_coach" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/request_coach"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/request_coach.zip"
-}
-
-data "archive_file" "search_coaches" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/search_coaches"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/search_coaches.zip"
-}
-
-data "archive_file" "update_athlete_profile" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/update_athlete_profile"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/update_athlete_profile.zip"
-}
-
-data "archive_file" "view_coach_invites" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/view_coach_invites"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/view_coach_invites.zip"
-}
-
-data "archive_file" "view_workouts_athlete" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/view_workouts_athlete"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/view_workouts_athlete.zip"
-}
-
-data "archive_file" "view_workout_inputs" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/athlete/view_workout_inputs"
-  output_path = "${path.module}/../server/lambdas/athlete/zips/view_workout_inputs.zip"
-}
-
-# Coach Lambdas
-data "archive_file" "accept_athlete_request" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/accept_athlete_request"
-  output_path = "${path.module}/../server/lambdas/coach/zips/accept_athlete_request.zip"
-}
-
-data "archive_file" "add_athlete_to_group" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/add_athlete_to_group"
-  output_path = "${path.module}/../server/lambdas/coach/zips/add_athlete_to_group.zip"
-}
-
-data "archive_file" "assign_group_workout" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/assign_group_workout"
-  output_path = "${path.module}/../server/lambdas/coach/zips/assign_group_workout.zip"
-}
-
-data "archive_file" "create_workout" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/create_workout"
-  output_path = "${path.module}/../server/lambdas/coach/zips/create_workout.zip"
-}
-
-data "archive_file" "delete_workout" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/delete_workout"
-  output_path = "${path.module}/../server/lambdas/coach/zips/delete_workout.zip"
-}
-
-data "archive_file" "get_absent_group_athletes" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/get_absent_group_athletes"
-  output_path = "${path.module}/../server/lambdas/coach/zips/get_absent_group_athletes.zip"
-}
-
-data "archive_file" "get_athletes" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/get_athletes"
-  output_path = "${path.module}/../server/lambdas/coach/zips/get_athletes.zip"
-}
-
-data "archive_file" "get_group_workout" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/get_group_workout"
-  output_path = "${path.module}/../server/lambdas/coach/zips/get_group_workout.zip"
-}
-
-data "archive_file" "get_workouts" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/get_workouts"
-  output_path = "${path.module}/../server/lambdas/coach/zips/get_workouts.zip"
-}
-
-data "archive_file" "invite_athlete" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/invite_athlete"
-  output_path = "${path.module}/../server/lambdas/coach/zips/invite_athlete.zip"
-}
-
-data "archive_file" "remove_group_athlete" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/remove_group_athlete"
-  output_path = "${path.module}/../server/lambdas/coach/zips/remove_group_athlete.zip"
-}
-
-data "archive_file" "search_athletes" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/search_athletes"
-  output_path = "${path.module}/../server/lambdas/coach/zips/search_athletes.zip"
-}
-
-data "archive_file" "update_coach_profile" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/update_coach_profile"
-  output_path = "${path.module}/../server/lambdas/coach/zips/update_coach_profile.zip"
-}
-
-data "archive_file" "view_athlete_requests" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/coach/view_athlete_requests"
-  output_path = "${path.module}/../server/lambdas/coach/zips/view_athlete_requests.zip"
-}
-
-# General Lambdas
-data "archive_file" "get_athletes_for_group" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/general/get_athletes_for_group"
-  output_path = "${path.module}/../server/lambdas/general/zips/get_athletes_for_group.zip"
-}
-
-data "archive_file" "get_groups" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/general/get_groups"
-  output_path = "${path.module}/../server/lambdas/general/zips/get_groups.zip"
-}
-
-data "archive_file" "get_user" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/general/get_user"
-  output_path = "${path.module}/../server/lambdas/general/zips/get_user.zip"
-}
-
-data "archive_file" "remove_coach_athlete" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/general/remove_coach_athlete"
-  output_path = "${path.module}/../server/lambdas/general/zips/remove_coach_athlete.zip"
-}
-
-data "archive_file" "view_group_inputs" {
-  type        = "zip"
-  source_dir  = "${path.module}/../server/lambdas/general/view_group_inputs"
-  output_path = "${path.module}/../server/lambdas/general/zips/view_group_inputs.zip"
-}
-

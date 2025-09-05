@@ -92,7 +92,8 @@ resource "aws_api_gateway_method" "main" {
   rest_api_id   = aws_api_gateway_rest_api.main.id
   resource_id   = aws_api_gateway_resource.subresources[each.key].id
   http_method   = each.value.method
-  authorization = "NONE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.cognito_authorizer.id
 }
 
 # Integrations for each lambda function based on the defined local variables
@@ -126,6 +127,14 @@ resource "aws_api_gateway_deployment" "main" {
     aws_api_gateway_method.main,
   ]
   rest_api_id = aws_api_gateway_rest_api.main.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  triggers = {
+    redeployment = timestamp()
+  }
 }
 
 # Identify the stage for the API Gateway deployment
@@ -133,4 +142,13 @@ resource "aws_api_gateway_stage" "main" {
   stage_name    = "prod"
   deployment_id = aws_api_gateway_deployment.main.id
   rest_api_id   = aws_api_gateway_rest_api.main.id
+}
+
+# Authorization for API Gateway to invoke the Lambda functions
+resource "aws_api_gateway_authorizer" "cognito_authorizer" {
+  name          = "cognito-authorizer"
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  type          = "COGNITO_USER_POOLS"
+  provider_arns = [var.cognito_arn]
+  identity_source = "method.request.header.Authorization"
 }

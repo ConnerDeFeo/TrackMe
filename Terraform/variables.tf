@@ -33,3 +33,8 @@ variable "keypair_path" {
   type        = string
   default     = "C:/Personal/TrackMe/keys/TrackMe-RDS-Bastion.pem"
 }
+
+variable "cognito_arn" {
+  description = "The ARN of the Cognito User Pool for API Gateway authorization"
+  type        = string
+}

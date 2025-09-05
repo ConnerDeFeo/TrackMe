@@ -2,41 +2,41 @@ locals {
 
   lambdas = {
     # GET Lambdas
-    "athletes/search_coaches" = {lambda = aws_lambda_function.lambdas["search_coaches"].arn, method = "GET"}
-    "athletes/view_workouts_athlete" = {lambda = aws_lambda_function.lambdas["view_workouts_athlete"].arn, method = "GET"}
-    "athletes/get_coaches" = { lambda = aws_lambda_function.lambdas["get_coaches"].arn, method = "GET" }
-    "athletes/get_coach_requests" = { lambda = aws_lambda_function.lambdas["get_coach_requests"].arn, method = "GET" }
-    "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"].arn, method = "GET" }
-    "coaches/view_athlete_requests" = { lambda = aws_lambda_function.lambdas["view_athlete_requests"].arn, method = "GET" }
-    "coaches/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"].arn, method = "GET" }
-    "coaches/get_workouts" = { lambda = aws_lambda_function.lambdas["get_workouts"].arn, method = "GET" }
-    "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"].arn, method = "GET" }
-    "coaches/get_athletes" = { lambda = aws_lambda_function.lambdas["get_athletes"].arn, method = "GET" }
-    "coaches/search_athletes" = { lambda = aws_lambda_function.lambdas["search_athletes"].arn, method = "GET" }
-    "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"].arn, method = "GET" }
-    "general/view_group_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"].arn, method = "GET" }
-    "general/get_athletes_for_group" = { lambda = aws_lambda_function.lambdas["get_athletes_for_group"].arn, method = "GET" }
-    "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"].arn, method = "GET" }
+    "athletes/search_coaches" = {lambda = aws_lambda_function.lambdas["search_coaches"], method = "GET"}
+    "athletes/view_workouts_athlete" = {lambda = aws_lambda_function.lambdas["view_workouts_athlete"], method = "GET"}
+    "athletes/get_coaches" = { lambda = aws_lambda_function.lambdas["get_coaches"], method = "GET" }
+    "athletes/get_coach_requests" = { lambda = aws_lambda_function.lambdas["get_coach_requests"], method = "GET" }
+    "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"], method = "GET" }
+    "coaches/view_athlete_requests" = { lambda = aws_lambda_function.lambdas["view_athlete_requests"], method = "GET" }
+    "coaches/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
+    "coaches/get_workouts" = { lambda = aws_lambda_function.lambdas["get_workouts"], method = "GET" }
+    "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"], method = "GET" }
+    "coaches/get_athletes" = { lambda = aws_lambda_function.lambdas["get_athletes"], method = "GET" }
+    "coaches/search_athletes" = { lambda = aws_lambda_function.lambdas["search_athletes"], method = "GET" }
+    "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"], method = "GET" }
+    "general/view_group_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }
+    "general/get_athletes_for_group" = { lambda = aws_lambda_function.lambdas["get_athletes_for_group"], method = "GET" }
+    "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"], method = "GET" }
 
     # POST Lambdas
-    "athletes/request_coach" = { lambda = aws_lambda_function.lambdas["request_coach"].arn, method = "POST" }
-    "athletes/update_athlete_profile" = { lambda = aws_lambda_function.lambdas["update_athlete_profile"].arn, method = "POST" }
-    "athletes/create_athlete" = { lambda = aws_lambda_function.lambdas["create_athlete"].arn, method = "POST" }
-    "athletes/accept_coach_invite" = { lambda = aws_lambda_function.lambdas["accept_coach_invite"].arn, method = "POST" }
-    "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"].arn, method = "POST" }
-    "coaches/accept_athlete_request" = { lambda = aws_lambda_function.lambdas["accept_athlete_request"].arn, method = "POST" }
-    "coaches/update_coach_profile" = { lambda = aws_lambda_function.lambdas["update_coach_profile"].arn, method = "POST" }
-    "coaches/add_athlete_to_group" = { lambda = aws_lambda_function.lambdas["add_athlete_to_group"].arn, method = "POST" }
-    "coaches/create_coach" = { lambda = aws_lambda_function.lambdas["create_coach"].arn, method = "POST" }
-    "coaches/create_group" = { lambda = aws_lambda_function.lambdas["create_group"].arn, method = "POST" }
-    "coaches/create_workout" = { lambda = aws_lambda_function.lambdas["create_workout"].arn, method = "POST" }
-    "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"].arn, method = "POST" }
-    "coaches/invite_athlete" = { lambda = aws_lambda_function.lambdas["invite_athlete"].arn, method = "POST" }
+    "athletes/request_coach" = { lambda = aws_lambda_function.lambdas["request_coach"], method = "POST" }
+    "athletes/update_athlete_profile" = { lambda = aws_lambda_function.lambdas["update_athlete_profile"], method = "POST" }
+    "athletes/create_athlete" = { lambda = aws_lambda_function.lambdas["create_athlete"], method = "POST" }
+    "athletes/accept_coach_invite" = { lambda = aws_lambda_function.lambdas["accept_coach_invite"], method = "POST" }
+    "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }
+    "coaches/accept_athlete_request" = { lambda = aws_lambda_function.lambdas["accept_athlete_request"], method = "POST" }
+    "coaches/update_coach_profile" = { lambda = aws_lambda_function.lambdas["update_coach_profile"], method = "POST" }
+    "coaches/add_athlete_to_group" = { lambda = aws_lambda_function.lambdas["add_athlete_to_group"], method = "POST" }
+    "coaches/create_coach" = { lambda = aws_lambda_function.lambdas["create_coach"], method = "POST" }
+    "coaches/create_group" = { lambda = aws_lambda_function.lambdas["create_group"], method = "POST" }
+    "coaches/create_workout" = { lambda = aws_lambda_function.lambdas["create_workout"], method = "POST" }
+    "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
+    "coaches/invite_athlete" = { lambda = aws_lambda_function.lambdas["invite_athlete"], method = "POST" }
 
     # DELETE Lambdas
-    "coaches/remove_group_athlete" = { lambda = aws_lambda_function.lambdas["remove_group_athlete"].arn, method = "DELETE" }
-    "coaches/delete_workout" = { lambda = aws_lambda_function.lambdas["delete_workout"].arn, method = "DELETE" }
-    "general/remove_coach_athlete" = { lambda = aws_lambda_function.lambdas["remove_coach_athlete"].arn, method = "DELETE" }
+    "coaches/remove_group_athlete" = { lambda = aws_lambda_function.lambdas["remove_group_athlete"], method = "DELETE" }
+    "coaches/delete_workout" = { lambda = aws_lambda_function.lambdas["delete_workout"], method = "DELETE" }
+    "general/remove_coach_athlete" = { lambda = aws_lambda_function.lambdas["remove_coach_athlete"], method = "DELETE" }
   }
 }
 
@@ -52,13 +52,11 @@ resource "aws_api_gateway_resource" "athletes" {
   parent_id   = aws_api_gateway_rest_api.main.root_resource_id
   path_part   = "athletes"
 }
-
 resource "aws_api_gateway_resource" "coaches" {
   rest_api_id = aws_api_gateway_rest_api.main.id
   parent_id   = aws_api_gateway_rest_api.main.root_resource_id
   path_part   = "coaches"
 }
-
 resource "aws_api_gateway_resource" "general" {
   rest_api_id = aws_api_gateway_rest_api.main.id
   parent_id   = aws_api_gateway_rest_api.main.root_resource_id
@@ -105,8 +103,8 @@ resource "aws_api_gateway_integration" "main" {
   resource_id = aws_api_gateway_resource.subresources[each.key].id
   http_method = aws_api_gateway_method.main[each.key].http_method
   type        = "AWS_PROXY"
-  integration_http_method = each.value.method
-  uri = aws_lambda_function.lambdas[each.value.lambda].invoke_arn
+  integration_http_method = "POST" # Lambda functions always use POST for integration
+  uri = each.value.lambda.invoke_arn
 }
 
 # Create permissions for API Gateway to invoke the Lambda functions
@@ -115,14 +113,18 @@ resource "aws_lambda_permission" "api_gateway" {
 
   statement_id  = "AllowAPIGatewayInvoke-${split("/", each.key)[1]}"
   action        = "lambda:InvokeFunction"
-  function_name = each.value.lambda
+  function_name = each.value.lambda.function_name
   # Use the execution ARN of the API Gateway for the source ARN
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
 }
 
 resource "aws_api_gateway_deployment" "main" {
-  depends_on = []
+  # This ensures all methods + integrations exist before deployment
+  depends_on = [
+    aws_api_gateway_integration.main,
+    aws_api_gateway_method.main,
+  ]
   rest_api_id = aws_api_gateway_rest_api.main.id
 }
 

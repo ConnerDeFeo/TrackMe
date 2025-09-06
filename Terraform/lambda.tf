@@ -22,6 +22,7 @@ locals {
     "view_coach_invites",
     "view_workouts_athlete",
     "view_workout_inputs",
+    "view_input_history",
 
     # Coach Lambdas
     "create_coach",

@@ -1,8 +1,7 @@
 import AuthInput from "../../components/AuthInput";
-import { Button, Pressable, Text, View } from "react-native";
+import { Button, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Picker } from "@react-native-picker/picker";
 import { signUp } from 'aws-amplify/auth';
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
@@ -11,7 +10,6 @@ import AuthenticationHeader from "../../components/AuthenticationHeader";
 //Create account page
 const CreateAccount = ()=>{
     const navigation = useNavigation<any>();
-    const selectStyling = {fontSize:20}
 
     const [message, setMessage] = useState<string>("");
     const [accountType,setAccountType] = useState<string>("Athlete");
@@ -89,14 +87,19 @@ const CreateAccount = ()=>{
                 
                 {/**CREATE ACCOUNT FORM*/}
                 <View className="gap-y-8 bg-red-200 rounded-xl p-6">
-                    <View className="bg-white rounded-lg p-2 h-12 justify-center">
-                        <Picker
-                            selectedValue={accountType}
-                            onValueChange={itemValue => setAccountType(itemValue)}
+                    <View className="bg-white rounded-lg h-12 flex flex-row overflow-hidden">
+                        <TouchableOpacity 
+                            onPress={() => setAccountType("Athlete")} 
+                            className={`flex-1 items-center justify-center ${accountType === 'Athlete' ? 'bg-black' : 'bg-white'}`}
                         >
-                            <Picker.Item label="Athlete" value="Athlete" style={selectStyling}/>
-                            <Picker.Item label="Coach" value="Coach" style={selectStyling}/>
-                        </Picker>
+                            <Text className={`text-xl ${accountType === 'Athlete' ? 'text-white' : 'text-black'}`}>Athlete</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            onPress={() => setAccountType("Coach")}
+                            className={`flex-1 items-center justify-center ${accountType === 'Coach' ? 'bg-black' : 'bg-white'}`}
+                        >
+                            <Text className={`text-xl ${accountType === 'Coach' ? 'text-white' : 'text-black'}`}>Coach</Text>
+                        </TouchableOpacity>
                     </View>
                     <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
                     <AuthInput value={username} setValue={setUsername} placeholder="Username"/>

@@ -10,7 +10,7 @@ import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreat
 const CreateWorkout = () => {
   const navigation = useNavigation<any>();
   const route = useRoute();
-  const { workout } = (route.params as { workout?: any }) || {};
+  const { workout, isEdit } = (route.params as { workout?: any, isEdit: boolean }) || {};
 
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
@@ -34,36 +34,37 @@ const CreateWorkout = () => {
     }
       
   };
+  console.log(isEdit)
   return (
     <ScrollView className="mt-16 bg-white">
       {/* HEADER: Title and Add Workout Button */}
       <View className="flex-row justify-between items-center p-4">
-      <Text className="text-4xl font-bold">Create Workout</Text>
+        <Text className="text-4xl font-bold">Create Workout</Text>
       </View>
 
       {/* WORKOUT TITLE INPUT */}
       <View className="border border-red-700 rounded-lg m-4 p-3 bg-white">
-      <Text className="font-bold">Title</Text>
-      <TextInput
-        value={title}
-        onChangeText={setTitle}
-        className="border-b border-red-700 text-black py-1 mt-1"
-        placeholder="Enter workout title"
-        placeholderTextColor="#888"
-      />
+        <Text className="font-bold">Title</Text>
+        <TextInput
+          value={title}
+          onChangeText={setTitle}
+          className="border-b border-red-700 text-black py-1 mt-1"
+          placeholder="Enter workout title"
+          placeholderTextColor="#888"
+        />
       </View>
 
       {/* WORKOUT DESCRIPTION INPUT */}
       <View className="border border-red-700 rounded-lg mx-4 mb-4 p-3 bg-white">
-      <Text className="font-bold">Description</Text>
-      <TextInput
-        multiline
-        value={description}
-        onChangeText={setDescription}
-        className="border-b border-red-700 text-black py-1 mt-1 min-h-10"
-        placeholder="Enter workout description"
-        placeholderTextColor="#888"
-      />
+        <Text className="font-bold">Description</Text>
+        <TextInput
+          multiline
+          value={description}
+          onChangeText={setDescription}
+          className="border-b border-red-700 text-black py-1 mt-1 min-h-10"
+          placeholder="Enter workout description"
+          placeholderTextColor="#888"
+        />
       </View>
 
       {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
@@ -72,13 +73,13 @@ const CreateWorkout = () => {
       {exercises.map((exercise, idx) => (
         <ExerciseCreation key={idx} excercise={exercise} setExercise={setExercises} />
       ))}
-      {/* Button to add a new exercise */}
-      <TouchableOpacity
-        className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
-        onPress={() => setExercises([...exercises, { name: '', id: exercises.length }])}
-      >
-        <Text className="text-white font-bold">Add exercise</Text>
-      </TouchableOpacity>
+        {/* Button to add a new exercise */}
+        <TouchableOpacity
+          className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
+          onPress={() => setExercises([...exercises, { name: '', id: exercises.length }])}
+        >
+          <Text className="text-white font-bold">Add exercise</Text>
+        </TouchableOpacity>
       </View>
 
       {/* CREATE WORKOUT BUTTON */}
@@ -86,7 +87,7 @@ const CreateWorkout = () => {
       className="bg-black rounded-lg py-3 items-center mx-4 mb-8"
       onPress={handleWorkoutCreation}
       >
-      <Text className="text-white font-bold text-lg">Create</Text>
+        <Text className="text-white font-bold text-lg">{isEdit ? 'Update' : 'Create'}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

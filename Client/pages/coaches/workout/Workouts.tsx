@@ -35,13 +35,13 @@ const Workouts = () => {
     <ScrollView className="mt-[4rem]">
       <View className="flex-row justify-between items-center p-4">
         <Text className="text-4xl font-bold">Workouts</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('CreateWorkout')}>
+        <TouchableOpacity onPress={() => navigation.navigate('CreateWorkout', {isEdit: false})}>
           <Image source={require("../../../images/Add.png")} className="h-12 w-12 rounded-full border-3" />
         </TouchableOpacity>
       </View>
       {workouts.map((workout, idx) => {
         return (
-          <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigation.navigate('CreateWorkout', { workout: workout })} />
+          <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigation.navigate('CreateWorkout', { workout: workout, isEdit: true })} />
         );
       })}
     </ScrollView>

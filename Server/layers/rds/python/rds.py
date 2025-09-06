@@ -1,9 +1,10 @@
 import os
-import logging
 
-if not os.getenv("ENVIRONMENT") == "production":
+# For local testing
+if os.getenv("ENVIRONMENT") == None:
     import sys
     sys.path.insert(0, r"C:\Users\cjack\AppData\Local\Programs\Python\Python312\Lib\site-packages")
+# Import psycopg2 regardless of environment to avoid issues with lambda layers
 import psycopg2
 
 _connection = None
@@ -17,7 +18,6 @@ def connect():
             _PORT=os.getenv("RDS_PORT")
             _USER=os.getenv("RDS_USER")
             _DBNAME=os.getenv("RDS_DBNAME")
-            _REGION=os.getenv("RDS_REGION")
             _PASSWORD=os.getenv("RDS_PASSWORD")
             _connection = psycopg2.connect(
                 host=_ENDPOINT, 

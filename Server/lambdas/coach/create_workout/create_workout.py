@@ -1,4 +1,4 @@
-from rds import execute_commit_fetch_one
+from rds import execute_commit_fetch_one, execute_commit
 import json
 import uuid
 
@@ -14,7 +14,7 @@ def create_workout(event, context):
         # If given workout id, edit current workout
         if workout_id:
             # Update existing workout
-            execute_commit_fetch_one(
+            execute_commit(
                 """
                     UPDATE workouts
                     SET title = %s, description = %s, exercises = %s
@@ -24,7 +24,7 @@ def create_workout(event, context):
             )
             return {
                 'statusCode': 200,
-                'body': json.dumps({'message': 'Workout created successfully'})
+                'body': json.dumps({'message': 'Workout updated successfully'})
             }
 
         # Else create new workout

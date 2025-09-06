@@ -11,9 +11,8 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
 from data import TestData
-from rds import execute_file, fetch_one, fetch_all
+from rds import execute_file, fetch_all
 from datetime import datetime, timezone 
-from testing_utils import debug_table
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -96,7 +95,7 @@ def test_input_times():
     assert response['statusCode'] == 200
 
     #Make sure the input was recorded in the database
-    inputs = fetch_all("SELECT * FROM athlete_inputs")
+    inputs = fetch_all("SELECT athleteId, groupId, distance, time FROM athlete_inputs")
     assert inputs is not None
     assert len(inputs) == 2  # Two inputs recorded
 

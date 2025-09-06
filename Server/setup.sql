@@ -86,6 +86,7 @@ CREATE TABLE group_workouts (
 );
 
 CREATE TABLE athlete_inputs(
+    id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupId INT REFERENCES groups(id) NOT NULL,
     distance INT DEFAULT 0,

@@ -1,6 +1,6 @@
 import json
 from rds import execute_commit_many
-
+from datetime import datetime, timezone
 #Inserts all of an athletes input times for a given group into db
 def input_times(event, context):
     body = json.loads(event['body'])
@@ -8,7 +8,7 @@ def input_times(event, context):
     try:
         inputs = body['inputs'] #inputs in {time: float, distance: int}
         athleteIds = body['athleteIds'] # list of athleteIds
-        date = body['date']
+        date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))  # date in 'YYYY-MM-DD' format
         groupId = body['groupId']
 
         #Create all inputs

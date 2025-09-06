@@ -1,4 +1,4 @@
-import { fetchUserAttributes, getCurrentUser, signIn, signOut } from "aws-amplify/auth";
+import { fetchAuthSession, fetchUserAttributes, getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import AsyncStorage from "./AsyncStorage";
 
 const UserService = {
@@ -26,11 +26,11 @@ const UserService = {
   //signs user in and navigates to their respective home page
   signIn: async (username: string, password: string) => {
     await AsyncStorage.clear();
-    await signIn({ username, password });
+    await signIn({ username, password }); //Throws error if sign in fails, so no need to handle it here
     const user = await getCurrentUser();
     const accountType = await UserService.getAccountType();
-    AsyncStorage.storeData('accountType', accountType!);
-    AsyncStorage.storeData('userId', user.userId);
+    await AsyncStorage.storeData('accountType', accountType!);
+    await AsyncStorage.storeData('userId', user.userId);
   },
   getUserId: async () => {
     try {

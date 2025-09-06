@@ -28,7 +28,7 @@ const CreateGroup = () => {
             const resp = await CoachGroupService.createGroup(userId, groupName);
             if(resp.ok){
                 const data = await resp.json();
-                navigation.navigate('ViewGroup', { groupId: data.groupId, groupName: groupName });
+                navigation.navigate('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });
             }
         } catch (error) {
             console.log("Error creating group:", error);
@@ -36,7 +36,7 @@ const CreateGroup = () => {
     };
 
     return (
-        <View className="flex-1 justify-center items-center px-6 bg-gray-50">
+        <View className="flex-1 justify-center items-center px-6 bg-gray-50 mt-[4rem]">
             <View className="w-full max-w-sm space-y-4">
             <TextInput
                 placeholder="Enter Group Name"

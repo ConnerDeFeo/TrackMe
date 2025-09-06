@@ -9,15 +9,23 @@ def view_input_history(event, context):
         athlete_id = query_params['athleteId']
 
         # Fetch input history from the database for the specified athlete
+        # We want to grab the last 10 distinct dates of input history for the athlete
         input_history = fetch_all(
             """
                 SELECT g.id, g.name, ai.date, ai.distance, ai.time
                 FROM athlete_inputs ai
                 JOIN groups g ON ai.groupId = g.id
                 WHERE ai.athleteId = %s
-                ORDER BY ai.date ASC, ai.id ASC
+                AND ai.date IN (
+                    SELECT DISTINCT date
+                    FROM athlete_inputs
+                    WHERE athleteId = %s
+                    ORDER BY date DESC
+                    LIMIT 10
+                )
+                ORDER BY ai.date DESC, ai.id ASC;
             """,
-            (athlete_id,)
+            (athlete_id,athlete_id)
         )
 
         if input_history is None:

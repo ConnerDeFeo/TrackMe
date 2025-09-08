@@ -18,6 +18,7 @@ locals {
     "general/get_athletes_for_group" = { lambda = aws_lambda_function.lambdas["get_athletes_for_group"], method = "GET" }
     "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"], method = "GET" }
     "athletes/view_input_history" = { lambda = aws_lambda_function.lambdas["view_input_history"], method = "GET" }
+    "athletes/search_input_history_date" = { lambda = aws_lambda_function.lambdas["search_input_history_date"], method = "GET" }
 
     # POST Lambdas
     "athletes/request_coach" = { lambda = aws_lambda_function.lambdas["request_coach"], method = "POST" }

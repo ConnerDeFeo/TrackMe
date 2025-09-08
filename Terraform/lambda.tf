@@ -23,6 +23,7 @@ locals {
     "view_workouts_athlete",
     "view_workout_inputs",
     "view_input_history",
+    "search_input_history_date",
 
     # Coach Lambdas
     "create_coach",

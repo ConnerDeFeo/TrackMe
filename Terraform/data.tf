@@ -92,6 +92,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/view_input_history"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/view_input_history.zip"
     }
+    "search_input_history_date" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/search_input_history_date"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/search_input_history_date.zip"
+    }
     
     # Coach Lambdas
     "accept_athlete_request" = {

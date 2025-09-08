@@ -26,7 +26,7 @@ def search_input_history_date(event, context):
                     )
                 ORDER BY date DESC
             """,
-            (athlete_id, date)
+            (athlete_id,athlete_id, date)
         )
 
         # Convert inputs into a easy to read format for the frontend

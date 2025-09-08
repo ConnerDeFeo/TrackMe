@@ -10,6 +10,7 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.view_input_history.view_input_history import view_input_history
+from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
 from datetime import datetime, timedelta, timezone
     
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -107,7 +108,9 @@ def test_view_input_history():
     assert inputs_today['2']['inputs'] == [{'distance': 3, 'time': 4.0}, {'distance': 5, 'time': 6.0}]
     assert inputs_today['2']['name'] == 'Test Group 2'
     
-def search_input_history_date():
+def test_search_input_history_date():
+    two_days_ago = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")
+    three_days_ago = (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%d")
     input_times(TestData.test_input_times, {})
     # Input variety of times
     input_times({
@@ -127,7 +130,7 @@ def search_input_history_date():
         "body": json.dumps({
             "athleteIds": ["1234"],
             'groupId': 2,
-            "date": (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d"),
+            "date": two_days_ago,
             'inputs': [
                 {
                     'distance': 3,
@@ -144,7 +147,7 @@ def search_input_history_date():
         "body": json.dumps({
             "athleteIds": ["1234"],
             'groupId': 2,
-            "date": (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%d"),
+            "date": three_days_ago,
             'inputs': [
                 {
                     'distance': 7,
@@ -153,3 +156,29 @@ def search_input_history_date():
             ]
         })
     }, {})
+
+    response =  search_input_history_date({
+        "queryStringParameters": {
+            "athleteId": "1234",
+            "date": yesterday
+        }
+    }, {})
+
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 3 # Yesterday's and the two previous days
+    assert yesterday in body
+    assert two_days_ago in body
+    assert three_days_ago in body
+
+    inputs_yesterday = body[yesterday]
+    assert inputs_yesterday['1']['inputs'] == [{'distance': 1, 'time': 2.0}]
+    assert inputs_yesterday['1']['name'] == 'Test Group'
+
+    inputs_two_days_ago = body[two_days_ago]
+    assert inputs_two_days_ago['2']['inputs'] == [{'distance': 3, 'time': 4.0}, {'distance': 5, 'time': 6.0}]
+    assert inputs_two_days_ago['2']['name'] == 'Test Group 2'
+
+    inputs_three_days_ago = body[three_days_ago]
+    assert inputs_three_days_ago['2']['inputs'] == [{'distance': 7, 'time': 8.0}]
+    assert inputs_three_days_ago['2']['name'] == 'Test Group 2'

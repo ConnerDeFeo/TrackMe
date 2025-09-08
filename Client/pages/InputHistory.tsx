@@ -8,31 +8,37 @@ const InputHistory = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [dateInput, setDateInput] = useState<string>("");
 
+  const fetchInputHistory = async () => {
+    const athleteId = await UserService.getUserId();
+    const resp = await HistoryService.getWorkoutHistory(athleteId!);
+    if (resp.ok){
+      const historyData = await resp.json();
+      setInputHistory(historyData);
+    }
+  };
+
   //Fetch input history for the athlete when the component mounts
   useEffect(() => {
-    const fetchInputHistory = async () => {
-      const athleteId = await UserService.getUserId();
-      const resp = await HistoryService.getWorkoutHistory(athleteId!);
-      if (resp.ok){
-        const historyData = await resp.json();
-        setInputHistory(historyData);
-      }
-    };
     fetchInputHistory();
   }, []);
 
   // Function to handle date search
-  const handleDateSearch = () => {
+  const handleDateSearch = async () => {
     if (dateInput) {
-      // Validate date format (MM-DD-YYYY only)
-      const dateRegex = /^\d{1,2}-\d{1,2}-\d{4}$/;
+      // Validate date format (YYYY-MM-DD only)
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
       if (dateRegex.test(dateInput)) {
         setSelectedDate(dateInput);
-        // Here you can make your backend call with the selectedDate
-        console.log("Date selected for backend call:", dateInput);
-        // Example: fetchHistoryByDate(dateInput);
+        const athleteId = await UserService.getUserId();
+        const resp = await HistoryService.searchInputHistoryByDate(athleteId!, dateInput);
+        if(resp.ok){
+          const historyData = await resp.json();
+          console.log(dateInput);
+          console.log("Fetched history data for date search:", historyData);
+          setInputHistory(historyData);
+        }
       } else {
-        alert("Please enter a valid date format (MM-DD-YYYY)");
+        alert("Please enter a valid date format (YYYY-MM-DD)");
       }
     }
   };
@@ -41,6 +47,7 @@ const InputHistory = () => {
   const clearDateFilter = () => {
     setSelectedDate("");
     setDateInput("");
+    fetchInputHistory();
   };
 
   return (
@@ -54,7 +61,7 @@ const InputHistory = () => {
           <TextInput
             value={dateInput}
             onChangeText={setDateInput}
-            placeholder="Enter date (MM-DD-YYYY)"
+            placeholder="Enter date (YYYY-MM-DD)"
             className="flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white"
           />
           <TouchableOpacity
@@ -78,12 +85,15 @@ const InputHistory = () => {
       <View className="p-4">
         {Object.keys(InputHistory).sort((a, b) => new Date(b).getTime() - new Date(a).getTime()).map((date) => (
           <View key={date} className="mb-6 bg-white shadow-md border-l-4 border-l-red-500 rounded-lg p-4">
-            <Text className="text-2xl font-bold text-gray-800 mb-3">{new Date(date).toLocaleDateString()}</Text>
+            <Text className="text-2xl font-bold text-gray-800 mb-3">{date}</Text>
             {Object.keys(InputHistory[date]).map((groupId) => (
               <View key={groupId} className="ml-4 mb-2">
                 <Text className="text-xl font-semibold text-gray-700">{InputHistory[date][groupId].name}</Text>
                 {InputHistory[date][groupId].inputs.map((inputItem: {time: number, distance: number}, index: number) => (
-                    <Text key={index} className="text-base text-gray-600 pl-4">Time: {inputItem.time}, Distance: {inputItem.distance}</Text>
+                    <View key={index} className="flex-row items-center pl-4 py-1">
+                      <Text className="text-base text-gray-600 w-24">{inputItem.distance}m</Text>
+                      <Text className="text-base text-gray-800 font-semibold">{inputItem.time}s</Text>
+                    </View>
                 ))}
               </View>
             ))}

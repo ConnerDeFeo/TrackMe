@@ -21,7 +21,6 @@ const Inputs = ()=>{
         const resp = await AthleteWorkoutService.viewWorkoutInputs();
         if (resp.ok){
             const inputs = await resp.json();
-            console.log(inputs)
             setSubmittedInputs(inputs);
         }
     };

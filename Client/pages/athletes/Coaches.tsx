@@ -36,7 +36,7 @@ const Coaches = ()=>{
     }, [userId]); //userId needed in case of page switching back and forth
 
     return (
-        <View className="flex-1 mt-[4rem]">
+        <View className="flex-1 mt-[4rem] p-4">
             <Text className="text-4xl font-bold">Coaches</Text>
             <View className="my-6 flex flex-row justify-between items-center">
                 <TouchableOpacity onPress={() => navigation.navigate('CoachRequests',{fetchCoaches:fetchCoaches})}>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Text, View, TextInput, TouchableOpacity } from "react-native";
 import UserService from "../services/UserService";
 import HistoryService from "../services/HistoryService";
+import SearchDate from "../components/SearchDate";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
@@ -56,22 +57,11 @@ const InputHistory = () => {
       
       {/* Date Search Section */}
       <View className="px-4 pb-4">
-        <Text className="text-lg font-semibold text-gray-700 mb-2">Search by Date:</Text>
-        <View className="flex-row items-center gap-2">
-          <TextInput
-            value={dateInput}
-            onChangeText={setDateInput}
-            placeholder="Enter date (YYYY-MM-DD)"
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white"
-          />
-          <TouchableOpacity
-            onPress={handleDateSearch}
-            className="bg-red-500 px-4 py-2 rounded-lg"
-          >
-            <Text className="text-white font-medium">Search</Text>
-          </TouchableOpacity>
-        </View>
-        
+        <SearchDate
+          dateInput={dateInput}
+          setDateInput={setDateInput}
+          handleDateSearch={handleDateSearch}
+        />
         {selectedDate && (
           <View className="flex-row items-center justify-between mt-2 p-2 bg-gray-100 rounded-lg">
             <Text className="text-gray-700">Filtering by: {selectedDate}</Text>

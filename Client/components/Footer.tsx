@@ -24,7 +24,7 @@ const layouts = {
   ],
   'coach': [
     ['Workouts', 'Workouts'], 
-    ['History', 'History'], 
+    ['History', 'GroupHistory'], 
     ['Groups', 'CoachGroups'], 
     ['Athletes', 'Athletes'], 
     ['Profile', 'CoachProfile']

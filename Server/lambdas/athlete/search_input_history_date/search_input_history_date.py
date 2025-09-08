@@ -1,33 +1,35 @@
 import json
 from rds import fetch_all
 
-# Fetches workout history for a given athlete
-def view_input_history(event, context):
-    query_params = event.get("queryStringParameters", {})
+# Grabs the given date's input history for the given athlete from the database
+# Also grabs the 6 preceding inputs 
+def search_input_history_date(event, context):
+    query_params = event.get('queryStringParameters', {})
 
     try:
         athlete_id = query_params['athleteId']
+        date = query_params['date']
 
-        # Fetch input history from the database for the specified athlete
-        # We want to grab the last 10 distinct dates of input history for the athlete
+        # Grab given data and 6 preceding dates' input history for the athlete
         input_history = fetch_all(
             """
                 SELECT g.id, g.name, ai.date, ai.distance, ai.time
                 FROM athlete_inputs ai
                 JOIN groups g ON ai.groupId = g.id
-                WHERE ai.athleteId = %s
-                AND ai.date IN (
+                WHERE athleteId = %s 
+                AND date IN (
                     SELECT DISTINCT date
                     FROM athlete_inputs
-                    WHERE athleteId = %s
-                    ORDER BY date DESC
-                    LIMIT 7
-                )
-                ORDER BY ai.date DESC, ai.id ASC;
+                        WHERE athleteId = %s AND date <= %s
+                        ORDER BY date DESC 
+                        LIMIT 7
+                    )
+                ORDER BY date DESC
             """,
-            (athlete_id,athlete_id)
+            (athlete_id, date)
         )
 
+        # Convert inputs into a easy to read format for the frontend
         if input_history is None:
             input_history = []
             
@@ -46,14 +48,15 @@ def view_input_history(event, context):
                 "distance": input[3],
                 "time": input[4]
             })
-
         return {
             "statusCode": 200,
             "body": json.dumps(sorted)
         }
     except Exception as e:
-        print(f"Error occurred while fetching input history: {str(e)}")
+        print(f"Error occurred while searching input history by date: {str(e)}")
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": "Internal server error"})
+            "body": json.dumps({
+                "message": "Internal server error"
+            })
         }

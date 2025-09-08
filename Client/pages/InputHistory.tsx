@@ -24,53 +24,27 @@ const InputHistory = () => {
   }, []);
 
   // Function to handle date search
-  const handleDateSearch = async () => {
-    if (dateInput) {
-      // Validate date format (YYYY-MM-DD only)
-      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-      if (dateRegex.test(dateInput)) {
-        setSelectedDate(dateInput);
-        const athleteId = await UserService.getUserId();
-        const resp = await HistoryService.searchInputHistoryByDate(athleteId!, dateInput);
-        if(resp.ok){
-          const historyData = await resp.json();
-          console.log(dateInput);
-          console.log("Fetched history data for date search:", historyData);
-          setInputHistory(historyData);
-        }
-      } else {
-        alert("Please enter a valid date format (YYYY-MM-DD)");
-      }
+  const handleDateSearch = async (dateInput:string) => {
+    const athleteId = await UserService.getUserId();
+    const resp = await HistoryService.searchInputHistoryByDate(athleteId!, dateInput);
+    if(resp.ok){
+      const historyData = await resp.json();
+      console.log(dateInput);
+      console.log("Fetched history data for date search:", historyData);
+      setInputHistory(historyData);
     }
   };
 
-  // Function to clear date filter
-  const clearDateFilter = () => {
-    setSelectedDate("");
-    setDateInput("");
-    fetchInputHistory();
-  };
 
   return (
     <View className="mt-[4rem]">
       <Text className="text-4xl font-bold p-4">Input History</Text>
       
       {/* Date Search Section */}
-      <View className="px-4 pb-4">
-        <SearchDate
-          dateInput={dateInput}
-          setDateInput={setDateInput}
-          handleDateSearch={handleDateSearch}
-        />
-        {selectedDate && (
-          <View className="flex-row items-center justify-between mt-2 p-2 bg-gray-100 rounded-lg">
-            <Text className="text-gray-700">Filtering by: {selectedDate}</Text>
-            <TouchableOpacity onPress={clearDateFilter}>
-              <Text className="text-red-500 font-medium">Clear</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
+      <SearchDate
+        handleDateSearch={handleDateSearch}
+        handleClear={fetchInputHistory}
+      />
       
       <View className="p-4">
         {Object.keys(InputHistory).sort((a, b) => new Date(b).getTime() - new Date(a).getTime()).map((date) => (

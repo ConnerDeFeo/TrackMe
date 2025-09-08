@@ -96,16 +96,6 @@ def test_view_input_history():
     assert len(input_history) == 2 # two dates with inputs recorded
 
     inputs_yesterday = input_history[yesterday]
-    # assert inputs_yesterday == {
-    #         '1': {
-    #             'inputs': [{'distance': 1, 'time': 2.0}], 
-    #             'name': 'Test Group'
-    #         },
-    #         '2': {
-    #             'inputs': [{'distance': 7, 'time': 8.0}], 
-    #             'name': 'Test Group 2'
-    #         },
-    #     }
     assert inputs_yesterday['1']['inputs'] == [{'distance': 1, 'time': 2.0}]
     assert inputs_yesterday['1']['name'] == 'Test Group'
     assert inputs_yesterday['2']['inputs'] == [{'distance': 7, 'time': 8.0}]
@@ -117,3 +107,49 @@ def test_view_input_history():
     assert inputs_today['2']['inputs'] == [{'distance': 3, 'time': 4.0}, {'distance': 5, 'time': 6.0}]
     assert inputs_today['2']['name'] == 'Test Group 2'
     
+def search_input_history_date():
+    input_times(TestData.test_input_times, {})
+    # Input variety of times
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1234"],
+            'groupId': 1,
+            "date": yesterday,
+            'inputs': [
+                {
+                    'distance': 1,
+                    'time': 2
+                }
+            ]
+        })
+    }, {})
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1234"],
+            'groupId': 2,
+            "date": (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d"),
+            'inputs': [
+                {
+                    'distance': 3,
+                    'time': 4
+                },
+                {
+                    'distance': 5,
+                    'time': 6
+                }
+            ]
+        })
+    }, {})
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1234"],
+            'groupId': 2,
+            "date": (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%d"),
+            'inputs': [
+                {
+                    'distance': 7,
+                    'time': 8
+                }
+            ]
+        })
+    }, {})

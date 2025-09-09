@@ -41,6 +41,7 @@ locals {
     "search_athletes",
     "update_coach_profile",
     "view_athlete_requests",
+    "get_available_history_dates",
 
     # General Lambdas
     "get_athletes_for_group",

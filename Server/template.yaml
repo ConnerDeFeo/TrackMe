@@ -57,21 +57,6 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  ViewInputHistoryFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/athlete/view_input_history/
-      Handler: view_input_history.view_input_history
-      Events:
-        ViewInputHistoryApi:
-          Type: Api
-          Properties:
-            Path: /athletes/view_input_history/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
   SearchCoachesFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -223,6 +208,21 @@ Resources:
         - Ref: RDSLayer
 
   # COACH FUNCTIONS
+  GetAvailableHistoryDatesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/coach/get_available_history_dates/
+      Handler: get_available_history_dates.get_available_history_dates
+      Events:
+        GetAvailableHistoryDatesApi:
+          Type: Api
+          Properties:
+            Path: /coaches/get_available_history_dates/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   ViewAthleteRequestsFunction:
     Type: AWS::Serverless::Function
     Properties:

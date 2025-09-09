@@ -8,6 +8,13 @@ const HistoryService = {
             url += `&date=${date}`;
         }
         return await API.get(url);
+    },
+    getAvailableHistoryDates: async (coachId: string, date?: string) => {
+        let url = `${EXPO_PUBLIC_API_URL}/coaches/get_available_history_dates?coachId=${coachId}`;
+        if (date) {
+            url += `&date=${date}`;
+        }
+        return await API.get(url);
     }
 };
 

@@ -150,6 +150,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/view_athlete_requests"
       output_path = "${path.module}/../Server/lambdas/coach/zips/view_athlete_requests.zip"
     }
+    "get_available_history_dates" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_available_history_dates"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_available_history_dates.zip"
+    }
     
     # General Lambdas
     "get_athletes_for_group" = {

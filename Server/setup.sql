@@ -37,6 +37,7 @@ CREATE TABLE groups (
     name VARCHAR(255) NOT NULL,
     dateCreated VARCHAR(10) DEFAULT CURRENT_DATE,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE,
     UNIQUE (name, coachId)
 );
 

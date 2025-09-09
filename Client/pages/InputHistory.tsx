@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, View } from "react-native";
 import UserService from "../services/UserService";
 import HistoryService from "../services/HistoryService";
 import SearchDate from "../components/SearchDate";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [dateInput, setDateInput] = useState<string>("");
 
   const fetchInputHistory = async () => {
     const athleteId = await UserService.getUserId();
@@ -29,12 +27,9 @@ const InputHistory = () => {
     const resp = await HistoryService.searchInputHistoryByDate(athleteId!, dateInput);
     if(resp.ok){
       const historyData = await resp.json();
-      console.log(dateInput);
-      console.log("Fetched history data for date search:", historyData);
       setInputHistory(historyData);
     }
   };
-
 
   return (
     <View className="mt-[4rem]">

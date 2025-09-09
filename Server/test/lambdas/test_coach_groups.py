@@ -1,6 +1,7 @@
 import pytest
 
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
+from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
@@ -164,3 +165,21 @@ def test_remove_group_athlete():
     response = get_absent_group_athletes(event, {})
     assert response['statusCode'] == 200
     assert json.loads(response['body']) == [['1234', "test_athlete"]]
+
+def test_delete_group():
+    create_group(TestData.test_group, {})
+
+    event = {
+        "queryStringParameters": {
+            "groupId": 1,
+        }
+    }
+
+    response = delete_group(event, {})
+    assert response['statusCode'] == 200
+
+    response = fetch_one("""
+        SELECT * FROM groups WHERE id = %s
+    """, (1,))
+    assert response is not None
+    assert response[4] is True  # Check if deleted flag is set to True

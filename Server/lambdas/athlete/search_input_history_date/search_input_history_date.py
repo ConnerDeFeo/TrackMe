@@ -1,5 +1,6 @@
 import json
 from rds import fetch_all
+from datetime import datetime, timezone
 
 # Grabs the given date's input history for the given athlete from the database
 # Also grabs the 6 preceding inputs 
@@ -8,7 +9,7 @@ def search_input_history_date(event, context):
 
     try:
         athlete_id = query_params['athleteId']
-        date = query_params['date']
+        date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         # Grab given data and 6 preceding dates' input history for the athlete
         input_history = fetch_all(

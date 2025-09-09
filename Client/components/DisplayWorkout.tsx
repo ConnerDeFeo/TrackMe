@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 import Exercise from "../types/Exersise";
 
-const DisplayWorkout: React.FC<{ workout: any, onPress:()=>void, onRemove?: (id: string) => void }> = ({ workout, onPress, onRemove }) => {
+const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id: string) => void }> = ({ workout, onPress, onRemove }) => {
     // Extract exercises array from workout, defaulting to empty array if undefined
     const exercises: Array<Exercise> = workout.exercises || [];
     

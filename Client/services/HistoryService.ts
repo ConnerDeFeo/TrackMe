@@ -15,6 +15,9 @@ const HistoryService = {
             url += `&date=${date}`;
         }
         return await API.get(url);
+    },
+    fetchHistoricalData: async (coachId: string, date: string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/fetch_historical_data?coachId=${coachId}&date=${date}`);
     }
 };
 

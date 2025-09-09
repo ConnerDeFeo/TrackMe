@@ -2,6 +2,7 @@ import json
 import pytest
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.input_times.input_times import input_times
+from lambdas.coach.fetch_historical_data.fetch_historical_data import fetch_historical_data
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.coach.create_workout.create_workout import create_workout
@@ -14,7 +15,7 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
 from datetime import datetime, timedelta, timezone
-from testing_utils import debug_table
+# from testing_utils import debug_table
     
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -140,8 +141,6 @@ def test_get_available_history_dates():
 
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
-    debug_table()
-    print(date)
     assert len(body) == 1
 
     response = get_available_history_dates({
@@ -153,3 +152,39 @@ def test_get_available_history_dates():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert len(body) == 0
+
+def test_fetch_historical_data():
+    response = create_workout(TestData.test_workout, {})
+    assign_group_workout(TestData.test_assign_group_workout, {})
+    input_times(TestData.test_input_times, {})
+    
+    # input times for yesterday to ensure we only get today's data
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1234"],
+            'groupId': 1,
+            "date": yesterday,
+            'inputs': [
+                {
+                    'distance': 150,
+                    'time': 15.0
+                }
+            ]
+        })
+    }, {})
+
+    response = fetch_historical_data({
+        "queryStringParameters": {
+            "coachId": "123",
+            "date": date
+        }
+    }, {})
+
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 1
+    group_data = body['1']
+    assert group_data['name'] == 'Test Group'
+    assert len(group_data['workouts']) == 1
+    assert group_data['athleteInputs']['1234']['username'] == 'test_athlete'
+    assert len(group_data['athleteInputs']['1234']['inputs']) == 2

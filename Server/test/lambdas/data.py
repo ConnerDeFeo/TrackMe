@@ -145,3 +145,12 @@ class TestData:
             "profilePictureUrl": None
         })
     }
+
+    test_assign_group_workout = {
+        "body": json.dumps({
+            "coachId": "123",
+            "groupId": "1",
+            "workoutId": 1,
+            "date": date
+        })
+    }

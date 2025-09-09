@@ -22,7 +22,7 @@ def fetch_historical_data(event, context):
         # Grab all athlete inputs for the given coach on the specified date
         athlete_inputs = fetch_all(
             """
-                SELECT g.id, g.name, ai.athleteId, ai.username, ai.time, ai.distance 
+                SELECT g.id, g.name, a.userId, a.username, ai.time, ai.distance 
                 FROM athlete_inputs ai
                 JOIN athletes a ON ai.athleteId = a.userId
                 JOIN groups g ON ai.groupId = g.id
@@ -38,7 +38,7 @@ def fetch_historical_data(event, context):
                 filtered_data[group_id] = {
                     "name": workout[1],
                     "workouts": [],
-                    "athleteInputs": []
+                    "athleteInputs": {}
                 }
             filtered_data[group_id]["workouts"].append({
                 "title": workout[2],
@@ -53,6 +53,19 @@ def fetch_historical_data(event, context):
                     "workouts": [],
                     "athleteInputs": {}
                 }
+            if not input[2] in filtered_data[group_id]["athleteInputs"]:
+                filtered_data[group_id]["athleteInputs"][input[2]] = {
+                    "username": input[3],
+                    "inputs": []
+                }
+            filtered_data[group_id]["athleteInputs"][input[2]]["inputs"].append({
+                "time": input[4],
+                "distance": input[5]
+            })
+        return {
+            "statusCode": 200,
+            "body": json.dumps(filtered_data)
+        }
             
 
     except Exception as e:

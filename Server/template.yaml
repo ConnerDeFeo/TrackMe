@@ -208,6 +208,21 @@ Resources:
         - Ref: RDSLayer
 
   # COACH FUNCTIONS
+  FetchHistoricalDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/coach/fetch_historical_data/
+      Handler: fetch_historical_data.fetch_historical_data
+      Events:
+        FetchHistoricalDataApi:
+          Type: Api
+          Properties:
+            Path: /coaches/fetch_historical_data/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   GetAvailableHistoryDatesFunction:
     Type: AWS::Serverless::Function
     Properties:

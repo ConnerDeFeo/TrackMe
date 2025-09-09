@@ -3,6 +3,9 @@ import pytest
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
+from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
+from lambdas.coach.create_workout.create_workout import create_workout
+from lambdas.coach.get_available_history_dates.get_available_history_dates import get_available_history_dates
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from rds import execute_file
 from data import TestData
@@ -11,6 +14,7 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
 from datetime import datetime, timedelta, timezone
+from testing_utils import debug_table
     
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -34,6 +38,7 @@ def setup_before_each_test(): #This will run before each test
     add_athlete_to_group({
         "body": json.dumps({
             "athleteId": "1234",
+            "coachId": "123",
             "groupId": 2
         })
     }, {})
@@ -113,3 +118,37 @@ def test_search_input_history_date():
     inputs_three_days_ago = body[three_days_ago]
     assert inputs_three_days_ago['2']['inputs'] == [{'distance': 7, 'time': 8.0}]
     assert inputs_three_days_ago['2']['name'] == 'Test Group 2'
+
+def test_get_available_history_dates():
+    response = create_workout(TestData.test_workout, {})
+    assert response['statusCode'] == 200
+    data = json.loads(response['body'])
+    workout_id = data['workout_id']
+    assign_group_workout({
+        "body": json.dumps({ 
+            "coachId": "123",
+            "groupId": "1",
+            "workoutId": workout_id
+        })
+    }, {})
+    response = get_available_history_dates({
+        "queryStringParameters": {
+            "coachId": "123",
+            "date": date
+        }
+    }, {})
+
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    debug_table()
+    assert len(body) == 1
+
+    response = get_available_history_dates({
+        "queryStringParameters": {
+            "coachId": "123",
+            "date": yesterday
+        }
+    }, {})
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 0

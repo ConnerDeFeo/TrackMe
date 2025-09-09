@@ -10,7 +10,7 @@ const InputHistory = () => {
 
   const fetchInputHistory = async () => {
     const athleteId = await UserService.getUserId();
-    const resp = await HistoryService.searchInputHistoryByDate(athleteId!, today);
+    const resp = await HistoryService.searchInputHistoryByDate(athleteId!);
     if (resp.ok){
       const historyData = await resp.json();
       setInputHistory(historyData);

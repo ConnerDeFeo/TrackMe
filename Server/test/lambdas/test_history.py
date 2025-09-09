@@ -9,7 +9,6 @@ from data import TestData
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_coach.create_coach import create_coach
-from lambdas.athlete.view_input_history.view_input_history import view_input_history
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
 from datetime import datetime, timedelta, timezone
     
@@ -39,74 +38,6 @@ def setup_before_each_test(): #This will run before each test
         })
     }, {})
     yield
-
-def test_view_input_history():
-    input_times(TestData.test_input_times, {})
-    # Input variety of times
-    input_times({
-        "body": json.dumps({
-            "athleteIds": ["1234"],
-            'groupId': 1,
-            "date": yesterday,
-            'inputs': [
-                {
-                    'distance': 1,
-                    'time': 2
-                }
-            ]
-        })
-    }, {})
-    input_times({
-        "body": json.dumps({
-            "athleteIds": ["1234"],
-            'groupId': 2,
-            "date": date,
-            'inputs': [
-                {
-                    'distance': 3,
-                    'time': 4
-                },
-                {
-                    'distance': 5,
-                    'time': 6
-                }
-            ]
-        })
-    }, {})
-    input_times({
-        "body": json.dumps({
-            "athleteIds": ["1234"],
-            'groupId': 2,
-            "date": yesterday,
-            'inputs': [
-                {
-                    'distance': 7,
-                    'time': 8
-                }
-            ]
-        })
-    }, {})
-
-    response =  view_input_history({
-        "queryStringParameters": {
-            "athleteId": "1234"
-        }
-    }, {})
-    assert response['statusCode'] == 200
-    input_history = json.loads(response['body'])
-    assert len(input_history) == 2 # two dates with inputs recorded
-
-    inputs_yesterday = input_history[yesterday]
-    assert inputs_yesterday['1']['inputs'] == [{'distance': 1, 'time': 2.0}]
-    assert inputs_yesterday['1']['name'] == 'Test Group'
-    assert inputs_yesterday['2']['inputs'] == [{'distance': 7, 'time': 8.0}]
-    assert inputs_yesterday['2']['name'] == 'Test Group 2'
-    
-    inputs_today = input_history[date]
-    assert inputs_today['1']['inputs'] == [{'distance': 100, 'time': 10.8}, {'distance': 200, 'time': 30}]
-    assert inputs_today['1']['name'] == 'Test Group'
-    assert inputs_today['2']['inputs'] == [{'distance': 3, 'time': 4.0}, {'distance': 5, 'time': 6.0}]
-    assert inputs_today['2']['name'] == 'Test Group 2'
     
 def test_search_input_history_date():
     two_days_ago = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")

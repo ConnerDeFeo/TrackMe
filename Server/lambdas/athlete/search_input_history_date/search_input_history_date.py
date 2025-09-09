@@ -23,7 +23,7 @@ def search_input_history_date(event, context):
                         WHERE athleteId = %s AND date <= %s
                         ORDER BY date DESC 
                         LIMIT 7
-                    )
+                )
                 ORDER BY date DESC
             """,
             (athlete_id,athlete_id, date)

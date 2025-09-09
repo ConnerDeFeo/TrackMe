@@ -6,10 +6,11 @@ import SearchDate from "../components/SearchDate";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
+  const today = new Date().toISOString().split('T')[0];
 
   const fetchInputHistory = async () => {
     const athleteId = await UserService.getUserId();
-    const resp = await HistoryService.getWorkoutHistory(athleteId!);
+    const resp = await HistoryService.searchInputHistoryByDate(athleteId!, today);
     if (resp.ok){
       const historyData = await resp.json();
       setInputHistory(historyData);

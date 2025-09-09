@@ -1,10 +1,4 @@
 import os
-
-# For local testing
-if os.getenv("ENVIRONMENT") == None:
-    import sys
-    sys.path.insert(0, r"C:\Users\cjack\AppData\Local\Programs\Python\Python312\Lib\site-packages")
-# Import psycopg2 regardless of environment to avoid issues with lambda layers
 import psycopg2
 
 _connection = None

@@ -141,6 +141,7 @@ def test_get_available_history_dates():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     debug_table()
+    print(date)
     assert len(body) == 1
 
     response = get_available_history_dates({

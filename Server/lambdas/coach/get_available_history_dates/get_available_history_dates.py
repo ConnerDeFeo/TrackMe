@@ -11,13 +11,13 @@ def get_available_history_dates(event, context):
 
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
         dates = fetch_all("""
-            SELECT DISTINCT w.date
+            SELECT DISTINCT gw.date
             FROM workouts w
             JOIN group_workouts gw ON w.id = gw.workoutId
             JOIN groups g ON gw.groupId = g.id
             WHERE g.coachId = %s
-            AND w.date <= %s
-            ORDER BY w.date DESC
+            AND gw.date <= %s
+            ORDER BY gw.date DESC
             LIMIT 7
         """, (coach_id, date)) or []
 

@@ -40,6 +40,7 @@ locals {
     "coaches/remove_group_athlete" = { lambda = aws_lambda_function.lambdas["remove_group_athlete"], method = "DELETE" }
     "coaches/delete_workout" = { lambda = aws_lambda_function.lambdas["delete_workout"], method = "DELETE" }
     "general/remove_coach_athlete" = { lambda = aws_lambda_function.lambdas["remove_coach_athlete"], method = "DELETE" }
+    "coaches/delete_group" = { lambda = aws_lambda_function.lambdas["delete_group"], method = "DELETE" }
   }
 }
 

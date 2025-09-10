@@ -208,6 +208,21 @@ Resources:
         - Ref: RDSLayer
 
   # COACH FUNCTIONS
+  DeleteGroupFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/delete_group/
+      Handler: delete_group.delete_group
+      Events:
+        DeleteGroupApi:
+          Type: Api
+          Properties:
+            Path: /coaches/delete_group/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   FetchHistoricalDataFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -151,12 +151,16 @@ locals {
       output_path = "${path.module}/../Server/lambdas/coach/zips/view_athlete_requests.zip"
     }
     "get_available_history_dates" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_available_history_dates"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_available_history_dates.zip"
+      source_dir  = "${path.module}/../Server/lambdas/coach/get_available_history_dates"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/get_available_history_dates.zip"
     }
     "fetch_historical_data" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/fetch_historical_data"
-      output_path = "${path.module}/../Server/lambdas/general/zips/fetch_historical_data.zip"
+      source_dir  = "${path.module}/../Server/lambdas/coach/fetch_historical_data"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/fetch_historical_data.zip"
+    }
+    "delete_group" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/delete_group"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/delete_group.zip"
     }
     
     # General Lambdas

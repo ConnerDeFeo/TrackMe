@@ -16,7 +16,6 @@ const CoachHistory = () => {
         const resp = await HistoryService.getAvailableHistoryDates(coachId!);
         if (resp.ok) {
             const historyData = await resp.json();       // Parse response JSON
-            console.log("Available history dates fetched: ", historyData);
             setAvailableDates(historyData);              // Update state with fetched dates
         }
     };
@@ -32,7 +31,6 @@ const CoachHistory = () => {
         const resp = await HistoryService.getAvailableHistoryDates(coachId!, dateInput);
         if (resp.ok) {
             const historyData = await resp.json();
-            console.log("Available history dates fetched: ", historyData);
             setAvailableDates(historyData);              // Filter state by search result
         }
     };

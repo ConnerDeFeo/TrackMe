@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ScrollView, Text,TouchableOpacity,View } from "react-native";
+import { Modal, Pressable, ScrollView, Text,TouchableOpacity,View } from "react-native";
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
@@ -15,6 +15,7 @@ const ViewGroup = () => {
 
   const [participants, setParticipants] = useState<string[]>([]);
   const [workouts, setWorkouts] = useState<Array<any>>([]);
+  const [deletionMode, setDeletionMode] = useState<boolean>(false);
 
   //Grabs all athletes that are a part of the group
   const fetchParticipants = async () => {
@@ -51,6 +52,13 @@ const ViewGroup = () => {
     }
   }
 
+  const handleGroupDeletion = async () => {
+    const resp = await CoachGroupService.deleteGroup(groupId);
+    if (resp.ok) {
+      navigation.goBack();
+    }
+  }
+
   return (
     <View className="flex-1 px-6 pt-16 pb-12">
       <View className="mb-8">
@@ -59,20 +67,20 @@ const ViewGroup = () => {
       </View>
 
       <View className="space-y-4 mb-8">
-      <TouchableOpacity 
-        onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})}
-        className="bg-[#E63946] rounded-lg py-3 px-4"
-      >
-        <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Update Workout" : "Send Workout"}</Text>
-      </TouchableOpacity>
-      {workouts.length > 0 && 
         <TouchableOpacity 
-          onPress={() => navigation.navigate('ViewGroupInputsCoach', { groupId:groupId })}
-          className="bg-black rounded-lg py-3 px-4 mt-2"
+          onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})}
+          className="bg-[#E63946] rounded-lg py-3 px-4"
         >
-          <Text className="text-white font-semibold text-center">View Group Inputs</Text>
+          <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Update Workout" : "Send Workout"}</Text>
         </TouchableOpacity>
-      }
+        {workouts.length > 0 && 
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('ViewGroupInputsCoach', { groupId:groupId })}
+            className="bg-black rounded-lg py-3 px-4 mt-2"
+          >
+            <Text className="text-white font-semibold text-center">View Group Inputs</Text>
+          </TouchableOpacity>
+        }
       </View>
 
       {workouts.map((workout) => (
@@ -104,6 +112,23 @@ const ViewGroup = () => {
         <Text className="text-gray-500 italic">No athletes assigned yet</Text>
         )}
       </View>
+      { deletionMode ?
+        <View className="flex flex-row justify-between items-center mt-4">
+          <Pressable onPress={handleGroupDeletion}>
+            <Text className="text-[#E63946] underline text-md">Confirm</Text>
+          </Pressable>
+          <TouchableOpacity onPress={() => setDeletionMode(false)}>
+            <Text className="underline text-md">Cancel</Text>
+          </TouchableOpacity>
+        </View>
+        :
+        <TouchableOpacity 
+          onPress={()=> setDeletionMode(true)}
+          className="bg-black rounded-lg py-3 px-4 mt-2"
+        >
+          <Text className="text-white font-semibold text-center">Delete Group</Text>
+        </TouchableOpacity>
+      }
     </View>
   );
 };

@@ -2,6 +2,7 @@ import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.coach.update_coach_profile.update_coach_profile import update_coach_profile
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.general.get_groups.get_groups import get_groups
@@ -58,6 +59,15 @@ def test_get_groups_coach():
     assert groups[0][1] == 1
     assert groups[1][0] == 'Test Group 2'
     assert groups[1][1] == 2
+
+def test_get_group_after_deletion():
+    delete_group({
+        "queryStringParameters": {
+            "groupId": "1"
+        }
+    }, {})
+    response = get_groups(TestData.test_get_group_athlete, {})
+    assert response['statusCode'] == 404
 
 def test_get_athletes_for_group():
     create_group(TestData.test_group, {})

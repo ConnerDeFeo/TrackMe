@@ -43,6 +43,7 @@ locals {
     "view_athlete_requests",
     "get_available_history_dates",
     "fetch_historical_data",
+    "delete_group",
 
     # General Lambdas
     "get_athletes_for_group",

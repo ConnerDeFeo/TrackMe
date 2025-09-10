@@ -34,7 +34,7 @@ const ViewGroupAthlete = ()=>{
 
     return(
         <View className="mt-[4rem] px-4">
-            <Text className="text-2xl font-bold text-center mb-6">{groupName}</Text>
+            <Text className="text-4xl font-bold mb-6">{groupName}</Text>
             {workouts.map((workout) => (
                 <DisplayWorkout key={workout.id} workout={workout} onPress={() => {}} />
             ))}

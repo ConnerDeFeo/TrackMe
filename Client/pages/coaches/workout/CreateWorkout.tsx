@@ -34,7 +34,7 @@ const CreateWorkout = () => {
     }
       
   };
-  console.log(isEdit)
+  console.log(exercises)
   return (
     <ScrollView className="mt-16 bg-white">
       {/* HEADER: Title and Add Workout Button */}
@@ -71,7 +71,7 @@ const CreateWorkout = () => {
       <View className="mx-4">
       {/* Render each exercise input */}
       {exercises.map((exercise, idx) => (
-        <ExerciseCreation key={idx} excercise={exercise} setExercise={setExercises} />
+        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx}/>
       ))}
         {/* Button to add a new exercise */}
         <TouchableOpacity

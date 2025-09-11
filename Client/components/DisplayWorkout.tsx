@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 import Exercise from "../types/Exersise";
 

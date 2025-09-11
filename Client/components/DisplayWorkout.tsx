@@ -42,27 +42,20 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
 
                             {/* Exercise details container */}
                             {exercise.sets && exercise.reps && (
-                                <View className="space-y-2">
-                                    {/* Number of sets */}
-                                    <Text className="text-gray-800">
-                                        <Text className="text-gray-500">Sets: </Text>
-                                        {exercise.sets}
-                                    </Text>
-                                    {/* Number of reps */}
-                                    <Text className="text-gray-800">
-                                        <Text className="text-gray-500">Reps: </Text>
-                                        {exercise.reps}
+                                <View className="gap-y-2">
+                                    {/* Number of sets and reps */}
+                                    <Text className="font-semibold text-md">
+                                        {exercise.sets} x {exercise.reps}
                                     </Text>
                                     
                                     {/* Exercise parts section (if any exist) */}
                                     {exercise.exerciseParts && exercise.exerciseParts.length > 0 && (
-                                        <View className="mt-3">
-                                            <Text className="text-gray-500 font-medium mb-2">Parts:</Text>
+                                        <View>
                                             {exercise.exerciseParts.map((part, partIndex) => (
                                                 /* Individual exercise part with distance and measurement */
                                                 <View key={partIndex} className="ml-3 py-1">
                                                     <Text className="text-gray-700">
-                                                        • Distance: {part.distance} {part.measurement}
+                                                        {part.distance} {part.measurement}
                                                     </Text>
                                                 </View>
                                             ))}

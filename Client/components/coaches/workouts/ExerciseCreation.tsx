@@ -1,6 +1,7 @@
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Exercise from "../../../types/Exersise";
 import { JSX } from "react";
+import Variables from "../../../constants/Variables";
 /**
  * Component for creating and editing a single exercise within a workout.
  * @param {object} props - The component props.
@@ -22,7 +23,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
       exerciseParts = [];
     }
     // Add a new exercise part with default values.
-    exerciseParts.push({ 'distance': 0, 'measurement': 'Meters' });
+    exerciseParts.push({ 'distance': 0, 'measurement': Variables.meters });
     // Update the state for the specific exercise being modified.
     setExercises((prev) => prev.map((ex,index) => 
       index === idx ? { ...ex, exerciseParts } : ex
@@ -92,15 +93,13 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
 
           {/* Dynamically rendered Exercise Parts */}
           <Text className="text-lg font-bold">Distances</Text>
-          {excercise.exerciseParts && excercise.exerciseParts.map((part: any, idx: number) => (
-              <View className="mb-3" key={idx}>
+          {excercise.exerciseParts && excercise.exerciseParts.map((part: any, partIdx: number) => (
+              <View className="mb-3" key={partIdx}>
                 {/* Button to remove this specific exercise part */}
                 <View className="flex flex-row justify-end items-center mb-1">
                   <TouchableOpacity onPress={() => {
                     const updatedParts = [...excercise.exerciseParts!];
-                    updatedParts.splice(idx, 1); // Remove the part at the current index.
-                    console.log("Current exercise: ", excercise);
-                    console.log("Updated Parts: ",updatedParts);
+                    updatedParts.splice(partIdx, 1); // Use the correct index for the part
                     setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, exerciseParts: updatedParts } : ex));
                   }}>
                     <Text className="text-[#E63946] underline">Remove</Text>
@@ -114,7 +113,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
                     // Update distance if the input is empty or a valid number.
                     if(text === '' || (text && !isNaN(Number(text)))) {
                       const updatedParts = [...excercise.exerciseParts!];
-                      updatedParts[idx].distance = Number(text);
+                      updatedParts[partIdx].distance = Number(text); // Use the correct index for the part
                       setExercises((prev) => prev.map((ex, index) => (index === idx ? { ...ex, exerciseParts: updatedParts } : ex)));
                     }
                   }} 

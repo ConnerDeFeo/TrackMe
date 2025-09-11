@@ -34,7 +34,6 @@ const CreateWorkout = () => {
     }
       
   };
-  console.log(exercises)
   return (
     <ScrollView className="mt-16 bg-white">
       {/* HEADER: Title and Add Workout Button */}
@@ -76,7 +75,7 @@ const CreateWorkout = () => {
         {/* Button to add a new exercise */}
         <TouchableOpacity
           className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
-          onPress={() => setExercises([...exercises, { name: '', id: exercises.length }])}
+          onPress={() => setExercises([...exercises, { name: ''}])}
         >
           <Text className="text-white font-bold">Add exercise</Text>
         </TouchableOpacity>

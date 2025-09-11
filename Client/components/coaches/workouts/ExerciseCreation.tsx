@@ -17,7 +17,6 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
    */
   const handleExcerciseComponentCreation = () => {
     let exerciseParts = excercise.exerciseParts;
-    console.log(excercise);
     // If no exercise parts exist yet, initialize the array.
     if (!exerciseParts){ 
       exerciseParts = [];
@@ -58,7 +57,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
         <View className="flex flex-row justify-between items-center">
           <Text className="text-lg font-bold mb-2">Name</Text>
           {/* Button to remove the entire exercise */}
-          <TouchableOpacity onPress={() => setExercises((prev) => prev.filter((ex, index) => index !== idx))}>
+          <TouchableOpacity onPress={() => setExercises((prev) => prev.filter((_, index) => index !== idx))}>
             <Text className="text-[#E63946] underline">Remove</Text>
           </TouchableOpacity>
         </View>
@@ -100,7 +99,9 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
                   <TouchableOpacity onPress={() => {
                     const updatedParts = [...excercise.exerciseParts!];
                     updatedParts.splice(idx, 1); // Remove the part at the current index.
-                    setExercises((prev) => prev.map((ex, index) => (index === idx ? { ...ex, exerciseParts: updatedParts } : ex)));
+                    console.log("Current exercise: ", excercise);
+                    console.log("Updated Parts: ",updatedParts);
+                    setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, exerciseParts: updatedParts } : ex));
                   }}>
                     <Text className="text-[#E63946] underline">Remove</Text>
                   </TouchableOpacity>

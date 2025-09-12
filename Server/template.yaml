@@ -41,7 +41,7 @@ Resources:
     Metadata:
       BuildMethod: python3.12
 
-  # ATHLETE FUNCTIONS
+  
   SearchInputHistoryDateFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -192,7 +192,28 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
+  #
+  # 
+  #
   # COACH FUNCTIONS
+  #
+  #
+  #
+  DeleteGroupWorkoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/coach/delete_group_workout/
+      Handler: delete_group_workout.delete_group_workout
+      Events:
+        DeleteGroupWorkoutApi:
+          Type: Api
+          Properties:
+            Path: /coaches/delete_group_workout/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   DeleteGroupFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -463,7 +484,13 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
+  #
+  #
+  #
   # GENERAL FUNCTIONS
+  #
+  #
+  #
   RemoveCoachAthlete:
     Type: AWS::Serverless::Function
     Properties:

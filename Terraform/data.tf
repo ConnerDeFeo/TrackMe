@@ -154,6 +154,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/delete_group"
       output_path = "${path.module}/../Server/lambdas/coach/zips/delete_group.zip"
     }
+    "delete_group_workout" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/delete_group_workout"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/delete_group_workout.zip"
+    }
     
     # General Lambdas
     "get_athletes_for_group" = {

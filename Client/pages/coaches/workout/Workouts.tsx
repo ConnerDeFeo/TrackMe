@@ -13,7 +13,7 @@ const Workouts = () => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       const coachId = await UserService.getUserId();
-      const response = await CoachWorkoutService.getWorkouts(coachId!);
+      const response = await CoachWorkoutService.getWorkoutTemplates(coachId!);
       if(response.ok) {
         const workouts = await response.json();
         setWorkouts(workouts || []);
@@ -25,7 +25,7 @@ const Workouts = () => {
 
   const onRemove = async (workoutId: string) => {
     const coachId = await UserService.getUserId();
-    const resp = await CoachWorkoutService.deleteWorkout(workoutId, coachId!);
+    const resp = await CoachWorkoutService.deleteWorkoutTemplate(workoutId, coachId!);
     if (resp.ok) {
       setWorkouts(workouts.filter(workout => workout.workoutId !== workoutId));
     }

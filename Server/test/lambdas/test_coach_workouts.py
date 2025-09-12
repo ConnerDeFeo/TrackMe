@@ -3,10 +3,10 @@ import pytest
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.delete_workout_template.delete_workout_template import delete_workout_template
-from lambdas.general.get_group_workout.get_group_workout import get_group_workout
 from lambdas.coach.get_workout_templates.get_workout_templates import get_workout_templates
 from lambdas.coach.assign_group_workout_template.assign_group_workout import assign_group_workout_template
 from lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.coach.delete_group_workout.delete_group_workout import delete_group_workout
 from data import TestData
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
@@ -211,3 +211,36 @@ def test_delete_workout():
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     assert data['message'] == 'Workout deleted successfully'
+
+def test_delete_group_workout():
+    create_workout_template(TestData.test_workout, {})
+
+    event = {
+        "body": json.dumps({ 
+            "coachId": "123",
+            "groupId": "1",
+            "workoutId": 1
+        })
+    }
+    response = assign_group_workout_template(event, {})
+    assert response['statusCode'] == 200
+
+    #Check if workout exists in rds
+    data = fetch_one("SELECT * FROM group_workouts")
+    assert data is not None
+    assert data[0] == 1
+    assert data[1] == 1
+    assert data[2] == date
+    assert data[3] == 1
+
+    event = {
+        "queryStringParameters": {
+            "groupWorkoutId": 1
+        }
+    }
+    response = delete_group_workout(event, {})
+    assert response['statusCode'] == 200
+    assert response['body'] == "Workout deleted successfully"
+    #Check if workout was deleted from rds
+    data = fetch_one("SELECT * FROM group_workouts")
+    assert data is None

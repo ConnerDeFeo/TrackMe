@@ -42,6 +42,7 @@ locals {
     "get_available_history_dates",
     "fetch_historical_data",
     "delete_group",
+    "delete_group_workout",
 
     # General Lambdas
     "get_athletes_for_group",

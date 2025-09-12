@@ -16,7 +16,7 @@ const AssignWorkout = ()=>{
     useEffect(() => {
         const fetchWorkouts = async () => {
             const coachId = await UserService.getUserId();
-            const response = await CoachWorkoutService.getWorkouts(coachId!);
+            const response = await CoachWorkoutService.getWorkoutTemplates(coachId!);
             if(response.ok) {
                 const workouts = await response.json();
                 setWorkouts(workouts || []);
@@ -27,7 +27,7 @@ const AssignWorkout = ()=>{
 
     const handleAssignWorkout = async (workoutId:string) => {
         const coachId = await UserService.getUserId();
-        const response = await CoachWorkoutService.assignWorkoutToGroup(workoutId, coachId!, groupId);
+        const response = await CoachWorkoutService.assignWorkoutTemplateToGroup(workoutId, coachId!, groupId);
         if (response.ok) {
             fetchWorkout();
             navigation.goBack();

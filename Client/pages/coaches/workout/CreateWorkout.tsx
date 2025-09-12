@@ -27,7 +27,7 @@ const CreateWorkout = () => {
     if(workout){
       workoutData['workoutId'] = workout.workoutId; // Include workoutId if editing an existing workout
     }
-    const resp = await CoachWorkoutService.createWorkout(workoutData);
+    const resp = await CoachWorkoutService.createWorkoutTemplate(workoutData);
     if (resp.ok){
       navigation.navigate('Workouts');
     }

@@ -11,11 +11,11 @@ def get_workout_templates(event, context):
         #Grab all workouts accosiated with the coach_id
         workouts = fetch_all(
             """
-                SELECT w.id, w.title, w.description, w.exercises 
-                FROM workouts w
-                WHERE w.coachId = %s AND w.isTemplate = TRUE
+                SELECT id, title, description, exercises 
+                FROM workouts 
+                WHERE coachId = %s AND isTemplate = %s
             """,
-            (coach_id,)
+            (coach_id,True)
         )
         
         if workouts:

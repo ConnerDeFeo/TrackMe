@@ -83,7 +83,7 @@ const ViewGroup = () => {
       </View>
 
       {workouts.map((workout) => (
-        <DisplayWorkout key={workout.workoutId} workout={workout} onPress={() => navigation.navigate('CreateWorkout', { workout })} />
+        <DisplayWorkout key={workout.id} workout={workout} onPress={() => navigation.navigate('CreateWorkout', { workout })} />
       ))}
 
       <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">

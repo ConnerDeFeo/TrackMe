@@ -37,6 +37,7 @@ const AssignWorkout = ()=>{
     return (
         <View className="mt-[4rem]">
             <Text className="text-4xl font-bold pl-4">Assign Workout</Text>
+            <Button title="Assign New Workout" onPress={() => navigation.navigate('CreateGroupWorkout', { groupId: groupId})} />
             {workouts.map((workout, idx) => (
                 <View key={idx} className="my-2">
                     <DisplayWorkout workout={workout} onPress={() => handleAssignWorkout(workout.workoutId)} />

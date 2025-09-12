@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { Button, Text, TextInput, View, ScrollView, TouchableOpacity } from "react-native";
-import CoachWorkoutService from "../../../services/CoachWorkoutService";
-import UserService from "../../../services/UserService";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { Text, TextInput, View, ScrollView, TouchableOpacity } from "react-native";
 import Exercise from "../../../types/Exersise";
 import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
 
@@ -15,15 +12,13 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
   const [exercises, setExercises] = useState<Array<Exercise>>(workout?.exercises || []);
 
   const handleCreation = async () => {
-    const coachId = await UserService.getUserId();
     const workoutData:Record<string, any> = {
       'title': title,
       'description': description,
-      'exercises': exercises,
-      'coachId': coachId
+      'exercises': exercises
     };
     if(workout){
-      workoutData['workoutId'] = workout.workoutId; // Include workoutId if editing an existing workout
+      workoutData['workoutId'] = workout.workoutId;
     }
     handleWorkoutCreation(workoutData);
   };

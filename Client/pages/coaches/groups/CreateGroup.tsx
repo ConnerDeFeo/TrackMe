@@ -16,8 +16,9 @@ const CreateGroup = () => {
         // Fetch user ID from local storage or authentication context
         const fetchUserId = async () => {
             const id = await AsyncStorage.getData("userId");
-            if (id) 
+            if (id){
                 setUserId(id);
+            } 
         };
         fetchUserId();
     }, []);

@@ -76,7 +76,7 @@ const ViewGroup = () => {
       </View>
 
       <View className="space-y-4 mb-8">
-        <TouchableOpacity 
+        <TouchableOpacity  
           onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})}
           className="bg-[#E63946] rounded-lg py-3 px-4"
         >

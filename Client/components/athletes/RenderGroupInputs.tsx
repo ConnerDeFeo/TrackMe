@@ -46,7 +46,7 @@ const RenderGroupInputs: React.FC<
 
     const navigation = useNavigation<any>();
     //Current workout group members
-    const {workoutGroup} = useWorkoutGroup(groupId);
+    const { workoutGroup } = useWorkoutGroup(groupId);
 
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
@@ -73,7 +73,7 @@ const RenderGroupInputs: React.FC<
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
                 <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId: groupId})}>
-                    <Text className="text-[#E63946] underline">Create Group</Text>
+                    <Text className="text-[#E63946] underline">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
                 </TouchableOpacity>
             </View>
 

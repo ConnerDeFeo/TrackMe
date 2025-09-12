@@ -3,12 +3,10 @@ locals {
   lambdas = {
     # GET Lambdas
     "athletes/search_coaches" = {lambda = aws_lambda_function.lambdas["search_coaches"], method = "GET"}
-    "athletes/view_workouts_athlete" = {lambda = aws_lambda_function.lambdas["view_workouts_athlete"], method = "GET"}
     "athletes/get_coaches" = { lambda = aws_lambda_function.lambdas["get_coaches"], method = "GET" }
     "athletes/get_coach_requests" = { lambda = aws_lambda_function.lambdas["get_coach_requests"], method = "GET" }
     "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"], method = "GET" }
     "coaches/view_athlete_requests" = { lambda = aws_lambda_function.lambdas["view_athlete_requests"], method = "GET" }
-    "coaches/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
     "coaches/get_workouts" = { lambda = aws_lambda_function.lambdas["get_workouts"], method = "GET" }
     "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"], method = "GET" }
     "coaches/get_athletes" = { lambda = aws_lambda_function.lambdas["get_athletes"], method = "GET" }
@@ -20,6 +18,7 @@ locals {
     "athletes/search_input_history_date" = { lambda = aws_lambda_function.lambdas["search_input_history_date"], method = "GET" }
     "coaches/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "general/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
+    "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
 
     # POST Lambdas
     "athletes/request_coach" = { lambda = aws_lambda_function.lambdas["request_coach"], method = "POST" }

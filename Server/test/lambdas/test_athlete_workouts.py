@@ -6,7 +6,7 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
-from lambdas.athlete.view_workouts_athlete.view_workouts_athlete import view_workouts_athlete
+from lambdas.general.get_group_workout.get_group_workout import get_group_workout
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
@@ -44,48 +44,6 @@ def create_extra_athlete(username,id):
         })
     }
     create_athlete(extra_athlete, {})
-
-def test_view_workouts_athlete():
-    workout2 = {
-        "body": json.dumps({
-            'coachId': '123',
-            'title': 'Test Workout2', 
-            'description': 'This is a test workout2',
-            'exercises': [
-                {
-                    'name': 'Warm-up',
-                }
-            ]
-        })
-    }
-    create_workout(workout2, {})
-    test_assign_workout = {
-        "body": json.dumps({
-            "workoutId": 2,
-            'coachId':'123',
-            "groupId": "1"
-        })
-    }
-    assign_group_workout(test_assign_workout, {})
-    event = {
-        "queryStringParameters": {
-            'groupId':"1",
-            "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        }
-    }
-    response = view_workouts_athlete(event, {})
-
-    assert response['statusCode'] == 200
-    body = json.loads(response['body'])
-    workout1 = body[0]
-    assert len(workout1['exercises']) == 3
-    assert workout1['title'] == 'Test Workout'
-    assert workout1['description'] == 'This is a test workout'
-
-    workout2 = body[1]
-    assert len(workout2['exercises']) == 1
-    assert workout2['title'] == 'Test Workout2'
-    assert workout2['description'] == 'This is a test workout2'
 
 def test_input_times():
 

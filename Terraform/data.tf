@@ -80,10 +80,6 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/view_coach_invites"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/view_coach_invites.zip"
     }
-    "view_workouts_athlete" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/view_workouts_athlete"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/view_workouts_athlete.zip"
-    }
     "view_workout_inputs" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/view_workout_inputs"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/view_workout_inputs.zip"
@@ -121,10 +117,6 @@ locals {
     "get_athletes" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/get_athletes"
       output_path = "${path.module}/../Server/lambdas/coach/zips/get_athletes.zip"
-    }
-    "get_group_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/get_group_workout"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/get_group_workout.zip"
     }
     "get_workouts" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/get_workouts"
@@ -183,6 +175,10 @@ locals {
     "view_group_inputs" = {
       source_dir  = "${path.module}/../Server/lambdas/general/view_group_inputs"
       output_path = "${path.module}/../Server/lambdas/general/zips/view_group_inputs.zip"
+    }
+    "get_group_workout" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_group_workout"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_group_workout.zip"
     }
   }
 }

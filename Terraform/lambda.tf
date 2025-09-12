@@ -20,7 +20,6 @@ locals {
     "search_coaches",
     "update_athlete_profile",
     "view_coach_invites",
-    "view_workouts_athlete",
     "view_workout_inputs",
     "search_input_history_date",
 
@@ -34,7 +33,6 @@ locals {
     "delete_workout",
     "get_absent_group_athletes",
     "get_athletes",
-    "get_group_workout",
     "get_workouts",
     "invite_athlete",
     "remove_group_athlete",
@@ -50,7 +48,8 @@ locals {
     "get_groups",
     "get_user",
     "remove_coach_athlete",
-    "view_group_inputs"
+    "view_group_inputs",
+    "get_group_workout",
   ]
 }
 

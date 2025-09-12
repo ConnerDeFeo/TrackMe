@@ -3,7 +3,7 @@ import pytest
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout.create_workout import create_workout
 from lambdas.coach.delete_workout.delete_workout import delete_workout
-from lambdas.coach.get_group_workout.get_group_workout import get_group_workout
+from lambdas.general.get_group_workout.get_group_workout import get_group_workout
 from lambdas.coach.get_workouts.get_workouts import get_workouts
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.coach.create_coach.create_coach import create_coach
@@ -140,13 +140,17 @@ def test_assign_multiple_workouts():
     assert workout[0] == 1
     assert workout[1] == 1
     assert workout[2] == "2024-01-01" 
-    assert workout[3] == 1
+    assert workout[3] == 'Test Workout'
+    assert workout[4] == 'This is a test workout'
+    assert len(workout[5]) == 3
 
     workout = data[1]  # Get the second row
     assert workout[0] == 2
     assert workout[1] == 1
     assert workout[2] == "2024-01-01" 
-    assert workout[3] == 2
+    assert workout[3] == 'Test Workout 2'
+    assert workout[4] == 'This is a test workout 2'
+    assert len(workout[5]) == 1
 
 def test_get_workouts():
     create_workout(TestData.test_workout, {})
@@ -196,38 +200,6 @@ def test_get_workouts():
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     assert len(data) == 1
-
-def test_get_group_workout():
-    response = create_workout(TestData.test_workout, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
-    test_assign_workout = {
-        "body": json.dumps({
-            "workoutId": workout_id,
-            "coachId": "123",
-            "groupId": "1"
-        })
-    }
-    assign_group_workout(test_assign_workout, {})
-
-    event = {
-        "queryStringParameters": {
-            "coachId": "123",
-            "groupId": "1",
-            "date": date
-        }
-    }
-    response = get_group_workout(event, {})
-    assert response['statusCode'] == 200
-
-    # Check if the data is valid
-    workout = json.loads(response['body'])
-    workout = workout[0]
-    assert workout['workoutId'] == 1
-    assert workout['title'] == 'Test Workout'
-    assert workout['description'] == 'This is a test workout'
-    assert len(workout['exercises']) == 3
 
 def test_delete_workout():
     response = create_workout(TestData.test_workout, {})

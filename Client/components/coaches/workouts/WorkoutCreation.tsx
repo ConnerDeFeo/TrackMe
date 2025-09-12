@@ -7,17 +7,14 @@ import Exercise from "../../../types/Exersise";
 import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
 
 //Page for workout creation by coaches
-const CreateWorkout = () => {
-  const navigation = useNavigation<any>();
-  const route = useRoute();
-  const { workout, isEdit, forGroupAssignment } = (route.params as { workout?: any, isEdit: boolean, forGroupAssignment?: boolean }) || {};
-  const pageTitle = forGroupAssignment ? "Assign Workout" : isEdit ? "Edit Workout Template" : "Create Workout Template";
+const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}: 
+    {workout?: any; handleWorkoutCreation: (workoutData:any) => void; pageTitle: string; buttonText: string;}) => {
 
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
   const [exercises, setExercises] = useState<Array<Exercise>>(workout?.exercises || []);
 
-  const handleWorkoutTemplateCreation = async () => {
+  const handleCreation = async () => {
     const coachId = await UserService.getUserId();
     const workoutData:Record<string, any> = {
       'title': title,
@@ -28,11 +25,7 @@ const CreateWorkout = () => {
     if(workout){
       workoutData['workoutId'] = workout.workoutId; // Include workoutId if editing an existing workout
     }
-    const resp = await CoachWorkoutService.createWorkoutTemplate(workoutData);
-    if (resp.ok){
-      navigation.navigate('Workouts');
-    }
-      
+    handleWorkoutCreation(workoutData);
   };
 
   const titleDescriptionLayout = (text:string)=>{
@@ -80,12 +73,12 @@ const CreateWorkout = () => {
       {/* CREATE WORKOUT BUTTON */}
       <TouchableOpacity
         className="bg-black rounded-lg py-3 items-center mx-4 mb-8"
-        onPress={handleWorkoutTemplateCreation}
+        onPress={handleCreation}
       >
-        <Text className="text-white font-bold text-lg">{isEdit ? 'Update Template' : 'Create Template'}</Text>
+        <Text className="text-white font-bold text-lg">{buttonText}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
 
-export default CreateWorkout;
+export default WorkoutCreation;

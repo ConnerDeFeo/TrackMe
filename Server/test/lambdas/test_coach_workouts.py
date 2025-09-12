@@ -4,7 +4,7 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.delete_workout_template.delete_workout_template import delete_workout_template
 from lambdas.coach.get_workout_templates.get_workout_templates import get_workout_templates
-from lambdas.coach.assign_group_workout_template.assign_group_workout import assign_group_workout_template
+from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.delete_group_workout.delete_group_workout import delete_group_workout
 from data import TestData

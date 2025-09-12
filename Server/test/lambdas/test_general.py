@@ -1,7 +1,7 @@
 import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
-from lambdas.coach.assign_group_workout_template.assign_group_workout import assign_group_workout_template
+from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.coach.update_coach_profile.update_coach_profile import update_coach_profile

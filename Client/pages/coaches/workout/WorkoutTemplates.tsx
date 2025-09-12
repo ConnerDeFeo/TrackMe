@@ -5,7 +5,7 @@ import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
 
-const Workouts = () => {
+const WorkoutTemplates = () => {
   const navigation = useNavigation<any>();
 
   const [workouts, setWorkouts] = useState<Array<any>>([]);
@@ -34,7 +34,7 @@ const Workouts = () => {
   return (
     <ScrollView className="mt-[4rem]">
       <View className="flex-row justify-between items-center p-4">
-        <Text className="text-4xl font-bold">Workouts</Text>
+        <Text className="text-4xl font-bold">Workout Templates</Text>
         <TouchableOpacity onPress={() => navigation.navigate('CreateWorkout', {isEdit: false})}>
           <Image source={require("../../../images/Add.png")} className="h-12 w-12 rounded-full border-3" />
         </TouchableOpacity>
@@ -48,4 +48,4 @@ const Workouts = () => {
   );
 };
 
-export default Workouts;
+export default WorkoutTemplates;

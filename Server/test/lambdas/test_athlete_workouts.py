@@ -5,7 +5,7 @@ from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
-from lambdas.coach.assign_group_workout_template.assign_group_workout import assign_group_workout_template
+from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs

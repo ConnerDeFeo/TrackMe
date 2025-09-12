@@ -19,7 +19,7 @@ import Athletes from './pages/coaches/Athletes';
 import Coaches from './pages/athletes/Coaches';
 import AssignAthletes from './pages/coaches/groups/AssignAthletes';
 import CreateWorkout from './pages/coaches/workout/CreateWorkout';
-import Workouts from './pages/coaches/workout/Workouts';
+import WorkoutTemplates from './pages/coaches/workout/WorkoutTemplates';
 import AssignWorkout from './pages/coaches/groups/AssignWorkout';
 import ViewGroupInputsCoach from './pages/coaches/groups/ViewGroupInputsCoach';
 import ViewGroupCoach from './pages/coaches/groups/ViewGroupCoach';
@@ -81,7 +81,7 @@ const RootStack = createNativeStackNavigator({
     CoachRequests: UserLayout(<CoachRequests/>),
     AssignAthletes: UserLayout(<AssignAthletes/>),
     CreateWorkout: UserLayout(<CreateWorkout/>),
-    Workouts: UserLayout(<Workouts/>),
+    WorkoutTemplates: UserLayout(<WorkoutTemplates/>),
     AssignWorkout: UserLayout(<AssignWorkout/>),
     ViewGroupInputsCoach: UserLayout(<ViewGroupInputsCoach/>),
     ViewGroupAthlete: UserLayout(<ViewGroupAthlete/>),

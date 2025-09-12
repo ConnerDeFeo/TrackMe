@@ -23,7 +23,7 @@ const layouts = {
     ['Profile', 'AthleteProfile']
   ],
   'coach': [
-    ['Workouts', 'Workouts'], 
+    ['Workouts', 'WorkoutTemplates'], 
     ['History', 'CoachHistory'], 
     ['Groups', 'CoachGroups'], 
     ['Athletes', 'Athletes'], 

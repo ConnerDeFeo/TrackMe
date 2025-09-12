@@ -17,6 +17,9 @@ const CoachWorkoutService = {
     },
     deleteWorkoutTemplate: async (workoutId:string, coachId:string) => {
         return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_workout_template?workoutId=${workoutId}&coachId=${coachId}`);
+    },
+    deleteGroupWorkout: async (groupWorkoutId:string) => {
+        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_group_workout?groupWorkoutId=${groupWorkoutId}`);
     }
 }
 

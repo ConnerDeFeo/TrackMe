@@ -30,13 +30,11 @@ const ViewGroupAthlete = ()=>{
         fetchAthletes();
         fetchWorkout();
     }, [groupId]);
-
-    console.log(workouts)
     return(
         <View className="mt-[4rem] px-4">
             <Text className="text-4xl font-bold mb-6">{groupName}</Text>
             {workouts.map((workout) => (
-                <DisplayWorkout key={workout.id} workout={workout} onPress={() => {}} />
+                <DisplayWorkout key={workout.groupWorkoutId} workout={workout} onPress={() => {}} />
             ))}
             <Text className="text-2xl font-bold mt-6 mb-4">Athletes</Text>
             <View className="space-y-2">

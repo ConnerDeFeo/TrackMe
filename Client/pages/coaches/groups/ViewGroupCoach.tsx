@@ -5,6 +5,7 @@ import CoachGroupService from "../../../services/CoachGroupService";
 import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
+import CoachWorkoutService from "../../../services/CoachWorkoutService";
 
 //Page for viewing a given group
 const ViewGroup = () => {
@@ -30,12 +31,14 @@ const ViewGroup = () => {
 
   //Fetches the workout for the current date
   const fetchWorkout = async () => {
-    const userId = await UserService.getUserId();
     const date = new Date().toISOString().split("T")[0];
     const resp = await GeneralService.getGroupWorkout(groupId, date);
     if(resp.ok){
       const workouts = await resp.json();
       setWorkouts(workouts);
+    }
+    else{
+      setWorkouts([]);
     }
   }
 
@@ -55,6 +58,13 @@ const ViewGroup = () => {
     const resp = await CoachGroupService.deleteGroup(groupId);
     if (resp.ok) {
       navigation.goBack();
+    }
+  }
+
+  const handleWorkoutRemoval = async (groupWorkoutId: string) => {
+    const resp = await CoachWorkoutService.deleteGroupWorkout(groupWorkoutId);
+    if (resp.ok) {
+      await fetchWorkout();
     }
   }
 
@@ -83,7 +93,12 @@ const ViewGroup = () => {
       </View>
 
       {workouts.map((workout) => (
-        <DisplayWorkout key={workout.id} workout={workout} onPress={() => navigation.navigate('CreateWorkout', { workout })} />
+        <DisplayWorkout 
+          key={workout.groupWorkoutId} 
+          workout={workout} 
+          onPress={() => navigation.navigate('CreateWorkout', { workout })} 
+          onRemove={() => handleWorkoutRemoval(workout.groupWorkoutId)}
+        />
       ))}
 
       <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">

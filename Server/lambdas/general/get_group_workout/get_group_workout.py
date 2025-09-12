@@ -13,7 +13,7 @@ def get_group_workout(event,context):
         #Get the workout title for the given date
         workouts = fetch_all(
             """
-                SELECT w.id, w.title, w.description, w.exercises
+                SELECT gw.id, w.title, w.description, w.exercises
                 FROM group_workouts gw
                 JOIN workouts w ON gw.workoutId = w.id
                 WHERE gw.groupId = %s AND gw.date = %s
@@ -24,7 +24,7 @@ def get_group_workout(event,context):
             converted_workouts = []
             for workout in workouts:
                 converted_workouts.append({
-                    'id': workout[0],
+                    'groupWorkoutId': workout[0],
                     'title': workout[1],
                     'description': workout[2],
                     'exercises': workout[3]

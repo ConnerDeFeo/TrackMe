@@ -10,10 +10,9 @@ def fetch_historical_data(event, context):
         # Grab all workouts for the given coach on the specified date
         workouts = fetch_all(
             """
-                SELECT g.id, g.name, w.title, w.description, w.exercises 
+                SELECT g.id, g.name, gw.title, gw.description, gw.exercises 
                 FROM group_workouts gw
                 JOIN groups g ON gw.groupId = g.id
-                JOIN workouts w ON gw.workoutId = w.id
                 WHERE gw.date = %s AND g.coachId = %s
             """,
             (date, coach_id)

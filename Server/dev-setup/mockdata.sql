@@ -47,5 +47,81 @@ VALUES (
         }
     ]'::jsonb
 );
-INSERT INTO group_workouts (groupId, workoutId) VALUES (1, 1);
-INSERT INTO group_workouts (groupId, workoutId) VALUES (2, 1);
+
+INSERT INTO group_workouts (groupId, title, description, exercises) 
+VALUES (
+    1,
+    'Test Workout',
+    'This is a test workout',
+    '[
+        {
+            "name": "Test name",
+            "sets": 3,
+            "reps": 10,
+            "exerciseParts": [
+                {
+                    "distance": 100,
+                    "measurement": "meters"
+                },
+                {
+                    "distance": 50,
+                    "measurement": "meters"
+                }
+            ],
+            "inputs": true
+        },
+        {
+            "name": "Test name 2",
+            "sets": 2,
+            "reps": 15,
+            "exerciseParts": [
+                {
+                    "distance": 200,
+                    "measurement": "meters"
+                }
+            ]
+        },
+        {
+            "name": "Warm-up"
+        }
+    ]'::jsonb
+);
+
+INSERT INTO group_workouts (groupId, title, description, exercises) 
+VALUES (
+    2,
+    'Test Workout',
+    'This is a test workout',
+    '[
+        {
+            "name": "Test name",
+            "sets": 3,
+            "reps": 10,
+            "exerciseParts": [
+                {
+                    "distance": 100,
+                    "measurement": "meters"
+                },
+                {
+                    "distance": 50,
+                    "measurement": "meters"
+                }
+            ],
+            "inputs": true
+        },
+        {
+            "name": "Test name 2",
+            "sets": 2,
+            "reps": 15,
+            "exerciseParts": [
+                {
+                    "distance": 200,
+                    "measurement": "meters"
+                }
+            ]
+        },
+        {
+            "name": "Warm-up"
+        }
+    ]'::jsonb
+);

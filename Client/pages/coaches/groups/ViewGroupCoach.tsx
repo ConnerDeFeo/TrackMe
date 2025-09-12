@@ -1,8 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Modal, Pressable, ScrollView, Text,TouchableOpacity,View } from "react-native";
+import { Pressable, Text,TouchableOpacity,View } from "react-native";
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
-import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
@@ -33,7 +32,7 @@ const ViewGroup = () => {
   const fetchWorkout = async () => {
     const userId = await UserService.getUserId();
     const date = new Date().toISOString().split("T")[0];
-    const resp = await CoachWorkoutService.getGroupWorkout(userId!, groupId, date);
+    const resp = await GeneralService.getGroupWorkout(groupId, date);
     if(resp.ok){
       const workouts = await resp.json();
       setWorkouts(workouts);

@@ -102,21 +102,6 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  ViewWorkoutsAthleteFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/view_workouts_athlete/
-      Handler: view_workouts_athlete.view_workouts_athlete
-      Events:
-        ViewWorkoutsAthleteApi:
-          Type: Api
-          Properties:
-            Path: /athletes/view_workouts_athlete/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
   GetCoachesFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -324,21 +309,6 @@ Resources:
           Properties:
             Path: /coaches/delete_workout/
             Method: delete
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-
-  GetGroupWorkout:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/coach/get_group_workout/
-      Handler: get_group_workout.get_group_workout
-      Events:
-        GetGroupWorkoutApi:
-          Type: Api
-          Properties:
-            Path: /coaches/get_group_workout/
-            Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
@@ -564,6 +534,21 @@ Resources:
           Type: Api
           Properties:
             Path: /general/get_groups/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        
+  GetGroupWorkout:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/get_group_workout/
+      Handler: get_group_workout.get_group_workout
+      Events:
+        GetGroupWorkoutApi:
+          Type: Api
+          Properties:
+            Path: /general/get_group_workout/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:

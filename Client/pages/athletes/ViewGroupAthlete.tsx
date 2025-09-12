@@ -2,7 +2,6 @@ import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import DisplayWorkout from "../../components/DisplayWorkout";
-import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import GeneralService from "../../services/GeneralService";
 
 //Pages that displays an athletes groupp for a given date
@@ -15,7 +14,7 @@ const ViewGroupAthlete = ()=>{
     useEffect(() => {
         // Fetch workout data for the group
         const fetchWorkout = async () => {
-            const resp = await AthleteWorkoutService.viewWorkouts(groupId);
+            const resp = await GeneralService.getGroupWorkout(groupId);
             if (resp.ok) {
                 const workouts = await resp.json();
                 setWorkouts(workouts);
@@ -32,6 +31,7 @@ const ViewGroupAthlete = ()=>{
         fetchWorkout();
     }, [groupId]);
 
+    console.log(workouts)
     return(
         <View className="mt-[4rem] px-4">
             <Text className="text-4xl font-bold mb-6">{groupName}</Text>

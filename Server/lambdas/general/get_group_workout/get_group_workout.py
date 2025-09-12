@@ -23,7 +23,7 @@ def get_group_workout(event,context):
             converted_workouts = []
             for workout in workouts:
                 converted_workouts.append({
-                    'workoutId': workout[0],
+                    'id': workout[0],
                     'title': workout[1],
                     'description': workout[2],
                     'exercises': workout[3]

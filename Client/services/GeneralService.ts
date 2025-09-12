@@ -44,7 +44,14 @@ const GeneralService = {
       return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?coachId=${userId}&athleteId=${targetId}`);
     }
     return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${userId}&coachId=${targetId}`);
-  }
+  },
+  getGroupWorkout: async (groupId:string, date?:string) => {
+    let request = `${EXPO_PUBLIC_API_URL}/general/get_group_workout?&groupId=${groupId}`;
+    if(date){
+      request += `&date=${date}`;
+    }
+    return await API.get(request);
+  },
 };
 
 export default GeneralService;

@@ -6,17 +6,17 @@ locals {
     "athletes/get_coaches" = { lambda = aws_lambda_function.lambdas["get_coaches"], method = "GET" }
     "athletes/get_coach_requests" = { lambda = aws_lambda_function.lambdas["get_coach_requests"], method = "GET" }
     "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"], method = "GET" }
+    "athletes/search_input_history_date" = { lambda = aws_lambda_function.lambdas["search_input_history_date"], method = "GET" }
     "coaches/view_athlete_requests" = { lambda = aws_lambda_function.lambdas["view_athlete_requests"], method = "GET" }
-    "coaches/get_workouts" = { lambda = aws_lambda_function.lambdas["get_workouts"], method = "GET" }
+    "coaches/get_workout_templates" = { lambda = aws_lambda_function.lambdas["get_workout_templates"], method = "GET" }
     "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"], method = "GET" }
     "coaches/get_athletes" = { lambda = aws_lambda_function.lambdas["get_athletes"], method = "GET" }
     "coaches/search_athletes" = { lambda = aws_lambda_function.lambdas["search_athletes"], method = "GET" }
+    "coaches/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"], method = "GET" }
     "general/view_group_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }
     "general/get_athletes_for_group" = { lambda = aws_lambda_function.lambdas["get_athletes_for_group"], method = "GET" }
     "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"], method = "GET" }
-    "athletes/search_input_history_date" = { lambda = aws_lambda_function.lambdas["search_input_history_date"], method = "GET" }
-    "coaches/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "general/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
     "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
 
@@ -31,13 +31,13 @@ locals {
     "coaches/add_athlete_to_group" = { lambda = aws_lambda_function.lambdas["add_athlete_to_group"], method = "POST" }
     "coaches/create_coach" = { lambda = aws_lambda_function.lambdas["create_coach"], method = "POST" }
     "coaches/create_group" = { lambda = aws_lambda_function.lambdas["create_group"], method = "POST" }
-    "coaches/create_workout" = { lambda = aws_lambda_function.lambdas["create_workout"], method = "POST" }
-    "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
+    "coaches/create_workout_template" = { lambda = aws_lambda_function.lambdas["create_workout_template"], method = "POST" }
+    "coaches/assign_group_workout_template" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
     "coaches/invite_athlete" = { lambda = aws_lambda_function.lambdas["invite_athlete"], method = "POST" }
 
     # DELETE Lambdas
     "coaches/remove_group_athlete" = { lambda = aws_lambda_function.lambdas["remove_group_athlete"], method = "DELETE" }
-    "coaches/delete_workout" = { lambda = aws_lambda_function.lambdas["delete_workout"], method = "DELETE" }
+    "coaches/delete_workout_template" = { lambda = aws_lambda_function.lambdas["delete_workout"], method = "DELETE" }
     "general/remove_coach_athlete" = { lambda = aws_lambda_function.lambdas["remove_coach_athlete"], method = "DELETE" }
     "coaches/delete_group" = { lambda = aws_lambda_function.lambdas["delete_group"], method = "DELETE" }
   }

@@ -4,7 +4,7 @@ import json
 from rds import execute_commit
 
 
-def assign_group_workout(event, context):
+def assign_group_workout_template(event, context):
     body = json.loads(event['body'])
     try:
         #Check if workout exists
@@ -15,10 +15,8 @@ def assign_group_workout(event, context):
         # Create connection in RDS
         execute_commit(
         """
-            INSERT INTO group_workouts (groupId, date, title, description, exercises)
-            SELECT %s, %s, title, description, exercises 
-            FROM workouts 
-            WHERE id = %s
+            INSERT INTO group_workouts (groupId, date, workoutId) 
+            VALUES (%s, %s, %s)
         """, (group_id, date, workout_id))
         return {
             "statusCode": 200,

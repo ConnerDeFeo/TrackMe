@@ -1,8 +1,7 @@
 from rds import execute_commit_fetch_one, execute_commit
 import json
-import uuid
 
-def create_workout(event, context):
+def create_workout_template(event, context):
     body = json.loads(event['body'])
     try:
         workout_id = body.get('workoutId', '')
@@ -17,26 +16,20 @@ def create_workout(event, context):
             execute_commit(
                 """
                     UPDATE workouts
-                    SET title = %s, description = %s, exercises = %s
+                    SET isTemplate = FALSE
                     WHERE id = %s
                 """,
-                (title, description, json.dumps(exercises), workout_id)
+                (workout_id,)
             )
-            return {
-                'statusCode': 200,
-                'body': json.dumps({'message': 'Workout updated successfully'})
-            }
-
-        # Else create new workout
-        else:
-            workout_id = execute_commit_fetch_one(
-                """
-                    INSERT INTO workouts (coachId, title, description, exercises)
-                    VALUES (%s, %s, %s, %s)
-                    RETURNING id
-                """,
-                (coach_id, title, description, json.dumps(exercises))
-            )
+        # Create a new workout regardless
+        workout_id = execute_commit_fetch_one(
+            """
+                INSERT INTO workouts (coachId, title, description, exercises, isTemplate)
+                VALUES (%s, %s, %s, %s, TRUE)
+                RETURNING id
+            """,
+            (coach_id, title, description, json.dumps(exercises))
+        )
         if not workout_id:
             return {
                 'statusCode': 409,

@@ -2,7 +2,7 @@ from rds import execute_commit
 import json
 
 #Removes a coaches workout
-def delete_workout(event, context):
+def delete_workout_template(event, context):
     query_params = event.get('queryStringParameters', {})
 
     try:
@@ -13,7 +13,7 @@ def delete_workout(event, context):
         execute_commit(
             """
                 UPDATE workouts
-                SET deleted = TRUE
+                SET isTemplate = FALSE
                 WHERE id = %s AND coachId = %s
             """,
             (workout_id, coach_id)

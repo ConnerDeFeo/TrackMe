@@ -13,7 +13,6 @@ import json
 from data import TestData
 from lambdas.coach.remove_group_athlete.remove_group_athlete import remove_group_athlete
 from rds import execute_file, fetch_one
-from testing_utils import debug_table
 
 
 test_coach = {

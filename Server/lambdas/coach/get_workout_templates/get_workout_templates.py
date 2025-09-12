@@ -2,7 +2,7 @@ import json
 from rds import fetch_all
 
 #Fetches all of a given coaches workouts
-def get_workouts(event, context):
+def get_workout_templates(event, context):
     query_params = event.get('queryStringParameters', {})
 
     try:
@@ -11,10 +11,11 @@ def get_workouts(event, context):
         #Grab all workouts accosiated with the coach_id
         workouts = fetch_all(
             """
-                SELECT id, title, description, exercises FROM workouts
-                WHERE coachId = %s AND deleted = %s
+                SELECT w.id, w.title, w.description, w.exercises 
+                FROM workouts w
+                WHERE w.coachId = %s AND w.isTemplate = TRUE
             """,
-            (coach_id, False)
+            (coach_id,)
         )
         
         if workouts:

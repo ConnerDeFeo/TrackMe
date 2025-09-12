@@ -98,17 +98,17 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/add_athlete_to_group"
       output_path = "${path.module}/../Server/lambdas/coach/zips/add_athlete_to_group.zip"
     }
-    "assign_group_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/assign_group_workout"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/assign_group_workout.zip"
+    "assign_group_workout_template" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/assign_group_workout_template"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/assign_group_workout_template.zip"
     }
-    "create_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/create_workout"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/create_workout.zip"
+    "create_workout_template" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/create_workout_template"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/create_workout_template.zip"
     }
-    "delete_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/delete_workout"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/delete_workout.zip"
+    "delete_workout_template" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/delete_workout_template"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/delete_workout_template.zip"
     }
     "get_absent_group_athletes" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/get_absent_group_athletes"
@@ -118,9 +118,9 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/get_athletes"
       output_path = "${path.module}/../Server/lambdas/coach/zips/get_athletes.zip"
     }
-    "get_workouts" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/get_workouts"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/get_workouts.zip"
+    "get_workout_templates" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/get_workout_templates"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/get_workout_templates.zip"
     }
     "invite_athlete" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/invite_athlete"

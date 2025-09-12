@@ -298,31 +298,31 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  DeleteWorkoutFunction:
+  DeleteWorkoutTemplateFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/delete_workout/
-      Handler: delete_workout.delete_workout
+      CodeUri: lambdas/coach/delete_workout_template/
+      Handler: delete_workout_template.delete_workout_template
       Events:
-        DeleteWorkoutApi:
+        DeleteWorkoutTemplateApi:
           Type: Api
           Properties:
-            Path: /coaches/delete_workout/
+            Path: /coaches/delete_workout_template/
             Method: delete
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
 
-  GetWorkoutsFunction:
+  GetWorkoutTemplatesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/coach/get_workouts/
-      Handler: get_workouts.get_workouts
+      CodeUri: lambdas/coach/get_workout_templates/
+      Handler: get_workout_templates.get_workout_templates
       Events:
-        GetWorkoutsApi:
+        GetWorkoutTemplatesApi:
           Type: Api
           Properties:
-            Path: /coaches/get_workouts/
+            Path: /coaches/get_workout_templates/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
@@ -403,31 +403,31 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  CreateWorkoutFunction:
+  CreateWorkoutTemplateFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/create_workout/
-      Handler: create_workout.create_workout
+      CodeUri: lambdas/coach/create_workout_template/
+      Handler: create_workout_template.create_workout_template
       Events:
-        CreateWorkoutApi:
+        CreateWorkoutTemplateApi:
           Type: Api
           Properties:
-            Path: /coaches/create_workout/
+            Path: /coaches/create_workout_template/
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
 
-  AssignGroupWorkoutFunction:
+  AssignGroupWorkoutTemplateFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: lambdas/coach/assign_group_workout/
-      Handler: assign_group_workout.assign_group_workout
+      CodeUri: lambdas/coach/assign_group_workout_template/
+      Handler: assign_group_workout_template.assign_group_workout_template
       Events:
-        AssignGroupWorkoutApi:
+        AssignGroupWorkoutTemplateApi:
           Type: Api
           Properties:
-            Path: /coaches/assign_group_workout/
+            Path: /coaches/assign_group_workout_template/
             Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:

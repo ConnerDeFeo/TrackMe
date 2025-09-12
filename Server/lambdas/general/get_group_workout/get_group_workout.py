@@ -13,9 +13,10 @@ def get_group_workout(event,context):
         #Get the workout title for the given date
         workouts = fetch_all(
             """
-                SELECT id, title, description, exercises
-                FROM group_workouts
-                WHERE groupId = %s AND date = %s
+                SELECT w.id, w.title, w.description, w.exercises
+                FROM group_workouts gw
+                JOIN workouts w ON gw.workoutId = w.id
+                WHERE gw.groupId = %s AND gw.date = %s
             """,
             (group_id, date)
         )

@@ -1,7 +1,7 @@
 import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
-from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
+from lambdas.coach.assign_group_workout_template.assign_group_workout import assign_group_workout_template
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.coach.update_coach_profile.update_coach_profile import update_coach_profile
@@ -19,7 +19,7 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.general.get_user.get_user import get_user
 from lambdas.general.remove_coach_athlete.remove_coach_athlete import remove_coach_athlete
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
-from lambdas.coach.create_workout.create_workout import create_workout
+from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from rds import execute_file, fetch_one
 from data import TestData
 from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
@@ -193,7 +193,7 @@ def test_remove_coach_athlete():
     assert relationships is None
 
 def test_get_group_workout():
-    response = create_workout(TestData.test_workout, {})
+    response = create_workout_template(TestData.test_workout, {})
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     workout_id = data['workout_id']
@@ -204,7 +204,7 @@ def test_get_group_workout():
             "groupId": "1"
         })
     }
-    assign_group_workout(test_assign_workout, {})
+    assign_group_workout_template(test_assign_workout, {})
 
     event = {
         "queryStringParameters": {

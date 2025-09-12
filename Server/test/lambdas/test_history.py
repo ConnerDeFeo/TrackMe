@@ -4,8 +4,8 @@ from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.fetch_historical_data.fetch_historical_data import fetch_historical_data
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
-from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
-from lambdas.coach.create_workout.create_workout import create_workout
+from lambdas.coach.assign_group_workout_template.assign_group_workout import assign_group_workout_template
+from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.get_available_history_dates.get_available_history_dates import get_available_history_dates
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from rds import execute_file
@@ -121,12 +121,12 @@ def test_search_input_history_date():
     assert inputs_three_days_ago['2']['name'] == 'Test Group 2'
 
 def test_get_available_history_dates():
-    response = create_workout(TestData.test_workout, {})
+    response = create_workout_template(TestData.test_workout, {})
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     workout_id = data['workout_id']
-    assign_group_workout({
-        "body": json.dumps({ 
+    assign_group_workout_template({
+        "body": json.dumps({
             "coachId": "123",
             "groupId": "1",
             "workoutId": workout_id
@@ -154,8 +154,8 @@ def test_get_available_history_dates():
     assert len(body) == 0
 
 def test_fetch_historical_data():
-    response = create_workout(TestData.test_workout, {})
-    assign_group_workout(TestData.test_assign_group_workout, {})
+    response = create_workout_template(TestData.test_workout, {})
+    assign_group_workout_template(TestData.test_assign_group_workout, {})
     input_times(TestData.test_input_times, {})
     
     # input times for yesterday to ensure we only get today's data

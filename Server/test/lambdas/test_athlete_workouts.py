@@ -3,10 +3,9 @@ import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.create_group.create_group import create_group
-from lambdas.coach.create_workout.create_workout import create_workout
+from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
-from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
-from lambdas.general.get_group_workout.get_group_workout import get_group_workout
+from lambdas.coach.assign_group_workout_template.assign_group_workout import assign_group_workout_template
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
@@ -25,7 +24,7 @@ def setup_before_each_test(): #This will run before each test
     create_group(TestData.test_group, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
-    create_workout(TestData.test_workout, {})
+    create_workout_template(TestData.test_workout, {})
     test_assign_workout = {
         "body": json.dumps({
             "workoutId": 1,
@@ -33,7 +32,7 @@ def setup_before_each_test(): #This will run before each test
             "groupId": "1"
         })
     }
-    assign_group_workout(test_assign_workout, {})
+    assign_group_workout_template(test_assign_workout, {})
     yield
 
 def create_extra_athlete(username,id):

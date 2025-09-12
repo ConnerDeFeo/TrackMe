@@ -90,19 +90,16 @@ def test_assign_group_workout():
     assert data[0] == 1
     assert data[1] == 1
     assert data[2] == date
-    assert data[3] == workout_id
+    assert data[3] == 'Test Workout'
+    assert data[4] == 'This is a test workout'
+    assert len(data[5]) == 3
 
 def test_assign_multiple_workouts():
-    response = create_workout(TestData.test_workout, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
-
+    create_workout(TestData.test_workout, {})
     event = {
-        "body": json.dumps({ 
-            "coachId": "123",
+        "body": json.dumps({
             "groupId": "1",
-            "workoutId": workout_id,
+            "workoutId": 1,
             "date": "2024-01-01" 
         })
     }
@@ -126,7 +123,6 @@ def test_assign_multiple_workouts():
     workout_id = data['workout_id']
     event = {
         "body": json.dumps({ 
-            "coachId": "123",
             "groupId": "1",
             "workoutId": workout_id,
             "date": "2024-01-01" 

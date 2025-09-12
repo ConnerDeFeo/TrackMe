@@ -9,17 +9,17 @@ def assign_group_workout(event, context):
     try:
         #Check if workout exists
         workout_id = body['workoutId']
-        coach_id = body['coachId']
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
         group_id = body['groupId']
 
         # Create connection in RDS
         execute_commit(
         """
-            DELETE FROM group_workouts WHERE groupId = %s AND date = %s AND workoutId = %s;
-            INSERT INTO group_workouts (groupId, date, workoutId)
-            VALUES (%s, %s, %s)
-        """, (group_id, date, workout_id, group_id, date, workout_id))
+            INSERT INTO group_workouts (groupId, date, title, description, exercises)
+            SELECT %s, %s, title, description, exercises 
+            FROM workouts 
+            WHERE id = %s
+        """, (group_id, date, workout_id))
         return {
             "statusCode": 200,
             "headers": {

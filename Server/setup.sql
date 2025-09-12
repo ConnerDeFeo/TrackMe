@@ -82,8 +82,9 @@ CREATE TABLE group_workouts (
     id SERIAL PRIMARY KEY,
     groupId INT REFERENCES groups(id) NOT NULL,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
-    workoutId INT REFERENCES workouts(id) NOT NULL,
-    UNIQUE (groupId, date, workoutId)
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    exercises JSONB
 );
 
 CREATE TABLE athlete_inputs(

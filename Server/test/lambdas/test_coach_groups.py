@@ -9,6 +9,7 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.get_absent_group_athletes.get_absent_group_athletes import get_absent_group_athletes
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
+from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 import json
 from data import TestData
 from lambdas.coach.remove_group_athlete.remove_group_athlete import remove_group_athlete
@@ -182,3 +183,49 @@ def test_delete_group():
     """, (1,))
     assert response is not None
     assert response[4] is True  # Check if deleted flag is set to True
+
+def test_assign_group_workout():
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
+
+    event = {
+        "body": json.dumps({
+            "groupId": 1,
+            "title": "Test Workout",
+            "description": "This is a test workout",
+            "exercises": [
+                {
+                    "name": "Push Ups",
+                    "sets": 3,
+                    "reps": 10
+                },
+                {
+                    "name": "Squats",
+                    "sets": 3,
+                    "reps": 15
+                }
+            ]
+        })
+    }
+
+    response = assign_group_workout(event, {})
+    assert response['statusCode'] == 200
+
+    body = json.loads(response['body'])
+    assert body['workout_id'] == 1
+
+    # Check if workout is assigned to group
+    response = fetch_one("""
+        SELECT * FROM group_workouts WHERE groupId = %s AND workoutId = %s
+    """, (1, 1))
+    assert response is not None
+
+    # Check if workout is NOT a template
+    response = fetch_one("""
+        SELECT isTemplate FROM workouts WHERE id = %s
+    """, (1,))
+    assert response is not None
+    assert response[0] is False

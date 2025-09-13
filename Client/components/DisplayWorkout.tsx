@@ -18,8 +18,8 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
             <View className="bg-white border border-gray-200 shadow-md my-3 mx-2 p-5 rounded-xl">
                 {/* Workout header section with title and description */}
                 <View className="mb-4">
-                    <View className="flex flex-row justify-between items-center">
-                        <Text className="text-xl font-bold text-gray-800 mb-2">{workout.title}</Text>
+                    <View className="flex flex-row justify-between items-center mb-2">
+                        <Text className="text-xl font-bold text-gray-800">{workout.title}</Text>
                         {onRemove && 
                             <TouchableOpacity onPress={() => onRemove(workout.workoutId)}>
                                 <Text className="text-[#E63946] underline">Remove</Text>

@@ -9,7 +9,7 @@ import DisplayWorkout from "../../../components/DisplayWorkout";
 const AssignWorkout = ()=>{
     const route = useRoute();
     const navigation = useNavigation<any>();
-    const { groupId, fetchWorkout } = route.params as { groupId: string, fetchWorkout: ()=>void};
+    const { groupId, groupName, fetchWorkout } = route.params as { groupId: string, groupName: string, fetchWorkout: ()=>void};
     const [workouts, setWorkouts] = useState<Array<any>>([]);
 
     //Fetch all workouts
@@ -37,7 +37,7 @@ const AssignWorkout = ()=>{
     return (
         <View className="mt-[4rem]">
             <Text className="text-4xl font-bold pl-4">Assign Workout</Text>
-            <Button title="Assign New Workout" onPress={() => navigation.navigate('CreateGroupWorkout', { groupId: groupId})} />
+            <Button title="Assign New Workout" onPress={() => navigation.navigate('AssignNewWorkout', { groupId: groupId, groupName: groupName })} />
             {workouts.map((workout, idx) => (
                 <View key={idx} className="my-2">
                     <DisplayWorkout workout={workout} onPress={() => handleAssignWorkout(workout.workoutId)} />

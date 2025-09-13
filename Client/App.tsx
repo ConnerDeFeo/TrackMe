@@ -33,7 +33,7 @@ import RequestCoaches from './pages/athletes/RequestCoaches';
 import InputHistory from './pages/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
 import HistoricalData from './components/coaches/HistoricalData';
-import CreateGroupWorkout from './pages/coaches/groups/CreateGroupWorkout';
+import AssignNewWorkout from './pages/coaches/groups/AssignNewWorkout';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -93,7 +93,7 @@ const RootStack = createNativeStackNavigator({
     InputHistory: UserLayout(<InputHistory/>),
     CoachHistory: UserLayout(<CoachHistory/>),
     HistoricalData: UserLayout(<HistoricalData/>),
-    CreateGroupWorkout: UserLayout(<CreateGroupWorkout/>),
+    AssignNewWorkout: UserLayout(<AssignNewWorkout/>),
   },
 });
 const Navigation = createStaticNavigation(RootStack);

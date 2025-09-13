@@ -484,6 +484,20 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
+  AssignGroupWorkout:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/coach/assign_group_workout/
+      Handler: assign_group_workout.assign_group_workout
+      Events:
+        AssignGroupWorkoutApi:
+          Type: Api
+          Properties:
+            Path: /coaches/assign_group_workout/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
   #
   #
   #

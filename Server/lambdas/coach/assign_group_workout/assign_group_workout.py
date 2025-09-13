@@ -9,6 +9,22 @@ def assign_group_workout(event, context):
         title = body['title']
         description = body.get('description', '')
         exercises = body.get('exercises', [])
+        workout_id = body.get('workoutId')
+        
+        if workout_id:
+            # If workoutId is provided, update the existing workout
+            execute_commit(
+                """
+                    UPDATE workouts
+                    SET title = %s, description = %s, exercises = %s
+                    WHERE id = %s AND coachId = (SELECT coachId from groups where id = %s)
+                """,
+                (title, description, json.dumps(exercises), workout_id, group_id)
+            )
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'message': 'Workout updated successfully', 'workout_id': workout_id})
+            }
 
         # Create a new workout and fetch the id
         workout_id = execute_commit_fetch_one(

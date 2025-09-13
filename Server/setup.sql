@@ -72,7 +72,7 @@ CREATE TABLE athlete_coach_requests (
 CREATE TABLE workouts(
     id SERIAL PRIMARY KEY,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
-    title VARCHAR(255) NOT NULL,
+    title VARCHAR(50) NOT NULL,
     description TEXT,
     exercises JSONB,
     isTemplate BOOLEAN DEFAULT FALSE

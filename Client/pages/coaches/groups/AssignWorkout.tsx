@@ -25,9 +25,8 @@ const AssignWorkout = ()=>{
         fetchWorkouts();
     }, []);
 
-    const handleAssignWorkout = async (workoutId:string) => {
-        const coachId = await UserService.getUserId();
-        const response = await CoachWorkoutService.assignWorkoutTemplateToGroup(workoutId, coachId!, groupId);
+    const handleAssignTemplateWorkout = async (workoutId:string) => {
+        const response = await CoachWorkoutService.assignWorkoutTemplateToGroup(workoutId, groupId);
         if (response.ok) {
             fetchWorkout();
             navigation.goBack();
@@ -40,7 +39,7 @@ const AssignWorkout = ()=>{
             <Button title="Assign New Workout" onPress={() => navigation.navigate('AssignNewWorkout', { groupId: groupId, groupName: groupName })} />
             {workouts.map((workout, idx) => (
                 <View key={idx} className="my-2">
-                    <DisplayWorkout workout={workout} onPress={() => handleAssignWorkout(workout.workoutId)} />
+                    <DisplayWorkout workout={workout} onPress={() => handleAssignTemplateWorkout(workout.workoutId)} />
                 </View>
             ))}
         </View>

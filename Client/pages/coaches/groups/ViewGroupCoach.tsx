@@ -80,7 +80,7 @@ const ViewGroup = () => {
           onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})}
           className="bg-[#E63946] rounded-lg py-3 px-4"
         >
-          <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Update Workout" : "Send Workout"}</Text>
+          <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Change Workout" : "Send Workout"}</Text>
         </TouchableOpacity>
         {workouts.length > 0 && 
           <TouchableOpacity 
@@ -96,7 +96,7 @@ const ViewGroup = () => {
         <DisplayWorkout 
           key={workout.groupWorkoutId} 
           workout={workout} 
-          onPress={() => navigation.navigate('CreateWorkout', { workout })} 
+          onPress={() => navigation.navigate('AssignNewWorkout', {groupId: groupId, groupName: groupName, workout: workout })} 
           onRemove={() => handleWorkoutRemoval(workout.groupWorkoutId)}
         />
       ))}

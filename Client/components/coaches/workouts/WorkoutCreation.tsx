@@ -23,16 +23,23 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
     handleWorkoutCreation(workoutData);
   };
 
+  const handleTitleChange = (text:string) => {
+    if(text.length <= 50){
+      setTitle(text);
+    }
+  }
+
   const titleDescriptionLayout = (text:string)=>{
     return(
       <View className="border border-red-700 rounded-lg m-4 p-3 bg-white">
         <Text className="font-bold">{text}</Text>
         <TextInput
           value={text === "Title" ? title : description}
-          onChangeText={text === "Title" ? setTitle : setDescription}
+          onChangeText={text === "Title" ? handleTitleChange : setDescription}
           className="border-b border-red-700 text-black py-1 mt-1"
           placeholder={`Enter workout ${text}`}
           placeholderTextColor="#888"
+          multiline
         />
       </View>
     );

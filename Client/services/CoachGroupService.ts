@@ -27,16 +27,6 @@ const CoachGroupService = {
     },
     deleteGroup: async (groupId:string) => {
         return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_group?groupId=${groupId}`);
-    },
-    assignGroupWorkout: async (groupId:string, workoutData:any) => {
-        return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout`, 
-            { 
-                'groupId': groupId, 
-                'title': workoutData.title,
-                'description': workoutData.description,
-                'exercises': workoutData.exercises,
-            }
-        );
     }
 }
 

@@ -10,8 +10,14 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
   const [exercises, setExercises] = useState<Array<Exercise>>(workout?.exercises || []);
+  //errors on form
+  const [errors, setErrors] = useState<number>(0);
 
   const handleCreation = async () => {
+    if(errors > 0){
+      alert("Please fill in all required fields");
+      return;
+    }
     const workoutData:Record<string, any> = {
       'title': title,
       'description': description,
@@ -44,6 +50,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
       </View>
     );
   }
+  console.log(errors);
   return (
     <ScrollView className="mt-16 bg-white">
       {/* HEADER: Title and Add Workout Button */}
@@ -61,7 +68,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
       <View className="mx-4">
       {/* Render each exercise input */}
       {exercises.map((exercise, idx) => (
-        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx}/>
+        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx} setErrors={setErrors}/>
       ))}
         {/* Button to add a new exercise */}
         <TouchableOpacity

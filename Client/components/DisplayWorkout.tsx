@@ -8,6 +8,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
     // Don't render anything if workout doesn't have a title
     if (!workout['title'])
         return <></>;
+    console.log(workout);
     return (
         // Main touchable container that navigates to CreateWorkout screen when pressed
         <TouchableOpacity 

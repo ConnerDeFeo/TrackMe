@@ -1,6 +1,6 @@
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Exercise from "../../../types/Exersise";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import Variables from "../../../constants/Variables";
 /**
  * Component for creating and editing a single exercise within a workout.
@@ -8,25 +8,25 @@ import Variables from "../../../constants/Variables";
  * @param {Exercise} props.excercise - The exercise object being created or edited.
  * @param {React.Dispatch<React.SetStateAction<Exercise[]>>} props.setExercise - The state setter function for the list of exercises.
  */
-const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercise; setExercises: React.Dispatch<React.SetStateAction<Exercise[]>>; idx: number; }) => {
-  // Determines whether to display the sets and reps section based on the existence of exercise parts.
-  const displaySetsReps = excercise.exerciseParts !== undefined && excercise.exerciseParts.length > 0;
-
+const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }: 
+  { excercise: Exercise; setExercises: React.Dispatch<React.SetStateAction<Exercise[]>>; idx: number; setErrors: React.Dispatch<React.SetStateAction<number>>; }) => {
   /**
    * Handles the creation of a new exercise part component.
    * It adds a new, empty part to the current exercise's `exerciseParts` array.
    */
   const handleExcerciseComponentCreation = () => {
     let exerciseParts = excercise.exerciseParts;
+    let exists = true;
     // If no exercise parts exist yet, initialize the array.
-    if (!exerciseParts){ 
+    if (!exerciseParts) {
       exerciseParts = [];
+      exists = false;
     }
     // Add a new exercise part with default values.
     exerciseParts.push({ 'distance': 0, 'measurement': Variables.meters });
     // Update the state for the specific exercise being modified.
     setExercises((prev) => prev.map((ex,index) => 
-      index === idx ? { ...ex, exerciseParts } : ex
+      index === idx ? { ...ex, exerciseParts:exerciseParts } : ex
     ));
   };
 
@@ -37,17 +37,26 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
    */
   const setsReps = (field: 'sets' | 'reps'): JSX.Element => {
     return (
-      <TextInput className="pl-4" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => {
-        // Update state only if a valid number is entered.
-        if(text && !isNaN(Number(text))) {
-          const updatedExcercise = { ...excercise, [field]: Number(text) };
-          setExercises((prev) => prev.map((ex, index) => index === idx ? updatedExcercise : ex));
-        }
-        // If the input is cleared, reset the value to 0.
-        if(text === '') {
-          setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, [field]: 0 } : ex));
-        }
-      }} />
+      <View className="mb-3">
+        <Text className="text-lg font-bold mb-2 pl-2">{field === 'sets' ? 'Sets' : 'Reps'}</Text>
+        <View className={`border rounded-md bg-white ${excercise[field] && excercise[field] > 0 ? 'border-gray-300' : 'border-red-500'}`}>
+          <TextInput className="pl-4" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => {
+            // Update state only if a valid number is entered.
+            if(text && !isNaN(Number(text))) {
+              if(excercise[field] === undefined) {
+                setErrors(prev => prev - 1); // Decrement error count if field was previously undefined
+              }
+              const updatedExcercise = { ...excercise, [field]: Number(text) };
+              setExercises((prev) => prev.map((ex, index) => index === idx ? updatedExcercise : ex));
+            }
+            // If the input is cleared, remove the value from state.
+            if(text === '') {
+              setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, [field]: undefined } : ex));
+              setErrors(prev => prev + 1); // Increment error count if field is cleared
+            }
+          }} />
+        </View>
+      </View>
     );
   }
 
@@ -65,6 +74,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
         <TextInput 
           className="border border-gray-300 rounded-md p-3 bg-white text-black"
           value={excercise.name} 
+          inputMode="numeric"
           onChangeText={text => {
             // Update the exercise name in the state.
             const updatedExercise = { ...excercise, name: text };
@@ -73,55 +83,54 @@ const ExerciseCreation = ({ excercise, setExercises, idx }: { excercise: Exercis
         />
       </View>
 
-      {/* Sets, Reps, and Exercise Parts Section */}
-      {displaySetsReps && (
+      {/* Dynamically rendered Exercise Parts */}
+      {excercise.exerciseParts && excercise.exerciseParts.length > 0 &&
         <View className="bg-gray-50 rounded-lg p-4 mb-4">
-          {/* Sets Input */}
-          <View className="mb-3">
-            <Text className="text-lg font-bold mb-2 pl-2">Sets</Text>
-            <View className="border border-gray-300 rounded-md bg-white">
-              {setsReps('sets')}
-            </View>
-          </View>
-          {/* Reps Input */}
-          <View className="mb-3">
-            <Text className="text-lg font-bold mb-2 pl-2">Reps</Text>
-            <View className="border border-gray-300 rounded-md bg-white">
-              {setsReps('reps')}
-            </View>
-          </View>
-
-          {/* Dynamically rendered Exercise Parts */}
+          {setsReps('sets')}
+          {setsReps('reps')}
           <Text className="text-lg font-bold">Distances</Text>
-          {excercise.exerciseParts && excercise.exerciseParts.map((part: any, partIdx: number) => (
-              <View className="mb-3" key={partIdx}>
-                {/* Button to remove this specific exercise part */}
-                <View className="flex flex-row justify-end items-center mb-1">
-                  <TouchableOpacity onPress={() => {
-                    const updatedParts = [...excercise.exerciseParts!];
-                    updatedParts.splice(partIdx, 1); // Use the correct index for the part
-                    setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, exerciseParts: updatedParts } : ex));
-                  }}>
-                    <Text className="text-[#E63946] underline">Remove</Text>
-                  </TouchableOpacity>
-                </View>
-                {/* Distance Input */}
-                <TextInput 
-                  className="border border-gray-300 rounded-md p-3 bg-white text-black"
-                  value={part.distance ? `${part.distance}` : ''} 
-                  onChangeText={text => {
-                    // Update distance if the input is empty or a valid number.
-                    if(text === '' || (text && !isNaN(Number(text)))) {
-                      const updatedParts = [...excercise.exerciseParts!];
-                      updatedParts[partIdx].distance = Number(text); // Use the correct index for the part
-                      setExercises((prev) => prev.map((ex, index) => (index === idx ? { ...ex, exerciseParts: updatedParts } : ex)));
-                    }
-                  }} 
-                />
+          {excercise.exerciseParts.map((part: any, partIdx: number) => (
+            <View className="mb-3" key={partIdx}>
+              {/* Button to remove this specific exercise part */}
+              <View className="flex flex-row justify-end items-center mb-1">
+                <TouchableOpacity onPress={() => {
+                  const updatedParts = [...excercise.exerciseParts!];
+                  updatedParts.splice(partIdx, 1); // Use the correct index for the part
+                  let sets = excercise.sets;
+                  let reps = excercise.reps;
+                  if(updatedParts.length === 0) {
+                    sets = undefined;
+                    reps = undefined;
+                  }
+                  setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, exerciseParts: updatedParts, sets: sets, reps:reps } : ex));
+                }}>
+                  <Text className="text-[#E63946] underline">Remove</Text>
+                </TouchableOpacity>
               </View>
+              {/* Distance Input */}
+              <TextInput 
+                className={`border rounded-md p-3 bg-white text-black ${part.distance === 0 ? 'border-red-500' : 'border-gray-300'}`}
+                value={part.distance ? `${part.distance}` : ''} 
+                inputMode="numeric"
+                onChangeText={text => {
+                  if(text===''){
+                    setErrors(prev => prev + 1); // Increment error count if field is cleared
+                  }
+                  // Update distance if the input is empty or a valid number.
+                  if(text === '' || (text && !isNaN(Number(text)))) {
+                    const updatedParts = [...excercise.exerciseParts!];
+                    if(part.distance === 0) {
+                      setErrors(prev => prev - 1); // Decrement error count if field was previously undefined
+                    }
+                    updatedParts[partIdx].distance = Number(text); // Use the correct index for the part
+                    setExercises((prev) => prev.map((ex, index) => (index === idx ? { ...ex, exerciseParts: updatedParts } : ex)));
+                  }
+                }} 
+              />
+            </View>
           ))}
         </View>
-      )}
+        }
 
       {/* Button to add a new exercise part */}
       <View className="mt-4">

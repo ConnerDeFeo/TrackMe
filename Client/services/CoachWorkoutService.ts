@@ -23,14 +23,16 @@ const CoachWorkoutService = {
         return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_group_workout?groupWorkoutId=${groupWorkoutId}`);
     },
     assignGroupWorkout: async (groupId:string, workoutData:any) => {
-        return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout`, 
-            { 
+        const payload: Record<string, any> = { 
                 'groupId': groupId, 
                 'title': workoutData.title,
                 'description': workoutData.description,
                 'exercises': workoutData.exercises,
-            }
-        );
+            };
+        if (workoutData.workoutId){
+            payload['workoutId'] = workoutData.workoutId;
+        }
+        return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout`, payload);
     }
 }
 

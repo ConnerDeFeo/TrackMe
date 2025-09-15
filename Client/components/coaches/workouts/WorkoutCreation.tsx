@@ -24,7 +24,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
       'exercises': exercises
     };
     if(workout){
-      workoutData['workoutId'] = workout.workoutId;
+      workoutData['workoutId'] = workout.groupWorkoutId;
     }
     handleWorkoutCreation(workoutData);
   };

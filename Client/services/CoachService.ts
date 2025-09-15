@@ -1,4 +1,5 @@
 import API from "./API";
+import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const CoachService = {
@@ -35,6 +36,10 @@ const CoachService = {
                 'athleteId': athleteId
             }
         );
+    },
+    declineAthleteRequest: async(athleteId:string) => {
+        const userId = await UserService.getUserId();
+        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/decline_athlete_request?coachId=${userId}&athleteId=${athleteId}`);
     }
 }
 

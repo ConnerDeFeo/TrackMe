@@ -56,9 +56,9 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/get_coaches"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/get_coaches.zip"
     }
-    "get_coach_requests" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/get_coach_requests"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/get_coach_requests.zip"
+    "get_coach_invites" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/get_coach_invites"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/get_coach_invites.zip"
     }
     "input_times" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/input_times"

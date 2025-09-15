@@ -14,7 +14,7 @@ locals {
     "create_athlete",
     "accept_coach_invite",
     "get_coaches",
-    "get_coach_requests",
+    "get_coach_invites",
     "input_times",
     "request_coach",
     "search_coaches",

@@ -143,7 +143,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
             <View className="mb-3" key={partIdx}>
               {/* Button to remove this specific exercise part */}
               <View className="flex flex-row justify-end items-center mb-1">
-                <TouchableOpacity onPress={handleDistanceRemoval.bind(null, partIdx)}>
+                <TouchableOpacity onPress={() => handleDistanceRemoval(partIdx)}>
                   <Text className="text-[#E63946] underline">Remove</Text>
                 </TouchableOpacity>
               </View>

@@ -138,16 +138,16 @@ Resources:
       Layers:
         - Ref: RDSLayer
 
-  GetCoachRequestsFunction:
+  GetCoachInvitesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/athlete/get_coach_requests/
-      Handler: get_coach_requests.get_coach_requests
+      CodeUri: lambdas/athlete/get_coach_invites/
+      Handler: get_coach_invites.get_coach_invites
       Events:
-        GetCoachRequestsApi:
+        GetCoachInvitesApi:
           Type: Api
           Properties:
-            Path: /athletes/get_coach_requests/
+            Path: /athletes/get_coach_invites/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:

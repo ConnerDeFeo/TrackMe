@@ -8,7 +8,7 @@ from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.get_coaches.get_coaches import get_coaches
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
-from lambdas.athlete.get_coach_requests.get_coach_requests import get_coach_requests
+from lambdas.athlete.get_coach_invites.get_coach_invites import get_coach_invites
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.view_coach_invites.view_coach_invites import view_coach_invites
 from lambdas.athlete.search_coaches.search_coaches import search_coaches
@@ -65,7 +65,7 @@ def test_get_coach_requests():
         }
     }
    
-    response = get_coach_requests(event, {})
+    response = get_coach_invites(event, {})
     assert response['statusCode'] == 200
 
     coach_requests = json.loads(response['body'])

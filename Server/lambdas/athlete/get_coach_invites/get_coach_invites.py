@@ -2,7 +2,7 @@ import json
 from rds import fetch_all
 
 #Get
-def get_coach_requests(event,context):
+def get_coach_invites(event,context):
     query_params = event.get('queryStringParameters', {})
 
     try:

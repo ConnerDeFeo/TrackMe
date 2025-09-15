@@ -4,7 +4,7 @@ locals {
     # GET Lambdas
     "athletes/search_coaches" = {lambda = aws_lambda_function.lambdas["search_coaches"], method = "GET"}
     "athletes/get_coaches" = { lambda = aws_lambda_function.lambdas["get_coaches"], method = "GET" }
-    "athletes/get_coach_requests" = { lambda = aws_lambda_function.lambdas["get_coach_requests"], method = "GET" }
+    "athletes/get_coach_invites" = { lambda = aws_lambda_function.lambdas["get_coach_invites"], method = "GET" }
     "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"], method = "GET" }
     "athletes/search_input_history_date" = { lambda = aws_lambda_function.lambdas["search_input_history_date"], method = "GET" }
     "coaches/view_athlete_requests" = { lambda = aws_lambda_function.lambdas["view_athlete_requests"], method = "GET" }

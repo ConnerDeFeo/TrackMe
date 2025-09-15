@@ -1,4 +1,5 @@
 import API from "./API";
+import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const AthleteService = {
@@ -14,8 +15,8 @@ const AthleteService = {
     getCoaches: async (userId:string) => {
         return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coaches?userId=${userId}`);
     },
-    getCoachRequests: async (userId:string) => {
-        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coach_requests?userId=${userId}`);
+    getCoachInvites: async (userId:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coach_invites?userId=${userId}`);
     },
     acceptCoachInvite: async(userId:string, coachId:string) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/accept_coach_invite`,
@@ -35,6 +36,10 @@ const AthleteService = {
                 'coachId': coachId
             }
         );
+    },
+    declineCoachInvite: async(coachId:string) => {
+        const userId = await UserService.getUserId();
+        return await API.delete(`${EXPO_PUBLIC_API_URL}/athletes/decline_coach_invite?athleteId=${userId}&coachId=${coachId}`);
     }
 }
 

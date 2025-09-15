@@ -11,11 +11,18 @@ import Variables from "../../../constants/Variables";
 const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }: 
   { excercise: Exercise; setExercises: React.Dispatch<React.SetStateAction<Exercise[]>>; idx: number; setErrors: React.Dispatch<React.SetStateAction<number>>; }) => {
     const [displaySetsReps, setDisplaySetsReps] = useState<boolean>(excercise.reps !== undefined || excercise.sets !== undefined);
+
+  // If current component deleted, remove its errors from total
+  const [currentErrors, setCurrentErrors] = useState<number>(0);
+  const handleErrorChange = (change:number)=>{
+    setErrors(prev => prev + change);
+    setCurrentErrors(prev => prev + change);
+  }
   /**
    * Handles the creation of a new exercise part component.
    * It adds a new, empty part to the current exercise's `exerciseParts` array.
    */
-  const handleExcerciseComponentCreation = () => {
+  const handleDistanceAddition = () => {
     let exerciseParts = excercise.exerciseParts;
     let exists = true;
     // If no exercise parts exist yet, initialize the array.
@@ -29,6 +36,18 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
     setExercises((prev) => prev.map((ex,index) => 
       index === idx ? { ...ex, exerciseParts:exerciseParts } : ex
     ));
+    handleErrorChange(1); // Increment error count as new part with distance 0 is added
+  };
+
+  const handleDistanceRemoval = (partIdx:number) => {
+    if(excercise.exerciseParts){
+      const updatedParts = [...excercise.exerciseParts];
+      updatedParts.splice(partIdx, 1);
+      setExercises((prev) => prev.map((ex,index) => 
+        index === idx ? { ...ex, exerciseParts:updatedParts } : ex
+      ));
+      handleErrorChange(-1); // Decrement error count as part is removed
+    }
   };
 
   const handleSetsRepsRemoval = ()=>{
@@ -40,7 +59,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
 
   const handleSetsRepsAddition = ()=>{
     setDisplaySetsReps(true);
-    setErrors(prev => prev+2); // Increment error count for both sets and reps
+    handleErrorChange(2);
   }
 
   /**
@@ -57,7 +76,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
             // Update state only if a valid number is entered.
             if(text && !isNaN(Number(text))) {
               if(excercise[field] === undefined) {
-                setErrors(prev => prev - 1); // Decrement error count if field was previously undefined
+                handleErrorChange(-1); // Decrement error count if field was previously undefined
               }
               const updatedExcercise = { ...excercise, [field]: Number(text) };
               setExercises((prev) => prev.map((ex, index) => index === idx ? updatedExcercise : ex));
@@ -65,12 +84,17 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
             // If the input is cleared, remove the value from state.
             if(text === '') {
               setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, [field]: undefined } : ex));
-              setErrors(prev => prev + 1); // Increment error count if field is cleared
+              handleErrorChange(1); // Increment error count if field is cleared
             }
           }} />
         </View>
       </View>
     );
+  }
+
+  const handleExerciseDeletion = ()=>{
+    setExercises((prev) => prev.filter((_, index) => index !== idx));
+    setErrors(prev => prev - currentErrors); // Remove this component's errors from total
   }
 
   return (
@@ -80,7 +104,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
         <View className="flex flex-row justify-between items-center">
           <Text className="text-lg font-bold mb-2">Name</Text>
           {/* Button to remove the entire exercise */}
-          <TouchableOpacity onPress={() => setExercises((prev) => prev.filter((_, index) => index !== idx))}>
+          <TouchableOpacity onPress={handleExerciseDeletion}>
             <Text className="text-[#E63946] underline">Remove</Text>
           </TouchableOpacity>
         </View>
@@ -119,11 +143,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
             <View className="mb-3" key={partIdx}>
               {/* Button to remove this specific exercise part */}
               <View className="flex flex-row justify-end items-center mb-1">
-                <TouchableOpacity onPress={() => {
-                  const updatedParts = [...excercise.exerciseParts!];
-                  updatedParts.splice(partIdx, 1); // Use the correct index for the part
-                  setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, exerciseParts: updatedParts } : ex));
-                }}>
+                <TouchableOpacity onPress={handleDistanceRemoval.bind(null, partIdx)}>
                   <Text className="text-[#E63946] underline">Remove</Text>
                 </TouchableOpacity>
               </View>
@@ -134,13 +154,13 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
                 inputMode="numeric"
                 onChangeText={text => {
                   if(text===''){
-                    setErrors(prev => prev + 1); // Increment error count if field is cleared
+                    handleErrorChange(1); // Increment error count if field is cleared
                   }
                   // Update distance if the input is empty or a valid number.
                   if(text === '' || (text && !isNaN(Number(text)))) {
                     const updatedParts = [...excercise.exerciseParts!];
                     if(part.distance === 0) {
-                      setErrors(prev => prev - 1); // Decrement error count if field was previously undefined
+                      handleErrorChange(-1); // Decrement error count if field was previously undefined
                     }
                     updatedParts[partIdx].distance = Number(text); // Use the correct index for the part
                     setExercises((prev) => prev.map((ex, index) => (index === idx ? { ...ex, exerciseParts: updatedParts } : ex)));
@@ -157,7 +177,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
         <Button 
           title="Add Distance" 
           color="#E63946"
-          onPress={handleExcerciseComponentCreation} 
+          onPress={handleDistanceAddition} 
         />
       </View>
     </View>

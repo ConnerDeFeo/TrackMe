@@ -88,6 +88,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/search_input_history_date"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/search_input_history_date.zip"
     }
+    "decline_coach_invite" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/decline_coach_invite"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/decline_coach_invite.zip"
+    }
     
     # Coach Lambdas
     "accept_athlete_request" = {
@@ -161,6 +165,10 @@ locals {
     "assign_group_workout" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/assign_group_workout"
       output_path = "${path.module}/../Server/lambdas/coach/zips/assign_group_workout.zip"
+    }
+    "decline_athlete_request" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/decline_athlete_request"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/decline_athlete_request.zip"
     }
     
     # General Lambdas

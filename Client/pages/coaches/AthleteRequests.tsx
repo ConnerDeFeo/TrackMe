@@ -49,30 +49,30 @@ const AthleteRequests = () =>{
             <Text className="text-4xl font-bold text-gray-800 p-4">Athlete Requests</Text>
             
             {/* Requests list or empty state */}
-            <View className="space-y-4">
+            <View className="gap-y-4">
                 {requests.length > 0 ? (
                     // Render each coach request with accept/decline buttons
                     requests.map(request => (
                     <View key={request} className="bg-white rounded-lg shadow-sm p-4 mx-auto w-full max-w-sm">
                         {/* Display athlete name (assuming request[1] is the athlete name) */}
                         <Text className="text-lg font-medium text-gray-800 text-center mb-4">{request[1]}</Text>
-                        <View className="flex-row space-x-3">
-                        <View className="flex-1">
-                            {/* Accept button - calls handleCoachAcceptance with coach ID */}
-                            <Button 
-                            title="Accept" 
-                            onPress={() => handleAthleteAcceptance(request[0])}
-                            color="#10B981"
-                            />
-                        </View>
-                        <View className="flex-1">
-                            {/* Decline button - currently only logs to console */}
-                            <Button 
-                            title="Decline" 
-                            onPress={() => console.log("Declined")}
-                            color="#E63946"
-                            />
-                        </View>
+                        <View className="flex-row gap-x-3">
+                            <View className="flex-1">
+                                {/* Accept button - calls handleCoachAcceptance with coach ID */}
+                                <Button 
+                                title="Accept" 
+                                onPress={() => handleAthleteAcceptance(request[0])}
+                                color="#10B981"
+                                />
+                            </View>
+                            <View className="flex-1">
+                                {/* Decline button - currently only logs to console */}
+                                <Button 
+                                title="Decline" 
+                                onPress={() => console.log("Declined")}
+                                color="#E63946"
+                                />
+                            </View>
                         </View>
                     </View>
                     ))

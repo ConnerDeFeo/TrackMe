@@ -22,6 +22,7 @@ locals {
     "view_coach_invites",
     "view_workout_inputs",
     "search_input_history_date",
+    "decline_coach_invite",
 
     # Coach Lambdas
     "create_coach",
@@ -44,6 +45,7 @@ locals {
     "delete_group",
     "delete_group_workout",
     "assign_group_workout",
+    "decline_athlete_request",
 
     # General Lambdas
     "get_athletes_for_group",

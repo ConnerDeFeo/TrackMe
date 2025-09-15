@@ -13,7 +13,6 @@ const CoachWorkoutService = {
         if(date){
             payload['date'] = date;
         }
-        console.log("Assigning workout template to group with payload:", payload);
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout_template`, payload);
     },
     deleteWorkoutTemplate: async (workoutId:string, coachId:string) => {

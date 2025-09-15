@@ -12,6 +12,7 @@ from lambdas.coach.update_coach_profile.update_coach_profile import update_coach
 from lambdas.coach.accept_athlete_request.accept_athlete_request import accept_athlete_request
 from lambdas.athlete.request_coach.request_coach import request_coach
 from lambdas.coach.view_athlete_requests.view_athlete_requests import view_athlete_requests
+from lambdas.coach.decline_athlete_request.decline_athlete_request import decline_athlete_request
 from rds import execute_file, fetch_one
 from data import TestData
 
@@ -190,3 +191,19 @@ def test_accept_athlete_request():
     assert data is not None
     assert data[1] == '1234'
     assert data[2] == '123'
+
+def test_decline_athlete_request():
+    create_coach(TestData.test_coach, {})
+    create_athlete(TestData.test_athlete, {})
+    request_coach(TestData.test_invite, {})
+    event = {
+        'queryStringParameters': {
+            'athleteId': '1234',
+            'coachId': '123'
+        }
+    }
+    response = decline_athlete_request(event, {})
+    assert response['statusCode'] == 200
+
+    data = fetch_one("SELECT * FROM athlete_coach_requests WHERE athleteId = %s AND coachId = %s", ('1234', '123'))
+    assert data is None

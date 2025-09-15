@@ -17,12 +17,10 @@ const ViewGroupInputsCoach = ()=>{
                 const athletesResp = await GeneralService.getAthletesForGroup(groupId);
                 if(athletesResp.ok){
                     const athletesData = await athletesResp.json();
-                    console.log(athletesData);
                     setAthletes(athletesData);
                 }
                 if(workoutInputsResp.ok) {
                     const workoutInputData = await workoutInputsResp.json();
-                    console.log(workoutInputData);
                     setWorkoutInputs(workoutInputData);
                 }
             } catch (error) {

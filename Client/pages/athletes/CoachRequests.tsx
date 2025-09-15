@@ -11,7 +11,6 @@ const CoachRequests = () =>{
     const route = useRoute();
     // Get the fetchAthletes function passed from parent component to refresh athlete list
     const { fetchAthletes } = route.params as { fetchAthletes: () => void };
-    const navigation = useNavigation<any>();
 
     // Fetches all athlete requests for the current user
     const fetchCoachInvites = async () => {
@@ -52,7 +51,7 @@ const CoachRequests = () =>{
                 {invites.length > 0 ? (
                     // Render each athlete request with accept/decline buttons
                     invites.map(invite => (
-                    <View key={invite} className="bg-white rounded-lg p-4 mx-auto w-[90%]">
+                    <View key={invite} className="bg-white rounded-lg p-4 mx-auto w-[90%] border border-gray-300">
                         <View className="flex-row items-center justify-between">
                             {/* Display athlete name */}
                             <Text className="text-xl font-medium flex-1">{invite[1]}</Text>

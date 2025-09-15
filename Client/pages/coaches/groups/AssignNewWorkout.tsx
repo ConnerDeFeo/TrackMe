@@ -7,7 +7,6 @@ const AssignNewWorkout = () => {
     const navigation = useNavigation<any>();
     const { groupId, groupName, workout } = route.params as { groupId: string, groupName: string, workout?: any };
 
-    console.log(workout)
     const handleWorkoutCreation = async (workoutData:any) => {
         const resp = await CoachWorkoutService.assignGroupWorkout(groupId, workoutData);
         if(resp.ok) {

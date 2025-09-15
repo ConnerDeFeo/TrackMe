@@ -50,7 +50,6 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
       </View>
     );
   }
-  console.log(errors);
   return (
     <ScrollView className="mt-16 bg-white">
       {/* HEADER: Title and Add Workout Button */}

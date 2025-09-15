@@ -55,6 +55,7 @@ CREATE TABLE athlete_coaches (
     UNIQUE (athleteId, coachId)
 );
 
+-- Coaches requesting athletes to be coached by them
 CREATE TABLE athlete_coach_invites (
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
@@ -62,6 +63,7 @@ CREATE TABLE athlete_coach_invites (
     UNIQUE (athleteId, coachId)
 );
 
+-- Athletes requesting to be coached by a coach (reverse of above table)
 CREATE TABLE athlete_coach_requests (
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,

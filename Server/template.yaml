@@ -41,7 +41,28 @@ Resources:
     Metadata:
       BuildMethod: python3.12
 
-  
+  #
+  #
+  #
+  # ATHLETE FUNCTIONS
+  #
+  #
+  #
+  DeclineCoachInviteFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/athlete/decline_coach_invite/
+      Handler: decline_coach_invite.decline_coach_invite
+      Events:
+        DeclineCoachInviteApi:
+          Type: Api
+          Properties:
+            Path: /athletes/decline_coach_invite/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   SearchInputHistoryDateFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -199,6 +220,21 @@ Resources:
   #
   #
   #
+  DeclineAthleteRequestFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/decline_athlete_request/
+      Handler: decline_athlete_request.decline_athlete_request
+      Events:
+        DeclineAthleteRequestApi:
+          Type: Api
+          Properties:
+            Path: /coaches/decline_athlete_request/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   DeleteGroupWorkoutFunction:
     Type: AWS::Serverless::Function
     Properties:

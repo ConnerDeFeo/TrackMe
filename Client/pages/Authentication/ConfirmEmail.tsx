@@ -26,7 +26,6 @@ const ConfirmEmail = () => {
             navigation.navigate(`${accountType}Groups`);
 
         } catch (error: any) {
-            console.log(error)
             setMessage(error.message);
         }
     }

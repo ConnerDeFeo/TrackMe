@@ -42,6 +42,8 @@ locals {
     "general/remove_coach_athlete" = { lambda = aws_lambda_function.lambdas["remove_coach_athlete"], method = "DELETE" }
     "coaches/delete_group" = { lambda = aws_lambda_function.lambdas["delete_group"], method = "DELETE" }
     "coaches/delete_group_workouts" = { lambda = aws_lambda_function.lambdas["delete_group_workouts"], method = "DELETE" }
+    "coaches/decline_athlete_request" = { lambda = aws_lambda_function.lambdas["decline_athlete_request"], method = "DELETE" }
+    "athletes/decline_coach_invite" = { lambda = aws_lambda_function.lambdas["decline_coach_invite"], method = "DELETE" }
   }
 }
 

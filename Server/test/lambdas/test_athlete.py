@@ -12,6 +12,7 @@ from lambdas.athlete.get_coach_requests.get_coach_requests import get_coach_requ
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.view_coach_invites.view_coach_invites import view_coach_invites
 from lambdas.athlete.search_coaches.search_coaches import search_coaches
+from lambdas.athlete.decline_coach_invite.decline_coach_invite import decline_coach_invite
 from rds import fetch_one
 
 
@@ -214,3 +215,21 @@ def test_search_with_term_coaches():
     assert coaches[1][0] == 'testcoach'
     assert coaches[1][1] == '123'
     assert coaches[1][2] == 'Added'
+
+def test_decline_coach_invite():
+    create_coach(TestData.test_coach, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+
+    event = {
+        'queryStringParameters': {
+            'athleteId': '1234',
+            'coachId': '123'
+        }
+    }
+    # Now decline the invite (which should remove the coach-athlete relationship)
+    response = decline_coach_invite(event, {})
+    assert response['statusCode'] == 200
+
+    data = fetch_one("SELECT * FROM athlete_coaches WHERE athleteId = %s AND coachId = %s", ('1234', '123'))
+    assert data is None

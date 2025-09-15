@@ -48,7 +48,6 @@ const AddAthlete= () => {
         fetchAllAthletes();
     }, []);
 
-    console.log(athletes)
     //Renders each athlete in the list
     const renderAthlete = ({ item }: { item: string[] }) => {
         const username = item[0];

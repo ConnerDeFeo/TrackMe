@@ -40,7 +40,7 @@ const Coaches = ()=>{
             <Text className="text-4xl font-bold">Coaches</Text>
             <View className="my-6 flex flex-row justify-between items-center">
                 <TouchableOpacity onPress={() => navigation.navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
-                    <Text className="text-[#E63946] font-semibold underline">Requests</Text>
+                    <Text className="text-[#E63946] font-semibold underline">Invites</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('RequestCoaches')}>
                     <Text className="text-[#E63946] font-semibold underline">Add Coaches</Text>

@@ -37,7 +37,7 @@ const CoachHistory = () => {
 
     return (
         <View className="mt-[4rem]">
-            <Text className="text-4xl font-bold p-4">Coach History</Text>
+            <Text className="text-4xl font-bold p-4">History</Text>
 
             {/* Date search input and clear button */}
             <SearchDate

@@ -541,6 +541,21 @@ Resources:
   #
   #
   #
+  GetPendingProposals:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/get_pending_proposals/
+      Handler: get_pending_proposals.get_pending_proposals
+      Events:
+        GetPendingProposalsApi:
+          Type: Api
+          Properties:
+            Path: /general/get_pending_proposals/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   RemoveCoachAthlete:
     Type: AWS::Serverless::Function
     Properties:

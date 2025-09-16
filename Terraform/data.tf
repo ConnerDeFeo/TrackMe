@@ -196,6 +196,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/get_group_workout"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_group_workout.zip"
     }
+    "get_pending_proposals" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_pending_proposals"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_pending_proposals.zip"
+    }
   }
 }
 

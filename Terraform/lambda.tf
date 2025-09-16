@@ -54,6 +54,7 @@ locals {
     "remove_coach_athlete",
     "view_group_inputs",
     "get_group_workout",
+    "get_pending_proposals",
   ]
 }
 

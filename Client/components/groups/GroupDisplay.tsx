@@ -8,9 +8,9 @@ const GroupDisplay: React.FC<{ groupName:string, navigateTo: ()=>void }> = ({ gr
                 onPress={navigateTo}
                 className="active:opacity-70"
             >
-            <Text className="text-xl font-semibold text-gray-800 ml-4">
-                {groupName}
-            </Text>
+                <Text className="text-xl font-semibold text-gray-800 ml-4">
+                    {groupName}
+                </Text>
             </TouchableOpacity>
         </View>
     );

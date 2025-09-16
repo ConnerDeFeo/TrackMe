@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Text, TextInput, View, ScrollView, TouchableOpacity } from "react-native";
 import Exercise from "../../../types/Exersise";
 import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
+import PageHeading from "../../PageHeading";
 
 //Page for workout creation by coaches
 const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}: 
@@ -53,9 +54,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
   return (
     <ScrollView className="mt-16 bg-white">
       {/* HEADER: Title and Add Workout Button */}
-      <View className="flex-row justify-between items-center p-4">
-        <Text className="text-4xl font-bold">{pageTitle}</Text>
-      </View>
+      <PageHeading title={pageTitle}/>
 
       {/* WORKOUT TITLE INPUT */}
       {titleDescriptionLayout("Title")}

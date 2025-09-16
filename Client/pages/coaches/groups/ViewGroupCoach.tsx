@@ -2,10 +2,10 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Pressable, Text,TouchableOpacity,View } from "react-native";
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
-import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
+import PageHeading from "../../../components/PageHeading";
 
 //Page for viewing a given group
 const ViewGroup = () => {
@@ -69,15 +69,11 @@ const ViewGroup = () => {
   }
 
   return (
-    <View className="flex-1 px-6 pt-16 pb-12">
-      <View className="mb-8">
-        <Text className="text-3xl font-bold text-gray-900 mb-2">{groupName}</Text>
-        <Text className="text-gray-600">Manage your group and workouts</Text>
-      </View>
-
+    <View className="pb-12">
+      <PageHeading title={groupName} backFunction={() => navigation.goBack()} />
       <View className="space-y-4 mb-8">
-        <TouchableOpacity  
-          onPress={() => navigation.navigate('AssignWorkout',{groupId: groupId, groupName: groupName, fetchWorkout:fetchWorkout})}
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AssignWorkout', { groupId: groupId, groupName: groupName, fetchWorkout: fetchWorkout })}
           className="bg-[#E63946] rounded-lg py-3 px-4"
         >
           <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Change Workout" : "Send Workout"}</Text>

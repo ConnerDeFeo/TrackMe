@@ -16,7 +16,9 @@ def get_group_workout(event,context):
                 SELECT gw.id, w.title, w.description, w.exercises
                 FROM group_workouts gw
                 JOIN workouts w ON gw.workoutId = w.id
+                JOIN groups g ON gw.groupId = g.id
                 WHERE gw.groupId = %s AND gw.date = %s
+                AND g.deleted = FALSE
             """,
             (group_id, date)
         )

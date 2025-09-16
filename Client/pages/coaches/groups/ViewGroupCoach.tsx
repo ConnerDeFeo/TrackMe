@@ -70,7 +70,7 @@ const ViewGroup = () => {
 
   return (
     <View className="pb-12">
-      <PageHeading title={groupName} backFunction={() => navigation.goBack()} />
+      <PageHeading title={groupName} />
       <View className="space-y-4 mb-8">
         <TouchableOpacity
           onPress={() => navigation.navigate('AssignWorkout', { groupId: groupId, groupName: groupName, fetchWorkout: fetchWorkout })}

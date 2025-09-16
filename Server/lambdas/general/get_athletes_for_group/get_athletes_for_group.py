@@ -14,8 +14,10 @@ def get_athletes_for_group(event, context):
             SELECT a.userId, a.username
             FROM athletes a
             JOIN athlete_groups ag ON a.userId = ag.athleteId
+            JOIN groups g ON ag.groupId = g.id
             WHERE ag.groupId = %s
             AND ag.removed = FALSE
+            AND g.deleted = FALSE
         """, (group_id,))
 
         if(athletes):

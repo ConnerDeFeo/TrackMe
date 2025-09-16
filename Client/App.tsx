@@ -18,7 +18,7 @@ import AddAthlete from './pages/coaches/AddAthlete';
 import Athletes from './pages/coaches/Athletes';
 import Coaches from './pages/athletes/Coaches';
 import AssignAthletes from './pages/coaches/groups/AssignAthletes';
-import CreateWorkout from './pages/coaches/workout/CreateWorkoutTemplate';
+import CreateWorkoutTemplate from './pages/coaches/workout/CreateWorkoutTemplate';
 import WorkoutTemplates from './pages/coaches/workout/WorkoutTemplates';
 import AssignWorkout from './pages/coaches/groups/AssignWorkout';
 import ViewGroupInputsCoach from './pages/coaches/groups/ViewGroupInputsCoach';
@@ -32,7 +32,7 @@ import AthleteRequests from './pages/coaches/AthleteRequests';
 import RequestCoaches from './pages/athletes/RequestCoaches';
 import InputHistory from './pages/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
-import HistoricalData from './components/coaches/HistoricalData';
+import HistoricalData from './pages/coaches/HistoricalData';
 import AssignNewWorkout from './pages/coaches/groups/AssignNewWorkout';
 //Root component used to render everything
 Amplify.configure(awsConfig);
@@ -81,7 +81,7 @@ const RootStack = createNativeStackNavigator({
     Coaches: UserLayout(<Coaches/>),
     CoachInvites: UserLayout(<CoachInvites/>),
     AssignAthletes: UserLayout(<AssignAthletes/>),
-    CreateWorkout: UserLayout(<CreateWorkout/>),
+    CreateWorkoutTemplate: UserLayout(<CreateWorkoutTemplate/>),
     WorkoutTemplates: UserLayout(<WorkoutTemplates/>),
     AssignWorkout: UserLayout(<AssignWorkout/>),
     ViewGroupInputsCoach: UserLayout(<ViewGroupInputsCoach/>),

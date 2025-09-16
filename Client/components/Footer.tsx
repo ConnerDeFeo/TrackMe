@@ -53,7 +53,7 @@ const Footer = () => {
             {buttons.map(([imageName, destination], idx) => (
                 <TouchableOpacity
                     key={idx}
-                    onPress={() => navigation.navigate(destination)}
+                    onPress={() => navigation.replace(destination)}
                 >
                     <Image source={images[imageName as keyof typeof images]} className="h-12 w-12" />
                 </TouchableOpacity>

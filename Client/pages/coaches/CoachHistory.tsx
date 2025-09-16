@@ -4,6 +4,7 @@ import SearchDate from "../../components/SearchDate";
 import UserService from "../../services/UserService";
 import HistoryService from "../../services/HistoryService";
 import { useNavigation } from "@react-navigation/native";
+import PageHeading from "../../components/PageHeading";
 
 const CoachHistory = () => {
     // Local state to hold the list of dates for which history exists
@@ -36,8 +37,8 @@ const CoachHistory = () => {
     };
 
     return (
-        <View className="mt-[4rem]">
-            <Text className="text-4xl font-bold p-4">History</Text>
+        <>
+            <PageHeading title="History" />
 
             {/* Date search input and clear button */}
             <SearchDate
@@ -61,7 +62,7 @@ const CoachHistory = () => {
                     </TouchableOpacity>
                 ))}
             </View>
-        </View>
+        </>
     );
 };
 

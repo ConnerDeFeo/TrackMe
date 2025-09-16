@@ -52,39 +52,39 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
     );
   }
   return (
-    <ScrollView className="mt-16 bg-white">
-      {/* HEADER: Title and Add Workout Button */}
-      <PageHeading title={pageTitle}/>
+    <>
+      <PageHeading title={pageTitle} goBack/>
+      <View>
+        {/* WORKOUT TITLE INPUT */}
+        {titleDescriptionLayout("Title")}
 
-      {/* WORKOUT TITLE INPUT */}
-      {titleDescriptionLayout("Title")}
+        {/* WORKOUT DESCRIPTION INPUT */}
+        {titleDescriptionLayout("Description")}
 
-      {/* WORKOUT DESCRIPTION INPUT */}
-      {titleDescriptionLayout("Description")}
+        {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
+        <View className="mx-4">
+        {/* Render each exercise input */}
+        {exercises.map((exercise, idx) => (
+          <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx} setErrors={setErrors}/>
+        ))}
+          {/* Button to add a new exercise */}
+          <TouchableOpacity
+            className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
+            onPress={() => setExercises([...exercises, { name: ''}])}
+          >
+            <Text className="text-white font-bold">Add exercise</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
-      <View className="mx-4">
-      {/* Render each exercise input */}
-      {exercises.map((exercise, idx) => (
-        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx} setErrors={setErrors}/>
-      ))}
-        {/* Button to add a new exercise */}
+        {/* CREATE WORKOUT BUTTON */}
         <TouchableOpacity
-          className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
-          onPress={() => setExercises([...exercises, { name: ''}])}
+          className="bg-black rounded-lg py-3 items-center mx-4 mb-8"
+          onPress={handleCreation}
         >
-          <Text className="text-white font-bold">Add exercise</Text>
+          <Text className="text-white font-bold text-lg">{buttonText}</Text>
         </TouchableOpacity>
       </View>
-
-      {/* CREATE WORKOUT BUTTON */}
-      <TouchableOpacity
-        className="bg-black rounded-lg py-3 items-center mx-4 mb-8"
-        onPress={handleCreation}
-      >
-        <Text className="text-white font-bold text-lg">{buttonText}</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    </>
   );
 };
 

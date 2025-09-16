@@ -14,7 +14,7 @@ const CreateWorkout = () => {
     workoutData['coachId'] = coachId;
     const resp = await CoachWorkoutService.createWorkoutTemplate(workoutData);
     if (resp.ok){
-      navigation.navigate('WorkoutTemplates');
+      navigation.replace('WorkoutTemplates');
     } 
   };
   return (

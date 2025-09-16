@@ -71,7 +71,7 @@ const CreateAccount = ()=>{
                 return;
             }
 
-            navigation.navigate('ConfirmEmail',{username:username,password:password, accountType:accountType});
+            navigation.replace('ConfirmEmail',{username:username,password:password, accountType:accountType});
         }
         catch (error:any) {
             handleError(error);
@@ -111,7 +111,7 @@ const CreateAccount = ()=>{
                 {/**SIGN IN LINK*/}
                 <View className="gap-y-6">
                     <Text className="text-center text-xl">Already have an account? </Text>
-                    <Button title="Sign In" onPress={()=>navigation.navigate('SignIn')} color="#E63946"/>
+                    <Button title="Sign In" onPress={()=>navigation.replace('SignIn')} color="#E63946"/>
                 </View>
             </View>
         </View>

@@ -3,6 +3,7 @@ import UserService from "../../services/UserService";
 import { useRoute } from "@react-navigation/native";
 import CoachService from "../../services/CoachService";
 import RequestsInvites from "../../components/RequestsInvites";
+import PageHeading from "../../components/PageHeading";
 
 const AthleteRequests = () =>{
     // State to store the list of coach requests
@@ -48,7 +49,10 @@ const AthleteRequests = () =>{
         }
     }
     return(
-        <RequestsInvites title={"Athlete Requests"} proposals={requests} handleAcceptance={handleAthleteAcceptance} handleDecline={handleDeclineAthleteRequest} />
+        <>
+            <PageHeading title={"Athlete Requests"} goBack/>
+            <RequestsInvites proposals={requests} handleAcceptance={handleAthleteAcceptance} handleDecline={handleDeclineAthleteRequest} />
+        </>
     );
 }
 

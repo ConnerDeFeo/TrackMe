@@ -1,11 +1,8 @@
 import { Text, TouchableOpacity, View } from "react-native";
 
-const RequestsInvites = ({title, proposals, handleAcceptance, handleDecline}: {title: string, proposals: string[], handleAcceptance: (id: string) => void, handleDecline: (id: string) => void}) => {
+const RequestsInvites = ({ proposals, handleAcceptance, handleDecline}: { proposals: string[], handleAcceptance: (id: string) => void, handleDecline: (id: string) => void}) => {
     return (
-        <View className="mt-[4rem]">
-            {/* Header with back button and title */}
-            <Text className="text-4xl font-bold p-4">{title}</Text>
-            
+        <>
             {/* Requests list or empty state */}
             <View className="gap-y-4">
                 {proposals.length > 0 ? (
@@ -39,7 +36,7 @@ const RequestsInvites = ({title, proposals, handleAcceptance, handleDecline}: {t
                     </View>
                 )}
             </View>
-        </View>
+        </>
     );
 };
 export default RequestsInvites;

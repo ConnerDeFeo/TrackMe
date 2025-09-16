@@ -69,77 +69,79 @@ const ViewGroup = () => {
   }
 
   return (
-    <View className="pb-12">
-      <PageHeading title={groupName} />
-      <View className="space-y-4 mb-8">
-        <TouchableOpacity
-          onPress={() => navigation.navigate('AssignWorkout', { groupId: groupId, groupName: groupName, fetchWorkout: fetchWorkout })}
-          className="bg-[#E63946] rounded-lg py-3 px-4"
-        >
-          <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Change Workout" : "Send Workout"}</Text>
-        </TouchableOpacity>
-        {workouts.length > 0 && 
+    <>
+      <PageHeading title={groupName} goBack/>
+      <View className="pb-12 px-4">
+        <View className="space-y-4 mb-8">
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AssignWorkout', { groupId: groupId, groupName: groupName, fetchWorkout: fetchWorkout })}
+            className="bg-[#E63946] rounded-lg py-3 px-4"
+          >
+            <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Change Workout" : "Send Workout"}</Text>
+          </TouchableOpacity>
+          {workouts.length > 0 && 
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('ViewGroupInputsCoach', { groupId:groupId })}
+              className="bg-black rounded-lg py-3 px-4 mt-2"
+            >
+              <Text className="text-white font-semibold text-center">View Group Inputs</Text>
+            </TouchableOpacity>
+          }
+        </View>
+
+        {workouts.map((workout) => (
+          <DisplayWorkout 
+            key={workout.groupWorkoutId} 
+            workout={workout} 
+            onPress={() => navigation.navigate('AssignNewWorkout', {groupId: groupId, groupName: groupName, workout: workout })} 
+            onRemove={() => handleWorkoutRemoval(workout.groupWorkoutId)}
+          />
+        ))}
+
+        <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <View className="flex flex-row justify-between items-center mb-4">
+            <Text className="text-lg font-semibold text-gray-900">
+              Athletes ({participants.length})
+            </Text>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})}
+              className="flex items-center"
+            >
+              <Text className="text-[#E63946] underline">Add Athletes</Text>
+            </TouchableOpacity>
+          </View>
+          {participants.length > 0 ? (
+            participants.map((participant) => (
+              <View key={participant[0]} className="py-2 border-b border-gray-100 last:border-b-0 flex flex-row justify-between items-center">
+                <Text className="text-gray-800 font-medium">{participant[1]}</Text>
+                <TouchableOpacity onPress={() => removeAthleteFromGroup(participant[0])}>
+                  <Text className="text-[#E63946] underline text-md">Remove</Text>
+                </TouchableOpacity>
+              </View>
+          ))
+          ) : (
+          <Text className="text-gray-500 italic">No athletes assigned yet</Text>
+          )}
+        </View>
+        { deletionMode ?
+          <View className="flex flex-row justify-between items-center mt-4">
+            <Pressable onPress={handleGroupDeletion}>
+              <Text className="text-[#E63946] underline text-md">Confirm</Text>
+            </Pressable>
+            <TouchableOpacity onPress={() => setDeletionMode(false)}>
+              <Text className="underline text-md">Cancel</Text>
+            </TouchableOpacity>
+          </View>
+          :
           <TouchableOpacity 
-            onPress={() => navigation.navigate('ViewGroupInputsCoach', { groupId:groupId })}
+            onPress={()=> setDeletionMode(true)}
             className="bg-black rounded-lg py-3 px-4 mt-2"
           >
-            <Text className="text-white font-semibold text-center">View Group Inputs</Text>
+            <Text className="text-white font-semibold text-center">Delete Group</Text>
           </TouchableOpacity>
         }
       </View>
-
-      {workouts.map((workout) => (
-        <DisplayWorkout 
-          key={workout.groupWorkoutId} 
-          workout={workout} 
-          onPress={() => navigation.navigate('AssignNewWorkout', {groupId: groupId, groupName: groupName, workout: workout })} 
-          onRemove={() => handleWorkoutRemoval(workout.groupWorkoutId)}
-        />
-      ))}
-
-      <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <View className="flex flex-row justify-between items-center mb-4">
-          <Text className="text-lg font-semibold text-gray-900">
-            Athletes ({participants.length})
-          </Text>
-          <TouchableOpacity 
-            onPress={() => navigation.navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})}
-            className="flex items-center"
-          >
-            <Text className="text-[#E63946] underline">Add Athletes</Text>
-          </TouchableOpacity>
-        </View>
-        {participants.length > 0 ? (
-          participants.map((participant) => (
-            <View key={participant[0]} className="py-2 border-b border-gray-100 last:border-b-0 flex flex-row justify-between items-center">
-              <Text className="text-gray-800 font-medium">{participant[1]}</Text>
-              <TouchableOpacity onPress={() => removeAthleteFromGroup(participant[0])}>
-                <Text className="text-[#E63946] underline text-md">Remove</Text>
-              </TouchableOpacity>
-            </View>
-        ))
-        ) : (
-        <Text className="text-gray-500 italic">No athletes assigned yet</Text>
-        )}
-      </View>
-      { deletionMode ?
-        <View className="flex flex-row justify-between items-center mt-4">
-          <Pressable onPress={handleGroupDeletion}>
-            <Text className="text-[#E63946] underline text-md">Confirm</Text>
-          </Pressable>
-          <TouchableOpacity onPress={() => setDeletionMode(false)}>
-            <Text className="underline text-md">Cancel</Text>
-          </TouchableOpacity>
-        </View>
-        :
-        <TouchableOpacity 
-          onPress={()=> setDeletionMode(true)}
-          className="bg-black rounded-lg py-3 px-4 mt-2"
-        >
-          <Text className="text-white font-semibold text-center">Delete Group</Text>
-        </TouchableOpacity>
-      }
-    </View>
+    </>
   );
 };
 

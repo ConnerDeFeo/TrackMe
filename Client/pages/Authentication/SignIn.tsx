@@ -22,7 +22,7 @@ const SignIn = ()=>{
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
             if(accountType) {
-                navigation.navigate(`${accountType}Groups`);
+                navigation.replace(`${accountType}Groups`);
             }
         }catch (error:any) {
             setError(error.message);
@@ -36,7 +36,7 @@ const SignIn = ()=>{
             if (accountType) {
                 AsyncStorage.storeData('accountType', accountType);
                 AsyncStorage.storeData('userId', userId!);
-                navigation.navigate(`${accountType}Groups`);
+                navigation.replace(`${accountType}Groups`);
                 return;
             }
         }
@@ -57,7 +57,7 @@ const SignIn = ()=>{
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-6">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <Button title="Create Account" onPress={()=>navigation.navigate('CreateAccount')} color="#E63946"/>
+                    <Button title="Create Account" onPress={()=>navigation.replace('CreateAccount')} color="#E63946"/>
                 </View>
             </View>
         </View>

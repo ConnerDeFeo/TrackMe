@@ -23,7 +23,7 @@ const ConfirmEmail = () => {
             });
             //If confirm email is succesfull, immediatley login and reroute to home page
             await UserService.signIn(username, password);
-            navigation.navigate(`${accountType}Groups`);
+            navigation.replace(`${accountType}Groups`);
 
         } catch (error: any) {
             setMessage(error.message);

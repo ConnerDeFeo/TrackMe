@@ -12,17 +12,17 @@ const Athletes = () => {
     const navigation = useNavigation<any>();
 
     const fetchAthletes = async () => {
-            try {
-                const userId = await UserService.getUserId();
-                const resp = await CoachService.getAthletes(userId!);
-                if(resp.ok){
-                    const athletes: string[][] = await resp.json()
-                    setAthletes(athletes);
-                }
-            } catch (error) {
-                console.error("Failed to fetch athletes:", error);
+        try {
+            const userId = await UserService.getUserId();
+            const resp = await CoachService.getAthletes(userId!);
+            if(resp.ok){
+                const athletes: string[][] = await resp.json()
+                setAthletes(athletes);
             }
-        };
+        } catch (error) {
+            console.error("Failed to fetch athletes:", error);
+        }
+    };
 
     //Fetch athletes for the current coach
     useEffect(() => {
@@ -33,14 +33,10 @@ const Athletes = () => {
         <ScrollView className="flex-1 p-4 mt-[4rem]">
             <Text className="text-4xl font-bold">My Athletes</Text>
             <View className="my-6 flex flex-row justify-between items-center">
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("AthleteRequests", {fetchAthletes:fetchAthletes})}
-                >
+                <TouchableOpacity onPress={() => navigation.navigate("AthleteRequests", {fetchAthletes:fetchAthletes})}>
                     <Text className="text-[#E63946] font-semibold underline">Requests</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("AddAthlete")}
-                >
+                <TouchableOpacity onPress={() => navigation.navigate("AddAthlete")}>
                     <Text className="text-[#E63946] font-semibold underline">Add Athlete</Text>
                 </TouchableOpacity>
             </View>

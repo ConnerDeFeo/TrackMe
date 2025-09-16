@@ -12,18 +12,18 @@ const AthleteRequests = () =>{
     const { fetchAthletes } = route.params as { fetchAthletes: () => void };
 
     // Fetches all coach requests for the current user
-        const fetchAthleteRequests = async () => {
-            const userId = await UserService.getUserId();
-            const requestsResponse = await CoachService.getAthleteRequests(userId!);
-            if (requestsResponse.ok) {
-                const data = await requestsResponse.json();
-                setRequests(data);
-            }
-            // Handle case where user has no pending requests
-            else if(requestsResponse.status === 404){
-                setRequests([]);
-            }
+    const fetchAthleteRequests = async () => {
+        const userId = await UserService.getUserId();
+        const requestsResponse = await CoachService.getAthleteRequests(userId!);
+        if (requestsResponse.ok) {
+            const data = await requestsResponse.json();
+            setRequests(data);
         }
+        // Handle case where user has no pending requests
+        else if(requestsResponse.status === 404){
+            setRequests([]);
+        }
+    }
 
     // Fetch all coach requests when component mounts
     useEffect(() => {

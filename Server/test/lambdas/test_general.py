@@ -16,6 +16,7 @@ from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
+from lambdas.general.get_pending_proposals.get_pending_proposals import get_pending_proposals
 from lambdas.general.get_user.get_user import get_user
 from lambdas.general.remove_coach_athlete.remove_coach_athlete import remove_coach_athlete
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
@@ -223,3 +224,31 @@ def test_get_group_workout():
     assert workout['title'] == 'Test Workout'
     assert workout['description'] == 'This is a test workout'
     assert len(workout['exercises']) == 3
+
+def test_get_pending_proposals():
+    create_athlete({
+        "body": json.dumps({
+            "userId": "1235",
+            "username": "testathlete2"
+        })
+    }, {})
+    invite_athlete({
+        "body": json.dumps({
+            "athleteId": "1235",
+            "coachId": "123"
+        })
+    }, {})
+
+    event = {
+        "queryStringParameters": {
+            "userId": "1235",
+            "accountType": "Athlete"
+        }
+    }
+    response = get_pending_proposals(event, {})
+    assert response['statusCode'] == 200
+
+    body = json.loads(response['body'])
+    assert len(body) == 1
+
+    assert body["count"] == 1

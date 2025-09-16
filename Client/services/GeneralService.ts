@@ -52,6 +52,11 @@ const GeneralService = {
     }
     return await API.get(request);
   },
+  getPendingProposals: async () => {
+    const userId = await UserService.getUserId();
+    const accountType = await AsyncStorage.getData('accountType');
+    return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_pending_proposals?userId=${userId}&accountType=${accountType}`);
+  }
 };
 
 export default GeneralService;

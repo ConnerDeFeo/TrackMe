@@ -4,16 +4,26 @@ import AthleteService from "../../services/AthleteService";
 import UserService from "../../services/UserService";
 import { useNavigation } from "@react-navigation/native";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
+import GeneralService from "../../services/GeneralService";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
-    const [userId, setUserId] = useState<string>('');
     const [coaches, setCoaches] = useState<string[][]>([]);
+    const [invites, setInvites] = useState<number>(0);
     const navigation = useNavigation<any>();
+
+    const fetchInvites = async () => {
+        const resp = await GeneralService.getPendingProposals();
+        if (resp.ok) {
+            const invites = await resp.json();
+            setInvites(invites.count);
+        }
+    };
 
     //Fetches all current coaches for a given user
     const fetchCoaches = async () => {
-        const requestsResponse = await AthleteService.getCoaches(userId);
+        const userId = await UserService.getUserId();
+        const requestsResponse = await AthleteService.getCoaches(userId!);
         if (requestsResponse.ok) {
             const data = await requestsResponse.json();
             setCoaches(data);
@@ -21,26 +31,20 @@ const Coaches = ()=>{
         else{
             setCoaches([])
         }
+        fetchInvites();
     }
 
     //Fetch all requests on load
     useEffect(() => {
-        const fetchData = async () => {
-            const userId = await UserService.getUserId();
-            if(userId){
-                setUserId(userId);
-            }    
-            fetchCoaches();
-        }
-        fetchData();
-    }, [userId]); //userId needed in case of page switching back and forth
+        fetchCoaches();
+    }, []);
 
     return (
         <View className="flex-1 mt-[4rem] p-4">
             <Text className="text-4xl font-bold">Coaches</Text>
             <View className="my-6 flex flex-row justify-between items-center">
                 <TouchableOpacity onPress={() => navigation.navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
-                    <Text className="text-[#E63946] font-semibold underline">Invites</Text>
+                    <Text className="text-[#E63946] font-semibold underline">Invites({invites})</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('RequestCoaches')}>
                     <Text className="text-[#E63946] font-semibold underline">Add Coaches</Text>

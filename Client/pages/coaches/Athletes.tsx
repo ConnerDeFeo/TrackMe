@@ -5,11 +5,21 @@ import CoachService from "../../services/CoachService";
 import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
+import GeneralService from "../../services/GeneralService";
 
 //All of a given coach's athletes
 const Athletes = () => {
     const [athletes, setAthletes] = useState<string[][]>([]);
+    const [requests, setRequests] = useState<number>(0);
     const navigation = useNavigation<any>();
+
+    const fetchRequests = async () => {
+        const resp = await GeneralService.getPendingProposals();
+        if(resp.ok){
+            const requests = await resp.json();
+            setRequests(requests.count);
+        }
+    };
 
     const fetchAthletes = async () => {
         try {
@@ -20,8 +30,9 @@ const Athletes = () => {
                 setAthletes(athletes);
             }
         } catch (error) {
-            console.error("Failed to fetch athletes:", error);
+            setAthletes([]);
         }
+        fetchRequests(); // Also fetch requests when fetching athletes
     };
 
     //Fetch athletes for the current coach
@@ -34,7 +45,7 @@ const Athletes = () => {
             <Text className="text-4xl font-bold">My Athletes</Text>
             <View className="my-6 flex flex-row justify-between items-center">
                 <TouchableOpacity onPress={() => navigation.navigate("AthleteRequests", {fetchAthletes:fetchAthletes})}>
-                    <Text className="text-[#E63946] font-semibold underline">Requests</Text>
+                    <Text className="text-[#E63946] font-semibold underline">Requests({requests})</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate("AddAthlete")}>
                     <Text className="text-[#E63946] font-semibold underline">Add Athlete</Text>

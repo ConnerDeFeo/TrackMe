@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import DisplayWorkout from "../../components/DisplayWorkout";
 import GeneralService from "../../services/GeneralService";
+import PageHeading from "../../components/PageHeading";
 
 //Pages that displays an athletes groupp for a given date
 const ViewGroupAthlete = ()=>{
@@ -31,20 +32,22 @@ const ViewGroupAthlete = ()=>{
         fetchWorkout();
     }, [groupId]);
     return(
-        <View className="mt-[4rem] px-4">
-            <Text className="text-4xl font-bold mb-6">{groupName}</Text>
-            {workouts.map((workout) => (
-                <DisplayWorkout key={workout.groupWorkoutId} workout={workout} onPress={() => {}} />
-            ))}
-            <Text className="text-2xl font-bold mt-6 mb-4">Athletes</Text>
-            <View className="space-y-2">
-                {athletes.map((athlete, index) => (
-                    <View key={index} className="rounded-lg p-3 border border-red-400">
-                        <Text className="text-lg font-medium text-gray-800">{athlete[1]}</Text>
-                    </View>
+        <>
+            <PageHeading title={groupName} goBack/>
+            <View className="px-4">
+                {workouts.map((workout) => (
+                    <DisplayWorkout key={workout.groupWorkoutId} workout={workout} onPress={() => {}} />
                 ))}
+                <Text className="text-2xl font-bold mt-2 mb-4">Athletes</Text>
+                <View className="space-y-2">
+                    {athletes.map((athlete, index) => (
+                        <View key={index} className="rounded-lg p-3 border border-red-400">
+                            <Text className="text-lg font-medium text-gray-800">{athlete[1]}</Text>
+                        </View>
+                    ))}
+                </View>
             </View>
-        </View>
+        </>
     );
 }
 

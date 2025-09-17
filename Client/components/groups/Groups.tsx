@@ -1,14 +1,14 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import { useEffect, useState } from "react";
 import GroupDisplay from "./GroupDisplay";
-import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "../../services/AsyncStorage";
+import { useNav } from "../../hooks/useNav";
 
 //View of all groups displayed in a list
 const Groups = () => {
   const [groups, setGroups] = useState<string[][]>([]);
-  const navigation = useNavigation<any>();
+  const {navigate} = useNav();
 
   //Fetch groups from the server
   useEffect(() => {
@@ -30,9 +30,9 @@ const Groups = () => {
     const accountType = await AsyncStorage.getData('accountType');
     
     if(accountType=='Athlete')
-      navigation.navigate("ViewGroupAthlete", { groupName: groupName, groupId: groupId });
+      navigate("ViewGroupAthlete", { groupName: groupName, groupId: groupId });
     else
-      navigation.navigate("ViewGroupCoach", { groupName: groupName, groupId: groupId });
+      navigate("ViewGroupCoach", { groupName: groupName, groupId: groupId });
   };
 
   return (

@@ -1,11 +1,11 @@
 import AuthInput from "../../components/AuthInput";
 import { Button, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { signUp } from 'aws-amplify/auth';
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
 import AuthenticationHeader from "../../components/AuthenticationHeader";
+import { useNavigation } from "@react-navigation/native";
 
 //Create account page
 const CreateAccount = ()=>{
@@ -71,7 +71,7 @@ const CreateAccount = ()=>{
                 return;
             }
 
-            navigation.replace('ConfirmEmail',{username:username,password:password, accountType:accountType});
+            navigation.replace("Auth",{"Screen":'ConfirmEmail',params:{username:username,password:password, accountType:accountType}});
         }
         catch (error:any) {
             handleError(error);
@@ -111,7 +111,7 @@ const CreateAccount = ()=>{
                 {/**SIGN IN LINK*/}
                 <View className="gap-y-6">
                     <Text className="text-center text-xl">Already have an account? </Text>
-                    <Button title="Sign In" onPress={()=>navigation.replace('SignIn')} color="#E63946"/>
+                    <Button title="Sign In" onPress={()=>navigation.replace("Auth",{"Screen":'SignIn'})} color="#E63946"/>
                 </View>
             </View>
         </View>

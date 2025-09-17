@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import AthleteService from "../../services/AthleteService";
 import UserService from "../../services/UserService";
-import { useNavigation } from "@react-navigation/native";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
 import GeneralService from "../../services/GeneralService";
+import { useNav } from "../../hooks/useNav";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
     const [coaches, setCoaches] = useState<string[][]>([]);
     const [invites, setInvites] = useState<number>(0);
-    const navigation = useNavigation<any>();
+    const {navigate} = useNav();
 
     const fetchInvites = async () => {
         const resp = await GeneralService.getPendingProposals();
@@ -43,10 +43,10 @@ const Coaches = ()=>{
         <View className="flex-1 mt-[4rem] p-4">
             <Text className="text-4xl font-bold">Coaches</Text>
             <View className="my-6 flex flex-row justify-between items-center">
-                <TouchableOpacity onPress={() => navigation.navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
+                <TouchableOpacity onPress={() => navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
                     <Text className="text-[#E63946] font-semibold underline">Invites({invites})</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('RequestCoaches')}>
+                <TouchableOpacity onPress={() => navigate('RequestCoaches')}>
                     <Text className="text-[#E63946] font-semibold underline">Add Coaches</Text>
                 </TouchableOpacity>
             </View>

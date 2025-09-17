@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, TouchableOpacity, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '../services/AsyncStorage';
+import { useNav } from '../hooks/useNav';
 
 // Import all images statically
 const images = {
@@ -33,7 +34,7 @@ const layouts = {
 
 //Footer at bottom of the screen with navigation buttons
 const Footer = () => {
-    const navigation = useNavigation<any>();
+    const {replace} = useNav();
     const [buttons, setButtons] = React.useState<string[][]>([]);
 
     useEffect(() => {
@@ -53,7 +54,7 @@ const Footer = () => {
             {buttons.map(([imageName, destination], idx) => (
                 <TouchableOpacity
                     key={idx}
-                    onPress={() => navigation.replace(destination)}
+                    onPress={() => replace(destination)}
                 >
                     <Image source={images[imageName as keyof typeof images]} className="h-12 w-12" />
                 </TouchableOpacity>

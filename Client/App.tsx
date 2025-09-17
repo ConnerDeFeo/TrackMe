@@ -2,7 +2,6 @@ import { ScrollView, View } from 'react-native';
 import './global.css'
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ComponentType } from 'react';
 import CreateAccount from './pages/authentication/CreateAccount';
 import { Amplify } from 'aws-amplify';
 import awsConfig from './aws-config';
@@ -34,66 +33,77 @@ import InputHistory from './pages/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
 import HistoricalData from './pages/coaches/HistoricalData';
 import AssignNewWorkout from './pages/coaches/groups/AssignNewWorkout';
+import { ComponentType } from 'react';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
-//Base page layout for all components
-function BaseLayout(content: React.ReactElement): ComponentType<any>{
-  return ()=>{
-    return(
-        <View className='bg-white flex-1'>
-          {content}
-        </View>
-    ); 
-  }
-}
-
-function UserLayout(content: React.ReactElement): ComponentType<any>{
-  return ()=>{
-    return(
+function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
+  return ()=>(
       <>
-        <ScrollView className='bg-white flex-1'>
+        <ScrollView className='bg-white flex-1' showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
           {content}
         </ScrollView>
-        <Footer/>
       </>
     ); 
-  }
+  
 }
-//Directory allowing page navigation
+
+
+const UserStack = createNativeStackNavigator();
+const UserLayoutWrapper = () =>{
+  return (
+    <View className='flex-1 bg-white'>
+      <UserStack.Navigator screenOptions={{ headerShown: false }}>
+        <UserStack.Screen name="CoachGroups" component={ScrollViewWrapper(<CoachGroups />)} />
+        <UserStack.Screen name="AthleteGroups" component={ScrollViewWrapper(<AthleteGroups />)} />
+        <UserStack.Screen name="CoachProfile" component={ScrollViewWrapper(<Profile />)} />
+        <UserStack.Screen name="AthleteProfile" component={ScrollViewWrapper(<Profile />)} />
+        <UserStack.Screen name="CreateGroup" component={ScrollViewWrapper(<CreateGroup />)} />
+        <UserStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />
+        <UserStack.Screen name="AddAthlete" component={ScrollViewWrapper(<AddAthlete />)} />
+        <UserStack.Screen name="Athletes" component={ScrollViewWrapper(<Athletes />)} />
+        <UserStack.Screen name="Coaches" component={ScrollViewWrapper(<Coaches />)} />
+        <UserStack.Screen name="CoachInvites" component={ScrollViewWrapper(<CoachInvites />)} />
+        <UserStack.Screen name="AssignAthletes" component={ScrollViewWrapper(<AssignAthletes />)} />
+        <UserStack.Screen name="CreateWorkoutTemplate" component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
+        <UserStack.Screen name="WorkoutTemplates" component={ScrollViewWrapper(<WorkoutTemplates />)} />
+        <UserStack.Screen name="AssignWorkout" component={ScrollViewWrapper(<AssignWorkout />)} />
+        <UserStack.Screen name="ViewGroupInputsCoach" component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
+        <UserStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
+        <UserStack.Screen name="Inputs" component={ScrollViewWrapper(<Inputs />)} />
+        <UserStack.Screen name="CreateWorkoutGroup" component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
+        <UserStack.Screen name="AthleteRequests" component={ScrollViewWrapper(<AthleteRequests />)} />
+        <UserStack.Screen name="RequestCoaches" component={ScrollViewWrapper(<RequestCoaches />)} />
+        <UserStack.Screen name="InputHistory" component={ScrollViewWrapper(<InputHistory />)} />
+        <UserStack.Screen name="CoachHistory" component={ScrollViewWrapper(<CoachHistory />)} />
+        <UserStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
+        <UserStack.Screen name="AssignNewWorkout" component={ScrollViewWrapper(<AssignNewWorkout />)} />
+      </UserStack.Navigator>
+      <Footer />
+    </View>
+  );
+}
+
+const AuthStack = createNativeStackNavigator();
+const AuthLayoutWrapper = () =>{
+  return (
+    <View className="flex-1 bg-white">
+      <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName='SignIn'>
+        <AuthStack.Screen name="SignIn" component={SignIn} />
+        <AuthStack.Screen name="CreateAccount" component={CreateAccount} />
+        <AuthStack.Screen name="ConfirmEmail" component={ConfirmEmail} />
+      </AuthStack.Navigator>
+    </View>
+  );
+}
+
 const RootStack = createNativeStackNavigator({
-  initialRouteName: 'SignIn',
   screenOptions: {
     headerShown: false
   },
   screens: {
-    CreateAccount: BaseLayout(<CreateAccount/>),
-    SignIn: BaseLayout(<SignIn/>),
-    ConfirmEmail: BaseLayout(<ConfirmEmail/>),
-    CoachGroups: UserLayout(<CoachGroups/>),
-    AthleteGroups: UserLayout(<AthleteGroups/>),
-    CoachProfile: UserLayout(<Profile/>),
-    AthleteProfile: UserLayout(<Profile/>),
-    CreateGroup: UserLayout(<CreateGroup/>),
-    ViewGroupCoach: UserLayout(<ViewGroupCoach/>),
-    AddAthlete: UserLayout(<AddAthlete/>),
-    Athletes: UserLayout(<Athletes/>),
-    Coaches: UserLayout(<Coaches/>),
-    CoachInvites: UserLayout(<CoachInvites/>),
-    AssignAthletes: UserLayout(<AssignAthletes/>),
-    CreateWorkoutTemplate: UserLayout(<CreateWorkoutTemplate/>),
-    WorkoutTemplates: UserLayout(<WorkoutTemplates/>),
-    AssignWorkout: UserLayout(<AssignWorkout/>),
-    ViewGroupInputsCoach: UserLayout(<ViewGroupInputsCoach/>),
-    ViewGroupAthlete: UserLayout(<ViewGroupAthlete/>),
-    Inputs: UserLayout(<Inputs/>),
-    CreateWorkoutGroup: UserLayout(<CreateWorkoutGroup/>),
-    AthleteRequests: UserLayout(<AthleteRequests/>),
-    RequestCoaches: UserLayout(<RequestCoaches/>),
-    InputHistory: UserLayout(<InputHistory/>),
-    CoachHistory: UserLayout(<CoachHistory/>),
-    HistoricalData: UserLayout(<HistoricalData/>),
-    AssignNewWorkout: UserLayout(<AssignNewWorkout/>),
+    Auth: AuthLayoutWrapper,
+    User: UserLayoutWrapper,
   },
 });
 const Navigation = createStaticNavigation(RootStack);

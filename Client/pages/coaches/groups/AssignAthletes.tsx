@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { Button, Text, TouchableOpacity, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import UserService from "../../../services/UserService";
+import { useNav } from "../../../hooks/useNav";
 
 //Page where coaches can add any current athletes to a given group
 const AssignAthletes = ()=>{
     const [athletes, setAthletes] = useState<string[]>([]);
     const route = useRoute();
     const { groupId, fetchParticipants } = route.params as { groupId: string, fetchParticipants: () => void };
-    const navigation = useNavigation<any>();
+    const { goBack } = useNav();
     
 
     const fetchAbsentAthletes = async () => {
@@ -42,7 +43,7 @@ const AssignAthletes = ()=>{
     return (
         <View className="flex-1 p-4 mt-[4rem]">
             <View className="flex-row items-center justify-between mb-6">
-                <Button title="Back" onPress={() => navigation.goBack()} color={'black'}/>
+                <Button title="Back" onPress={() => goBack()} color={'black'}/>
                 <Text className="text-2xl font-bold text-gray-800 flex-1 text-center">Assign Athletes</Text>
                 <View className="w-16" />
             </View>

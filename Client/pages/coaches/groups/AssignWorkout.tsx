@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import DisplayWorkout from "../../../components/DisplayWorkout";
+import PageHeading from "../../../components/PageHeading";
+import { useNav } from "../../../hooks/useNav";
 
 //Page where coaches can assign workouts to athletes
 const AssignWorkout = ()=>{
     const route = useRoute();
-    const navigation = useNavigation<any>();
+    const { navigate, goBack } = useNav();
     const { groupId, groupName, fetchWorkout } = route.params as { groupId: string, groupName: string, fetchWorkout: ()=>void};
     const [workouts, setWorkouts] = useState<Array<any>>([]);
 
@@ -29,20 +31,25 @@ const AssignWorkout = ()=>{
         const response = await CoachWorkoutService.assignWorkoutTemplateToGroup(workoutId, groupId);
         if (response.ok) {
             fetchWorkout();
-            navigation.goBack();
+            goBack();
         }
     };
 
     return (
-        <View className="mt-[4rem]">
-            <Text className="text-4xl font-bold pl-4">Assign Workout</Text>
-            <Button title="Assign New Workout" onPress={() => navigation.navigate('AssignNewWorkout', { groupId: groupId, groupName: groupName })} />
+        <>
+            <PageHeading title={"Assign Workout"} goBack/>
+            <TouchableOpacity
+                onPress={() => navigate('AssignNewWorkout', { groupId: groupId, groupName: groupName })}
+                className="bg-[#E63946] rounded-lg py-3 mx-4"
+            >
+                <Text className="text-white font-semibold text-center">Assign New Workout</Text>
+            </TouchableOpacity>
             {workouts.map((workout, idx) => (
                 <View key={idx} className="my-2">
                     <DisplayWorkout workout={workout} onPress={() => handleAssignTemplateWorkout(workout.workoutId)} />
                 </View>
             ))}
-        </View>
+        </>
     );
 }
 

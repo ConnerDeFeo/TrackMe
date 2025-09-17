@@ -1,14 +1,14 @@
 import Groups from "../../../components/groups/Groups";
-import { useNavigation } from "@react-navigation/native";
 import PageHeading from "../../../components/PageHeading";
+import { useNav } from "../../../hooks/useNav";
 
 //Page where coaches can see and manage their groups
 const CoachGroups = () => {
-  const navigation = useNavigation<any>();
+  const { navigate } = useNav();
 
   return (
     <>
-      <PageHeading title="Groups" addFunction={() => navigation.navigate('CreateGroup')} />
+      <PageHeading title="Groups" addFunction={() => navigate('CreateGroup')} />
       <Groups />
     </>
   );

@@ -6,6 +6,7 @@ import UserService from "../../services/UserService";
 import usePersistentState from "../../hooks/usePersistentState";
 import AsyncStorage from "../../services/AsyncStorage";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
+import { useNav } from "../../hooks/useNav";
 
 //Component used to render input fields for a specific group
 /**
@@ -44,7 +45,7 @@ const RenderGroupInputs: React.FC<
             onSubmit,
         })=>{
 
-    const navigation = useNavigation<any>();
+    const {navigate} = useNav();
     //Current workout group members
     const { workoutGroup } = useWorkoutGroup(groupId);
 
@@ -72,7 +73,7 @@ const RenderGroupInputs: React.FC<
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId: groupId})}>
+                <TouchableOpacity onPress={()=>navigate('CreateWorkoutGroup', { groupId: groupId})}>
                     <Text className="text-[#E63946] underline">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
                 </TouchableOpacity>
             </View>

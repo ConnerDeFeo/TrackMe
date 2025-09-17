@@ -1,14 +1,15 @@
 import { confirmSignUp } from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import UserService from "../../services/UserService";
+import { useNav } from "../../hooks/useNav";
+import { useRoute } from "@react-navigation/native";
 
 
 //Confirm Email page
 const ConfirmEmail = () => {
     const route = useRoute();
-    const navigation = useNavigation<any>();
+    const {replace, goBack} = useNav();
     const {username, password, accountType} = route.params as { username: string; password: string; accountType: string };
 
     const [verificationCode, setVerificationCode] = useState<string>("");
@@ -23,7 +24,7 @@ const ConfirmEmail = () => {
             });
             //If confirm email is succesfull, immediatley login and reroute to home page
             await UserService.signIn(username, password);
-            navigation.replace(`${accountType}Groups`);
+            replace(`${accountType}Groups`);
 
         } catch (error: any) {
             setMessage(error.message);
@@ -61,7 +62,7 @@ const ConfirmEmail = () => {
                         <Button title="Confirm Email" color="#E63946" onPress={handleConfirmEmail} />
                         <Button 
                             title="Back to Create Account" 
-                            onPress={() => navigation.goBack()}
+                            onPress={() => goBack()}
                             color="black"
                         />
                     </View>

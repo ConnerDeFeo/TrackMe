@@ -4,10 +4,11 @@ import UserService from "../services/UserService";
 import { useNavigation } from "@react-navigation/native";
 import GeneralService from "../services/GeneralService";
 import { useState } from "react";
+import { useNav } from "../hooks/useNav";
 
 //Profile page for both coaches and athletes
 const Profile = () => {
-    const navigation = useNavigation<any>();
+    const {navigate} = useNav();
     // State to hold current user data being displayed/edited
     const [userData, setUserData] = useState<Record<string, any>>([]);
     // State to track original data for comparison to detect changes
@@ -36,7 +37,7 @@ const Profile = () => {
     // Handle user logout and navigate to sign in screen
     const handleLogout = async () => {
         await UserService.signOut();
-        navigation.navigate("SignIn");
+        navigate("SignIn");
     }
 
     // Update user profile only if field value has changed

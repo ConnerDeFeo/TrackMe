@@ -3,7 +3,7 @@ import AsyncStorage from "../services/AsyncStorage";
 
 const globalSubscribers: { [key: string]: (() => void)[] } = {};
 
-export const useWorkoutGroup = (groupId:string, ) =>{
+export const useWorkoutGroup = (groupId:string) =>{
     const [workoutGroup, setWorkoutGroup] = useState<{id: string, username: string}[]>([]);
     const [loading, setLoading] = useState(true);
     const key = `WorkoutGroup-${groupId}`;

@@ -3,13 +3,13 @@ import { Text, TouchableOpacity, View } from "react-native";
 import SearchDate from "../../components/SearchDate";
 import UserService from "../../services/UserService";
 import HistoryService from "../../services/HistoryService";
-import { useNavigation } from "@react-navigation/native";
 import PageHeading from "../../components/PageHeading";
+import { useNav } from "../../hooks/useNav";
 
 const CoachHistory = () => {
     // Local state to hold the list of dates for which history exists
     const [availableDates, setAvailableDates] = useState<string[]>([]);
-    const navigation = useNavigation<any>();  // Hook to navigate between screens
+    const { navigate } = useNav();  // Hook to navigate between screens
 
     // Fetch all dates that have workouts assigned when the component mounts
     const fetchAvailableHistoryDates = async () => {
@@ -53,7 +53,7 @@ const CoachHistory = () => {
                         key={date}
                         className="mb-6 bg-white shadow-md border-l-4 border-l-red-500 rounded-lg p-4"
                         onPress={() =>
-                            navigation.navigate('HistoricalData', { date })
+                            navigate('HistoricalData', { date })
                         }
                     >
                         <Text className="text-2xl font-bold text-gray-800">

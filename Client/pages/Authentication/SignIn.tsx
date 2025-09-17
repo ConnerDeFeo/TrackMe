@@ -1,11 +1,11 @@
 import AuthInput from "../../components/AuthInput";
-import { Button, Image, Pressable, Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import AuthenticationHeader from "../../components/AuthenticationHeader";
 import AsyncStorage from "../../services/AsyncStorage";
+import { useNavigation } from "@react-navigation/native";
 
 //Create account page
 const SignIn = ()=>{
@@ -22,7 +22,7 @@ const SignIn = ()=>{
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
             if(accountType) {
-                navigation.replace(`${accountType}Groups`);
+                navigation.replace("User",{"Screen":`${accountType}Groups`});
             }
         }catch (error:any) {
             setError(error.message);
@@ -31,12 +31,12 @@ const SignIn = ()=>{
 
     useEffect(() => {
         async function checkUser() {
-            const accountType =await UserService.getAccountType();
+            const accountType = await UserService.getAccountType();
             const userId = await UserService.getUserId();
             if (accountType) {
                 AsyncStorage.storeData('accountType', accountType);
                 AsyncStorage.storeData('userId', userId!);
-                navigation.replace(`${accountType}Groups`);
+                navigation.replace("User",{"Screen":`${accountType}Groups`});
                 return;
             }
         }
@@ -57,7 +57,7 @@ const SignIn = ()=>{
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-6">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <Button title="Create Account" onPress={()=>navigation.replace('CreateAccount')} color="#E63946"/>
+                    <Button title="Create Account" onPress={()=>navigation.replace("Auth",{"Screen":'CreateAccount'})} color="#E63946"/>
                 </View>
             </View>
         </View>

@@ -1,13 +1,13 @@
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
 import PageHeading from "../../../components/PageHeading";
+import { useNav } from "../../../hooks/useNav";
 
 const WorkoutTemplates = () => {
-  const navigation = useNavigation<any>();
+  const { navigate } = useNav();
 
   const [workouts, setWorkouts] = useState<Array<any>>([]);
 
@@ -34,11 +34,11 @@ const WorkoutTemplates = () => {
 
   return (
     <>
-      <PageHeading title="Workout Templates" addFunction={() => navigation.navigate('CreateWorkoutTemplate')} />
+      <PageHeading title="Workout Templates" addFunction={() => navigate('CreateWorkoutTemplate')} />
       <ScrollView>
         {workouts.map((workout, idx) => {
           return (
-            <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigation.navigate('CreateWorkoutTemplate', { workout: workout, isEdit: true })} />
+            <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigate('CreateWorkoutTemplate', { workout: workout, isEdit: true })} />
           );
         })}
       </ScrollView>

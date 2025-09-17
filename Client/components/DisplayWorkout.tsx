@@ -46,20 +46,19 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
                                     <Text className="font-semibold text-md">
                                         {exercise.sets} x {exercise.reps}
                                     </Text>
-                                    
-                                    {/* Exercise parts section (if any exist) */}
-                                    {exercise.exerciseParts && exercise.exerciseParts.length > 0 && (
-                                        <View>
-                                            {exercise.exerciseParts.map((part, partIndex) => (
-                                                /* Individual exercise part with distance and measurement */
-                                                <View key={partIndex} className="ml-3 py-1">
-                                                    <Text className="text-gray-700">
-                                                        {part.distance} {part.measurement}
-                                                    </Text>
-                                                </View>
-                                            ))}
+                                </View>
+                            )}
+                            {/* Exercise parts section (if any exist) */}
+                            {exercise.exerciseParts && exercise.exerciseParts.length > 0 && (
+                                <View>
+                                    {exercise.exerciseParts.map((part, partIndex) => (
+                                        /* Individual exercise part with distance and measurement */
+                                        <View key={partIndex} className="ml-3 py-1">
+                                            <Text className="text-gray-700">
+                                                {part.distance} {part.measurement}
+                                            </Text>
                                         </View>
-                                    )}
+                                    ))}
                                 </View>
                             )}
                         </View>

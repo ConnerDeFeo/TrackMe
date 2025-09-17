@@ -2,7 +2,7 @@ import AuthInput from "../../components/AuthInput";
 import { Button, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import UserService from "../../services/UserService";
-import { fetchUserAttributes } from "aws-amplify/auth";
+import { fetchUserAttributes  } from "aws-amplify/auth";
 import AuthenticationHeader from "../../components/AuthenticationHeader";
 import AsyncStorage from "../../services/AsyncStorage";
 import { useNavigation } from "@react-navigation/native";
@@ -15,17 +15,24 @@ const SignIn = ()=>{
     const [password,setPassword] = useState<string>("");
     const [error,setError] = useState<string>("");
 
+    const handleError = async (error:any) => {
+        console.log("Sign in error:", error);
+        if (error.name==="UserUnAuthenticatedException" && username) {
+            navigation.navigate("Auth", { screen: 'ConfirmEmail', params:{username:username, password:password, accountType:""} });
+            return;
+        }
+        setError(error.message);
+    }
+
     //Function to handle sign in
     const handleSignIn = async () => {
         try{
             await UserService.signIn(username,password);
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
-            if(accountType) {
-                navigation.replace("User",{"Screen":`${accountType}Groups`});
-            }
+            navigation.replace("User",{"Screen":`${accountType}Groups`});
         }catch (error:any) {
-            setError(error.message);
+            handleError(error);
         }
     }
 
@@ -57,7 +64,7 @@ const SignIn = ()=>{
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-6">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <Button title="Create Account" onPress={()=>navigation.replace("Auth",{"Screen":'CreateAccount'})} color="#E63946"/>
+                    <Button title="Create Account" onPress={()=>navigation.replace("Auth", {screen:'CreateAccount'})} color="#E63946"/>
                 </View>
             </View>
         </View>

@@ -62,16 +62,18 @@ const CreateAccount = ()=>{
             }
             //Create the account in the database
             let rdsResp;
-            if(accountType === "Athlete") 
+            if(accountType === "Athlete"){
                 rdsResp = await AthleteService.createAthlete(userId, username);
-            else
+            }
+            else{
                 rdsResp = await CoachService.createCoach(userId, username);
+            }
             if(!rdsResp) {
                 setMessage("Failed to create account. Please try again.");
                 return;
             }
 
-            navigation.replace("Auth",{"Screen":'ConfirmEmail',params:{username:username,password:password, accountType:accountType}});
+            navigation.replace("Auth",{screen:'ConfirmEmail',params:{username:username,password:password}});
         }
         catch (error:any) {
             handleError(error);

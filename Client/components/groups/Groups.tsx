@@ -29,10 +29,12 @@ const Groups = () => {
   const handleNavigation = async (groupName: string, groupId: string) => {
     const accountType = await AsyncStorage.getData('accountType');
     
-    if(accountType=='Athlete')
-      navigate("ViewGroupAthlete", { groupName: groupName, groupId: groupId });
-    else
-      navigate("ViewGroupCoach", { groupName: groupName, groupId: groupId });
+    if(accountType=='Athlete'){
+      navigate("ViewGroupAthlete", { groupName, groupId });
+    }
+    else{
+      navigate("ViewGroupCoach", { groupName, groupId });
+    }
   };
 
   return (

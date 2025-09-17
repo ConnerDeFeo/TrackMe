@@ -7,7 +7,7 @@ import { useNav } from "../../../hooks/useNav";
 
 //Page where coaches can create a new group
 const CreateGroup = () => {
-    const { navigate } = useNav();
+    const { replace } = useNav();
     //State to hold group name and user ID
     const [groupName, setGroupName] = useState("");
     const [userId, setUserId] = useState("");
@@ -29,7 +29,7 @@ const CreateGroup = () => {
             const resp = await CoachGroupService.createGroup(userId, groupName);
             if(resp.ok){
                 const data = await resp.json();
-                navigate('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });
+                replace('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });
             }
         } catch (error) {
             console.log("Error creating group:", error);

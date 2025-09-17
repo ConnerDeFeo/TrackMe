@@ -11,7 +11,7 @@ import { useNav } from "../../../hooks/useNav";
 //Page for viewing a given group
 const ViewGroup = () => {
   const route = useRoute();
-  const { goBack, navigate } = useNav();
+  const { replace, navigate } = useNav();
   const {groupName, groupId} = route.params as { groupName: string, groupId: string };
 
   const [participants, setParticipants] = useState<string[]>([]);
@@ -58,7 +58,7 @@ const ViewGroup = () => {
   const handleGroupDeletion = async () => {
     const resp = await CoachGroupService.deleteGroup(groupId);
     if (resp.ok) {
-      goBack();
+      replace('CoachGroups');
     }
   }
 

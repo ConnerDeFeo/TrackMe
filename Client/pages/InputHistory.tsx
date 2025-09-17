@@ -3,10 +3,10 @@ import { Text, View } from "react-native";
 import UserService from "../services/UserService";
 import HistoryService from "../services/HistoryService";
 import SearchDate from "../components/SearchDate";
+import PageHeading from "../components/PageHeading";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
-  const today = new Date().toISOString().split('T')[0];
 
   const fetchInputHistory = async () => {
     const athleteId = await UserService.getUserId();
@@ -33,8 +33,8 @@ const InputHistory = () => {
   };
 
   return (
-    <View className="mt-[4rem]">
-      <Text className="text-4xl font-bold p-4">Input History</Text>
+    <>
+      <PageHeading title="Input History"/>
       
       {/* Date Search Section */}
       <SearchDate
@@ -60,7 +60,7 @@ const InputHistory = () => {
           </View>
         ))}
       </View>
-    </View>
+    </>
   );
 };
 

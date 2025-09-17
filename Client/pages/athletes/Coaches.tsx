@@ -5,6 +5,7 @@ import UserService from "../../services/UserService";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
 import GeneralService from "../../services/GeneralService";
 import { useNav } from "../../hooks/useNav";
+import PageHeading from "../../components/PageHeading";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
@@ -40,26 +41,28 @@ const Coaches = ()=>{
     }, []);
 
     return (
-        <View className="flex-1 mt-[4rem] p-4">
-            <Text className="text-4xl font-bold">Coaches</Text>
-            <View className="my-6 flex flex-row justify-between items-center">
-                <TouchableOpacity onPress={() => navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
-                    <Text className="text-[#E63946] font-semibold underline">Invites({invites})</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigate('RequestCoaches')}>
-                    <Text className="text-[#E63946] font-semibold underline">Add Coaches</Text>
-                </TouchableOpacity>
+        <>
+            <PageHeading title="Coaches"/>
+            <View className="flex-1 px-4">
+                <View className="my-6 flex flex-row justify-between items-center">
+                    <TouchableOpacity onPress={() => navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
+                        <Text className="text-[#E63946] font-semibold underline">Invites({invites})</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigate('RequestCoaches')}>
+                        <Text className="text-[#E63946] font-semibold underline">Add Coaches</Text>
+                    </TouchableOpacity>
+                </View>
+                <View className="bg-white rounded-lg p-4 mb-6">
+                {coaches.length > 0 ? (
+                    coaches.map(coach => (
+                        <CoachAthleteRelationship key={coach[0]} user={coach} fetchUsers={fetchCoaches} />
+                    ))
+                ) : (
+                    <Text className="text-gray-500 text-center py-4">No coaches yet</Text>
+                )}
+                </View>
             </View>
-            <View className="bg-white rounded-lg p-4 mb-6">
-            {coaches.length > 0 ? (
-                coaches.map(coach => (
-                    <CoachAthleteRelationship key={coach[0]} user={coach} fetchUsers={fetchCoaches} />
-                ))
-            ) : (
-                <Text className="text-gray-500 text-center py-4">No coaches yet</Text>
-            )}
-            </View>
-        </View>
+        </>
     )
 }
 

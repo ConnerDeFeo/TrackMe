@@ -14,7 +14,7 @@ const PageHeading = ({title, addFunction, goBack,}: { title: string; addFunction
             className="
                 relative flex flex-row justify-between
                 border-b border-gray-300 px-4 mt-[4rem]
-                min-h-[2rem] pb-2 mb-4
+                min-h-[2.75rem] pb-2 mb-4
             "
         >
             {/* Left area: Back button (optional) */}

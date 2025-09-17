@@ -57,7 +57,7 @@ const SignIn = ()=>{
                 {/**SIGN IN*/}
                 <Text className="text-red-500 text-center mt-100">{error}</Text>
                 <View className="gap-y-8 bg-red-200 rounded-xl p-6">
-                    <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
+                    <AuthInput value={username} setValue={setUsername} placeholder="Username or Email"/>
                     <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
                     <Button title="Login" onPress={handleSignIn} color="black"/>
                 </View>

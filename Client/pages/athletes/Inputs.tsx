@@ -4,6 +4,7 @@ import GeneralService from "../../services/GeneralService";
 import usePersistentState from "../../hooks/usePersistentState";
 import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
+import PageHeading from "../../components/PageHeading";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -66,8 +67,8 @@ const Inputs = ()=>{
         });
     }
     return (
-        <View className="mt-[4rem]">
-            <Text className="text-4xl font-bold text-gray-800 mb-6 p-4">Inputs</Text>
+        <>
+            <PageHeading title="Inputs"/>
             {/* Render input components for each group */}
             {groups.map(group => (
                 <RenderGroupInputs
@@ -82,7 +83,7 @@ const Inputs = ()=>{
                     setCurrentInputs={setCurrentInputs}
                 />
             ))}
-        </View>
+        </>
     );
 }
 

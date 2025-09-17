@@ -1,13 +1,14 @@
 import { Text, View } from "react-native";
 import Groups from "../../components/groups/Groups";
+import PageHeading from "../../components/PageHeading";
 
 //Athlete view when they are looking at all ther groups
 const AthleteGroups = () => {
   return (
-    <View className="mt-[4rem]">
-      <Text className="text-4xl font-bold mb-2 p-4">Groups</Text>
+    <>
+      <PageHeading title="Groups" />
       <Groups/>
-    </View>
+    </>
   );
 };
 

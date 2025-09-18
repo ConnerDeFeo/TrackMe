@@ -10,7 +10,6 @@ const UserService = {
           return user['custom:accountType'];
       return null;
     } catch (error) {
-      console.log("Error fetching user attributes:", error);
       return null;
     }
   },
@@ -37,7 +36,6 @@ const UserService = {
       const user = await getCurrentUser();
       return user.userId;
     } catch (error) {
-      console.log("Error fetching user ID:", error);
       return null;
     }
   },
@@ -46,7 +44,6 @@ const UserService = {
       const user = await getCurrentUser();
       return user.username;
     } catch (error) {
-      console.log("Error fetching username:", error);
       return null;
     }
   }

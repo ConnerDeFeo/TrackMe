@@ -35,6 +35,7 @@ import HistoricalData from './pages/coaches/HistoricalData';
 import AssignNewWorkout from './pages/coaches/groups/AssignNewWorkout';
 import { ComponentType } from 'react';
 import ForgotPassword from './pages/authentication/ForgotPassword';
+import ResetPassword from './pages/authentication/ResetPassword';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -94,6 +95,7 @@ const AuthLayoutWrapper = () =>{
         <AuthStack.Screen name="CreateAccount" component={CreateAccount} />
         <AuthStack.Screen name="ConfirmEmail" component={ConfirmEmail} />
         <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <AuthStack.Screen name="ResetPassword" component={ResetPassword} />
       </AuthStack.Navigator>
     </View>
   );

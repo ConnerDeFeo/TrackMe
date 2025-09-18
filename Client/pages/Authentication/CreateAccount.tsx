@@ -1,10 +1,10 @@
-import AuthInput from "../../components/AuthInput";
+import AuthInput from "../../components/authentication/AuthInput";
 import { Button, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { signUp } from 'aws-amplify/auth';
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
-import AuthenticationHeader from "../../components/AuthenticationHeader";
+import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
 import { useNavigation } from "@react-navigation/native";
 
 //Create account page

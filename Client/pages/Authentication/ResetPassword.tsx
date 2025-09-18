@@ -1,8 +1,8 @@
-import AuthInput from "../../components/AuthInput";
+import AuthInput from "../../components/authentication/AuthInput";
 import { Button, Text, View } from "react-native";
 import { useState } from "react";
 import { confirmResetPassword } from "aws-amplify/auth";
-import AuthenticationHeader from "../../components/AuthenticationHeader";
+import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 //Reset password page

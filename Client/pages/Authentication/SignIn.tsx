@@ -11,7 +11,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const SignIn = ()=>{
     const navigation = useNavigation<any>();
     const route = useRoute();
-    const { resetPasswordMessage } = route.params as { resetPasswordMessage?: string } || {resetPasswordMessage:"testing"};
+    const { resetPasswordMessage } = route.params as { resetPasswordMessage?: string } || {};
     const [showResetPasswordMessage, setShowResetPasswordMessage] = useState<boolean>(!!resetPasswordMessage);
 
     const [username,setUsername] = useState<string>("");
@@ -53,7 +53,6 @@ const SignIn = ()=>{
         checkUser();
     }, [navigation]);
 
-    console.log(resetPasswordMessage)
     return(
         <View className="relative h-full w-[85%] mx-auto">
             <AuthenticationHeader/>

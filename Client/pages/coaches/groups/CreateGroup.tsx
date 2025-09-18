@@ -7,7 +7,7 @@ import { useNav } from "../../../hooks/useNav";
 
 //Page where coaches can create a new group
 const CreateGroup = () => {
-    const { replace } = useNav();
+    const { navigate } = useNav();
     //State to hold group name and user ID
     const [groupName, setGroupName] = useState("");
     const [userId, setUserId] = useState("");
@@ -29,12 +29,18 @@ const CreateGroup = () => {
             const resp = await CoachGroupService.createGroup(userId, groupName);
             if(resp.ok){
                 const data = await resp.json();
-                replace('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });
+                navigate('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });
             }
         } catch (error) {
             console.log("Error creating group:", error);
         }
     };
+
+    const handleGroupNameChange = (text: string) => {
+        if (text.length <= 30) { // Limit to 30 characters
+            setGroupName(text);
+        }
+    }
 
     return (
         <View className="flex-1 justify-center items-center px-6 bg-gray-50 mt-[4rem]">
@@ -42,7 +48,7 @@ const CreateGroup = () => {
             <TextInput
                 placeholder="Enter Group Name"
                 value={groupName}
-                onChangeText={setGroupName}
+                onChangeText={handleGroupNameChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-800 placeholder-gray-400 shadow-sm"
             />
             <View className="mt-6">

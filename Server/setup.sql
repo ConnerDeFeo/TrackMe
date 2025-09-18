@@ -34,7 +34,7 @@ CREATE TABLE athletes (
 
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(30) NOT NULL,
     dateCreated VARCHAR(10) DEFAULT CURRENT_DATE,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
     deleted BOOLEAN DEFAULT FALSE,

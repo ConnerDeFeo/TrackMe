@@ -11,6 +11,17 @@ def create_group(event, context):
         group_name = body['groupName']
         coachId = body['coachId']
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        
+        if len(group_name) > 30:
+            return {
+                "statusCode": 400,
+                "headers": {
+                    "Access-Control-Allow-Origin": "http://localhost:8081",
+                    "Access-Control-Allow-Credentials": True,
+                    "Content-Type": "application/json"
+                },
+                "body": json.dumps({"message": "Group name exceeds 20 characters"})
+            }
 
         # Create group in RDS with the current date
         group_id = execute_commit_fetch_one(

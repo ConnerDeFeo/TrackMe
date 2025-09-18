@@ -105,7 +105,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
           <Text className="text-lg font-bold mb-2">Name</Text>
           {/* Button to remove the entire exercise */}
           <TouchableOpacity onPress={handleExerciseDeletion}>
-            <Text className="text-[#E63946] underline">Remove</Text>
+            <Text className="text-[#E63946]">Remove</Text>
           </TouchableOpacity>
         </View>
         <TextInput 
@@ -126,7 +126,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
           <View className="flex flex-col items-center justify-end">
             <Text className="text-4xl font-bold">X</Text>
             <TouchableOpacity onPress={handleSetsRepsRemoval}>
-                <Text className="text-[#E63946] underline">Remove</Text>
+                <Text className="text-[#E63946]">Remove</Text>
               </TouchableOpacity>
           </View>
           {setsReps('reps')}
@@ -144,7 +144,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
               {/* Button to remove this specific exercise part */}
               <View className="flex flex-row justify-end items-center mb-1">
                 <TouchableOpacity onPress={() => handleDistanceRemoval(partIdx)}>
-                  <Text className="text-[#E63946] underline">Remove</Text>
+                  <Text className="text-[#E63946]">Remove</Text>
                 </TouchableOpacity>
               </View>
               {/* Distance Input */}

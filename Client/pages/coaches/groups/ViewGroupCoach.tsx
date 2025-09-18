@@ -108,7 +108,7 @@ const ViewGroup = () => {
               onPress={() => navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})}
               className="flex items-center"
             >
-              <Text className="text-[#E63946] underline">Add Athletes</Text>
+              <Text className="text-[#E63946]">Add Athletes</Text>
             </TouchableOpacity>
           </View>
           {participants.length > 0 ? (
@@ -116,7 +116,7 @@ const ViewGroup = () => {
               <View key={participant[0]} className="py-2 border-b border-gray-100 last:border-b-0 flex flex-row justify-between items-center">
                 <Text className="text-gray-800 font-medium">{participant[1]}</Text>
                 <TouchableOpacity onPress={() => removeAthleteFromGroup(participant[0])}>
-                  <Text className="text-[#E63946] underline text-md">Remove</Text>
+                  <Text className="text-[#E63946] text-md">Remove</Text>
                 </TouchableOpacity>
               </View>
           ))
@@ -127,10 +127,10 @@ const ViewGroup = () => {
         { deletionMode ?
           <View className="flex flex-row justify-between items-center mt-4">
             <Pressable onPress={handleGroupDeletion}>
-              <Text className="text-[#E63946] underline text-md">Confirm</Text>
+              <Text className="text-[#E63946] text-md">Confirm</Text>
             </Pressable>
             <TouchableOpacity onPress={() => setDeletionMode(false)}>
-              <Text className="underline text-md">Cancel</Text>
+              <Text className="text-md">Cancel</Text>
             </TouchableOpacity>
           </View>
           :

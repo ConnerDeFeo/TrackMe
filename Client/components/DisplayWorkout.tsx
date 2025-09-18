@@ -22,7 +22,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
                         <Text className="text-xl font-bold text-gray-800">{workout.title}</Text>
                         {onRemove && 
                             <TouchableOpacity onPress={() => onRemove(workout.workoutId)}>
-                                <Text className="text-[#E63946] underline">Remove</Text>
+                                <Text className="text-[#E63946]">Remove</Text>
                             </TouchableOpacity>
                         }
                     </View>

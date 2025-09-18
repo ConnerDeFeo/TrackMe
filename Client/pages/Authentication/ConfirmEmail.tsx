@@ -86,7 +86,7 @@ const ConfirmEmail = () => {
                         <Button title="Back to Sign In" color="black" onPress={() => navigation.replace("Auth", { screen: 'SignIn' })} />
                         <View className="flex flex-row justify-between items-center">
                             <TouchableOpacity onPress={handleResendCode} disabled={resendCodeTimer > 0}>
-                                <Text className="underline">Resend Code</Text>
+                                <Text>Resend Code</Text>
                             </TouchableOpacity>
                             {resendCodeTimer > 0 &&
                                 <View className=" px-3 py-1">

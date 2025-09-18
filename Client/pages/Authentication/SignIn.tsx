@@ -1,5 +1,5 @@
 import AuthInput from "../../components/AuthInput";
-import { Button, Text, View } from "react-native";
+import { Button, Text, TouchableOpacity, View } from "react-native";
 import { useEffect, useState } from "react";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes  } from "aws-amplify/auth";
@@ -56,9 +56,14 @@ const SignIn = ()=>{
             <View className="m-auto gap-y-10 w-full">
                 {/**SIGN IN*/}
                 <Text className="text-red-500 text-center mt-100">{error}</Text>
-                <View className="gap-y-8 bg-red-200 rounded-xl p-6">
+                <View className="gap-y-4 bg-red-200 rounded-xl p-6">
                     <AuthInput value={username} setValue={setUsername} placeholder="Username or Email"/>
-                    <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
+                    <View className="gap-y-2">
+                        <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
+                        <TouchableOpacity onPress={()=>navigation.navigate("Auth", {screen:'ForgotPassword'})}>
+                            <Text className="text-right">Forgot Password?</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Button title="Login" onPress={handleSignIn} color="black"/>
                 </View>
                 {/**CREATE NEW ACCOUNT*/}

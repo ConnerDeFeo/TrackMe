@@ -74,7 +74,7 @@ const RenderGroupInputs: React.FC<
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
                 <TouchableOpacity onPress={()=>navigate('CreateWorkoutGroup', { groupId: groupId})}>
-                    <Text className="text-[#E63946] underline">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
+                    <Text className="text-[#E63946]">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
                 </TouchableOpacity>
             </View>
 

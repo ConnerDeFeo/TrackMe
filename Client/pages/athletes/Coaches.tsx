@@ -40,8 +40,8 @@ const Coaches = ()=>{
     }, []);
 
     return (
-        <View className="flex-1 px-4">
-            <View className="my-6 flex flex-row justify-between items-center">
+        <View className="flex-1 px-4 mt-4">
+            <View className="flex flex-row justify-between items-center">
                 <TouchableOpacity onPress={() => navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
                     <Text className="text-[#E63946] font-semibold">Invites({invites})</Text>
                 </TouchableOpacity>

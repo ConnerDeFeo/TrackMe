@@ -75,7 +75,7 @@ const RequestCoaches = () => {
     };
 
     return (
-        <View className="flex-1 px-4">
+        <View className="flex-1 px-4 mt-4">
             <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} placeholder='Search coaches...' />
             {loading ? (
                 <Text className="text-center text-gray-500 text-base mt-4">Searching...</Text>

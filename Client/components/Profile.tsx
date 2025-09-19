@@ -56,7 +56,7 @@ const Profile = () => {
     }
 
     return (
-        <View className="flex-1 bg-gray-50 px-6 pt-16">
+        <View className="flex-1 bg-gray-50 px-6 pt-4">
             {/* Profile Picture Section */}
             <View className="items-center mb-8 ">
                 {/* Placeholder profile picture with gradient background */}

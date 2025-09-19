@@ -33,7 +33,8 @@ const SignIn = ()=>{
             await UserService.signIn(username,password);
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
-            navigation.replace("User",{"Screen":`${accountType}Groups`});
+            console.log("Account Type: ", accountType);
+            navigation.replace("User",{screen:`${accountType}Groups`});
         }catch (error:any) {
             handleError(error);
         }
@@ -46,7 +47,7 @@ const SignIn = ()=>{
             if (accountType) {
                 AsyncStorage.storeData('accountType', accountType);
                 AsyncStorage.storeData('userId', userId!);
-                navigation.replace("User",{"Screen":`${accountType}Groups`});
+                navigation.replace("User",{screen:`${accountType}Groups`});
                 return;
             }
         }

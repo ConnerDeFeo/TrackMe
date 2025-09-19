@@ -6,7 +6,7 @@ import { useRoute } from "@react-navigation/native";
 const AssignNewWorkout = () => {
     const route = useRoute();
     const { navigate } = useNav();
-    const { groupId, groupName } = route.params as { groupId: string, groupName: string };
+    const { groupId, groupName, workout } = route.params as { groupId: string, groupName: string, workout?: any };
 
     const handleWorkoutCreation = async (workoutData:any) => {
         const resp = await CoachWorkoutService.assignGroupWorkout(groupId, workoutData);
@@ -20,6 +20,7 @@ const AssignNewWorkout = () => {
             pageTitle="Assign Group Workout"
             buttonText="Assign"
             handleWorkoutCreation={handleWorkoutCreation}
+            workout={workout}
         />
     );
 }

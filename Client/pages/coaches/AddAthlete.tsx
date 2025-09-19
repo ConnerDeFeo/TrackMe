@@ -81,7 +81,7 @@ const AddAthlete= () => {
     };
 
     return (
-        <View className="flex-1 px-4 bg-white">
+        <View className="flex-1 px-4 bg-white mt-4">
             <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} placeholder='Search athletes...' />
             {loading ? (
                 <Text className="text-center text-gray-500 text-base mt-4">Searching...</Text>

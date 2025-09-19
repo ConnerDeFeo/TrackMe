@@ -36,7 +36,7 @@ const CoachHistory = () => {
     };
 
     return (
-        <>
+        <View className="mt-2">
             {/* Date search input and clear button */}
             <SearchDate
                 handleDateSearch={handleDateSearch}
@@ -59,7 +59,7 @@ const CoachHistory = () => {
                     </TouchableOpacity>
                 ))}
             </View>
-        </>
+        </View>
     );
 };
 

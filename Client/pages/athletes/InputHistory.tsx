@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import UserService from "../services/UserService";
-import HistoryService from "../services/HistoryService";
-import SearchDate from "../components/SearchDate";
+import UserService from "../../services/UserService";
+import HistoryService from "../../services/HistoryService";
+import SearchDate from "../../components/SearchDate";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
@@ -32,7 +32,7 @@ const InputHistory = () => {
   };
 
   return (
-    <>
+    <View className="mt-4">
       {/* Date Search Section */}
       <SearchDate
         handleDateSearch={handleDateSearch}
@@ -57,7 +57,7 @@ const InputHistory = () => {
           </View>
         ))}
       </View>
-    </>
+    </View>
   );
 };
 

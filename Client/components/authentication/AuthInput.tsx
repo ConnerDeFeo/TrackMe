@@ -21,7 +21,7 @@ const AuthInput = ( {value, setValue, placeholder, sensitive}:
                 className="text-xl p-1 bg-white rounded p-2"
                 placeholder={placeholder}
             /> 
-            {/* Show eye icon for password fields only */}
+            {/* Show eye icon for password fields on=-ly */}
             {sensitive &&
                 <TouchableOpacity className="absolute right-3 top-2" onPress={() => setHidePassword(!hidePassword)}>
                     {/* Eye icon to toggle password visibility */}

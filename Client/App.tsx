@@ -1,6 +1,6 @@
 import { ScrollView, View } from 'react-native';
 import './global.css'
-import { createStaticNavigation } from '@react-navigation/native';
+import { createStaticNavigation, useNavigationContainerRef, useNavigationState } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateAccount from './pages/authentication/CreateAccount';
 import { Amplify } from 'aws-amplify';
@@ -33,7 +33,7 @@ import InputHistory from './pages/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
 import HistoricalData from './pages/coaches/HistoricalData';
 import AssignNewWorkout from './pages/coaches/groups/AssignNewWorkout';
-import { ComponentType } from 'react';
+import { ComponentType, useEffect } from 'react';
 import ForgotPassword from './pages/authentication/ForgotPassword';
 import ResetPassword from './pages/authentication/ResetPassword';
 //Root component used to render everything
@@ -52,10 +52,21 @@ function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
 
 
 const UserStack = createNativeStackNavigator();
-const UserLayoutWrapper = () =>{
+const UserLayoutWrapper = () => {
   return (
     <View className='flex-1 bg-white'>
-      <UserStack.Navigator screenOptions={{ headerShown: false }}>
+      <UserStack.Navigator screenOptions={{ headerShown: false }}
+        screenListeners={{
+          state: (e) => {
+            const state = e.data.state;
+            console.log('=== USER STACK ===');
+            console.log('Current route:', state.routes[state.index]?.name);
+            console.log('Full stack:', state.routes.map(route => route.name));
+            console.log('Stack depth:', state.routes.length);
+            console.log('==================');
+          }
+        }}
+      >
         <UserStack.Screen name="CoachGroups" component={ScrollViewWrapper(<CoachGroups />)} />
         <UserStack.Screen name="AthleteGroups" component={ScrollViewWrapper(<AthleteGroups />)} />
         <UserStack.Screen name="CoachProfile" component={ScrollViewWrapper(<Profile />)} />

@@ -71,7 +71,7 @@ const ViewGroup = () => {
 
   return (
     <>
-      <PageHeading title={groupName} goBack/>
+      <PageHeading title={groupName} popToTop/>
       <View className="pb-12 px-4">
         <View className="space-y-4 mb-8">
           <TouchableOpacity

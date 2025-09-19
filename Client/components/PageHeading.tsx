@@ -6,8 +6,11 @@ import { useNav } from "../hooks/useNav";
 //  - title: text shown centered in the header
 //  - addFunction: if provided, renders a + icon that calls this on press
 //  - goBack: when true, shows a back arrow that navigates to previous screen
-const PageHeading = ({title, addFunction, goBack,}: { title: string; addFunction?: () => void; goBack?: boolean; }) => {
-    const {goBack: handleGoBack} = useNav(); // Access navigation for goBack
+const PageHeading = ({title, addFunction, goBack, popToTop}: { title: string; addFunction?: () => void; goBack?: boolean; popToTop?: boolean; }) => {
+    const {goBack: handleGoBack, popToTop:handlePopToTop} = useNav(); // Access navigation for goBack
+    if(goBack && popToTop){
+        throw new Error("Cannot provide both goBack and popToTop props to PageHeading");
+    }
 
     return (
         <View
@@ -19,8 +22,8 @@ const PageHeading = ({title, addFunction, goBack,}: { title: string; addFunction
         >
             {/* Left area: Back button (optional) */}
             <View>
-                {goBack && (
-                    <TouchableOpacity onPress={handleGoBack}>
+                {(goBack || popToTop) && (
+                    <TouchableOpacity onPress={goBack ? handleGoBack : handlePopToTop}>
                         <Image source={require("../images/Back.png")} className="h-8 w-8" />
                     </TouchableOpacity>
                 )}

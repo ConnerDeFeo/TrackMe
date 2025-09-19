@@ -11,6 +11,9 @@ export const useNav = () =>{
     const replace = (screen: string, params?: any) => {
         navigation.replace("User", { screen, params });
     }
+    const popToTop = () => {
+        navigation.popToTop();
+    }
     const goBack = () => {
         navigation.goBack();
     }
@@ -18,6 +21,7 @@ export const useNav = () =>{
     return {
         navigate,
         replace,
-        goBack
+        goBack,
+        popToTop
     }
 }

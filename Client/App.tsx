@@ -82,7 +82,6 @@ const UserLayoutWrapper = () => {
     <View className='flex-1 bg-white'>
       <UserStack.Navigator screenOptions={({route, navigation})=> {
         const params = route.params;
-        console.log("Route params for", route.name, params);
         const plusTarget = getPlusButtonNavigationTarget(route.name);
         const canGoBack = navigation.canGoBack();
         return{

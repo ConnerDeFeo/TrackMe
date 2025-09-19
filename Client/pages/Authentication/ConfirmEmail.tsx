@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import UserService from "../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import AthleteService from "../../services/AthleteService";
+import CoachService from "../../services/CoachService";
 
 
 //Confirm Email page
@@ -33,8 +35,22 @@ const ConfirmEmail = () => {
             });
             //If confirm email is succesfull, immediatley login and reroute to home page
             await UserService.signIn(username, password);
+            const userId = await UserService.getUserId();
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
+            //Create the account in the database
+            let rdsResp;
+            if(accountType === "Athlete"){
+                rdsResp = await AthleteService.createAthlete(userId!, username);
+            }
+            else{
+                rdsResp = await CoachService.createCoach(userId!, username);
+            }
+            if(!rdsResp) {
+                setMessage("Failed to create account. Please try again.");
+                return;
+            }
+
             navigation.replace("User", { screen: `${accountType}Groups` });
 
         } catch (error: any) {

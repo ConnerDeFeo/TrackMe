@@ -2,8 +2,6 @@ import AuthInput from "../../components/authentication/AuthInput";
 import { Button, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { signUp } from 'aws-amplify/auth';
-import AthleteService from "../../services/AthleteService";
-import CoachService from "../../services/CoachService";
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
 import { useNavigation } from "@react-navigation/native";
 
@@ -60,18 +58,6 @@ const CreateAccount = ()=>{
                 setMessage("Failed to retrieve user ID. Please try again.");
                 return;
             }
-            //Create the account in the database
-            let rdsResp;
-            if(accountType === "Athlete"){
-                rdsResp = await AthleteService.createAthlete(userId, username);
-            }
-            else{
-                rdsResp = await CoachService.createCoach(userId, username);
-            }
-            if(!rdsResp) {
-                setMessage("Failed to create account. Please try again.");
-                return;
-            }
 
             navigation.replace("Auth",{screen:'ConfirmEmail',params:{username:username,password:password}});
         }
@@ -89,18 +75,18 @@ const CreateAccount = ()=>{
                 
                 {/**CREATE ACCOUNT FORM*/}
                 <View className="gap-y-8 bg-red-200 rounded-xl p-6">
-                    <View className="bg-white rounded-lg h-12 flex flex-row overflow-hidden">
+                    <View className="rounded-lg h-12 flex flex-row overflow-hidden">
                         <TouchableOpacity 
                             onPress={() => setAccountType("Athlete")} 
-                            className={`flex-1 items-center justify-center ${accountType === 'Athlete' ? 'bg-black' : 'bg-white'}`}
+                            className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Athlete' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
                         >
-                            <Text className={`text-xl ${accountType === 'Athlete' ? 'text-white' : 'text-black'}`}>Athlete</Text>
+                            <Text className={`text-xl ${accountType === 'Athlete' ? 'text-white font-bold' : 'text-black'}`}>Athlete</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             onPress={() => setAccountType("Coach")}
-                            className={`flex-1 items-center justify-center ${accountType === 'Coach' ? 'bg-black' : 'bg-white'}`}
+                            className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Coach' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
                         >
-                            <Text className={`text-xl ${accountType === 'Coach' ? 'text-white' : 'text-black'}`}>Coach</Text>
+                            <Text className={`text-xl ${accountType === 'Coach' ? 'text-white font-bold' : 'text-black'}`}>Coach</Text>
                         </TouchableOpacity>
                     </View>
                     <AuthInput value={email} setValue={setEmail} placeholder="Email"/>

@@ -4,7 +4,6 @@ import { Text, View } from "react-native";
 import HistoryService from "../../services/HistoryService";
 import UserService from "../../services/UserService";
 import DisplayWorkout from "../../components/DisplayWorkout";
-import PageHeading from "../../components/PageHeading";
 
 const HistoricalData = ()=>{
     const route = useRoute();
@@ -26,7 +25,6 @@ const HistoricalData = ()=>{
 
     return(
         <>
-            <PageHeading title={date} goBack/>
             <View className="min-h-screen">
                 {Object.keys(historicalData).length === 0 ? (
                 <Text className="text-center mt-10">No historical data available for this date.</Text>

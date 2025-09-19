@@ -4,7 +4,6 @@ import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import { useRoute } from "@react-navigation/native";
 import DisplayWorkout from "../../../components/DisplayWorkout";
-import PageHeading from "../../../components/PageHeading";
 import { useNav } from "../../../hooks/useNav";
 
 //Page where coaches can assign workouts to athletes
@@ -37,7 +36,6 @@ const AssignWorkout = ()=>{
 
     return (
         <>
-            <PageHeading title={"Assign Workout"} goBack/>
             <TouchableOpacity
                 onPress={() => navigate('AssignNewWorkout', { groupId: groupId, groupName: groupName })}
                 className="bg-[#E63946] rounded-lg py-3 mx-4"

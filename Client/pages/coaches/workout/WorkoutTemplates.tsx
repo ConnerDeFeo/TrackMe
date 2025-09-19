@@ -3,7 +3,6 @@ import { ScrollView } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import UserService from "../../../services/UserService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
-import PageHeading from "../../../components/PageHeading";
 import { useNav } from "../../../hooks/useNav";
 
 const WorkoutTemplates = () => {
@@ -33,16 +32,13 @@ const WorkoutTemplates = () => {
   };
 
   return (
-    <>
-      <PageHeading title="Workout Templates" addFunction={() => navigate('CreateWorkoutTemplate')} />
-      <ScrollView>
-        {workouts.map((workout, idx) => {
-          return (
-            <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigate('CreateWorkoutTemplate', { workout: workout, isEdit: true })} />
-          );
-        })}
-      </ScrollView>
-    </>
+    <ScrollView>
+      {workouts.map((workout, idx) => {
+        return (
+          <DisplayWorkout key={idx} workout={workout} onRemove={onRemove} onPress={() => navigate('CreateWorkoutTemplate', { workout: workout, isEdit: true })} />
+        );
+      })}
+    </ScrollView>
   );
 };
 

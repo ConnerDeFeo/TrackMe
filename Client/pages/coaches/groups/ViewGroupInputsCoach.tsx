@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import GeneralService from "../../../services/GeneralService";
-import PageHeading from "../../../components/PageHeading";
 
 const ViewGroupInputsCoach = ()=>{
     const route = useRoute();
@@ -33,22 +32,19 @@ const ViewGroupInputsCoach = ()=>{
     },[])
 
     return(
-        <>
-            <PageHeading title="Workout Inputs" goBack/>
-            <View className="px-4">
-                {athletes.map((athlete)=>(
-                <View key={athlete[0]} className="bg-white rounded-lg shadow-lg p-6 mb-6 border-l-4" style={{borderLeftColor: '#E63946'}}>
-                    <Text className="text-xl font-semibold text-black mb-4">{athlete[1]}</Text>
-                    {workoutInputs[athlete[0]]?.map((input, index) => (
-                    <View key={index} className="bg-gray-50 rounded-md p-4 mb-3 flex flex-row justify-between items-center">
-                        <Text className="text-gray-800 font-medium text-md">Distance: {input.distance}m</Text>
-                        <Text className="text-gray-800 font-medium text-md">Time: {input.time}s</Text>
-                    </View>
-                    ))}
+        <View className="px-4">
+            {athletes.map((athlete)=>(
+            <View key={athlete[0]} className="bg-white rounded-lg shadow-lg p-6 mb-6 border-l-4" style={{borderLeftColor: '#E63946'}}>
+                <Text className="text-xl font-semibold text-black mb-4">{athlete[1]}</Text>
+                {workoutInputs[athlete[0]]?.map((input, index) => (
+                <View key={index} className="bg-gray-50 rounded-md p-4 mb-3 flex flex-row justify-between items-center">
+                    <Text className="text-gray-800 font-medium text-md">Distance: {input.distance}m</Text>
+                    <Text className="text-gray-800 font-medium text-md">Time: {input.time}s</Text>
                 </View>
                 ))}
             </View>
-        </>
+            ))}
+        </View>
     );
 }
 

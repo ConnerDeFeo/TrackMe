@@ -3,7 +3,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import SearchDate from "../../components/SearchDate";
 import UserService from "../../services/UserService";
 import HistoryService from "../../services/HistoryService";
-import PageHeading from "../../components/PageHeading";
 import { useNav } from "../../hooks/useNav";
 
 const CoachHistory = () => {
@@ -38,8 +37,6 @@ const CoachHistory = () => {
 
     return (
         <>
-            <PageHeading title="History" />
-
             {/* Date search input and clear button */}
             <SearchDate
                 handleDateSearch={handleDateSearch}

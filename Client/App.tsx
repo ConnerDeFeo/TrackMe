@@ -1,6 +1,6 @@
-import { ScrollView, View } from 'react-native';
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import './global.css'
-import { createStaticNavigation, useNavigationContainerRef, useNavigationState } from '@react-navigation/native';
+import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateAccount from './pages/authentication/CreateAccount';
 import { Amplify } from 'aws-amplify';
@@ -33,9 +33,11 @@ import InputHistory from './pages/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
 import HistoricalData from './pages/coaches/HistoricalData';
 import AssignNewWorkout from './pages/coaches/groups/AssignNewWorkout';
-import { ComponentType, useEffect } from 'react';
+import { ComponentType } from 'react';
 import ForgotPassword from './pages/authentication/ForgotPassword';
 import ResetPassword from './pages/authentication/ResetPassword';
+import HeaderPlusButton from './components/HeaderPlusButton';
+import { useNav } from './hooks/useNav';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -49,48 +51,49 @@ function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
     ); 
   
 }
-
-
+const getPlusButtonNavigationTarget = (routeName:string) => {
+  switch(routeName) {
+    case 'CoachGroups': return 'CreateGroup';
+    case 'Athletes': return 'AddAthlete';
+    case 'WorkoutTemplates': return 'CreateWorkoutTemplate';
+    default: return null;
+  }
+};
 const UserStack = createNativeStackNavigator();
 const UserLayoutWrapper = () => {
+  const { navigate, goBack } = useNav();
   return (
     <View className='flex-1 bg-white'>
-      <UserStack.Navigator screenOptions={{ headerShown: false }}
-        screenListeners={{
-          state: (e) => {
-            const state = e.data.state;
-            console.log('=== USER STACK ===');
-            console.log('Current route:', state.routes[state.index]?.name);
-            console.log('Full stack:', state.routes.map(route => route.name));
-            console.log('Stack depth:', state.routes.length);
-            console.log('==================');
-          }
-        }}
-      >
-        <UserStack.Screen name="CoachGroups" component={ScrollViewWrapper(<CoachGroups />)} />
-        <UserStack.Screen name="AthleteGroups" component={ScrollViewWrapper(<AthleteGroups />)} />
-        <UserStack.Screen name="CoachProfile" component={ScrollViewWrapper(<Profile />)} />
-        <UserStack.Screen name="AthleteProfile" component={ScrollViewWrapper(<Profile />)} />
-        <UserStack.Screen name="CreateGroup" component={ScrollViewWrapper(<CreateGroup />)} />
-        <UserStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />
-        <UserStack.Screen name="AddAthlete" component={ScrollViewWrapper(<AddAthlete />)} />
-        <UserStack.Screen name="Athletes" component={ScrollViewWrapper(<Athletes />)} />
-        <UserStack.Screen name="Coaches" component={ScrollViewWrapper(<Coaches />)} />
-        <UserStack.Screen name="CoachInvites" component={ScrollViewWrapper(<CoachInvites />)} />
-        <UserStack.Screen name="AssignAthletes" component={ScrollViewWrapper(<AssignAthletes />)} />
-        <UserStack.Screen name="CreateWorkoutTemplate" component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
-        <UserStack.Screen name="WorkoutTemplates" component={ScrollViewWrapper(<WorkoutTemplates />)} />
-        <UserStack.Screen name="AssignWorkout" component={ScrollViewWrapper(<AssignWorkout />)} />
-        <UserStack.Screen name="ViewGroupInputsCoach" component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
-        <UserStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
-        <UserStack.Screen name="Inputs" component={ScrollViewWrapper(<Inputs />)} />
-        <UserStack.Screen name="CreateWorkoutGroup" component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
-        <UserStack.Screen name="AthleteRequests" component={ScrollViewWrapper(<AthleteRequests />)} />
-        <UserStack.Screen name="RequestCoaches" component={ScrollViewWrapper(<RequestCoaches />)} />
-        <UserStack.Screen name="InputHistory" component={ScrollViewWrapper(<InputHistory />)} />
-        <UserStack.Screen name="CoachHistory" component={ScrollViewWrapper(<CoachHistory />)} />
-        <UserStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
-        <UserStack.Screen name="AssignNewWorkout" component={ScrollViewWrapper(<AssignNewWorkout />)} />
+      <UserStack.Navigator screenOptions={({route})=> {
+        const plusTarget = getPlusButtonNavigationTarget(route.name);
+        return{
+          headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigate(plusTarget)} /> : ()=>null
+        }
+      }}>
+        <UserStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<CoachGroups />)} />
+        <UserStack.Screen name="AthleteGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<AthleteGroups />)} />
+        <UserStack.Screen name="CoachProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <UserStack.Screen name="AthleteProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <UserStack.Screen name="CreateGroup" options={{ title: "Create Group" }} component={ScrollViewWrapper(<CreateGroup />)} />
+        <UserStack.Screen name="ViewGroupCoach" options={{ title: "CHANGE TITLE" }} component={ScrollViewWrapper(<ViewGroupCoach />)} />
+        <UserStack.Screen name="AddAthlete" options={{ title: "Add Athlete" }} component={ScrollViewWrapper(<AddAthlete />)} />
+        <UserStack.Screen name="Athletes" options={{ title: "Athletes" }} component={ScrollViewWrapper(<Athletes />)} />
+        <UserStack.Screen name="Coaches" options={{ title: "Coaches" }} component={ScrollViewWrapper(<Coaches />)} />
+        <UserStack.Screen name="CoachInvites" options={{ title: "Coach Invites" }} component={ScrollViewWrapper(<CoachInvites />)} />
+        <UserStack.Screen name="AssignAthletes" options={{ title: "Assign Athletes" }} component={ScrollViewWrapper(<AssignAthletes />)} />
+        <UserStack.Screen name="CreateWorkoutTemplate" options={{ title: "Create Workout Template" }} component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
+        <UserStack.Screen name="WorkoutTemplates" options={{ title: "Workout Templates" }} component={ScrollViewWrapper(<WorkoutTemplates />)} />
+        <UserStack.Screen name="AssignWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignWorkout />)} />
+        <UserStack.Screen name="ViewGroupInputsCoach" options={{ title: "View Group Inputs Coach" }} component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
+        <UserStack.Screen name="ViewGroupAthlete" options={{ title: "View Group Athlete" }} component={ScrollViewWrapper(<ViewGroupAthlete />)} />
+        <UserStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
+        <UserStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
+        <UserStack.Screen name="AthleteRequests" options={{ title: "Athlete Requests" }} component={ScrollViewWrapper(<AthleteRequests />)} />
+        <UserStack.Screen name="RequestCoaches" options={{ title: "Request Coaches" }} component={ScrollViewWrapper(<RequestCoaches />)} />
+        <UserStack.Screen name="InputHistory" options={{ title: "Input History" }} component={ScrollViewWrapper(<InputHistory />)} />
+        <UserStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
+        <UserStack.Screen name="HistoricalData" options={{ title: "Historical Data" }} component={ScrollViewWrapper(<HistoricalData />)} />
+        <UserStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
       </UserStack.Navigator>
       <Footer />
     </View>

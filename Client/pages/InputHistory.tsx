@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 import UserService from "../services/UserService";
 import HistoryService from "../services/HistoryService";
 import SearchDate from "../components/SearchDate";
-import PageHeading from "../components/PageHeading";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
@@ -34,8 +33,6 @@ const InputHistory = () => {
 
   return (
     <>
-      <PageHeading title="Input History"/>
-      
       {/* Date Search Section */}
       <SearchDate
         handleDateSearch={handleDateSearch}

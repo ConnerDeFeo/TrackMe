@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Text, TextInput, View, ScrollView, TouchableOpacity } from "react-native";
 import Exercise from "../../../types/Exersise";
 import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
-import PageHeading from "../../PageHeading";
 
 //Page for workout creation by coaches
 const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}: 
@@ -52,39 +51,36 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
     );
   }
   return (
-    <>
-      <PageHeading title={pageTitle} goBack/>
-      <View>
-        {/* WORKOUT TITLE INPUT */}
-        {titleDescriptionLayout("Title")}
+    <View>
+      {/* WORKOUT TITLE INPUT */}
+      {titleDescriptionLayout("Title")}
 
-        {/* WORKOUT DESCRIPTION INPUT */}
-        {titleDescriptionLayout("Description")}
+      {/* WORKOUT DESCRIPTION INPUT */}
+      {titleDescriptionLayout("Description")}
 
-        {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
-        <View className="mx-4">
-        {/* Render each exercise input */}
-        {exercises.map((exercise, idx) => (
-          <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx} setErrors={setErrors}/>
-        ))}
-          {/* Button to add a new exercise */}
-          <TouchableOpacity
-            className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
-            onPress={() => setExercises([...exercises, { name: ''}])}
-          >
-            <Text className="text-white font-bold">Add exercise</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* CREATE WORKOUT BUTTON */}
+      {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
+      <View className="mx-4">
+      {/* Render each exercise input */}
+      {exercises.map((exercise, idx) => (
+        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx} setErrors={setErrors}/>
+      ))}
+        {/* Button to add a new exercise */}
         <TouchableOpacity
-          className="bg-black rounded-lg py-3 items-center mx-4 mb-8"
-          onPress={handleCreation}
+          className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
+          onPress={() => setExercises([...exercises, { name: ''}])}
         >
-          <Text className="text-white font-bold text-lg">{buttonText}</Text>
+          <Text className="text-white font-bold">Add exercise</Text>
         </TouchableOpacity>
       </View>
-    </>
+
+      {/* CREATE WORKOUT BUTTON */}
+      <TouchableOpacity
+        className="bg-black rounded-lg py-3 items-center mx-4 mb-8"
+        onPress={handleCreation}
+      >
+        <Text className="text-white font-bold text-lg">{buttonText}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 

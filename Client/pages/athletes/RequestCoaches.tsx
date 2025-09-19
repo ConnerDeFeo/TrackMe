@@ -3,7 +3,6 @@ import { View,  FlatList, Text, Button} from 'react-native';
 import AthleteService from '../../services/AthleteService';
 import SearchBar from '../../components/SearchBar';
 import UserService from '../../services/UserService';
-import PageHeading from '../../components/PageHeading';
 
 
 //Page for requesting coaches
@@ -76,21 +75,18 @@ const RequestCoaches = () => {
     };
 
     return (
-        <>
-            <PageHeading title="Request Coaches" goBack/>
-            <View className="flex-1 px-4">
-                <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} placeholder='Search coaches...' />
-                {loading ? (
-                    <Text className="text-center text-gray-500 text-base mt-4">Searching...</Text>
-                ) : (
-                    <View className="space-y-3">
-                        {coaches.map((coach) => (
-                            renderCoach({ item: coach })
-                        ))}
-                    </View>
-                )}
-            </View>
-        </>
+        <View className="flex-1 px-4">
+            <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} placeholder='Search coaches...' />
+            {loading ? (
+                <Text className="text-center text-gray-500 text-base mt-4">Searching...</Text>
+            ) : (
+                <View className="space-y-3">
+                    {coaches.map((coach) => (
+                        renderCoach({ item: coach })
+                    ))}
+                </View>
+            )}
+        </View>
     );
 };
 

@@ -37,12 +37,12 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
 
   const titleDescriptionLayout = (text:string)=>{
     return(
-      <View className="border border-red-700 rounded-lg m-4 p-3 bg-white">
+      <View className="border-2 rounded-lg m-4 p-3 bg-white">
         <Text className="font-bold">{text}</Text>
         <TextInput
           value={text === "Title" ? title : description}
           onChangeText={text === "Title" ? handleTitleChange : setDescription}
-          className="border-b border-red-700 text-black py-1 mt-1"
+          className="border-b text-black py-1 mt-1"
           placeholder={`Enter workout ${text}`}
           placeholderTextColor="#888"
           multiline
@@ -64,22 +64,21 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
       {exercises.map((exercise, idx) => (
         <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx} setErrors={setErrors}/>
       ))}
-        {/* Button to add a new exercise */}
-        <TouchableOpacity
-          className="bg-[#E63946] rounded-lg py-2 items-center mt-2 mb-4"
-          onPress={() => setExercises([...exercises, { name: ''}])}
-        >
-          <Text className="text-white font-bold">Add exercise</Text>
-        </TouchableOpacity>
+        <View className="flex flex-row justify-between items-center">
+          {/* Button to add a new exercise */}
+          <TouchableOpacity
+            onPress={() => setExercises([...exercises, { name: ''}])}
+          >
+            <Text className="font-bold text-[#E63946]">Add exercise</Text>
+          </TouchableOpacity>
+          {/* CREATE WORKOUT BUTTON */}
+          <TouchableOpacity
+            onPress={handleCreation}
+          >
+            <Text className="font-bold text-[#E63946]">{buttonText}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      {/* CREATE WORKOUT BUTTON */}
-      <TouchableOpacity
-        className="bg-black rounded-lg py-3 items-center mx-4 mb-8"
-        onPress={handleCreation}
-      >
-        <Text className="text-white font-bold text-lg">{buttonText}</Text>
-      </TouchableOpacity>
     </View>
   );
 };

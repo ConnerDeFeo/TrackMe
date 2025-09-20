@@ -98,7 +98,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
   }
 
   return (
-    <View className="border-2 border-red-500 bg-white rounded-lg shadow-lg my-3 p-4">
+    <View className="border-2 bg-white rounded-lg shadow-lg my-3 p-4">
       {/* Exercise Name Section */}
       <View className="mb-4">
         <View className="flex flex-row justify-between items-center">

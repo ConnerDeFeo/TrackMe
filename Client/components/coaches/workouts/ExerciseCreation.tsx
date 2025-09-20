@@ -119,22 +119,30 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
           }} 
         />
       </View>
-      { displaySetsReps ?
+      <View className="flex flex-row justify-between items-center mb-4">\
+          {displaySetsReps ? 
+            <TouchableOpacity onPress={handleSetsRepsRemoval}>
+              <Text className="font-medium text-[#E63946]">Remove Sets/Reps</Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity onPress={handleSetsRepsAddition}>
+              <Text className="font-medium text-[#E63946]">Add Sets/Reps</Text>
+            </TouchableOpacity>
+          }
+          {/* Button to add a new exercise part */}
+          <TouchableOpacity onPress={handleDistanceAddition}>
+            <Text className="font-medium text-[#E63946]">Add Distance</Text>
+          </TouchableOpacity>
+      </View>
+      { displaySetsReps &&
           /* Sets and Reps Section */
           <View className="flex flex-row justify-between w-[75%] mx-auto items-center mb-3">
             {setsReps('sets')}
             <View className="flex flex-col items-center justify-end">
               <Text className="text-4xl font-bold">X</Text>
-              <TouchableOpacity onPress={handleSetsRepsRemoval}>
-                  <Text className="text-[#E63946]">Remove</Text>
-                </TouchableOpacity>
             </View>
             {setsReps('reps')}
           </View>
-          :
-          <TouchableOpacity onPress={handleSetsRepsAddition} className="bg-black rounded-md p-3 mt-2">
-            <Text className="text-white text-center font-medium">Add Sets/Reps</Text>
-          </TouchableOpacity>
       }
 
               {/* Dynamically rendered Exercise Parts */}
@@ -173,11 +181,6 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
           ))}
         </View>
         }
-
-      {/* Button to add a new exercise part */}
-      <TouchableOpacity onPress={handleDistanceAddition} className="bg-[#E63946] rounded-md p-3 mt-4">
-        <Text className="text-white text-center font-medium">Add Distance</Text>
-      </TouchableOpacity>
     </View>
   );
 };

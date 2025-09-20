@@ -50,7 +50,7 @@ const Footer = () => {
     }, []);
 
     return (
-        <View className='h-[5rem] border-t flex-row justify-around items-center'>
+        <View className='h-[6rem] border-t flex-row justify-around items-top pt-4'>
             {buttons.map(([imageName, destination], idx) => (
                 <TouchableOpacity
                     key={idx}

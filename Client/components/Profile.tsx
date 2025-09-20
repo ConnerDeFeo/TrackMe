@@ -56,13 +56,9 @@ const Profile = () => {
     }
 
     return (
-        <View className="flex-1 bg-gray-50 px-6 pt-4">
+        <View className="flex-1 px-6 pt-4">
             {/* Profile Picture Section */}
             <View className="items-center mb-8 ">
-                {/* Placeholder profile picture with gradient background */}
-                <View className="h-32 w-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full items-center justify-center shadow-lg mb-4">
-                    <Text className="text-white text-lg font-semibold">PFP</Text>
-                </View>
                 {/* Display user's full name */}
                 <Text className="text-2xl font-bold text-gray-800 mb-2">{userData.firstName} {userData.lastName}</Text>
                 {/* Display username */}

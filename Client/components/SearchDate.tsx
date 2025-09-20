@@ -17,13 +17,14 @@ const SearchDate: React.FC<{
     // Called when user taps "Search"
     const handleSearch = async () => {
         if (!dateInput) return;  // nothing to do if input is empty
-
+        // Remove whtitespace
+        const trimmedInput = dateInput.trim();
         // Only accept YYYY-MM-DD format
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        if (dateRegex.test(dateInput)) {
+        if (dateRegex.test(trimmedInput)) {
             // Update local label and notify parent
-            setSelectedDate(dateInput);
-            handleDateSearch(dateInput);
+            setSelectedDate(trimmedInput);
+            handleDateSearch(trimmedInput);
         } else {
             // Alert user if format is invalid
             alert("Please enter a valid date format (YYYY-MM-DD)");

@@ -119,7 +119,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
           }} 
         />
       </View>
-      <View className="flex flex-row justify-between items-center mb-4">\
+      <View className="flex flex-row justify-between items-center mb-4">
           {displaySetsReps ? 
             <TouchableOpacity onPress={handleSetsRepsRemoval}>
               <Text className="font-medium text-[#E63946]">Remove Sets/Reps</Text>

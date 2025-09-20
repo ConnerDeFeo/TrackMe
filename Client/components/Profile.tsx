@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import UserService from "../services/UserService";
 import { useNavigation } from "@react-navigation/native";
 import GeneralService from "../services/GeneralService";
@@ -134,11 +134,12 @@ const Profile = () => {
 
                 {/* Logout button */}
                 <View className="mt-8">
-                    <Button 
-                    title="Sign Out" 
-                    onPress={handleLogout} 
-                    color={'#EF4444'}
-                    />
+                    <TouchableOpacity
+                        onPress={handleLogout}
+                        className="bg-red-500 p-3 rounded items-center"
+                    >
+                        <Text className="text-white font-semibold text-base">Sign Out</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

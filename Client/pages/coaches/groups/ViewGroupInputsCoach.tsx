@@ -32,7 +32,7 @@ const ViewGroupInputsCoach = ()=>{
     },[])
 
     return(
-        <View className="px-4">
+        <View className="px-4 mt-4">
             {athletes.map((athlete)=>(
             <View key={athlete[0]} className="bg-white rounded-lg shadow-lg p-6 mb-6 border-l-4" style={{borderLeftColor: '#E63946'}}>
                 <Text className="text-xl font-semibold text-black mb-4">{athlete[1]}</Text>

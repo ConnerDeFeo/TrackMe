@@ -1,4 +1,4 @@
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import Exercise from "../../../types/Exersise";
 import { JSX, useState } from "react";
 import Variables from "../../../constants/Variables";
@@ -120,22 +120,24 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
         />
       </View>
       { displaySetsReps ?
-        /* Sets and Reps Section */
-        <View className="flex flex-row justify-between w-[75%] mx-auto items-center mb-3">
-          {setsReps('sets')}
-          <View className="flex flex-col items-center justify-end">
-            <Text className="text-4xl font-bold">X</Text>
-            <TouchableOpacity onPress={handleSetsRepsRemoval}>
-                <Text className="text-[#E63946]">Remove</Text>
-              </TouchableOpacity>
+          /* Sets and Reps Section */
+          <View className="flex flex-row justify-between w-[75%] mx-auto items-center mb-3">
+            {setsReps('sets')}
+            <View className="flex flex-col items-center justify-end">
+              <Text className="text-4xl font-bold">X</Text>
+              <TouchableOpacity onPress={handleSetsRepsRemoval}>
+                  <Text className="text-[#E63946]">Remove</Text>
+                </TouchableOpacity>
+            </View>
+            {setsReps('reps')}
           </View>
-          {setsReps('reps')}
-        </View>
-        :
-        <Button title="Sets/Reps" color="black" onPress={handleSetsRepsAddition} />
+          :
+          <TouchableOpacity onPress={handleSetsRepsAddition} className="bg-black rounded-md p-3 mt-2">
+            <Text className="text-white text-center font-medium">Add Sets/Reps</Text>
+          </TouchableOpacity>
       }
 
-      {/* Dynamically rendered Exercise Parts */}
+              {/* Dynamically rendered Exercise Parts */}
       {excercise.exerciseParts && excercise.exerciseParts.length > 0 &&
         <View className="bg-gray-50 rounded-lg p-4 mb-4">
           <Text className="text-lg font-bold">Distances</Text>
@@ -173,13 +175,9 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
         }
 
       {/* Button to add a new exercise part */}
-      <View className="mt-4">
-        <Button 
-          title="Add Distance" 
-          color="#E63946"
-          onPress={handleDistanceAddition} 
-        />
-      </View>
+      <TouchableOpacity onPress={handleDistanceAddition} className="bg-[#E63946] rounded-md p-3 mt-4">
+        <Text className="text-white text-center font-medium">Add Distance</Text>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -70,37 +70,41 @@ const CreateAccount = ()=>{
         <View className="relative h-full w-[85%] mx-auto">
             <AuthenticationHeader />
             <View className="m-auto gap-y-10 w-full">
-                {/**ERROR MESSAGE*/}
-                <Text className="text-red-500 text-center text-xl">{message}</Text>
-                
-                {/**CREATE ACCOUNT FORM*/}
-                <View className="gap-y-8 bg-red-200 rounded-xl p-6">
-                    <View className="rounded-lg h-12 flex flex-row overflow-hidden">
-                        <TouchableOpacity 
-                            onPress={() => setAccountType("Athlete")} 
-                            className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Athlete' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
-                        >
-                            <Text className={`text-xl ${accountType === 'Athlete' ? 'text-white font-bold' : 'text-black'}`}>Athlete</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            onPress={() => setAccountType("Coach")}
-                            className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Coach' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
-                        >
-                            <Text className={`text-xl ${accountType === 'Coach' ? 'text-white font-bold' : 'text-black'}`}>Coach</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
-                    <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
-                    <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
-                    <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
-                    <Button title="Create Account" onPress={handleCreateAccount} color="black"/>
+            {/**ERROR MESSAGE*/}
+            <Text className="text-red-500 text-center text-xl">{message}</Text>
+            
+            {/**CREATE ACCOUNT FORM*/}
+            <View className="gap-y-8 bg-red-200 rounded-xl p-6">
+                <View className="rounded-lg h-12 flex flex-row overflow-hidden">
+                <TouchableOpacity 
+                    onPress={() => setAccountType("Athlete")} 
+                    className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Athlete' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
+                >
+                    <Text className={`text-xl ${accountType === 'Athlete' ? 'text-white font-bold' : 'text-black'}`}>Athlete</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    onPress={() => setAccountType("Coach")}
+                    className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Coach' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
+                >
+                    <Text className={`text-xl ${accountType === 'Coach' ? 'text-white font-bold' : 'text-black'}`}>Coach</Text>
+                </TouchableOpacity>
                 </View>
+                <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
+                <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
+                <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
+                <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
+                <TouchableOpacity onPress={handleCreateAccount} className="bg-black rounded-lg py-3 items-center">
+                    <Text className="text-white text-xl font-bold">Create Account</Text>
+                </TouchableOpacity>
+            </View>
 
-                {/**SIGN IN LINK*/}
-                <View className="gap-y-6">
-                    <Text className="text-center text-xl">Already have an account? </Text>
-                    <Button title="Sign In" onPress={()=>navigation.replace("Auth",{"Screen":'SignIn'})} color="#E63946"/>
-                </View>
+            {/**SIGN IN LINK*/}
+            <View className="gap-y-6">
+                <Text className="text-center text-xl">Already have an account? </Text>
+                <TouchableOpacity onPress={()=>navigation.replace("Auth",{"Screen":'SignIn'})} className="bg-red-500 rounded-lg py-3 items-center">
+                    <Text className="text-white text-xl font-bold">Sign In</Text>
+                </TouchableOpacity>
+            </View>
             </View>
         </View>
     );

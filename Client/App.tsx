@@ -55,7 +55,6 @@ function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
 const getPlusButtonNavigationTarget = (routeName:string) => {
   switch(routeName) {
     case 'CoachGroups': return 'CreateGroup';
-    case 'Athletes': return 'AddAthlete';
     case 'WorkoutTemplates': return 'CreateWorkoutTemplate';
     default: return null;
   }
@@ -105,7 +104,7 @@ const UserLayoutWrapper = () => {
         <UserStack.Screen name="CreateWorkoutTemplate" options={{ title: "Create Workout Template" }} component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
         <UserStack.Screen name="WorkoutTemplates" options={{ title: "Workout Templates" }} component={ScrollViewWrapper(<WorkoutTemplates />)} />
         <UserStack.Screen name="AssignWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignWorkout />)} />
-        <UserStack.Screen name="ViewGroupInputsCoach" options={{ title: "View Group Inputs Coach" }} component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
+        <UserStack.Screen name="ViewGroupInputsCoach" options={{ title: "Group Inputs" }} component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
         <UserStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
         <UserStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
         <UserStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />

@@ -69,13 +69,13 @@ const ViewGroup = () => {
   }
 
   return (
-    <View className="pb-12 px-4">
+    <View className="pb-12 px-4 mt-4">
       <View className="space-y-4 mb-8">
         <TouchableOpacity
           onPress={() => navigate('AssignWorkout', { groupId: groupId, groupName: groupName, fetchWorkout: fetchWorkout })}
           className="bg-[#E63946] rounded-lg py-3"
         >
-          <Text className="text-white font-semibold text-center">{workouts.length > 0 ? "Change Workout" : "Send Workout"}</Text>
+          <Text className="text-white font-semibold text-center">Send Workout</Text>
         </TouchableOpacity>
         {workouts.length > 0 && 
           <TouchableOpacity 

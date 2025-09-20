@@ -1,6 +1,6 @@
 import { confirmSignUp, fetchUserAttributes, resendSignUpCode } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import UserService from "../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AthleteService from "../../services/AthleteService";
@@ -98,8 +98,18 @@ const ConfirmEmail = () => {
                     />
                     
                     <View className="gap-y-3">
-                        <Button title="Confirm Email" color="#E63946" onPress={handleConfirmEmail} />
-                        <Button title="Back to Sign In" color="black" onPress={() => navigation.replace("Auth", { screen: 'SignIn' })} />
+                        <TouchableOpacity 
+                            className="bg-red-600 rounded-lg py-3 px-4"
+                            onPress={handleConfirmEmail}
+                        >
+                            <Text className="text-white text-center font-semibold">Confirm Email</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            className="bg-black rounded-lg py-3 px-4"
+                            onPress={() => navigation.replace("Auth", { screen: 'SignIn' })}
+                        >
+                            <Text className="text-white text-center font-semibold">Back to Sign In</Text>
+                        </TouchableOpacity>
                         <View className="flex flex-row justify-between items-center">
                             <TouchableOpacity onPress={handleResendCode} disabled={resendCodeTimer > 0}>
                                 <Text>Resend Code</Text>

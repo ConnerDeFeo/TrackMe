@@ -162,7 +162,9 @@ const RenderGroupInputs: React.FC<
             </View>
 
             {/* Submit the current inputs for the current group */}
-            <Button title="Submit" color="black" onPress={handleInputSubmission} />
+            <TouchableOpacity className="bg-black rounded-lg p-3" onPress={handleInputSubmission}>
+                <Text className="text-white text-center font-medium">Submit</Text>
+            </TouchableOpacity>
         </View>
     );
 }

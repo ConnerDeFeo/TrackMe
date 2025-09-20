@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, TextInput, View } from "react-native";
+import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AsyncStorage from "../../../services/AsyncStorage";
 import CoachGroupService from "../../../services/CoachGroupService";
 import { useNav } from "../../../hooks/useNav";
@@ -52,11 +52,14 @@ const CreateGroup = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-800 placeholder-gray-400 shadow-sm"
             />
             <View className="mt-6">
-                <Button 
-                title="Create Group" 
-                onPress={handleCreateGroup}
-                color="#E63946"
-                />
+                <TouchableOpacity
+                    onPress={handleCreateGroup}
+                    className="bg-red-500 px-6 py-3 rounded-lg"
+                >
+                    <Text className="text-white text-center font-semibold">
+                        Create Group
+                    </Text>
+                </TouchableOpacity>
             </View>
             </View>
         </View>

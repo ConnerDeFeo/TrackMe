@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View,  FlatList, Text, Button} from 'react-native';
+import { View, Text, TouchableOpacity} from 'react-native';
 import AthleteService from '../../services/AthleteService';
 import SearchBar from '../../components/SearchBar';
 import UserService from '../../services/UserService';
@@ -62,7 +62,14 @@ const RequestCoaches = () => {
                 joinedStatus = <Text className='text-blue-500'>Awaiting Response</Text>;
                 break;
             default:
-                joinedStatus = <Button title='Request' color='black' onPress={() => handleRequest(userId)} />;
+                joinedStatus = (
+                    <TouchableOpacity
+                        className="bg-black px-4 py-2 rounded"
+                        onPress={() => handleRequest(userId)}
+                    >
+                        <Text className="text-white font-medium">Request</Text>
+                    </TouchableOpacity>
+                );
                 break;
         }
 

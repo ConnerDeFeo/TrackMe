@@ -1,5 +1,5 @@
 import AuthInput from "../../components/authentication/AuthInput";
-import { Button, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { confirmResetPassword } from "aws-amplify/auth";
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
@@ -71,16 +71,19 @@ const ResetPassword = () => {
                 placeholder="Confirm New Password" 
                 sensitive={true}
                 />
-                <Button title="Reset Password" onPress={handleConfirmReset} color="black" />
+                <TouchableOpacity onPress={handleConfirmReset} className="bg-black py-3 rounded">
+                    <Text className="text-white text-center font-medium">Reset Password</Text>
+                </TouchableOpacity>
             </View>
 
             {/**BACK TO SIGN IN*/}
             <View className="gap-y-6">
-                <Button 
-                title="Back to Sign In" 
+                <TouchableOpacity 
                 onPress={() => navigation.navigate("Auth", { screen: 'SignIn' })} 
-                color="#E63946"
-                />
+                className="bg-[#E63946] py-3 rounded"
+                >
+                    <Text className="text-white text-center font-medium">Back to Sign In</Text>
+                </TouchableOpacity>
             </View>
             </View>
         </View>

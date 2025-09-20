@@ -33,7 +33,6 @@ const SignIn = ()=>{
             await UserService.signIn(username,password);
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
-            console.log("Account Type: ", accountType);
             navigation.replace("User",{screen:`${accountType}Groups`});
         }catch (error:any) {
             handleError(error);

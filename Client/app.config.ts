@@ -33,7 +33,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
-      package: PACKAGE_NAME
+      package: PACKAGE_NAME,
+      versionCode: 4,
     },
     plugins: ["expo-secure-store"],
     extra: {

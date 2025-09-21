@@ -1,7 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import { Pressable, Text,TouchableOpacity,View } from "react-native";
-import { useState, useCallback  } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import CoachGroupService from "../../../services/CoachGroupService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
@@ -19,7 +19,7 @@ const ViewGroup = () => {
   const [deletionMode, setDeletionMode] = useState<boolean>(false);
 
   //Grabs all athletes that are a part of the group
-  const fetchParticipants = useCallback(async () => {
+  const fetchParticipants = useCallback( async () => {
       const resp = await GeneralService.getAthletesForGroup(groupId);
       if (resp.ok) {
         const data = await resp.json();
@@ -44,10 +44,12 @@ const ViewGroup = () => {
     }
   }, [groupId]);
 
-  useFocusEffect(()=>{
-    fetchParticipants();
-    fetchWorkout();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchParticipants();
+      fetchWorkout();
+    }, [fetchParticipants, fetchWorkout])
+  );
 
   const removeAthleteFromGroup = async (athleteId: string) => {
     const resp = await CoachGroupService.removeAthleteFromGroup(athleteId, groupId);

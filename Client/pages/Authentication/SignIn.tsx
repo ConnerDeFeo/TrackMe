@@ -1,6 +1,7 @@
 import AuthInput from "../../components/authentication/AuthInput";
 import { Button, Text, TouchableOpacity, View } from "react-native";
 import { useEffect, useState } from "react";
+import * as Updates from 'expo-updates';
 import UserService from "../../services/UserService";
 import { fetchUserAttributes  } from "aws-amplify/auth";
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
@@ -50,6 +51,15 @@ const SignIn = ()=>{
                 return;
             }
         }
+        // Expo Updates - Check for and apply updates
+        async function checkAndApplyUpdate() {
+            const update = await Updates.checkForUpdateAsync();
+            if (update.isAvailable) {
+                await Updates.fetchUpdateAsync();
+                await Updates.reloadAsync(); // reloads app with new code
+            }
+        }
+        checkAndApplyUpdate();
         checkUser();
     }, [navigation]);
 

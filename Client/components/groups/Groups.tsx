@@ -1,4 +1,3 @@
-import { View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import { useEffect, useState } from "react";
 import GroupDisplay from "./GroupDisplay";
@@ -38,11 +37,11 @@ const Groups = () => {
   };
 
   return (
-    <View>
+    <>
       {groups.map((group, index) => (
         <GroupDisplay key={index} groupName={group[0]} navigateTo={() => handleNavigation(group[0], group[1])} />
       ))}
-    </View>
+    </>
   );
 };
 

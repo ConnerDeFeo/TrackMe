@@ -26,20 +26,26 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       bundleIdentifier: BUNDLE_IDENTIFIER,
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
-      },
+      }
     },
     android: {
       adaptiveIcon: {
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
-      package: PACKAGE_NAME,
+      package: PACKAGE_NAME
     },
     plugins: ["expo-secure-store"],
     extra: {
       eas: {
         projectId: APP_ID,
       }
+    },
+    updates: {
+      url: "https://u.expo.dev/7a30db18-1202-43a9-9ca5-8c93acc236ed",
+    },
+    runtimeVersion: {
+      policy: "appVersion",
     },
   };
 };

@@ -6,13 +6,13 @@ import { useNav } from '../hooks/useNav';
 
 // Import all images statically
 const images = {
-    'Groups': require('../images/Groups.png'),
-    'Inputs': require('../images/Input.png'),
-    'Coaches': require('../images/Friends.png'),
-    'Workouts': require('../images/Sprinter.png'),
-    'Athletes': require('../images/Friends.png'),
-    'Profile': require('../images/Profile.png'),
-    'History': require('../images/History.png'),
+    'Groups': require('../assets/images/Groups.png'),
+    'Inputs': require('../assets/images/Input.png'),
+    'Coaches': require('../assets/images/Friends.png'),
+    'Workouts': require('../assets/images/Sprinter.png'),
+    'Athletes': require('../assets/images/Friends.png'),
+    'Profile': require('../assets/images/Profile.png'),
+    'History': require('../assets/images/History.png'),
 };
 
 const layouts = {

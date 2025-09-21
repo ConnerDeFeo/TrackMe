@@ -1,7 +1,7 @@
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import Exercise from "../../../types/Exersise";
 import { JSX, useState } from "react";
-import Variables from "../../../constants/Variables";
+import Variables from "../../../assets/constants/Variables";
 /**
  * Component for creating and editing a single exercise within a workout.
  * @param {object} props - The component props.

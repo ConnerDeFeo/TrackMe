@@ -5,7 +5,7 @@ const HeaderBackButton = ({destination}:{destination:string}) => {
     const {goBack, popTo} = useNav(); // Access navigation for goBack
     return (
         <TouchableOpacity onPress={destination ? () => popTo(destination) : goBack}>
-            <Image source={require("../images/Back.png")} className="h-8 w-8" />
+            <Image source={require("../assets/images/Back.png")} className="h-8 w-8" />
         </TouchableOpacity>
     );
 }

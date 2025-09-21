@@ -10,7 +10,7 @@ import { useNav } from "../../../hooks/useNav";
 const AssignWorkout = ()=>{
     const route = useRoute();
     const { navigate, goBack } = useNav();
-    const { groupId, groupName, fetchWorkout } = route.params as { groupId: string, groupName: string, fetchWorkout: ()=>void};
+    const { groupId, groupName } = route.params as { groupId: string, groupName: string };
     const [workouts, setWorkouts] = useState<Array<any>>([]);
 
     //Fetch all workouts
@@ -28,26 +28,26 @@ const AssignWorkout = ()=>{
 
     const handleAssignTemplateWorkout = async (workoutId:string) => {
         const response = await CoachWorkoutService.assignWorkoutTemplateToGroup(workoutId, groupId);
+        console.log(response);
         if (response.ok) {
-            fetchWorkout();
             goBack();
         }
     };
 
     return (
-        <>
+        <View className="mt-4">
             <TouchableOpacity
                 onPress={() => navigate('AssignNewWorkout', { groupId: groupId, groupName: groupName })}
                 className="bg-[#E63946] rounded-lg py-3 mx-4"
             >
                 <Text className="text-white font-semibold text-center">Assign New Workout</Text>
             </TouchableOpacity>
-            {workouts.map((workout, idx) => (
-                <View key={idx} className="my-2">
-                    <DisplayWorkout workout={workout} onPress={() => handleAssignTemplateWorkout(workout.workoutId)} />
-                </View>
-            ))}
-        </>
+            <View className="flex gap-y-2">
+                {workouts.map((workout, idx) => (
+                    <DisplayWorkout key={idx} workout={workout} onPress={() => handleAssignTemplateWorkout(workout.workoutId)} />
+                ))}
+            </View>
+        </View>
     );
 }
 

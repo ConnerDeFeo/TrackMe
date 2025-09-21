@@ -17,7 +17,6 @@ const AssignNewWorkout = () => {
 
     return (
         <WorkoutCreation
-            pageTitle="Assign Group Workout"
             buttonText="Assign"
             handleWorkoutCreation={handleWorkoutCreation}
             workout={workout}

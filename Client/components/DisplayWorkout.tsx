@@ -12,7 +12,6 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
         // Main touchable container that navigates to CreateWorkout screen when pressed
         <TouchableOpacity 
             onPress={onPress}
-            className="active:opacity-80"
         >
             {/* Main workout card container */}
             <View className="bg-white border border-gray-200 shadow-md my-3 mx-2 p-5 rounded-xl">

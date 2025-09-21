@@ -1,6 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import { Pressable, Text,TouchableOpacity,View } from "react-native";
-import { useEffect, useState } from "react";
+import { useState, useCallback  } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import CoachGroupService from "../../../services/CoachGroupService";
 import DisplayWorkout from "../../../components/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
@@ -18,7 +19,7 @@ const ViewGroup = () => {
   const [deletionMode, setDeletionMode] = useState<boolean>(false);
 
   //Grabs all athletes that are a part of the group
-  const fetchParticipants = async () => {
+  const fetchParticipants = useCallback(async () => {
       const resp = await GeneralService.getAthletesForGroup(groupId);
       if (resp.ok) {
         const data = await resp.json();
@@ -28,9 +29,10 @@ const ViewGroup = () => {
         setParticipants([]);
       }
     }
+  , [groupId]);
 
   //Fetches the workout for the current date
-  const fetchWorkout = async () => {
+  const fetchWorkout = useCallback(async () => {
     const date = new Date().toISOString().split("T")[0];
     const resp = await GeneralService.getGroupWorkout(groupId, date);
     if(resp.ok){
@@ -40,12 +42,12 @@ const ViewGroup = () => {
     else{
       setWorkouts([]);
     }
-  }
+  }, [groupId]);
 
-  useEffect(()=>{
+  useFocusEffect(()=>{
     fetchParticipants();
     fetchWorkout();
-  },[])
+  });
 
   const removeAthleteFromGroup = async (athleteId: string) => {
     const resp = await CoachGroupService.removeAthleteFromGroup(athleteId, groupId);
@@ -72,7 +74,7 @@ const ViewGroup = () => {
     <View className="pb-12 px-4 mt-4">
       <View className="space-y-4 mb-8">
         <TouchableOpacity
-          onPress={() => navigate('AssignWorkout', { groupId: groupId, groupName: groupName, fetchWorkout: fetchWorkout })}
+          onPress={() => navigate('AssignWorkout', { groupId: groupId, groupName: groupName })}
           className="bg-[#E63946] rounded-lg py-3"
         >
           <Text className="text-white font-semibold text-center">Send Workout</Text>

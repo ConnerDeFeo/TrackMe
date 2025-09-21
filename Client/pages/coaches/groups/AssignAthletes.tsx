@@ -41,29 +41,20 @@ const AssignAthletes = ()=>{
     };
 
     return (
-        <View className="flex-1 p-4 mt-[4rem]">
-            <View className="flex-row items-center justify-between mb-6">
-                <TouchableOpacity onPress={() => goBack()} className="px-4 py-2 bg-black rounded-lg">
-                    <Text className="text-white font-semibold">Back</Text>
-                </TouchableOpacity>
-                <Text className="text-2xl font-bold text-gray-800 flex-1 text-center">Assign Athletes</Text>
-            <View className="w-16" />
-            </View>
-            <View className="space-y-3">
+        <View className="flex-1 mt-4">
             {athletes.map(athlete => (
-            <View key={athlete[0]} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center justify-between">
-                <Text className="text-lg font-medium text-gray-800 flex-1">{athlete[1]}</Text>
-                {athlete[2] ? 
-                <View className="bg-green-100 px-3 py-1 rounded-full">
-                    <Text className="text-green-800 font-medium">Assigned</Text>
-                </View> : 
-                <TouchableOpacity className="bg-[#E63946] px-4 py-2 rounded-lg" onPress={() => handleAssignAthlete(athlete[0])}>
-                    <Text className="text-white font-semibold">Assign</Text>
-                </TouchableOpacity>
-                }
-            </View>
+                <View key={athlete[0]} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center justify-between">
+                    <Text className="text-lg font-medium text-gray-800 flex-1">{athlete[1]}</Text>
+                    {athlete[2] ? 
+                        <View className="bg-green-100 px-3 py-1 rounded-full">
+                            <Text className="text-green-800 font-medium">Assigned</Text>
+                        </View> : 
+                        <TouchableOpacity className="bg-[#E63946] px-4 py-2 rounded-lg" onPress={() => handleAssignAthlete(athlete[0])}>
+                            <Text className="text-white font-semibold">Assign</Text>
+                        </TouchableOpacity>
+                    }
+                </View>
             ))}
-            </View>
         </View>
     );
 }

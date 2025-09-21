@@ -4,6 +4,7 @@ const APP_ID = "7a30db18-1202-43a9-9ca5-8c93acc236ed";
 const APP_NAME = "Track Me";
 const BUNDLE_IDENTIFIER = "com.connerdefeo.trackme.prod";
 const PACKAGE_NAME = "com.connerdefeo.trackme.prod";
+const ICON = "./assets/images/Track.png";
 
 export default ({ config }: ConfigContext): ExpoConfig => {
   return {
@@ -14,9 +15,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     orientation: "portrait",
     userInterfaceStyle: "light",
     newArchEnabled: true,
+    icon: ICON,
     splash: {
       resizeMode: "contain",
       backgroundColor: "#ffffff",
+      image: ICON,
     },
     ios: {
       supportsTablet: true,

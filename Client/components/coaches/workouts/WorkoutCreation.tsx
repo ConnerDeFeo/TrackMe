@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Text, TextInput, View, ScrollView, TouchableOpacity } from "react-native";
+import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import Exercise from "../../../types/Exersise";
 import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
 
 //Page for workout creation by coaches
-const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}: 
-    {workout?: any; handleWorkoutCreation: (workoutData:any) => void; pageTitle: string; buttonText: string;}) => {
+const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}: 
+    {workout?: any; handleWorkoutCreation: (workoutData:any) => void; buttonText: string;}) => {
 
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
@@ -51,7 +51,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, pageTitle, buttonText}
     );
   }
   return (
-    <View>
+    <View className="mb-8">
       {/* WORKOUT TITLE INPUT */}
       {titleDescriptionLayout("Title")}
 

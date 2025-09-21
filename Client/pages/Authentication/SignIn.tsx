@@ -69,16 +69,12 @@ const SignIn = ()=>{
                             <Text className="text-right">Forgot Password?</Text>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={handleSignIn} className="bg-black rounded-lg py-3">
-                        <Text className="text-white text-center font-medium">Login</Text>
-                    </TouchableOpacity>
+                    <Button title="Login" onPress={handleSignIn} color="black"/>
                 </View>
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-6">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <TouchableOpacity onPress={()=>navigation.replace("Auth", {screen:'CreateAccount'})} className="bg-red-500 rounded-lg py-3">
-                        <Text className="text-white text-center font-medium">Create Account</Text>
-                    </TouchableOpacity>
+                    <Button title="Create Account" onPress={()=>navigation.replace("Auth", {screen:'CreateAccount'})} color="#E63946"/>
                 </View>
             </View>
         </View>

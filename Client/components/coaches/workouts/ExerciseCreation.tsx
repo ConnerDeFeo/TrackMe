@@ -71,15 +71,18 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
     return (
       <View>
         <Text className="text-lg font-bold">{field === 'sets' ? 'Sets' : 'Reps'}</Text>
-        <View className={`border rounded-md bg-white ${excercise[field] && excercise[field] > 0 ? 'border-gray-300' : 'border-red-500'}`}>
+        <View className={`border rounded-md bg-white h-12 ${excercise[field] && excercise[field] > 0 ? 'border-gray-300' : 'border-red-500'}`}>
           <TextInput className="text-center" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => {
             // Update state only if a valid number is entered.
             if(text && !isNaN(Number(text))) {
               if(excercise[field] === undefined) {
                 handleErrorChange(-1); // Decrement error count if field was previously undefined
               }
-              const updatedExcercise = { ...excercise, [field]: Number(text) };
-              setExercises((prev) => prev.map((ex, index) => index === idx ? updatedExcercise : ex));
+              const num = Number(text);
+              if(num <= 99){
+                const updatedExcercise = { ...excercise, [field]: Number(text) };
+                setExercises((prev) => prev.map((ex, index) => index === idx ? updatedExcercise : ex));
+              }324
             }
             // If the input is cleared, remove the value from state.
             if(text === '') {

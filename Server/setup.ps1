@@ -1,10 +1,10 @@
-cd dev-setup
+Set-Location dev-setup
 pip install -r requirements.txt
 python setup_rds.py
 python insertData.py
-cd ..
-cd layers/rds/python
+Set-Location ..
+Set-Location layers/rds/python
 Remove-Item -Recurse -Force psycopg2*
-cd ../../..
+Set-Location ../../..
 sam build
 sam local start-api

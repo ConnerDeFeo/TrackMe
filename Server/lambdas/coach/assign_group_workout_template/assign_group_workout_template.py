@@ -1,8 +1,6 @@
 from datetime import datetime, timezone
 import json
-
 from rds import execute_commit
-
 
 def assign_group_workout_template(event, context):
     body = json.loads(event['body'])

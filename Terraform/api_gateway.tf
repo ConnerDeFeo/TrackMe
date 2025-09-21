@@ -33,7 +33,7 @@ locals {
     "coaches/create_coach" = { lambda = aws_lambda_function.lambdas["create_coach"], method = "POST" }
     "coaches/create_group" = { lambda = aws_lambda_function.lambdas["create_group"], method = "POST" }
     "coaches/create_workout_template" = { lambda = aws_lambda_function.lambdas["create_workout_template"], method = "POST" }
-    "coaches/assign_group_workout_template" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
+    "coaches/assign_group_workout_template" = { lambda = aws_lambda_function.lambdas["assign_group_workout_template"], method = "POST" }
     "coaches/invite_athlete" = { lambda = aws_lambda_function.lambdas["invite_athlete"], method = "POST" }
     "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
 

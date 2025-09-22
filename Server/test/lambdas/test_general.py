@@ -131,15 +131,12 @@ def test_view_group_inputs():
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     assert len(data) == 1
-    athlete_data = data['1234']
-    assert len(athlete_data) == 2
-    assert athlete_data['username'] == "test_athlete"
-    inputs = athlete_data['inputs']
-    assert len(inputs) == 2
-    assert inputs[0]['distance'] == 100
-    assert inputs[0]['time'] == 10.8
-    assert inputs[1]['distance'] == 200
-    assert inputs[1]['time'] == 30
+    inputed_times = data['1234']
+    assert len(inputed_times) == 2
+    assert inputed_times[0]['distance'] == 100
+    assert inputed_times[0]['time'] == 10.8
+    assert inputed_times[1]['distance'] == 200
+    assert inputed_times[1]['time'] == 30
 
 def test_get_user():
     create_athlete(TestData.test_athlete, {})

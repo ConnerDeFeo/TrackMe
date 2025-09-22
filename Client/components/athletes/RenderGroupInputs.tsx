@@ -96,10 +96,10 @@ const RenderGroupInputs: React.FC<
             {/**Submitted inputs that will be displayed */}
             {submitedInputs[groupId] &&
                 <View>
-                    <Text className="my-2">Submitted Inputs:</Text>
+                    <Text className="my-2">Submitted:</Text>
                     {submitedInputs[groupId].map((input, idx) => (
                         <View key={idx} className="flex flex-row justify-between items-center mb-2 ml-2">
-                            <Text className="text-gray-600">Time: {input.time}</Text>
+                            <Text className="text-gray-600">Time: {input.time}s</Text>
                             <Text className="text-gray-600">Distance: {input.distance}m</Text>
                         </View>
                     ))}

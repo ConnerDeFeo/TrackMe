@@ -72,6 +72,7 @@ const getPageTitle = (routeName:string, params:any) => {
     case 'ViewGroupCoach': return params.groupName;
     case 'ViewGroupAthlete': return params.groupName;
     case 'ViewGroupInputsCoach': return `${params.groupName} Inputs`;
+    case 'MassInput': return `${params.groupName} Mass Input`;
     default: return routeName;
   }
 }
@@ -114,7 +115,7 @@ const UserLayoutWrapper = () => {
         <UserStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
         <UserStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <UserStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
-        <UserStack.Screen name="MassInput" options={{ title: "Mass Input" }} component={ScrollViewWrapper(<MassInput />)} />
+        <UserStack.Screen name="MassInput" component={ScrollViewWrapper(<MassInput />)} />
       </UserStack.Navigator>
       <Footer />
     </View>

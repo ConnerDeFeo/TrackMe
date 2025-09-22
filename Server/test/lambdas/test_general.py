@@ -21,9 +21,10 @@ from lambdas.general.get_user.get_user import get_user
 from lambdas.general.remove_coach_athlete.remove_coach_athlete import remove_coach_athlete
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
-from rds import execute_file, fetch_one
+from rds import execute_file, fetch_one, fetch_all
 from data import TestData
 from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
+from lambdas.general.mass_input.mass_input import mass_input
 from testing_utils import debug_table
 from datetime import datetime, timezone
 
@@ -41,6 +42,14 @@ def setup_before_each_test(): #This will run before each test
     accept_coach_invite(TestData.test_accept_coach_invite, {})
     add_athlete_to_group(TestData.test_add_athlete_to_group, {})
     yield
+
+def generate_athlete(username, userId):
+    create_athlete( {
+        "body": json.dumps({
+            "userId": userId,
+            "username": username
+        })
+    },{}) 
 
 def test_get_groups_athlete():
     response = get_groups(TestData.test_get_group_athlete, {})
@@ -118,9 +127,6 @@ def test_get_athletes_for_group():
     assert body[0][1] == "test_athlete"
 
 def test_view_group_inputs():
-    create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
     input_times(TestData.test_input_times, {})
     event = {
         "queryStringParameters": {
@@ -252,3 +258,89 @@ def test_get_pending_proposals():
     assert len(body) == 1
 
     assert body["count"] == 1
+
+def test_mass_input():
+    generate_athlete("testathlete2", "5678")
+    generate_athlete("testathlete3", "91011")
+    invite_athlete({
+        "body": json.dumps({
+            "athleteId": "91011",
+            "coachId": "123"
+        })
+    }, {})
+    invite_athlete({
+        "body": json.dumps({
+            "athleteId": "5678",
+            "coachId": "123"
+        })
+    }, {})
+    accept_coach_invite({
+        "body": json.dumps({
+            "athleteId": "91011",
+            "coachId": "123"
+        })
+    }, {})
+    accept_coach_invite({
+        "body": json.dumps({
+            "athleteId": "5678",
+            "coachId": "123"
+        })
+    }, {})
+    event = {
+        "body": json.dumps({
+            "groupId": 1,
+            "athleteData": {
+                "1234": [  # Existing athlete
+                    {"time": 12.5, "distance": 100},
+                    {"time": 25.0, "distance": 200}
+                ],
+                "5678": [  # New athlete
+                    {"time": 11.0, "distance": 100},
+                    {"time": 22.0, "distance": 200}
+                ],
+                "91011": [  # New athlete
+                    {"time": 10.5, "distance": 100},
+                    {"time": 21.0, "distance": 200}
+                ]
+            }
+        })
+    }
+
+    response = mass_input(event, {})
+    assert response['statusCode'] == 200
+
+    data = fetch_all("""
+        SELECT * FROM athlete_inputs WHERE groupId = %s
+    """, (1,))
+    assert data is not None
+    assert len(data) == 6  # 3 athletes * 2 inputs each
+
+
+    # Check if the data is correct
+    athlete1_inputs = [d for d in data if d[1] == '1234']
+    athlete2_inputs = [d for d in data if d[1] == '5678']
+    athlete3_inputs = [d for d in data if d[1] == '91011']
+    assert len(athlete1_inputs) == 2
+    assert len(athlete2_inputs) == 2
+    assert len(athlete3_inputs) == 2
+
+    assert athlete1_inputs[0][3] == 100
+    assert athlete1_inputs[0][4] == 12.5
+    assert athlete1_inputs[0][5] == date
+    assert athlete1_inputs[1][3] == 200
+    assert athlete1_inputs[1][4] == 25.0
+    assert athlete1_inputs[1][5] == date
+
+    assert athlete2_inputs[0][3] == 100
+    assert athlete2_inputs[0][4] == 11.0
+    assert athlete2_inputs[0][5] == date
+    assert athlete2_inputs[1][3] == 200
+    assert athlete2_inputs[1][4] == 22.0
+    assert athlete2_inputs[1][5] == date
+
+    assert athlete3_inputs[0][3] == 100
+    assert athlete3_inputs[0][4] == 10.5
+    assert athlete3_inputs[0][5] == date
+    assert athlete3_inputs[1][3] == 200
+    assert athlete3_inputs[1][4] == 21.0
+    assert athlete3_inputs[1][5] == date

@@ -80,15 +80,10 @@ const CreateWorkoutGroup = ()=>{
     }
 
     return (
-        <View className="mt-16 px-6 bg-white min-h-screen">
-            {/* Header Section */}
-            <Text className="text-3xl font-bold text-black mb-8 text-center">Create Workout Group</Text>
-            
-            {/* Athletes Selection Section */}
-            <Text className="text-xl font-semibold text-black mb-4">Select Athletes</Text>
+        <View className="mt-4 px-6 bg-white min-h-screen">
             
             {/* Athletes List with Selection Toggle */}
-            <View className="mb-8">
+            <View className="mb-4">
                 {groupMembers.map((athlete) => {
                     if(athlete[0] === userId) {
                         return;

@@ -45,11 +45,9 @@ Amplify.configure(awsConfig);
 
 function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
   return ()=>(
-      <>
-        <ScrollView className='bg-white flex-1' showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-          {content}
-        </ScrollView>
-      </>
+      <ScrollView className='bg-white flex-1' showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+        {content}
+      </ScrollView>
     ); 
   
 }
@@ -73,6 +71,7 @@ const getPageTitle = (routeName:string, params:any) => {
     case 'HistoricalData': return params.date;
     case 'ViewGroupCoach': return params.groupName;
     case 'ViewGroupAthlete': return params.groupName;
+    case 'ViewGroupInputsCoach': return `${params.groupName} Inputs`;
     default: return routeName;
   }
 }
@@ -105,7 +104,7 @@ const UserLayoutWrapper = () => {
         <UserStack.Screen name="CreateWorkoutTemplate" options={{ title: "Create Workout Template" }} component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
         <UserStack.Screen name="WorkoutTemplates" options={{ title: "Workout Templates" }} component={ScrollViewWrapper(<WorkoutTemplates />)} />
         <UserStack.Screen name="AssignWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignWorkout />)} />
-        <UserStack.Screen name="ViewGroupInputsCoach" options={{ title: "Group Inputs" }} component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
+        <UserStack.Screen name="ViewGroupInputsCoach" component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
         <UserStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
         <UserStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
         <UserStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />

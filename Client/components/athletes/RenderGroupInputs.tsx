@@ -69,14 +69,18 @@ const RenderGroupInputs: React.FC<
 
     return(
         // Main container for the group with styling for card appearance
-        <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 gap-y-4">
+        <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 gap-y-4 mt-4">
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <TouchableOpacity onPress={()=>navigate('CreateWorkoutGroup', { groupId: groupId})}>
+                <TouchableOpacity onPress={()=>navigate('CreateWorkoutGroup', { groupId })}>
                     <Text className="text-[#E63946]">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
                 </TouchableOpacity>
             </View>
+            {/* Go to mass inputs */}
+            <TouchableOpacity onPress={()=>navigate('MassInput', { groupId, groupName})}>
+                <Text className="text-[#E63946] ml-auto">Mass Input</Text>
+            </TouchableOpacity>
 
             {/**Current workout group and their inputs */}
             {workoutGroup.length > 0 && (

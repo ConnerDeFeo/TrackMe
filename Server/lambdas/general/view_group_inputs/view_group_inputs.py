@@ -13,7 +13,9 @@ def view_group_inputs(event, context):
         #Grab data from rds
         athlete_inputs = fetch_all(
             """
-                SELECT athleteId, distance, time FROM athlete_inputs
+                SELECT ai.athleteId, a.username, ai.distance, ai.time 
+                FROM athlete_inputs ai
+                JOIN athletes a ON ai.athleteId = a.userId
                 WHERE groupId = %s AND date = %s
             """,
             (group_id, date)
@@ -24,10 +26,12 @@ def view_group_inputs(event, context):
             parsed_data = {}
             for input in athlete_inputs:
                 if input[0] not in parsed_data:
-                    parsed_data[input[0]] = []
-                parsed_data[input[0]].append({
-                    "distance": input[1],
-                    "time": input[2]
+                    parsed_data[input[0]] = {}
+                    parsed_data[input[0]]['username'] = input[1]
+                    parsed_data[input[0]]['inputs'] = []
+                parsed_data[input[0]]['inputs'].append({
+                    "distance": input[2],
+                    "time": input[3]
                 })
 
             return {

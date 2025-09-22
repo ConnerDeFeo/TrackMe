@@ -36,11 +36,9 @@ const ViewGroupAthlete = ()=>{
                 <DisplayWorkout key={workout.groupWorkoutId} workout={workout} onPress={() => {}} />
             ))}
             <Text className="text-2xl font-bold mt-2 mb-4">Athletes</Text>
-            <View className="space-y-2">
+            <View className="gap-y-2">
                 {athletes.map((athlete, index) => (
-                    <View key={index} className="rounded-lg p-3 border border-red-400">
-                        <Text className="text-lg font-medium text-gray-800">{athlete[1]}</Text>
-                    </View>
+                    <Text key={index} className="text-lg font-medium text-gray-800 rounded-lg p-3 border border-red-500">{athlete[1]}</Text>
                 ))}
             </View>
         </View>

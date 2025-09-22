@@ -56,6 +56,13 @@ const GeneralService = {
     const userId = await UserService.getUserId();
     const accountType = await AsyncStorage.getData('accountType');
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_pending_proposals?userId=${userId}&accountType=${accountType}`);
+  },
+  massInput: async (athleteData: Record<string, { time?: string | undefined; distance?: string | undefined}[]>, groupId:string, date?: string) => {
+    return await API.post(`${EXPO_PUBLIC_API_URL}/general/mass_input`, {
+      athleteData,
+      groupId,
+      date
+    });
   }
 };
 

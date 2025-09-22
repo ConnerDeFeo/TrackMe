@@ -13,11 +13,10 @@ const MassInput = () => {
   const [athletes, setAthletes] = useState<string[][]>([]);
   // Track current input values for each given group { groupId : [time/distance, time/distance] }
   const [currentInputs, setCurrentInputs] = 
-  usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('currentMassInputs', {});
+  usePersistentState<Record<string, { time: string | undefined; distance: string | undefined}[]>>('currentMassInputs', {});
 
   //fetch athletes and workout inputs
-  useEffect(()=>{
-    const fetchData = async () => {
+  const fetchData = async () => {
       try {
         const workoutInputsResp = await GeneralService.viewGroupInputs(groupId);
         const athletesResp = await GeneralService.getAthletesForGroup(groupId);
@@ -33,8 +32,8 @@ const MassInput = () => {
         console.error("Error fetching data:", error);
       }
     };
-
-      fetchData();
+  useEffect(()=>{
+    fetchData();
   },[])
 
   // Handle time input changes with validation (numbers only)
@@ -51,20 +50,26 @@ const MassInput = () => {
         });
     }
 
-    // Handle distance input changes with validation (numbers only)
+    // Handle distance input changes with validation (integers only)
     const handleDistanceChange = (athleteId:string, idx: number, value: string)=>{
-        let updatedValue = ''
-        // Only allow numeric values or empty string
-        if(!isNaN(Number(value)) || value === ''){
-            updatedValue = value
-        }
+      // Only allow integer values or empty string
+      if (/^\d*$/.test(value)) {
         // Update the specific input in the group while preserving other inputs
         setCurrentInputs(prev => {
-            const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, distance: updatedValue } : input) || [];
-            return { ...prev, [athleteId]: updatedAthlete };
+          const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, distance: value } : input) || [];
+          return { ...prev, [athleteId]: updatedAthlete };
         });
+      }
     }
 
+    const handleInputSubmission = async () => {
+        const date = new Date().toISOString().split("T")[0];
+        const resp = await GeneralService.massInput(currentInputs, groupId, date);
+        if(resp.ok){
+          setCurrentInputs({});
+          fetchData();
+        }
+    }
   return (
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(
@@ -89,8 +94,8 @@ const MassInput = () => {
         />
       </View>
       ))}
-      <TouchableOpacity>
-        <Text className="text-[#E63946] text-center">Submit All Inputs</Text>
+      <TouchableOpacity className="bg-red-500 rounded-lg p-3 mt-2" onPress={handleInputSubmission}>
+        <Text className="text-white text-center">Submit</Text>
       </TouchableOpacity>
     </View>
   );

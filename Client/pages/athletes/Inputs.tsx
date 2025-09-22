@@ -10,7 +10,7 @@ const Inputs = ()=>{
 
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [currentInputs, setCurrentInputs] = 
-    usePersistentState<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>('current', {});
+    usePersistentState<Record<string, { time: string | undefined; distance: string | undefined}[]>>('current', {});
 
     // Store previously submitted workout inputs organized by date and group
     const [submittedInputs, setSubmittedInputs] = useState<Record<number, { time: number; distance: number }[]>>({});
@@ -51,18 +51,16 @@ const Inputs = ()=>{
         });
     }
 
-    // Handle distance input changes with validation (numbers only)
-    const handleDistanceChange = (groupId:string, idx: number, value: string)=>{
-        let updatedValue = ''
-        // Only allow numeric values or empty string
-        if(!isNaN(Number(value)) || value === ''){
-            updatedValue = value
-        }
+    // Handle distance input changes with validation (integers only)
+    const handleDistanceChange = (athleteId:string, idx: number, value: string)=>{
+      // Only allow integer values or empty string
+      if (/^\d*$/.test(value)) {
         // Update the specific input in the group while preserving other inputs
         setCurrentInputs(prev => {
-            const updatedGroup = prev[groupId]?.map((input, i) => i === idx ? { ...input, distance: updatedValue } : input) || [];
-            return { ...prev, [groupId]: updatedGroup };
+          const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, distance: value } : input) || [];
+          return { ...prev, [athleteId]: updatedAthlete };
         });
+      }
     }
     return (
         <>

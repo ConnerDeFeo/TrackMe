@@ -29,10 +29,10 @@ const RenderGroupInputs: React.FC<
     {
         groupId:string, 
         groupName:string,
-        currentInputs:Record<string, { time?: string | undefined; distance?: string | undefined}[]>,
+        currentInputs:Record<string, { time: string | undefined; distance: string | undefined}[]>,
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
+        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time: string | undefined; distance: string | undefined}[]>>>,
         submitedInputs: Record<string, { time: number; distance: number}[]>,
         onSubmit: () => void
     }> = (

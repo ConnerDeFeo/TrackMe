@@ -12,8 +12,8 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
  */
 const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTimeChange, handleDistanceChange}:
     {
-        currentInputs: Record<string, { time?: string | undefined; distance?: string | undefined}[]>,
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
+        currentInputs: Record<string, { time: string | undefined; distance: string | undefined}[]>,
+        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time: string | undefined; distance: string | undefined}[]>>>,
         identifierId: string,
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
@@ -26,7 +26,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                 <View key={idx} className="flex flex-row justify-between items-center mb-2">
                     {/* Time input field */}
                     <TextInput
-                        placeholder="Enter time"
+                        placeholder="Time"
                         keyboardType="numeric"
                         value={input?.time}
                         className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
@@ -34,7 +34,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                     />
                     {/* Distance input field */}
                     <TextInput
-                        placeholder="Enter distance"
+                        placeholder="Distance"
                         keyboardType="numeric"
                         className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
                         value={input?.distance}

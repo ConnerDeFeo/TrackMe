@@ -4,6 +4,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../hooks/usePersistentState";
 import InputTracking from "../components/InputTracking";
+import TimeDistanceDisplay from "../components/TimeDistanceDisplay";
 
 const MassInput = () => {
   const route = useRoute();
@@ -65,27 +66,30 @@ const MassInput = () => {
     }
 
   return (
-    <View className="px-4 mt-4">
+    <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(
-        <View key={athlete[0]} className="bg-white rounded-lg p-2 mb-2 border-b" >
-            <Text className="text-xl font-semibold text-black mb-4">{athlete[1]}</Text>
-            {workoutInputs[athlete[0]]?.map((input, index) => (
-              <View key={index} className="flex flex-row justify-between items-center">
-                  <Text className="text-gray-800 font-medium text-md">Distance: {input.distance}m</Text>
-                  <Text className="text-gray-800 font-medium text-md">Time: {input.time}s</Text>
-              </View>
-            ))}
+      <View key={athlete[0]} className="bg-white rounded-xl shadow-md p-4 mb-4" >
+        <Text className="text-2xl font-bold text-gray-800 mb-3">{athlete[1]}</Text>
+        
+        {workoutInputs[athlete[0]] && workoutInputs[athlete[0]].length > 0 && (
+          <View className="mb-4">
+          <Text className="text-sm font-semibold text-gray-500 uppercase mb-2">Previous Entries</Text>
+          {workoutInputs[athlete[0]].map((input, index) => (
+            <TimeDistanceDisplay key={index} time={input.time} distance={input.distance} />
+          ))}
+          </View>
+        )}
 
-            <InputTracking
-                currentInputs={currentInputs}
-                setCurrentInputs={setCurrentInputs}
-                identifierId={athlete[0]}
-                handleTimeChange={handleTimeChange}
-                handleDistanceChange={handleDistanceChange}
-            />
-        </View>
+        <InputTracking
+          currentInputs={currentInputs}
+          setCurrentInputs={setCurrentInputs}
+          identifierId={athlete[0]}
+          handleTimeChange={handleTimeChange}
+          handleDistanceChange={handleDistanceChange}
+        />
+      </View>
       ))}
-  </View>
+    </View>
   );
 }
 

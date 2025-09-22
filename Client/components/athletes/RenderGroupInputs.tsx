@@ -8,6 +8,7 @@ import AsyncStorage from "../../services/AsyncStorage";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 import { useNav } from "../../hooks/useNav";
 import InputTracking from "../InputTracking";
+import TimeDistanceDisplay from "../TimeDistanceDisplay";
 
 //Component used to render input fields for a specific group
 /**
@@ -32,7 +33,7 @@ const RenderGroupInputs: React.FC<
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time?: string | undefined; distance?: string | undefined}[]>>>,
-        submitedInputs: Record<string, { time?: string | undefined; distance?: string | undefined}[]>,
+        submitedInputs: Record<string, { time: number; distance: number}[]>,
         onSubmit: () => void
     }> = (
         {
@@ -99,10 +100,7 @@ const RenderGroupInputs: React.FC<
                 <View>
                     <Text className="my-2">Submitted:</Text>
                     {submitedInputs[groupId].map((input, idx) => (
-                        <View key={idx} className="flex flex-row justify-between items-center mb-2 ml-2">
-                            <Text className="text-gray-600">Time: {input.time}s</Text>
-                            <Text className="text-gray-600">Distance: {input.distance}m</Text>
-                        </View>
+                        <TimeDistanceDisplay key={idx} time={input.time} distance={input.distance} />
                     ))}
                 </View>
             }

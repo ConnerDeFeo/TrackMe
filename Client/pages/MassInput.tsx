@@ -89,6 +89,9 @@ const MassInput = () => {
         />
       </View>
       ))}
+      <TouchableOpacity>
+        <Text className="text-[#E63946] text-center">Submit All Inputs</Text>
+      </TouchableOpacity>
     </View>
   );
 }

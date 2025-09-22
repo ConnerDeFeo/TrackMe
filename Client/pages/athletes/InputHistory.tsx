@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import UserService from "../../services/UserService";
 import HistoryService from "../../services/HistoryService";
 import SearchDate from "../../components/SearchDate";
+import TimeDistanceDisplay from "../../components/TimeDistanceDisplay";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
@@ -47,10 +48,7 @@ const InputHistory = () => {
               <View key={groupId} className="ml-4 mb-2">
                 <Text className="text-xl font-semibold text-gray-700">{InputHistory[date][groupId].name}</Text>
                 {InputHistory[date][groupId].inputs.map((inputItem: {time: number, distance: number}, index: number) => (
-                    <View key={index} className="flex-row items-center pl-4 py-1">
-                      <Text className="text-base text-gray-600 w-24">{inputItem.distance}m</Text>
-                      <Text className="text-base text-gray-800 font-semibold">{inputItem.time}s</Text>
-                    </View>
+                    <TimeDistanceDisplay key={index} time={inputItem.time} distance={inputItem.distance} />
                 ))}
               </View>
             ))}

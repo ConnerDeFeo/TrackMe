@@ -86,7 +86,7 @@ const ViewGroup = () => {
             onPress={() => navigate('ViewGroupInputsCoach', { groupId, groupName })}
             className="bg-black rounded-lg py-3 mt-2"
           >
-            <Text className="text-white font-semibold text-center">View Group Inputs</Text>
+            <Text className="text-white font-semibold text-center">Group Inputs</Text>
           </TouchableOpacity>
         }
       </View>

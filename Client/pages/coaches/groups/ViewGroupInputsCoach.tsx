@@ -15,6 +15,7 @@ const ViewGroupInputsCoach = ()=>{
                 const workoutInputsResp = await GeneralService.viewGroupInputs(groupId);
                 if(workoutInputsResp.ok) {
                     const workoutInputData = await workoutInputsResp.json();
+                    console.log(workoutInputData);
                     setWorkoutInputs(workoutInputData);
                 }
             } catch (error) {
@@ -27,8 +28,8 @@ const ViewGroupInputsCoach = ()=>{
 
     return(
         <View className="px-4 mt-4">
-            {Object.entries(workoutInputs).map(([username, data])=>(
-            <View key={username} className="bg-white rounded-lg shadow-lg p-6 mb-6 border-l-4" style={{borderLeftColor: '#E63946'}}>
+            {Object.entries(workoutInputs).map(([userId, data])=>(
+            <View key={userId} className="bg-white rounded-lg shadow-lg p-6 mb-6 border-l-4" style={{borderLeftColor: '#E63946'}}>
                 <Text className="text-xl font-semibold text-black mb-4">{data.username}</Text>
                 {data.inputs?.map((input, index) => (
                     <View key={index} className="bg-gray-50 rounded-md p-4 mb-3 flex flex-row justify-between items-center">

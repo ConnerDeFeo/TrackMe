@@ -39,6 +39,7 @@ import ResetPassword from './pages/authentication/ResetPassword';
 import HeaderPlusButton from './components/HeaderPlusButton';
 import { HeaderBackButton } from '@react-navigation/elements';
 import { useNav } from './hooks/useNav';
+import MassInput from './pages/MassInput';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -114,6 +115,7 @@ const UserLayoutWrapper = () => {
         <UserStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
         <UserStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <UserStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
+        <UserStack.Screen name="MassInput" options={{ title: "Mass Input" }} component={ScrollViewWrapper(<MassInput />)} />
       </UserStack.Navigator>
       <Footer />
     </View>

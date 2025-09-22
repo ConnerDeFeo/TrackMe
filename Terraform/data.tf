@@ -200,6 +200,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/get_pending_proposals"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_pending_proposals.zip"
     }
+    "mass_input" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/mass_input"
+      output_path = "${path.module}/../Server/lambdas/general/zips/mass_input.zip"
+    }
   }
 }
 

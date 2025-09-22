@@ -541,6 +541,21 @@ Resources:
   #
   #
   #
+  MassInput:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/mass_input/
+      Handler: mass_input.mass_input
+      Events:
+        MassInputApi:
+          Type: Api
+          Properties:
+            Path: /general/mass_input/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+
   GetPendingProposals:
     Type: AWS::Serverless::Function
     Properties:

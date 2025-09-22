@@ -7,6 +7,7 @@ import usePersistentState from "../../hooks/usePersistentState";
 import AsyncStorage from "../../services/AsyncStorage";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 import { useNav } from "../../hooks/useNav";
+import InputTracking from "../InputTracking";
 
 //Component used to render input fields for a specific group
 /**
@@ -105,65 +106,14 @@ const RenderGroupInputs: React.FC<
                     ))}
                 </View>
             }
-            
             {/* Render all existing input pairs for this group */}
-            {currentInputs[groupId]?.map((input, idx) => (
-                <View key={idx} className="flex flex-row justify-between items-center mb-2">
-                    {/* Time input field */}
-                    <TextInput
-                        placeholder="Enter time"
-                        keyboardType="numeric"
-                        value={input?.time}
-                        className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
-                        onChangeText={text => handleTimeChange(groupId, idx, text)}
-                    />
-                    {/* Distance input field */}
-                    <TextInput
-                        placeholder="Enter distance"
-                        keyboardType="numeric"
-                        className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
-                        value={input?.distance}
-                        onChangeText={text => handleDistanceChange(groupId, idx, text)}
-                    />
-                    {/* Units label */}
-                    <Text>Meters</Text>
-                </View>
-            ))}
-            <View className="flex flex-row items-center justify-between">
-                {/* Button to remove last input */}
-                <TouchableOpacity 
-                    className="bg-[#E63946] rounded-lg p-2 w-[45%]"
-                    onPress={() => {
-                    setCurrentInputs(prev => {
-                        const updatedGroup = prev[groupId]?.slice(0, -1) || [];
-                        return { ...prev, [groupId]: updatedGroup };
-                    });
-                }}>
-                    <Text className="text-white text-center">Remove</Text>
-                </TouchableOpacity>
-
-                {/* Button to add new input pair to the group */}
-                <TouchableOpacity 
-                    className="bg-[#E63946] rounded-lg p-2 w-[45%]"
-                    onPress={() => {
-                        // Initialize or update the inputs array for this group
-                        let updatedInputs: { time?: string; distance?: string }[] = [];
-                        
-                        // Check if group has existing inputs, if not create first input
-                        if (currentInputs[groupId] === undefined) {
-                            updatedInputs = [{ time: '', distance: '' }];
-                        } else {
-                            // Add new empty input to existing inputs
-                            updatedInputs = [...currentInputs[groupId], { time: '', distance: '' }];
-                        }
-                        
-                        // Update state with new inputs array for this group
-                        setCurrentInputs(prev => ({ ...prev, [groupId]: updatedInputs }));
-                    }
-                }>
-                    <Text className="text-white text-center">Add</Text>
-                </TouchableOpacity>
-            </View>
+            <InputTracking
+                currentInputs={currentInputs}
+                setCurrentInputs={setCurrentInputs}
+                identifierId={groupId}
+                handleTimeChange={handleTimeChange}
+                handleDistanceChange={handleDistanceChange}
+            />
 
             {/* Submit the current inputs for the current group */}
             <TouchableOpacity className="bg-black rounded-lg p-3" onPress={handleInputSubmission}>

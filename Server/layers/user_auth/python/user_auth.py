@@ -2,7 +2,7 @@ import os
 import json
 import base64
 
-def get_user_id(event):
+def get_user_info(event):
     # If in production, extract user ID and account type from JWT claims
     if os.getenv("ENVIRONMENT") == "production":
         claims = event['requestContext']['authorizer']['claims']
@@ -14,6 +14,14 @@ def get_user_id(event):
     # Else manual extraction is needed for local testing
     try:
         token = event['headers'].get('Authorization')
+
+        # for local testing
+        if token == "test":
+            return {
+                'user_id': event['test_data']['userId'],
+                'accountType': event['test_data']['accountType']
+            }
+
         if not token:
             raise Exception("Unauthorized: No Authorization header provided")
         if token.startswith('Bearer '):

@@ -1,14 +1,14 @@
 import json
 from rds import fetch_all
+from user_auth import get_user_info
 
-#Gets all related groups for an athlet or coach
+#Gets all related groups for an athlete or coach
 def get_groups(event, context):
-    query_params = event.get('queryStringParameters', {})
     try:
-        print("Received event:", event)
         # Query string parameters
-        userId = query_params.get('userId')
-        accountType = query_params.get('accountType')
+        user_info = get_user_info(event)
+        userId = user_info['user_id']
+        accountType = user_info['accountType']
 
         #Athletes
         if accountType == 'Athlete':

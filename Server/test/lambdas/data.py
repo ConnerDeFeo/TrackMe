@@ -81,14 +81,20 @@ class TestData:
     }
 
     test_get_group_athlete = {
-        "queryStringParameters":{
+        "headers":{
+            "Authorization": "test",
+        },
+        "test_data":{
             "userId": "1234",
             "accountType": "Athlete"
         }
     }
 
     test_get_group_coach = {
-        "queryStringParameters": {
+        "headers":{
+            "Authorization": "test",
+        },
+        "test_data": {
             "userId": "123",
             "accountType": "Coach"
         }

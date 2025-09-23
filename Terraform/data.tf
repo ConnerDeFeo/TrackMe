@@ -92,6 +92,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/decline_coach_invite"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/decline_coach_invite.zip"
     }
+    "remove_inputs" = {
+      source_dir  = "${path.module}/../Server/lambdas/athlete/remove_inputs"
+      output_path = "${path.module}/../Server/lambdas/athlete/zips/remove_inputs.zip"
+    }
     
     # Coach Lambdas
     "accept_athlete_request" = {

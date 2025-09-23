@@ -23,6 +23,7 @@ locals {
     "view_workout_inputs",
     "search_input_history_date",
     "decline_coach_invite",
+    "remove_inputs",
 
     # Coach Lambdas
     "create_coach",

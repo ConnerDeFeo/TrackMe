@@ -2,6 +2,7 @@ import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
+from lambdas.athlete.remove_inputs.remove_inputs import remove_inputs
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
@@ -90,3 +91,49 @@ def test_view_workout_inputs():
     assert len(inputs) == 2
     assert {"distance": 100, "time": 10.8, "inputId":1} in inputs
     assert {"distance": 200, "time": 30, "inputId":2} in inputs
+
+def test_remove_inputs():
+    create_extra_athlete("test3", "1236")
+    input_times(TestData.test_input_times, {})
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1236"],
+            'groupId': 1,
+            "date": date,
+            'inputs': [
+                {
+                    'distance': 100,
+                    'time': 12.5
+                }
+            ]
+        })
+    }, {})
+
+    event = {
+        'body': json.dumps({
+            "athleteId": "1234",
+            "inputIds": [1,3]  # Attempt to remove the first and third inputs
+        })
+    }
+
+    response = remove_inputs(event, {})
+    assert response['statusCode'] == 200
+
+    # Check the database to ensure the input was removed
+    inputs = fetch_all("SELECT athleteId, groupId, distance, time, id FROM athlete_inputs")
+    assert inputs is not None
+    assert len(inputs) == 2  # Only one input should be deleted
+
+    # Convert list of tuples to a list of dictionaries for easier lookup
+    remaining_inputs = [
+        {'athleteId': row[0], 'groupId': row[1], 'distance': row[2], 'time': row[3], 'id': row[4]}
+        for row in inputs
+    ]
+
+    # Expected remaining inputs
+    expected_input_2 = {'athleteId': '1234', 'groupId': 1, 'distance': 200, 'time': 30.0, 'id': 2}
+    expected_input_3 = {'athleteId': '1236', 'groupId': 1, 'distance': 100, 'time': 12.5, 'id': 3}
+
+    # Check that both expected inputs are present, regardless of order
+    assert expected_input_2 in remaining_inputs
+    assert expected_input_3 in remaining_inputs

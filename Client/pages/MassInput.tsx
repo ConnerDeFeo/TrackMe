@@ -78,7 +78,7 @@ const MassInput = () => {
         
         {workoutInputs[athlete[0]] && workoutInputs[athlete[0]].length > 0 && (
           <View className="mb-4">
-          <Text className="text-sm font-semibold text-gray-500 uppercase mb-2">Previous Entries</Text>
+          <Text className="font-semibold text-gray-500 uppercase mb-2">Entries</Text>
           {workoutInputs[athlete[0]].map((input, index) => (
             <TimeDistanceDisplay key={index} time={input.time} distance={input.distance} />
           ))}

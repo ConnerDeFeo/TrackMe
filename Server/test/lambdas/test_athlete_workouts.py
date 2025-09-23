@@ -88,5 +88,5 @@ def test_view_workout_inputs():
     inputs = body['1'] # GroupId
 
     assert len(inputs) == 2
-    assert {"distance": 100, "time": 10.8} in inputs
-    assert {"distance": 200, "time": 30} in inputs
+    assert {"distance": 100, "time": 10.8, "inputId":1} in inputs
+    assert {"distance": 200, "time": 30, "inputId":2} in inputs

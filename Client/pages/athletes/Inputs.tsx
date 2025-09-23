@@ -13,7 +13,7 @@ const Inputs = ()=>{
     usePersistentState<Record<string, { time: string | undefined; distance: string | undefined}[]>>('current', {});
 
     // Store previously submitted workout inputs organized by date and group
-    const [submittedInputs, setSubmittedInputs] = useState<Record<number, { time: number; distance: number }[]>>({});
+    const [submittedInputs, setSubmittedInputs] = useState<Record<number, { time: number; distance: number, inputId: number }[]>>({});
 
     // Fetch previously submitted workout inputs from the server
     const fetchSubmittedInputs = async () => {

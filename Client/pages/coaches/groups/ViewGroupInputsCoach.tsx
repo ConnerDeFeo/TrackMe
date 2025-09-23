@@ -7,7 +7,7 @@ import TimeDistanceDisplay from "../../../components/TimeDistanceDisplay";
 const ViewGroupInputsCoach = ()=>{
     const route = useRoute();
     const { groupId } = route.params as { groupId: string };
-    const [workoutInputs, setWorkoutInputs] = useState<Record<string, {distance: number, time: number}[]>>({});
+    const [workoutInputs, setWorkoutInputs] = useState<Record<string, {distance: number, time: number, inputId: number}[]>>({});
     const [athletes, setAthletes] = useState<string[][]>([]);
 
     //fetch athletes and workout inputs

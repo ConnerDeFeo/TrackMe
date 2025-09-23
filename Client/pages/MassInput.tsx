@@ -8,8 +8,8 @@ import TimeDistanceDisplay from "../components/TimeDistanceDisplay";
 
 const MassInput = () => {
   const route = useRoute();
-  const { groupId, groupName } = route.params as { groupId: string; groupName: string };
-  const [workoutInputs, setWorkoutInputs] = useState<Record<string, {distance: number, time: number}[]>>({});
+  const { groupId } = route.params as { groupId: string; };
+  const [workoutInputs, setWorkoutInputs] = useState<Record<string, {distance: number, time: number, inputId:number}[]>>({});
   const [athletes, setAthletes] = useState<string[][]>([]);
   // Track current input values for each given group { groupId : [time/distance, time/distance] }
   const [currentInputs, setCurrentInputs] = 

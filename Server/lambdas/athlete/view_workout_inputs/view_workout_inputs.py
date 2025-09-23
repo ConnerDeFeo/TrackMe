@@ -16,7 +16,7 @@ def view_workout_inputs(event, context):
         
         athlete_inputs = fetch_all(
         """
-            SELECT g.id, ai.distance, ai.time
+            SELECT g.id, ai.distance, ai.time, ai.id
             FROM groups g
             JOIN athlete_inputs ai ON ai.groupId = g.id
             WHERE ai.athleteId = %s AND ai.date = %s
@@ -29,7 +29,7 @@ def view_workout_inputs(event, context):
                 id = input[0]
                 if id not in parsed_data:
                     parsed_data[id] = []
-                parsed_data[id].append({"distance": input[1], "time": input[2]})
+                parsed_data[id].append({"distance": input[1], "time": input[2], "inputId": input[3]})
 
         if len(parsed_data) > 0:
             return {

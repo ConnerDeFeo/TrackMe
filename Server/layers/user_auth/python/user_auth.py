@@ -1,6 +1,4 @@
 import os
-import json
-import base64
 
 def get_user_info(event):
     # If in production, extract user ID and account type from JWT claims
@@ -13,6 +11,8 @@ def get_user_info(event):
     
     # Else manual extraction is needed for local testing
     try:
+        import json
+        import base64
         token = event['headers'].get('Authorization')
 
         # for local testing

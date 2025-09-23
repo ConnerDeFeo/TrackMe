@@ -1,11 +1,13 @@
 import json
 from rds import execute_commit
+from user_auth import get_user_info
 
 # Function to request a certain coach adds this athlete to their roster
 def request_coach(event, context):
     body = json.loads(event.get('body', '{}'))
     try:
-        athlete_id = body['athleteId']
+        user_info = get_user_info(event)
+        athlete_id = user_info['userId']
         coach_id = body['coachId']
 
         # Insert the athlete into the group invite table

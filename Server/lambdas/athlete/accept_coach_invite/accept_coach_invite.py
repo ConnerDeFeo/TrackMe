@@ -1,13 +1,15 @@
 import json
 from rds import execute_commit
+from user_auth import get_user_info
 
 # Function to accept a coach invite
 def accept_coach_invite(event, context):
     # Extract athleteId and coachId from the event
     body = json.loads(event['body'])
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['user_id']
         athlete_id = body['athleteId']
-        coach_id = body['coachId']
 
         # Insert the athlete into the group, remove the invite
         execute_commit(

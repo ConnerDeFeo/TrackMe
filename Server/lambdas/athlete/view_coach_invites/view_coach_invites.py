@@ -1,12 +1,13 @@
 from rds import fetch_all
 import json
+from user_auth import get_user_info
 
 #Shows all coach invites for an athlete
 def view_coach_invites(event, context):
-    body = json.loads(event['body'])
 
     try:
-        user_id = body['userId']
+        user_info = get_user_info(event)
+        user_id = user_info['userId']
 
         #Grab all invites for the athlete
         invites = fetch_all(

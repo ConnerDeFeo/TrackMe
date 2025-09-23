@@ -1,11 +1,13 @@
 from rds import execute_commit
+from user_auth import get_user_info
 
 # Declines a coach's request to be the coach of the given athlete
 def decline_coach_invite(event, context):
     query_params = event.get('queryStringParameters', {})
 
     try:
-        athlete_id = query_params['athleteId']
+        user_info = get_user_info(event)
+        athlete_id = user_info['user_id']
         coach_id = query_params['coachId']
 
         # Delete the request from the athlete_coach_requests table

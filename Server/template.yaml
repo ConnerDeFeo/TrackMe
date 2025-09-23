@@ -47,6 +47,16 @@ Resources:
     Metadata:
       BuildMethod: python3.12
 
+  UserAuthLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: UserAuthLayer
+      Description: UserAuthLayer utilities
+      ContentUri: layers/user_auth/python/
+      CompatibleRuntimes:
+        - python3.12
+    Metadata:
+      BuildMethod: python3.12
   #
   #
   #
@@ -666,6 +676,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
         
   GetGroupWorkout:
     Type: AWS::Serverless::Function

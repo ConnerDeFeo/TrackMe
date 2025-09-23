@@ -1,15 +1,29 @@
 import json
-from rds import execute_commit_many
+from rds import execute_commit_many, fetch_one
 from datetime import datetime, timezone
+from user_auth import get_user_info
+
 #Inserts all of an athletes input times for a given group into db
 def input_times(event, context):
     body = json.loads(event['body'])
 
     try:
+        user_info = get_user_info(event)
+        user_id = user_info['userId']
         inputs = body['inputs'] #inputs in {time: float, distance: int}
         athleteIds = body['athleteIds'] # list of athleteIds
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))  # date in 'YYYY-MM-DD' format
         groupId = body['groupId']
+
+        # Check to make sure user is in group
+        group = fetch_one("SELECT id FROM athlete_groups WHERE groupId=%s AND athleteId=%s", (groupId, user_id))
+        if group is None:
+            return {
+                'statusCode': 403,
+                'body': json.dumps({
+                    'message': 'User not in group'
+                })
+            }
 
         #Create all inputs
         params = []

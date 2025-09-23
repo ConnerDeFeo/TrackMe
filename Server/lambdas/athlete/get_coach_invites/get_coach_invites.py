@@ -1,13 +1,13 @@
 import json
 from rds import fetch_all
+from user_auth import get_user_info
 
 #Get
 def get_coach_invites(event,context):
-    query_params = event.get('queryStringParameters', {})
 
     try:
-        user_id = query_params['userId']
-
+        user_info = get_user_info(event)
+        user_id = user_info['user_id']
         #Fetch all coaches from the db that have made a request to the athlete
         coaches = fetch_all(
         """

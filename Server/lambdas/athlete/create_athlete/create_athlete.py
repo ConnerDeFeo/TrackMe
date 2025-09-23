@@ -1,5 +1,7 @@
 import json
 from rds import execute_commit
+from user_auth import get_user_info
+
 #Create athlete
 def create_athlete(event, context):
     body = json.loads(event['body']) 
@@ -7,7 +9,8 @@ def create_athlete(event, context):
     # Attempt athlete creation
     try:
         #Insert athlete into the database
-        execute_commit('INSERT INTO athletes (userId, username) VALUES (%s, %s)', (body['userId'], body['username']))
+        user_info = get_user_info(event)
+        execute_commit('INSERT INTO athletes (userId, username) VALUES (%s, %s)', (user_info['user_id'], body['username']))
         return {
             "statusCode": 200,
             "headers": {

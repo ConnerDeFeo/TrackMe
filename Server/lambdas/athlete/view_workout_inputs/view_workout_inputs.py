@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, timezone
 from rds import fetch_all
+from user_auth import get_user_info
 
 
 # Gets all athlete inputs for a given day
@@ -10,7 +11,8 @@ def view_workout_inputs(event, context):
 
     try:
         # Get required parameters
-        athlete_id = query_params.get('athleteId')
+        user_info = get_user_info(event)
+        athlete_id = user_info['user_id']
         # Default to current UTC date if no date provided
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
         

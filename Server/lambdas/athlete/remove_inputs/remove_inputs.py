@@ -1,12 +1,14 @@
 import json
 from rds import execute_commit
+from user_auth import get_user_info
 
 def remove_inputs(event, context):
     body = json.loads(event['body'])
     try:
+        user_info = get_user_info(event)
+        athlete_id = user_info['user_id']
         input_ids = body['inputIds']  # Expecting a list of input IDs to remove
-        athlete_id = body['athleteId']  # Optional: If you want to restrict removal to a specific athlete
-        # remove all inptus from db
+        # remove all inputs from db
         execute_commit(
             "DELETE FROM athlete_inputs WHERE id IN %s and athleteId = %s",
             (tuple(input_ids), athlete_id)

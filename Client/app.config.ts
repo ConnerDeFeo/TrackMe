@@ -34,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       edgeToEdgeEnabled: true,
       package: PACKAGE_NAME,
-      versionCode: 4,
+      versionCode: 5,
     },
     plugins: ["expo-secure-store"],
     extra: {
@@ -43,7 +43,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       }
     },
     updates: {
-      url: "https://u.expo.dev/7a30db18-1202-43a9-9ca5-8c93acc236ed",
+      url: "https://u.expo.dev/7a30db18-1202-43a9-9ca5-8c93acc236ed", 
+      fallbackToCacheTimeout: 0
     },
     runtimeVersion: {
       policy: "appVersion",

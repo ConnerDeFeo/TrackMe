@@ -4,13 +4,11 @@ from user_auth import get_user_info
 
 #Create athlete
 def create_athlete(event, context):
-    body = json.loads(event['body']) 
-
     # Attempt athlete creation
     try:
         #Insert athlete into the database
         user_info = get_user_info(event)
-        execute_commit('INSERT INTO athletes (userId, username) VALUES (%s, %s)', (user_info['user_id'], body['username']))
+        execute_commit('INSERT INTO athletes (userId, username) VALUES (%s, %s)', (user_info['user_id'], user_info['username']))
         return {
             "statusCode": 200,
             "headers": {

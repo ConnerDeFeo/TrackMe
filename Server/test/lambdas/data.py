@@ -1,48 +1,40 @@
 import json
-
 from datetime import datetime, timezone
-
+from testing_utils import generate_auth_header
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 class TestData:
     test_coach = {
-            "body": json.dumps({
-                "userId": "123",
-                'username': "testcoach",
-            })
+            "headers":generate_auth_header("123", "Coach", "testcoach")
         }
     
     test_group = {
             "body": json.dumps({
-                "groupName": "Test Group",
-                "coachId": "123"
-            })
+                "groupName": "Test Group"
+            }),
+            "headers":generate_auth_header("123", "Coach", "testcoach")
         }
     
     test_athlete = {
-            "body": json.dumps({
-                "userId": "1234",
-                "username": "test_athlete"
-            })
+            "headers":generate_auth_header("1234", "Athlete", "test_athlete")
         }
     
     test_invite = {
         "body": json.dumps({
             "athleteId": "1234",
-            "coachId": "123"
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     test_accept_coach_invite = {
             "body": json.dumps({
-                "athleteId": "1234",
                 "coachId": "123"
-            })
+            }),
+            "headers":generate_auth_header("1234", "Athlete", "test_athlete")
         }
 
     test_workout = {
         "body": json.dumps({
-            'coachId': '123',
             'title': 'Test Workout', 
             'description': 'This is a test workout',
             'exercises': [
@@ -77,35 +69,24 @@ class TestData:
                     'name': 'Warm-up',
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     test_get_group_athlete = {
-        "headers":{
-            "Authorization": "test",
-        },
-        "test_data":{
-            "userId": "1234",
-            "accountType": "Athlete"
-        }
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
     test_get_group_coach = {
-        "headers":{
-            "Authorization": "test",
-        },
-        "test_data": {
-            "userId": "123",
-            "accountType": "Coach"
-        }
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     test_add_athlete_to_group = {
         "body": json.dumps({
             "athleteId": "1234",
-            "coachId": "123",
             "groupId": "1"
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     test_input_times = {
@@ -123,12 +104,12 @@ class TestData:
                     'time': 30
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
     test_update_athlete_profile = {
         "body": json.dumps({
-            "athleteId": '1234',
             "bio": "Updated bio",
             "firstName": "Updated",
             "lastName": "Name",
@@ -137,26 +118,27 @@ class TestData:
             "profilePictureUrl": None,
             'tffrsUrl':"someurl",
             'bodyWeight': 70
-        })
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
     test_update_coach_profile = {
         "body": json.dumps({
-            "coachId": '123',
             "bio": "Updated bio",
             "firstName": "Updated",
             "lastName": "Name",
             "tffrsUrl": "http://updated.url",
             "gender": "Female",
             "profilePictureUrl": None
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     test_assign_group_workout = {
         "body": json.dumps({
-            "coachId": "123",
             "groupId": "1",
             "workoutId": 1,
             "date": date
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }

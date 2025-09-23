@@ -6,7 +6,8 @@ def get_user_info(event):
         claims = event['requestContext']['authorizer']['claims']
         return {
             'user_id': claims['sub'],
-            'accountType': claims['custom:accountType']
+            'accountType': claims['custom:accountType'],
+            'username': claims['cognito:username']
         }
     
     # Else manual extraction is needed for local testing
@@ -18,8 +19,9 @@ def get_user_info(event):
         # for local testing
         if token == "test":
             return {
-                'user_id': event['test_data']['userId'],
-                'accountType': event['test_data']['accountType']
+                'user_id': event['headers']['AuthorizationData']['userId'],
+                'accountType': event['headers']['AuthorizationData']['accountType'],
+                'username': event['headers']['AuthorizationData']['username']
             }
 
         if not token:
@@ -38,7 +40,8 @@ def get_user_info(event):
         payload = json.loads(base64.b64decode(payload_part).decode('utf-8'))
         return {
             'user_id': payload['sub'],
-            'accountType': payload['custom:accountType']
+            'accountType': payload['custom:accountType'],
+            'username': payload['cognito:username']
         }
     except Exception as e:
         raise Exception(f"Unauthorized: {str(e)}")

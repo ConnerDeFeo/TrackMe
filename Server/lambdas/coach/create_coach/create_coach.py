@@ -4,14 +4,14 @@ from user_auth import get_user_info
 
 #Create athlete
 def create_coach(event, context):
-    body = json.loads(event['body']) 
 
     # Attempt athlete creation
     try:
         user_info = get_user_info(event)
         user_id = user_info['user_id']
+        username = user_info['username']
         #Insert coach into the database
-        execute_commit("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (user_id, body['username']))
+        execute_commit("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (user_id, username))
         return {
             "statusCode": 200,
             "headers": {

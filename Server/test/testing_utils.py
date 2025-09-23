@@ -13,3 +13,13 @@ def debug_table():
         else:
             for row in rows:
                 print(row)
+
+def generate_auth_header(user_id, account_type, username):
+    return {
+        "Authorization": "test",
+        "AuthorizationData": {
+            "userId": user_id,
+            "accountType": account_type,
+            "username": username
+        }
+    }

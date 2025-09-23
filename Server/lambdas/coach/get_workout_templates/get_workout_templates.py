@@ -1,12 +1,12 @@
 import json
 from rds import fetch_all
-
+from user_auth import get_user_info
 #Fetches all of a given coaches workouts
 def get_workout_templates(event, context):
-    query_params = event.get('queryStringParameters', {})
 
     try:
-        coach_id = query_params['coachId']
+        user_info = get_user_info(event)
+        coach_id = user_info['userId']
 
         #Grab all workouts accosiated with the coach_id
         workouts = fetch_all(

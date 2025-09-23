@@ -1,13 +1,14 @@
 import json
 from rds import execute_commit, fetch_one
-
+from user_auth import get_user_info
 #Adds an athlete to a group
 def add_athlete_to_group(event, context):
     body = json.loads(event.get('body', '{}'))
 
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['user_id']
         athlete_id = body['athleteId']
-        coach_id = body['coachId']
         group_id = body['groupId']
 
         #Check to see if coach has athlete added

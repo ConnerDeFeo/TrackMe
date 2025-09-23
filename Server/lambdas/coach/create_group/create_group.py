@@ -1,15 +1,16 @@
 import json
-
 from rds import execute_commit_fetch_one
 from datetime import datetime, timezone
+from user_auth import get_user_info
 
 #Create group for a coach
 def create_group(event, context):
     # Get group data from the request body
     try:
+        user_info = get_user_info(event)
+        coachId = user_info['user_id']
         body = json.loads(event['body'])
         group_name = body['groupName']
-        coachId = body['coachId']
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         
         if len(group_name) > 30:

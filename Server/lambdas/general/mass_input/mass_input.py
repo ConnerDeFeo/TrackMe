@@ -1,15 +1,33 @@
 import json
-from rds import execute_commit_many
+from rds import execute_commit_many, fetch_one
 from datetime import datetime, timezone
+from user_auth import get_user_info
 
 # Insert multiple athlete inputs into the database
 def mass_input(event, context):
     body = json.loads(event['body'])
 
     try:
+        user_info = get_user_info(event)
+        user_id = user_info['userId']
+        groupId = body['groupId']
+
+        # Check to see if user is a coach or athlete that is actually part of group
+        exists = fetch_one("""
+            SELECT id FROM groups g
+            JOIN athlete_groups ag ON g.id = ag.groupId
+            WHERE g.id = %s AND (g.coachId = %s OR ag.athleteId = %s)
+        """, (groupId, user_id, user_id))
+        if not exists:
+            return {
+                'statusCode': 403,
+                'body': json.dumps({
+                    'message': 'User not authorized for this group'
+                })
+            }
+
         athlete_data = body['athleteData'] # map {athleteId: [{time: float, distance: int}]}
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))  # date in 'YYYY-MM-DD' format, optional
-        groupId = body['groupId']
 
         # Prepare parameters for bulk insert
         params = []
@@ -24,8 +42,8 @@ def mass_input(event, context):
         # Bulk insert into the database
         execute_commit_many(
             """
-            INSERT INTO athlete_inputs (athleteId, groupId, distance, time, date)
-            VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO athlete_inputs (athleteId, groupId, distance, time, date)
+                VALUES (%s, %s, %s, %s, %s)
             """, params)
         
         return {

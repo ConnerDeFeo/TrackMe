@@ -1,11 +1,13 @@
 from rds import execute_commit_fetch_one, execute_commit
 import json
+from user_auth import get_user_info
 
 def create_workout_template(event, context):
     body = json.loads(event['body'])
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['user_id']
         workout_id = body.get('workoutId', '')
-        coach_id = body['coachId']
         title = body['title']
         description = body.get('description', '')
         exercises = body.get('exercises', [])

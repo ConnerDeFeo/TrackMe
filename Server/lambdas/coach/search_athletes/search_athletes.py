@@ -1,12 +1,14 @@
 import json
 from rds import fetch_all
+from user_auth import get_user_info
 
 #Searches athletes based on search term
 def search_athletes(event, context):
     query_params = event.get('queryStringParameters', {})
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['userId']
         search_term = query_params.get('searchTerm', "")
-        coach_id = query_params['coachId']
 
         search_query = """
             SELECT a.username, a.userId,

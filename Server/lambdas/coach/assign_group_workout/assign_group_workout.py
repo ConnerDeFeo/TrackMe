@@ -1,10 +1,13 @@
 import json 
 from rds import execute_commit, execute_commit_fetch_one
+from user_auth import get_user_info
 
 def assign_group_workout(event, context):
     body = json.loads(event['body'])
 
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['user_id']
         group_id = body['groupId']
         title = body['title']
         description = body.get('description', '')
@@ -17,9 +20,9 @@ def assign_group_workout(event, context):
                 """
                     UPDATE workouts
                     SET title = %s, description = %s, exercises = %s
-                    WHERE id = %s AND coachId = (SELECT coachId from groups where id = %s)
+                    WHERE id = %s AND coachId = %s
                 """,
-                (title, description, json.dumps(exercises), workout_id, group_id)
+                (title, description, json.dumps(exercises), workout_id, coach_id)
             )
             return {
                 'statusCode': 200,
@@ -30,10 +33,10 @@ def assign_group_workout(event, context):
         workout_id = execute_commit_fetch_one(
             """
                 INSERT INTO workouts (coachId, title, description, exercises, isTemplate)
-                VALUES ((SELECT coachId from groups where id = %s), %s, %s, %s, FALSE)
+                VALUES (%s, %s, %s, %s, FALSE)
                 RETURNING id
             """,
-            (group_id, title, description, json.dumps(exercises))
+            (coach_id, title, description, json.dumps(exercises))
         )
         if workout_id:
             # Assign the workout to the group

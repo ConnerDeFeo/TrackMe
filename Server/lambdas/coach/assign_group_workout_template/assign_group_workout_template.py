@@ -1,10 +1,13 @@
 from datetime import datetime, timezone
 import json
 from rds import execute_commit
+from user_auth import get_user_info
 
 def assign_group_workout_template(event, context):
     body = json.loads(event['body'])
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['user_id']
         #Check if workout exists
         workout_id = body['workoutId']
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
@@ -13,9 +16,11 @@ def assign_group_workout_template(event, context):
         # Create connection in RDS
         execute_commit(
         """
-            INSERT INTO group_workouts (groupId, date, workoutId) 
-            VALUES (%s, %s, %s)
-        """, (group_id, date, workout_id))
+            INSERT INTO group_workouts (groupId, date, workoutId)
+            SELECT %s, %s, %s
+            FROM groups
+            WHERE coachId = %s AND id = %s
+        """, (group_id, date, workout_id, coach_id, group_id))
         return {
             "statusCode": 200,
             "headers": {

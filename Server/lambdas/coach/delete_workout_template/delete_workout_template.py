@@ -1,13 +1,15 @@
 from rds import execute_commit
 import json
+from user_auth import get_user_info
 
 #Removes a coaches workout
 def delete_workout_template(event, context):
     query_params = event.get('queryStringParameters', {})
 
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['userId']
         workout_id = query_params['workoutId']
-        coach_id = query_params['coachId']
 
         #Update the table to soft delete the workout
         execute_commit(
@@ -29,3 +31,4 @@ def delete_workout_template(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': 'Failed to delete workout', 'message': str(e)})
         }
+    

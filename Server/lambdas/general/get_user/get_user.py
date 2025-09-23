@@ -1,13 +1,14 @@
 import json
 from rds import fetch_one
+from user_auth import get_user_info
 
 def get_user(event, context):
-    query_params = event.get("queryStringParameters", {})
     mapping = {"Athlete": "athletes", "Coach": "coaches"}
 
     try:
-        user_id = query_params['userId']
-        account_type = query_params['accountType']
+        user_info = get_user_info(event)
+        user_id = user_info['userId']
+        account_type = user_info['accountType']
         data = fetch_one(f"SELECT * FROM {mapping[account_type]} WHERE userId = %s", (user_id,))
         if data:
             if account_type == "Athlete":

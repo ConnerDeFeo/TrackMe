@@ -1,12 +1,14 @@
 import json
 from rds import execute_commit
+from user_auth import get_user_info
 
 def update_coach_profile(event, context):
     body = json.loads(event['body'])
 
     # Attempt coach profile update
     try:
-        coachId = body['coachId']
+        user_info = get_user_info(event)
+        coachId = user_info['userId']
         bio = body.get('bio')
         firstName = body.get('firstName')
         lastName = body.get('lastName')

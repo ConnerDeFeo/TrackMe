@@ -1,13 +1,15 @@
 from rds import fetch_all
 import json
+from user_auth import get_user_info
 
 #Get all athletes not already part of a given group
 def get_absent_group_athletes(event, context):
     query_params = event['queryStringParameters']
 
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['userId']
         group_id = query_params['groupId']
-        coach_id = query_params['coachId']
 
         # Get absent athletes
         absent_athletes = fetch_all(

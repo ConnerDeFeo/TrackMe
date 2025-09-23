@@ -1,12 +1,14 @@
 import json
 from rds import fetch_all
 from datetime import datetime, timezone
+from user_auth import get_user_info
 
 # Fetches dates for a given coach where there is a workout
 def get_available_history_dates(event, context):
     query_params = event.get('queryStringParameters', {})
     try:
-        coach_id = query_params['coachId']
+        user_info = get_user_info(event)
+        coach_id = user_info['userId']
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups

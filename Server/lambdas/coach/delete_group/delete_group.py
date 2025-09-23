@@ -1,16 +1,19 @@
 import json
 from rds import execute_commit
+from user_auth import get_user_info
 
 # deletes group from db
 def delete_group(event, context):
     query_params = event.get("queryStringParameters", {})
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info["user_id"]
         group_id = query_params["groupId"]
 
         # light delete group from db
         execute_commit(
-            "UPDATE groups SET deleted = TRUE WHERE id = %s",
-            (group_id,)
+            "UPDATE groups SET deleted = TRUE WHERE id = %s AND coachId = %s",
+            (group_id, coach_id)
         )
         return {
             "statusCode": 200,

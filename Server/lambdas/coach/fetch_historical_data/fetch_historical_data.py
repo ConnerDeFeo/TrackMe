@@ -1,10 +1,12 @@
 import json
 from rds import fetch_all
+from user_auth import get_user_info
 # Grabs all workouts and workout inputs for a given coach on a given date
 def fetch_historical_data(event, context):
     query_params = event.get('queryStringParameters', {})
     try:
-        coach_id = query_params['coachId']
+        user_info = get_user_info(event)
+        coach_id = user_info['userId']
         date = query_params['date']
 
         # Grab all workouts for the given coach on the specified date

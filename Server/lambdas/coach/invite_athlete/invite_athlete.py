@@ -1,12 +1,14 @@
 import json
 from rds import execute_commit
+from user_auth import get_user_info
 
 # Function to invite an athlete to a group
 def invite_athlete(event, context):
     body = json.loads(event.get('body', '{}'))
     try:
+        user_info = get_user_info(event)
+        coach_id = user_info['userId']
         athlete_id = body['athleteId']
-        coach_id = body['coachId']
 
         # Insert the athlete into the group invite table
         execute_commit(

@@ -7,7 +7,7 @@ def assign_group_workout_template(event, context):
     body = json.loads(event['body'])
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['user_id']
+        coach_id = user_info["userId"]
         #Check if workout exists
         workout_id = body['workoutId']
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))

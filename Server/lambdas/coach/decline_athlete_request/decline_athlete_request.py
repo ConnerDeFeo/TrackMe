@@ -7,7 +7,7 @@ def decline_athlete_request(event, context):
 
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['user_id']
+        coach_id = user_info["userId"]
         athlete_id = query_params['athleteId']
 
         # Delete the request from the athlete_coach_requests table

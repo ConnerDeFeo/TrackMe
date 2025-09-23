@@ -7,7 +7,7 @@ def decline_coach_invite(event, context):
 
     try:
         user_info = get_user_info(event)
-        athlete_id = user_info['user_id']
+        athlete_id = user_info["userId"]
         coach_id = query_params['coachId']
 
         # Delete the request from the athlete_coach_requests table

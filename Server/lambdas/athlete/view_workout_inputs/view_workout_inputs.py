@@ -12,7 +12,7 @@ def view_workout_inputs(event, context):
     try:
         # Get required parameters
         user_info = get_user_info(event)
-        athlete_id = user_info['user_id']
+        athlete_id = user_info["userId"]
         # Default to current UTC date if no date provided
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
         

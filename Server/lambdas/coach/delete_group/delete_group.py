@@ -7,7 +7,7 @@ def delete_group(event, context):
     query_params = event.get("queryStringParameters", {})
     try:
         user_info = get_user_info(event)
-        coach_id = user_info["user_id"]
+        coach_id = user_info["userId"]
         group_id = query_params["groupId"]
 
         # light delete group from db

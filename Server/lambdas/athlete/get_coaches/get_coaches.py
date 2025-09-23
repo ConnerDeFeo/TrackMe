@@ -7,7 +7,7 @@ def get_coaches(event, context):
 
     try:
         user_info = get_user_info(event)
-        user_id = user_info['user_id']
+        user_id = user_info["userId"]
 
         # Get all coaches
         coaches = fetch_all(

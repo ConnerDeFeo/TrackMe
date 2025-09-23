@@ -7,7 +7,7 @@ def remove_group_athlete(event, context):
 
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['userId']
+        coach_id = user_info["userId"]
         group_id = query_params['groupId']
         athlete_id = query_params['athleteId']
 
@@ -15,13 +15,14 @@ def remove_group_athlete(event, context):
         execute_commit(
             """
                 UPDATE athlete_groups ag
-                JOIN groups g ON ag.groupId = g.id
-                SET ag.removed = TRUE
-                WHERE ag.athleteId = %s 
-                AND g.id = %s
-                AND g.coachId = %s
+                SET removed = %s
+                FROM groups g
+                WHERE ag.groupId = g.id
+                    AND ag.athleteId = %s 
+                    AND g.id = %s
+                    AND g.coachId = %s
             """,
-            (athlete_id, group_id, coach_id)
+            (True, athlete_id, group_id, coach_id)
         )
 
         return {

@@ -7,7 +7,7 @@ def add_athlete_to_group(event, context):
 
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['user_id']
+        coach_id = user_info["userId"]
         athlete_id = body['athleteId']
         group_id = body['groupId']
 

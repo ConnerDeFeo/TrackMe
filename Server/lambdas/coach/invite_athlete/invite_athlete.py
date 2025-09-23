@@ -7,7 +7,7 @@ def invite_athlete(event, context):
     body = json.loads(event.get('body', '{}'))
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['userId']
+        coach_id = user_info["userId"]
         athlete_id = body['athleteId']
 
         # Insert the athlete into the group invite table

@@ -7,7 +7,7 @@ def assign_group_workout(event, context):
 
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['user_id']
+        coach_id = user_info["userId"]
         group_id = body['groupId']
         title = body['title']
         description = body.get('description', '')

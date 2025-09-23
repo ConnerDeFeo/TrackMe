@@ -35,6 +35,12 @@ def test_create_coach():
     response = create_coach(TestData.test_coach, {})
     assert response['statusCode'] == 200
 
+    #Check if coach exists in rds
+    coach = fetch_one("SELECT * FROM coaches WHERE userId=%s", ('123',))
+    assert coach is not None
+    assert coach[0] == '123'
+    assert coach[1] == 'testcoach'
+
 def test_get_athletes():
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})

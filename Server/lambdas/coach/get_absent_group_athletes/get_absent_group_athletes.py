@@ -8,7 +8,7 @@ def get_absent_group_athletes(event, context):
 
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['userId']
+        coach_id = user_info["userId"]
         group_id = query_params['groupId']
 
         # Get absent athletes

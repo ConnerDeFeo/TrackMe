@@ -8,7 +8,7 @@ def accept_athlete_request(event, context):
     body = json.loads(event['body'])
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['user_id']
+        coach_id = user_info["userId"]
         athlete_id = body['athleteId']
 
         # Insert the athlete into the group, remove the invite

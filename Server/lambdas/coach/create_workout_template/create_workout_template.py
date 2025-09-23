@@ -6,7 +6,7 @@ def create_workout_template(event, context):
     body = json.loads(event['body'])
     try:
         user_info = get_user_info(event)
-        coach_id = user_info['user_id']
+        coach_id = user_info["userId"]
         workout_id = body.get('workoutId', '')
         title = body['title']
         description = body.get('description', '')

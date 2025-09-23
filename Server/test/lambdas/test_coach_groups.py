@@ -14,20 +14,13 @@ import json
 from data import TestData
 from lambdas.coach.remove_group_athlete.remove_group_athlete import remove_group_athlete
 from rds import execute_file, fetch_one
-
-
-test_coach = {
-        "body": json.dumps({
-            "userId": "123",
-            'username': "testcoach",
-        })
-    }
+from testing_utils import *
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
     execute_file('./setup.sql')
-    create_coach(test_coach, {})
+    create_coach(TestData.test_coach, {})
     yield
 
 def generate_athlete(username, userId):
@@ -67,9 +60,9 @@ def test_add_athlete_to_group():
     event = {
         "body": json.dumps({
             "athleteId": "1234",
-            "coachId": "123",
             "groupId": "1"
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = add_athlete_to_group(event, {})
@@ -91,22 +84,19 @@ def setup_get_tests():
     accept_coach_invite(TestData.test_accept_coach_invite, {})
     add_athlete_to_group(TestData.test_add_athlete_to_group, {})
     create_athlete({
-        "body": json.dumps({
-            "userId": "1235",
-            "username": "testathlete2"
-        })
+        "headers":generate_auth_header("1235", "Athlete", "testathlete2"),
     }, {})
     invite_athlete({
         "body": json.dumps({
             "athleteId": "1235",
-            "coachId": "123"
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }, {})
     accept_coach_invite({
         "body": json.dumps({
-            "athleteId": "1235",
             "coachId": "123"
-        })
+        }),
+        "headers":generate_auth_header("1235", "Athlete", "testathlete2")
     }, {})
 
 def test_get_absent_group_athletes():
@@ -115,8 +105,8 @@ def test_get_absent_group_athletes():
     event = {
         "queryStringParameters": {
             "groupId": "1",
-            "coachId": "123"
-        }
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = get_absent_group_athletes(event, {})
@@ -139,7 +129,8 @@ def test_remove_group_athlete():
         "queryStringParameters": {
             "groupId": "1",
             "athleteId": "1234"
-        }
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = remove_group_athlete(event, {})
@@ -158,8 +149,8 @@ def test_remove_group_athlete():
     event = {
         "queryStringParameters": {
             "groupId": "1",
-            "coachId": "123"
-        }
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = get_absent_group_athletes(event, {})
@@ -172,7 +163,8 @@ def test_delete_group():
     event = {
         "queryStringParameters": {
             "groupId": 1,
-        }
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = delete_group(event, {})
@@ -208,7 +200,8 @@ def test_assign_group_workout():
                     "reps": 15
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = assign_group_workout(event, {})

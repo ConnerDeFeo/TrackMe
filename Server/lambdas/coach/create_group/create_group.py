@@ -8,7 +8,7 @@ def create_group(event, context):
     # Get group data from the request body
     try:
         user_info = get_user_info(event)
-        coachId = user_info['user_id']
+        coachId = user_info["userId"]
         body = json.loads(event['body'])
         group_name = body['groupName']
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")

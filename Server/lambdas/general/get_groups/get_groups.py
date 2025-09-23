@@ -7,7 +7,7 @@ def get_groups(event, context):
     try:
         # Query string parameters
         user_info = get_user_info(event)
-        userId = user_info['user_id']
+        userId = user_info["userId"]
         accountType = user_info['accountType']
 
         #Athletes

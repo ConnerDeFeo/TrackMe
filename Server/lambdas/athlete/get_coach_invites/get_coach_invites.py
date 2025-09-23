@@ -7,7 +7,7 @@ def get_coach_invites(event,context):
 
     try:
         user_info = get_user_info(event)
-        user_id = user_info['user_id']
+        user_id = user_info["userId"]
         #Fetch all coaches from the db that have made a request to the athlete
         coaches = fetch_all(
         """

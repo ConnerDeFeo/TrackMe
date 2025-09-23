@@ -6,7 +6,7 @@ def remove_inputs(event, context):
     body = json.loads(event['body'])
     try:
         user_info = get_user_info(event)
-        athlete_id = user_info['user_id']
+        athlete_id = user_info["userId"]
         input_ids = body['inputIds']  # Expecting a list of input IDs to remove
         # remove all inputs from db
         execute_commit(

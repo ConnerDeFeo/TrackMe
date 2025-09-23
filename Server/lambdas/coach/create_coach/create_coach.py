@@ -8,7 +8,7 @@ def create_coach(event, context):
     # Attempt athlete creation
     try:
         user_info = get_user_info(event)
-        user_id = user_info['user_id']
+        user_id = user_info["userId"]
         username = user_info['username']
         #Insert coach into the database
         execute_commit("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (user_id, username))

@@ -58,11 +58,11 @@ Resources:
           Type: Api
           Properties: 
             Path: /athletes/remove_inputs/
-            Method: delete
+            Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
-        
+
   DeclineCoachInviteFunction:
     Type: AWS::Serverless::Function 
     Properties:

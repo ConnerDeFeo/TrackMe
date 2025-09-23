@@ -15,6 +15,15 @@ const AthleteWorkoutService = {
             'date': date,
             'inputs': inputs
         });
+    },
+    removeInputs: async (inputIds:number[]) => {
+        const userId = await UserService.getUserId();
+        return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/remove_inputs`,
+            {
+                'athleteId': userId,
+                'inputIds': inputIds
+            }
+        );
     }
 }
 

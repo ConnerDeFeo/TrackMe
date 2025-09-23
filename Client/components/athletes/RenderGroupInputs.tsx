@@ -51,7 +51,7 @@ const RenderGroupInputs: React.FC<
     //Current workout group members
     const { workoutGroup } = useWorkoutGroup(groupId);
     // List of input IDs that have been submitted and selected by user
-    const [selectedSubmitedInputs, setSelectedSubmitedInputs] = useState<string[]>([]);
+    const [selectedSubmitedInputs, setSelectedSubmitedInputs] = useState<number[]>([]);
 
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
@@ -71,6 +71,15 @@ const RenderGroupInputs: React.FC<
         }
     }
 
+    const handleInputRemoval = async () => {
+        const resp = await AthleteWorkoutService.removeInputs(selectedSubmitedInputs);
+        if(resp.ok){
+            setSelectedSubmitedInputs([]);
+            onSubmit();
+        }
+    }
+
+    console.log(selectedSubmitedInputs);
     return(
         // Main container for the group with styling for card appearance
         <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 gap-y-4 mt-4">
@@ -104,7 +113,7 @@ const RenderGroupInputs: React.FC<
                         <Text className="font-semibold text-gray-500 uppercase">Entries</Text>
                         {
                             selectedSubmitedInputs.length > 0 && (
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={handleInputRemoval}>
                                     <Text className="text-[#E63946]">Remove Inputs</Text>
                                 </TouchableOpacity>
                             )
@@ -112,13 +121,13 @@ const RenderGroupInputs: React.FC<
                     </View>
                     {submitedInputs[groupId].map((input, idx) => (
                         <TouchableOpacity key={idx} onPress={()=>{
-                            if(selectedSubmitedInputs.includes(input.inputId.toString())){
-                                setSelectedSubmitedInputs(prev => prev.filter(id => id !== input.inputId.toString()));
+                            if(selectedSubmitedInputs.includes(input.inputId)){
+                                setSelectedSubmitedInputs(prev => prev.filter(id => id !== input.inputId));
                             } else {
-                                setSelectedSubmitedInputs(prev => [...prev, input.inputId.toString()]);
+                                setSelectedSubmitedInputs(prev => [...prev, input.inputId]);
                             }
                         }}>
-                            <TimeDistanceDisplay key={idx} time={input.time} distance={input.distance} selected={selectedSubmitedInputs.includes(input.inputId.toString())} />
+                            <TimeDistanceDisplay key={idx} time={input.time} distance={input.distance} selected={selectedSubmitedInputs.includes(input.inputId)} />
                         </TouchableOpacity>
                     ))}
                 </View>

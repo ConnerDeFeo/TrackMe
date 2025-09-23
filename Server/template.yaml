@@ -29,6 +29,12 @@ Resources:
         AllowHeaders: "'Content-Type, Authorization'"
         AllowOrigin: "'http://localhost:8081'"
         AllowCredentials: true
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !Sub "arn here"
+            Identity:
+              Header: Authorization
 
   RDSLayer:
     Type: AWS::Serverless::LayerVersion

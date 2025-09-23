@@ -5,6 +5,7 @@ from rds import fetch_all
 def get_groups(event, context):
     query_params = event.get('queryStringParameters', {})
     try:
+        print("Received event:", event)
         # Query string parameters
         userId = query_params.get('userId')
         accountType = query_params.get('accountType')

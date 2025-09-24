@@ -15,6 +15,7 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
 from datetime import datetime, timedelta, timezone
+from testing_utils import *
     
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -28,9 +29,9 @@ def setup_before_each_test(): #This will run before each test
     create_group(TestData.test_group, {})
     create_group({
         "body": json.dumps({
-            "groupName": "Test Group 2",
-            "coachId": "123"
-        })
+            "groupName": "Test Group 2"
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
@@ -38,9 +39,9 @@ def setup_before_each_test(): #This will run before each test
     add_athlete_to_group({
         "body": json.dumps({
             "athleteId": "1234",
-            "coachId": "123",
             "groupId": 2
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }, {})
     yield
     
@@ -60,7 +61,8 @@ def test_search_input_history_date():
                     'time': 2
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
     input_times({
         "body": json.dumps({
@@ -77,7 +79,8 @@ def test_search_input_history_date():
                     'time': 6
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
     input_times({
         "body": json.dumps({
@@ -90,14 +93,15 @@ def test_search_input_history_date():
                     'time': 8
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
 
     response =  search_input_history_date({
         "queryStringParameters": {
-            "athleteId": "1234",
             "date": yesterday
-        }
+        },
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
 
     assert response['statusCode'] == 200
@@ -126,16 +130,16 @@ def test_get_available_history_dates():
     workout_id = data['workout_id']
     assign_group_workout_template({
         "body": json.dumps({
-            "coachId": "123",
             "groupId": "1",
             "workoutId": workout_id
-        })
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     response = get_available_history_dates({
         "queryStringParameters": {
-            "coachId": "123",
             "date": date
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
 
     assert response['statusCode'] == 200
@@ -144,16 +148,16 @@ def test_get_available_history_dates():
 
     response = get_available_history_dates({
         "queryStringParameters": {
-            "coachId": "123",
             "date": yesterday
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert len(body) == 0
 
 def test_fetch_historical_data():
-    response = create_workout_template(TestData.test_workout, {})
+    create_workout_template(TestData.test_workout, {})
     assign_group_workout_template(TestData.test_assign_group_workout, {})
     input_times(TestData.test_input_times, {})
     
@@ -169,18 +173,20 @@ def test_fetch_historical_data():
                     'time': 15.0
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
 
     response = fetch_historical_data({
         "queryStringParameters": {
-            "coachId": "123",
             "date": date
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
 
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
+    debug_table()
     assert len(body) == 1
     group_data = body['1']
     assert group_data['name'] == 'Test Group'

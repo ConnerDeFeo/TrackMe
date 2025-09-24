@@ -4,7 +4,6 @@ from user_auth import get_user_info
 
 # Gets all current proposals (requests or invites) for a user
 def get_pending_proposals(event, context):
-    query_params = event.get('queryStringParameters', {})
     accountMappings = {
         'athlete': 'invites',
         'coach': 'requests'

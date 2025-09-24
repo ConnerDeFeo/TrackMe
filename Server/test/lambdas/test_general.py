@@ -149,16 +149,10 @@ def test_get_user():
     update_coach_profile(TestData.test_update_coach_profile, {})
 
     athlete_response = get_user({
-        "queryStringParameters": {
-            "userId": "1234",
-            "accountType": "Athlete"
-        }
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete"),
     }, {})
     coach_response = get_user({
-        "queryStringParameters": {
-            "userId": "123",
-            "accountType": "Coach"
-        }
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     assert athlete_response['statusCode'] == 200
     assert coach_response['statusCode'] == 200
@@ -187,10 +181,12 @@ def test_remove_coach_athlete():
         "queryStringParameters": {
             "coachId": "123",
             "athleteId": "1234"
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     assert response['statusCode'] == 200
-    relationships = fetch_one("""
+    relationships = fetch_one(
+    """
         SELECT * FROM athlete_coaches WHERE coachId = %s AND athleteId = %s
     """, ("123", "1234"))
     assert relationships is None
@@ -203,18 +199,18 @@ def test_get_group_workout():
     test_assign_workout = {
         "body": json.dumps({
             "workoutId": workout_id,
-            "coachId": "123",
             "groupId": "1"
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
     assign_group_workout_template(test_assign_workout, {})
 
     event = {
         "queryStringParameters": {
-            "coachId": "123",
             "groupId": "1",
             "date": date
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     response = get_group_workout(event, {})
     assert response['statusCode'] == 200
@@ -229,24 +225,19 @@ def test_get_group_workout():
 
 def test_get_pending_proposals():
     create_athlete({
-        "body": json.dumps({
-            "userId": "1235",
-            "username": "testathlete2"
-        })
+        "headers": generate_auth_header("1235", "Athlete", "testathlete2")
     }, {})
     invite_athlete({
         "body": json.dumps({
-            "athleteId": "1235",
-            "coachId": "123"
-        })
+            "athleteId": "1235"
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
 
     event = {
-        "queryStringParameters": {
-            "userId": "1235",
-            "accountType": "Athlete"
-        }
+        "headers": generate_auth_header("1235", "Athlete", "testathlete2")
     }
+    debug_table()
     response = get_pending_proposals(event, {})
     assert response['statusCode'] == 200
 
@@ -260,27 +251,27 @@ def test_mass_input():
     generate_athlete("testathlete3", "91011")
     invite_athlete({
         "body": json.dumps({
-            "athleteId": "91011",
-            "coachId": "123"
-        })
+            "athleteId": "91011"
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     invite_athlete({
         "body": json.dumps({
-            "athleteId": "5678",
-            "coachId": "123"
-        })
+            "athleteId": "5678"
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     accept_coach_invite({
         "body": json.dumps({
-            "athleteId": "91011",
             "coachId": "123"
-        })
+        }),
+        "headers": generate_auth_header("91011", "Athlete", "testathlete3")
     }, {})
     accept_coach_invite({
         "body": json.dumps({
-            "athleteId": "5678",
             "coachId": "123"
-        })
+        }),
+        "headers": generate_auth_header("5678", "Athlete", "testathlete2")
     }, {})
     event = {
         "body": json.dumps({
@@ -299,7 +290,8 @@ def test_mass_input():
                     {"time": 21.0, "distance": 200}
                 ]
             }
-        })
+        }),
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
     response = mass_input(event, {})

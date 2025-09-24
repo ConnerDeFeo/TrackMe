@@ -14,7 +14,6 @@ const AssignNewWorkout = () => {
             navigate("ViewGroupCoach", { groupId, groupName });
         }
     }
-    console.log("workout", workout);
     return (
         <WorkoutCreation
             buttonText="Assign"

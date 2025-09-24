@@ -105,7 +105,7 @@ const ViewGroup = () => {
             Athletes ({participants.length})
           </Text>
           <TouchableOpacity 
-            onPress={() => navigate('AssignAthletes', { groupId: groupId, fetchParticipants: fetchParticipants})}
+            onPress={() => navigate('AssignAthletes', { groupId: groupId})}
             className="flex items-center"
           >
             <Text className="text-[#E63946]">Add Athletes</Text>

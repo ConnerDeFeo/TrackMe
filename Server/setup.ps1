@@ -7,4 +7,4 @@ Set-Location layers/rds/python
 Remove-Item -Recurse -Force psycopg2*
 Set-Location ../../..
 sam build
-sam local start-api
+sam local start-api --warm-containers LAZY

@@ -34,7 +34,6 @@ const CoachWorkoutService = {
         if (workoutData.groupWorkoutId){
             payload['groupWorkoutId'] = workoutData.groupWorkoutId;
         }
-        console.log("payload", payload);
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout`, payload);
     }
 }

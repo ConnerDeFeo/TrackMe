@@ -58,7 +58,7 @@ const SignIn = ()=>{
             <AuthenticationHeader/>
             {/**Success Message from reset password*/}
             {showResetPasswordMessage && <Text className="text-green-500 text-center absolute top-[19rem] left-0 right-0">{resetPasswordMessage}</Text>}
-            <View className="m-auto gap-y-10 w-full">
+            <View className="m-auto gap-y-6 w-full">
                 {/**SIGN IN*/}
                 <Text className="text-red-500 text-center mt-100">{error}</Text>
                 <View className="gap-y-4 bg-red-200 rounded-xl p-6">
@@ -69,12 +69,16 @@ const SignIn = ()=>{
                             <Text className="text-right">Forgot Password?</Text>
                         </TouchableOpacity>
                     </View>
-                    <Button title="Login" onPress={handleSignIn} color="black"/>
+                    <TouchableOpacity onPress={handleSignIn} className="bg-black rounded-lg py-3">
+                        <Text className="text-white text-xl font-bold text-center">Login</Text>
+                    </TouchableOpacity>
                 </View>
                 {/**CREATE NEW ACCOUNT*/}
-                <View className="gap-y-6">
+                <View className="gap-y-4">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <Button title="Create Account" onPress={()=>navigation.replace("Auth", {screen:'CreateAccount'})} color="#E63946"/>
+                    <TouchableOpacity onPress={()=>navigation.replace("Auth", {screen:'CreateAccount'})} className="bg-red-500 rounded-lg py-3">
+                        <Text className="text-white text-xl font-bold text-center">Create Account</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

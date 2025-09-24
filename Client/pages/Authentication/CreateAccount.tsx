@@ -101,8 +101,8 @@ const CreateAccount = ()=>{
             {/**SIGN IN LINK*/}
             <View className="gap-y-6">
                 <Text className="text-center text-xl">Already have an account? </Text>
-                <TouchableOpacity onPress={()=>navigation.replace("Auth",{"Screen":'SignIn'})} className="bg-red-500 rounded-lg py-3 items-center">
-                    <Text className="text-white text-xl font-bold">Sign In</Text>
+                <TouchableOpacity onPress={()=>navigation.replace("Auth",{screen:'SignIn'})} className="bg-red-500 rounded-lg py-3">
+                    <Text className="text-white text-xl font-bold text-center">Sign In</Text>
                 </TouchableOpacity>
             </View>
             </View>

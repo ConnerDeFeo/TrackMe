@@ -78,6 +78,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   DeclineCoachInviteFunction:
     Type: AWS::Serverless::Function 
@@ -93,6 +94,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   SearchInputHistoryDateFunction:
     Type: AWS::Serverless::Function
@@ -108,6 +110,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   SearchCoachesFunction:
     Type: AWS::Serverless::Function
@@ -123,6 +126,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   RequestCoachFunction:
     Type: AWS::Serverless::Function
@@ -138,6 +142,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   UpdateAthleteProfileFunction:
     Type: AWS::Serverless::Function 
@@ -153,6 +158,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetCoachesFunction:
     Type: AWS::Serverless::Function 
@@ -168,6 +174,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetCoachInvitesFunction:
     Type: AWS::Serverless::Function
@@ -183,6 +190,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   CreateAthleteFunction:
     Type: AWS::Serverless::Function 
@@ -198,6 +206,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   AcceptCoachInviteFunction:
     Type: AWS::Serverless::Function 
@@ -213,6 +222,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   InputTimesFunction:
     Type: AWS::Serverless::Function 
@@ -228,6 +238,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   ViewWorkoutInputsFunction:
     Type: AWS::Serverless::Function 
@@ -243,6 +254,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   #
   # 
@@ -265,6 +277,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   DeleteGroupWorkoutFunction:
     Type: AWS::Serverless::Function
@@ -280,6 +293,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   DeleteGroupFunction:
     Type: AWS::Serverless::Function 
@@ -295,6 +309,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   FetchHistoricalDataFunction:
     Type: AWS::Serverless::Function
@@ -310,6 +325,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetAvailableHistoryDatesFunction:
     Type: AWS::Serverless::Function
@@ -325,6 +341,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   ViewAthleteRequestsFunction:
     Type: AWS::Serverless::Function
@@ -340,6 +357,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   AcceptAthleteRequestFunction:
     Type: AWS::Serverless::Function 
@@ -355,6 +373,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   UpdateCoachProfileFunction:
     Type: AWS::Serverless::Function 
@@ -370,6 +389,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   RemoveGroupAthleteFunction:
     Type: AWS::Serverless::Function 
@@ -385,6 +405,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   DeleteWorkoutTemplateFunction:
     Type: AWS::Serverless::Function
@@ -400,6 +421,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetWorkoutTemplatesFunction:
     Type: AWS::Serverless::Function
@@ -415,6 +437,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetAbsentGroupAthletesFunction:
     Type: AWS::Serverless::Function 
@@ -430,6 +453,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   AddAthleteToGroupFunction:
     Type: AWS::Serverless::Function 
@@ -445,6 +469,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetAthletesFunction:
     Type: AWS::Serverless::Function
@@ -460,6 +485,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   CreateCoachFunction:
     Type: AWS::Serverless::Function 
@@ -475,6 +501,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   CreateGroupFunction:
     Type: AWS::Serverless::Function 
@@ -490,6 +517,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   CreateWorkoutTemplateFunction:
     Type: AWS::Serverless::Function 
@@ -505,6 +533,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   AssignGroupWorkoutTemplateFunction:
     Type: AWS::Serverless::Function 
@@ -520,6 +549,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   InviteAthleteFunction:
     Type: AWS::Serverless::Function 
@@ -535,6 +565,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   SearchAthletesFunction:
     Type: AWS::Serverless::Function
@@ -550,6 +581,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   AssignGroupWorkout:
     Type: AWS::Serverless::Function
@@ -565,6 +597,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
   #
   #
   #
@@ -586,6 +619,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetPendingProposals:
     Type: AWS::Serverless::Function
@@ -601,6 +635,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   RemoveCoachAthlete:
     Type: AWS::Serverless::Function
@@ -616,6 +651,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetUserFunction:
     Type: AWS::Serverless::Function
@@ -631,6 +667,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   ViewGroupInputsFunction:
     Type: AWS::Serverless::Function
@@ -646,6 +683,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetAthletesForGroupFunction:
     Type: AWS::Serverless::Function
@@ -661,6 +699,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   GetGroupsFunction:
     Type: AWS::Serverless::Function 
@@ -692,6 +731,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
 Outputs:
   ApiGatewayApiUrl:

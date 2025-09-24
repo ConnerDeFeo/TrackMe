@@ -13,7 +13,8 @@ from lambdas.coach.accept_athlete_request.accept_athlete_request import accept_a
 from lambdas.athlete.request_coach.request_coach import request_coach
 from lambdas.coach.view_athlete_requests.view_athlete_requests import view_athlete_requests
 from lambdas.coach.decline_athlete_request.decline_athlete_request import decline_athlete_request
-from rds import execute_file, fetch_one
+from rds import execute_file, fetch_one, fetch_all
+from testing_utils import *
 from data import TestData
 
 @pytest.fixture(autouse=True)
@@ -22,12 +23,9 @@ def setup_before_each_test(): #This will run before each test
     execute_file('./setup.sql')
     yield
 
-def generate_athlete(username, userId):
+def generate_athlete(username, user_id):
     create_athlete( {
-        "body": json.dumps({
-            "userId": userId,
-            "username": username
-        })
+        "headers":generate_auth_header(user_id, "Athlete", username)
     },{})
 
 def test_create_coach():
@@ -46,7 +44,6 @@ def test_get_athletes():
     create_athlete(TestData.test_athlete, {})
     
     # Debug: Check how many athletes exist after creating one
-    from rds import fetch_all
     athletes_after_create = fetch_all("SELECT userId, username FROM athletes", ())
     print(f"Athletes after create_athlete: {athletes_after_create}")
     
@@ -63,9 +60,7 @@ def test_get_athletes():
     print(f"Athletes after accept_coach_invite: {athletes_after_accept}")
     
     event = {
-        "queryStringParameters": {
-            "coachId": "123"
-        }
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
     response = get_athletes(event, {})
     assert response['statusCode'] == 200
@@ -87,9 +82,9 @@ def test_search_empty_athletes():
     generate_athlete("testathlete2", "5678")
     invite_athlete({
         "body": json.dumps({
-            "coachId": "123",
             "athleteId": "5678"
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }, {})
 
     #Athlete Requested
@@ -97,23 +92,20 @@ def test_search_empty_athletes():
     request_coach({
         "body": json.dumps({
             "coachId": "123",
-            "athleteId": "1000"
-        })
+        }),
+        "headers":generate_auth_header("1000", "Athlete", "testRequestAthlete")
     }, {})
 
     #Neither
     generate_athlete("2test_athlete3", "91011")
 
     event = {
-        "queryStringParameters": {
-            "coachId": "123"
-        }
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
     response = search_athletes(event, {})
     assert response['statusCode'] == 200
 
     athletes = json.loads(response['body'])
-    print(athletes)
     mappings = {'test_athlete':'Added', 'testathlete2':'Pending', 'testRequestAthlete':'Requested', '2test_athlete3':'Not Added'}
     assert len(athletes) == 4
     for athlete in athletes:
@@ -128,16 +120,16 @@ def test_search_with_term_athletes():
     generate_athlete("2test_athlete3", "91011")
     invite_athlete({
         "body": json.dumps({
-            "coachId": "123",
             "athleteId": "5678"
-        })
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
 
     event = {
         "queryStringParameters": {
-            "coachId": "123",
             'searchTerm': 'test'
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     response = search_athletes(event, {})
     assert response['statusCode'] == 200
@@ -164,11 +156,9 @@ def test_update_athlete_profile():
 def test_view_athlete_requests():
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
-    request_coach(TestData.test_invite, {})
+    request_coach(TestData.test_request_coach, {})
     event = {
-        'queryStringParameters': {
-            'userId': '123'
-        }
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = view_athlete_requests(event, {})
@@ -185,9 +175,9 @@ def test_accept_athlete_request():
     request_coach(TestData.test_invite, {})
     event = {
         'body': json.dumps({
-            'athleteId': '1234',
-            'coachId': '123'
-        })
+            'athleteId': '1234'
+        }),
+        'headers': generate_auth_header("123", "Coach", "testcoach")
     }
 
     response = accept_athlete_request(event, {})
@@ -204,9 +194,9 @@ def test_decline_athlete_request():
     request_coach(TestData.test_invite, {})
     event = {
         'queryStringParameters': {
-            'athleteId': '1234',
-            'coachId': '123'
-        }
+            'athleteId': '1234'
+        },
+        'headers': generate_auth_header("123", "Coach", "testcoach")
     }
     response = decline_athlete_request(event, {})
     assert response['statusCode'] == 200

@@ -25,7 +25,6 @@ from rds import execute_file, fetch_one, fetch_all
 from data import TestData
 from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
 from lambdas.general.mass_input.mass_input import mass_input
-from testing_utils import debug_table
 from datetime import datetime, timezone
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -162,8 +161,6 @@ def test_get_user():
             "accountType": "Coach"
         }
     }, {})
-
-    debug_table()
     assert athlete_response['statusCode'] == 200
     assert coach_response['statusCode'] == 200
 

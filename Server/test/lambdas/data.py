@@ -26,6 +26,13 @@ class TestData:
         "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
+    test_request_coach = {
+        "body": json.dumps({
+            "coachId": "123"
+        }),
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
     test_accept_coach_invite = {
             "body": json.dumps({
                 "coachId": "123"

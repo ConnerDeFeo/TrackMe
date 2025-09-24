@@ -15,7 +15,6 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
 from datetime import datetime, timedelta, timezone
-# from testing_utils import debug_table
     
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")

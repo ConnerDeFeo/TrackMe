@@ -31,7 +31,6 @@ const AssignWorkout = ()=>{
             goBack();
         }
     };
-
     return (
         <View className="mt-4">
             <TouchableOpacity

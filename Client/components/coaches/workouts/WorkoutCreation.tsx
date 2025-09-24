@@ -13,12 +13,14 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
 
   const handleCreation = async () => {
     let valid = true;
-    workout?.exercises.forEach((exercise:Exercise) => {
-      if(!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0 || exercise?.reps === 0){
-        valid = false;
-      }
-    });
-    if(!valid || workout.title.trim() === "" ){
+    if(exercises.length > 0){
+      exercises.forEach((exercise:Exercise) => {
+        if(!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0 || exercise?.reps === 0){
+          valid = false;
+        }
+      });
+    }
+    if(!valid || workout?.title?.trim() === "" ){
       alert("Please fill in all required fields");
       return;
     }

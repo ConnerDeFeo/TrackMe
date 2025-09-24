@@ -9,14 +9,12 @@ const AssignNewWorkout = () => {
     const { groupId, groupName, workout } = route.params as { groupId: string, groupName: string, workout?: any };
 
     const handleWorkoutCreation = async (workoutData:any) => {
-        console.log("INSIDE FUNCTION");
         const resp = await CoachWorkoutService.assignGroupWorkout(groupId, workoutData);
-        console.log(resp);
         if(resp.ok) {
-            navigate("ViewGroupCoach", { groupId: groupId, groupName: groupName });
+            navigate("ViewGroupCoach", { groupId, groupName });
         }
     }
-    console.log(workout);
+    console.log("workout", workout);
     return (
         <WorkoutCreation
             buttonText="Assign"

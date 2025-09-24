@@ -218,7 +218,7 @@ def test_get_group_workout():
     # Check if the data is valid
     workout = json.loads(response['body'])
     workout = workout[0]
-    assert workout['workoutId'] == 1
+    assert workout['groupWorkoutId'] == 1
     assert workout['title'] == 'Test Workout'
     assert workout['description'] == 'This is a test workout'
     assert len(workout['exercises']) == 3

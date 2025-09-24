@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import json 
 from rds import execute_commit, execute_commit_fetch_one
 from user_auth import get_user_info
@@ -12,34 +13,53 @@ def assign_group_workout(event, context):
         title = body['title']
         description = body.get('description', '')
         exercises = body.get('exercises', [])
-        workout_id = body.get('workoutId')
+        group_workout_id = body.get('groupWorkoutId')
+
+        jsonExercises = json.dumps(exercises)
         
-        if workout_id:
+        if group_workout_id:
             # If workoutId is provided, update the existing workout
-            execute_commit(
+            updated = execute_commit_fetch_one(
                 """
                     UPDATE workouts
                     SET title = %s, description = %s, exercises = %s
-                    WHERE id = %s AND coachId = %s
+                    WHERE id = (SELECT workoutId FROM group_workouts WHERE id = %s) AND coachId = %s AND isTemplate = %s
+                    RETURNING id
                 """,
-                (title, description, json.dumps(exercises), workout_id, coach_id)
+                (title, description, jsonExercises, group_workout_id, coach_id, False)
             )
-            return {
-                'statusCode': 200,
-                'body': json.dumps({'message': 'Workout updated successfully', 'workout_id': workout_id})
-            }
-
+            # Only return for updating non workout template
+            if updated:
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps({'message': 'Workout updated successfully', 'groupWorkoutId': group_workout_id})
+                }
         # Create a new workout and fetch the id
         workout_id = execute_commit_fetch_one(
             """
                 INSERT INTO workouts (coachId, title, description, exercises, isTemplate)
-                VALUES (%s, %s, %s, %s, FALSE)
+                VALUES (%s, %s, %s, %s, %s)
                 RETURNING id
             """,
-            (coach_id, title, description, json.dumps(exercises))
+            (coach_id, title, description, jsonExercises, False)
         )
         if workout_id:
-            # Assign the workout to the group
+            # This implies the workout is a workout template and the previous group workout needs to be updated
+            if group_workout_id:
+                execute_commit(
+                    """
+                        UPDATE group_workouts
+                        SET workoutId = %s
+                        WHERE id = %s
+                    """,
+                    (workout_id[0], group_workout_id)
+                )
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps({'message': 'Workout updated successfully', 'groupWorkoutId': group_workout_id})
+                }
+
+            # Else linkl the new workout to the group
             execute_commit(
                 """
                     INSERT INTO group_workouts (groupId, workoutId)
@@ -52,8 +72,8 @@ def assign_group_workout(event, context):
                 'body': json.dumps({'message': 'Workout assigned to group successfully', 'workout_id': workout_id[0]})
             }
         return {
-            'statusCode': 409,
-            'body': json.dumps({'error': 'Conflict creating or assigning workout'})
+            'statusCode': 400,
+            'body': json.dumps({'error': 'Failed to assign workout to group'})
         }
     except Exception as e:
         print(f"Error assigning workout to group: {e}")

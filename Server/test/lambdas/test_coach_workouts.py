@@ -237,7 +237,7 @@ def test_delete_group_workout():
 
     event = {
         "queryStringParameters": {
-            "workoutId": 1
+            "groupWorkoutId": 1
         },
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }

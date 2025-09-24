@@ -732,12 +732,3 @@ Resources:
       Layers:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
-
-Outputs:
-  ApiGatewayApiUrl:
-    Description: "API Gateway endpoint URL for Dev stage"
-    Value: !Sub "https://${ApiGatewayApi}.execute-api.${AWS::Region}.amazonaws.com/Dev/"
-    
-  LocalApiUrl:
-    Description: "Local API Gateway endpoint URL"
-    Value: "http://127.0.0.1:3000"

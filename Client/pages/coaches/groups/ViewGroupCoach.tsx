@@ -71,7 +71,6 @@ const ViewGroup = () => {
       await fetchWorkout();
     }
   }
-
   return (
     <View className="pb-12 px-4 mt-4">
       <View className="space-y-4 mb-8">
@@ -93,10 +92,10 @@ const ViewGroup = () => {
 
       {workouts.map((workout) => (
         <DisplayWorkout 
-          key={workout.workoutId} 
+          key={workout.groupWorkoutId} 
           workout={workout} 
           onPress={() => navigate('AssignNewWorkout', {groupId: groupId, groupName: groupName, workout: workout })} 
-          onRemove={() => handleWorkoutRemoval(workout.workoutId)}
+          onRemove={() => handleWorkoutRemoval(workout.groupWorkoutId)}
         />
       ))}
 

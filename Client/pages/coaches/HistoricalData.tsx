@@ -13,8 +13,6 @@ const HistoricalData = ()=>{
     useEffect(() => {
         const fetchHistoricalData = async () => {
             const resp = await HistoryService.fetchHistoricalData(date);
-            console.log(date)
-            console.log(resp);
             if (resp.ok) {
                 const data = await resp.json();
                 setHistoricalData(data);

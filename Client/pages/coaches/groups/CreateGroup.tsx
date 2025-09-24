@@ -26,7 +26,7 @@ const CreateGroup = () => {
     //handles groups creation and redirection
     const handleCreateGroup = async () => {
         try {
-            const resp = await CoachGroupService.createGroup(userId, groupName);
+            const resp = await CoachGroupService.createGroup(groupName);
             if(resp.ok){
                 const data = await resp.json();
                 navigate('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });

@@ -5,18 +5,18 @@ const CoachWorkoutService = {
     createWorkoutTemplate: async (workoutData:any) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/create_workout_template`, workoutData);
     },
-    getWorkoutTemplates: async (coachId:string) => {
-        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/get_workout_templates?coachId=${coachId}`);
+    getWorkoutTemplates: async () => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/coaches/get_workout_templates`);
     },
     assignWorkoutTemplateToGroup: async (workoutId:string,groupId:string, date?: string) => {
-        const payload: Record<string, any> = { workoutId:workoutId, groupId: groupId };
+        const payload: Record<string, any> = { workoutId, groupId };
         if(date){
             payload['date'] = date;
         }
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout_template`, payload);
     },
-    deleteWorkoutTemplate: async (workoutId:string, coachId:string) => {
-        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_workout_template?workoutId=${workoutId}&coachId=${coachId}`);
+    deleteWorkoutTemplate: async (workoutId:string) => {
+        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_workout_template?workoutId=${workoutId}`);
     },
     deleteGroupWorkout: async (groupWorkoutId:string) => {
         return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_group_workout?groupWorkoutId=${groupWorkoutId}`);

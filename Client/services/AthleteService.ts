@@ -4,35 +4,28 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const AthleteService = {
     //Creates athlete
-    createAthlete: async (userId:string, username:string) => {
-        return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/create_athlete`,
-            { 
-                'userId': userId, 
-                'username': username 
-            }
-        );
+    createAthlete: async () => {
+        return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/create_athlete`);
     },
-    getCoaches: async (userId:string) => {
-        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coaches?userId=${userId}`);
+    getCoaches: async () => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coaches`);
     },
-    getCoachInvites: async (userId:string) => {
-        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coach_invites?userId=${userId}`);
+    getCoachInvites: async () => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/get_coach_invites`);
     },
-    acceptCoachInvite: async(userId:string, coachId:string) => {
+    acceptCoachInvite: async(coachId:string) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/accept_coach_invite`,
             {
-                'athleteId': userId,
                 'coachId': coachId
             }
         );
     },
-    searchCoaches: async (userId:string, searchTerm:string) => {
-        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/search_coaches?athleteId=${userId}&searchTerm=${searchTerm}`);
+    searchCoaches: async (searchTerm:string) => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/athletes/search_coaches?searchTerm=${searchTerm}`);
     },
-    requestCoach: async (userId:string, coachId:string) => {
+    requestCoach: async ( coachId:string) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/request_coach`,
             {
-                'athleteId': userId,
                 'coachId': coachId
             }
         );

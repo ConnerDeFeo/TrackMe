@@ -22,7 +22,6 @@ const CreateWorkout = () => {
     <WorkoutCreation
       workout={workout}
       handleWorkoutCreation={handleWorkoutCreation}
-      pageTitle={"Create Workout Template"}
       buttonText={isEdit ? "Save Changes" : "Create Workout"} 
     />
   );

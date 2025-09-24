@@ -9,8 +9,7 @@ const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
 
   const fetchInputHistory = async () => {
-    const athleteId = await UserService.getUserId();
-    const resp = await HistoryService.searchInputHistoryByDate(athleteId!);
+    const resp = await HistoryService.searchInputHistoryByDate();
     if (resp.ok){
       const historyData = await resp.json();
       setInputHistory(historyData);
@@ -24,8 +23,7 @@ const InputHistory = () => {
 
   // Function to handle date search
   const handleDateSearch = async (dateInput:string) => {
-    const athleteId = await UserService.getUserId();
-    const resp = await HistoryService.searchInputHistoryByDate(athleteId!, dateInput);
+    const resp = await HistoryService.searchInputHistoryByDate(dateInput);
     if(resp.ok){
       const historyData = await resp.json();
       setInputHistory(historyData);

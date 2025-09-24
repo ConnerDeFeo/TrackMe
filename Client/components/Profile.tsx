@@ -22,7 +22,7 @@ const Profile = () => {
             setAccountType(accountType!);
             const userId = await UserService.getUserId();
             if(userId) {
-                const resp = await GeneralService.getUser(userId);
+                const resp = await GeneralService.getUser();
                 if(resp){
                 const data = await resp.json();
                 setUserData(data);

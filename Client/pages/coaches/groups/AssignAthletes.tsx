@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import {Text, TouchableOpacity, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
 import { useRoute } from "@react-navigation/native";
-import UserService from "../../../services/UserService";
-import { useNav } from "../../../hooks/useNav";
 
 //Page where coaches can add any current athletes to a given group
 const AssignAthletes = ()=>{
     const [athletes, setAthletes] = useState<string[]>([]);
     const route = useRoute();
     const { groupId, fetchParticipants } = route.params as { groupId: string, fetchParticipants: () => void };
-    const { goBack } = useNav();
     
 
     const fetchAbsentAthletes = async () => {
-            const userId = await UserService.getUserId();
-            const response = await CoachGroupService.getAbsentGroupAthletes(groupId, userId!);
+            const response = await CoachGroupService.getAbsentGroupAthletes(groupId);
             if (response.ok) {
                 const data = await response.json();
                 setAthletes(data);
@@ -32,8 +28,7 @@ const AssignAthletes = ()=>{
 
     //Handle assigning athletes to given groups
     async function handleAssignAthlete(athleteId: string){
-        const userId = await UserService.getUserId();
-        const response = await CoachGroupService.add_athlete_to_group(athleteId, groupId, userId!);
+        const response = await CoachGroupService.add_athlete_to_group(athleteId, groupId);
         if (response.ok) {
             fetchAbsentAthletes();
             fetchParticipants(); //used to reload previous page

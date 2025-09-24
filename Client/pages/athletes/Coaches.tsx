@@ -23,7 +23,7 @@ const Coaches = ()=>{
     //Fetches all current coaches for a given user
     const fetchCoaches = async () => {
         const userId = await UserService.getUserId();
-        const requestsResponse = await AthleteService.getCoaches(userId!);
+        const requestsResponse = await AthleteService.getCoaches();
         if (requestsResponse.ok) {
             const data = await requestsResponse.json();
             setCoaches(data);

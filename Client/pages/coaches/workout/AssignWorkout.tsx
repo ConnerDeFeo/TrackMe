@@ -16,8 +16,7 @@ const AssignWorkout = ()=>{
     //Fetch all workouts
     useEffect(() => {
         const fetchWorkouts = async () => {
-            const coachId = await UserService.getUserId();
-            const response = await CoachWorkoutService.getWorkoutTemplates(coachId!);
+            const response = await CoachWorkoutService.getWorkoutTemplates();
             if(response.ok) {
                 const workouts = await response.json();
                 setWorkouts(workouts || []);

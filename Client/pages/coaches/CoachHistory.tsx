@@ -12,8 +12,7 @@ const CoachHistory = () => {
 
     // Fetch all dates that have workouts assigned when the component mounts
     const fetchAvailableHistoryDates = async () => {
-        const coachId = await UserService.getUserId();  // Get current coach ID
-        const resp = await HistoryService.getAvailableHistoryDates(coachId!);
+        const resp = await HistoryService.getAvailableHistoryDates();
         if (resp.ok) {
             const historyData = await resp.json();       // Parse response JSON
             setAvailableDates(historyData);              // Update state with fetched dates
@@ -27,8 +26,7 @@ const CoachHistory = () => {
 
     // Handler called when user searches for a specific date
     const handleDateSearch = async (dateInput: string) => {
-        const coachId = await UserService.getUserId();
-        const resp = await HistoryService.getAvailableHistoryDates(coachId!, dateInput);
+        const resp = await HistoryService.getAvailableHistoryDates(dateInput);
         if (resp.ok) {
             const historyData = await resp.json();
             setAvailableDates(historyData);              // Filter state by search result

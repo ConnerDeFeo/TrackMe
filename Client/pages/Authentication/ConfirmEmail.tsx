@@ -35,16 +35,15 @@ const ConfirmEmail = () => {
             });
             //If confirm email is succesfull, immediatley login and reroute to home page
             await UserService.signIn(username, password);
-            const userId = await UserService.getUserId();
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
             //Create the account in the database
             let rdsResp;
             if(accountType === "Athlete"){
-                rdsResp = await AthleteService.createAthlete(userId!, username);
+                rdsResp = await AthleteService.createAthlete();
             }
             else{
-                rdsResp = await CoachService.createCoach(userId!, username);
+                rdsResp = await CoachService.createCoach();
             }
             if(!rdsResp) {
                 setMessage("Failed to create account. Please try again.");

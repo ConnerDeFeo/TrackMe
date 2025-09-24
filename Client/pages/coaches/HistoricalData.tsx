@@ -2,7 +2,6 @@ import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import HistoryService from "../../services/HistoryService";
-import UserService from "../../services/UserService";
 import DisplayWorkout from "../../components/DisplayWorkout";
 
 const HistoricalData = ()=>{
@@ -13,8 +12,7 @@ const HistoricalData = ()=>{
     // Fetch historical data for the given date when component mounts
     useEffect(() => {
         const fetchHistoricalData = async () => {
-            const coachId = await UserService.getUserId();
-            const resp = await HistoryService.fetchHistoricalData(coachId!, date);
+            const resp = await HistoryService.fetchHistoricalData(date);
             if (resp.ok) {
                 const data = await resp.json();
                 setHistoricalData(data);

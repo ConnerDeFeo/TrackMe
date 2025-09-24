@@ -15,8 +15,7 @@ const RequestCoaches = () => {
     const handleSearch = async (term: string) => {
         setSearchTerm(term);
         setLoading(true);
-        const userId = await UserService.getUserId();
-        const res = await AthleteService.searchCoaches(userId!,searchTerm);
+        const res = await AthleteService.searchCoaches(searchTerm);
         if(res.ok){
             const coaches:string[][] = await res.json();
             setCoaches(coaches);
@@ -26,8 +25,7 @@ const RequestCoaches = () => {
 
     //Request coach
     const handleRequest = async (coachId: string) => {
-        const userId = await UserService.getUserId();
-        const resp = await AthleteService.requestCoach(userId!, coachId);
+        const resp = await AthleteService.requestCoach(coachId);
         if(resp.ok){
             handleSearch(searchTerm); // Re-fetch coaches to update the list
         }

@@ -14,7 +14,7 @@ const CoachInvites = () =>{
     // Fetches all athlete requests for the current user
     const fetchCoachInvites = async () => {
         const userId = await UserService.getUserId();
-        const requestsResponse = await AthleteService.getCoachInvites(userId!);
+        const requestsResponse = await AthleteService.getCoachInvites();
         if (requestsResponse.ok) {
             const data = await requestsResponse.json();
             setInvites(data);
@@ -30,9 +30,8 @@ const CoachInvites = () =>{
     }, []); // Empty dependency array - only run on mount
 
     // Handle accepting a coach invitation
-    async function handleCoachAcceptance(athleteId: string){
-        const userId = await UserService.getUserId();
-        const response = await AthleteService.acceptCoachInvite(userId!,athleteId);
+    async function handleCoachAcceptance(coachId: string){
+        const response = await AthleteService.acceptCoachInvite(coachId);
         // If acceptance is successful, refresh the athlete list in parent component
         if(response.ok){
             fetchCoachInvites();

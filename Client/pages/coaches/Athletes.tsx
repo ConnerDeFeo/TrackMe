@@ -23,8 +23,7 @@ const Athletes = () => {
 
     const fetchAthletes = async () => {
         try {
-            const userId = await UserService.getUserId();
-            const resp = await CoachService.getAthletes(userId!);
+            const resp = await CoachService.getAthletes();
             if(resp.ok){
                 const athletes: string[][] = await resp.json()
                 setAthletes(athletes);

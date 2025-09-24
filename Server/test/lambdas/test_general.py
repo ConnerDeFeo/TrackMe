@@ -26,6 +26,7 @@ from data import TestData
 from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
 from lambdas.general.mass_input.mass_input import mass_input
 from datetime import datetime, timezone
+from testing_utils import *
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -44,10 +45,7 @@ def setup_before_each_test(): #This will run before each test
 
 def generate_athlete(username, userId):
     create_athlete( {
-        "body": json.dumps({
-            "userId": userId,
-            "username": username
-        })
+        "headers": generate_auth_header(userId, "Athlete", username)
     },{}) 
 
 def test_get_groups_athlete():
@@ -62,9 +60,9 @@ def test_get_groups_athlete():
 def test_get_groups_coach():
     create_group({
         "body": json.dumps({
-            "groupName": "Test Group 2",
-            "coachId": "123"
-        })
+            "groupName": "Test Group 2"
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     response = get_groups(TestData.test_get_group_coach, {})
     assert response['statusCode'] == 200
@@ -80,7 +78,8 @@ def test_get_group_after_deletion():
     delete_group({
         "queryStringParameters": {
             "groupId": "1"
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
     response = get_groups(TestData.test_get_group_athlete, {})
     assert response['statusCode'] == 404

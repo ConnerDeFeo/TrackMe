@@ -1,6 +1,7 @@
 from datetime import datetime,timezone
 import json
 from rds import fetch_all
+from user_auth import get_user_info
 
 #Grabs all user inputs for a given date and groupId
 def view_group_inputs(event, context):
@@ -13,7 +14,8 @@ def view_group_inputs(event, context):
         #Grab data from rds
         athlete_inputs = fetch_all(
             """
-                SELECT athleteId, distance, time FROM athlete_inputs
+                SELECT athleteId, distance, time 
+                FROM athlete_inputs
                 WHERE groupId = %s AND date = %s
             """,
             (group_id, date)

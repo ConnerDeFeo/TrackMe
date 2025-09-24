@@ -10,9 +10,11 @@ from lambdas.coach.assign_group_workout_template.assign_group_workout_template i
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
+from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from data import TestData
 from rds import execute_file, fetch_all
-from datetime import datetime, timezone 
+from datetime import datetime, timezone
+from testing_utils import * 
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -25,30 +27,26 @@ def setup_before_each_test(): #This will run before each test
     create_group(TestData.test_group, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
     create_workout_template(TestData.test_workout, {})
     test_assign_workout = {
         "body": json.dumps({
             "workoutId": 1,
             'coachId':'123',
             "groupId": "1"
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
     assign_group_workout_template(test_assign_workout, {})
     yield
 
 def create_extra_athlete(username,id):
     extra_athlete = {
-        "body": json.dumps({
-            "userId": id,
-            "username": username
-        })
+        "headers":generate_auth_header(id, "Athlete", username)
     }
     create_athlete(extra_athlete, {})
 
 def test_input_times():
-
-    print(TestData.test_input_times)
-
     response = input_times(TestData.test_input_times, {})
     assert response['statusCode'] == 200
 
@@ -76,9 +74,9 @@ def test_view_workout_inputs():
 
     event = {
         'queryStringParameters': {
-            "athleteId": "1234",
             "date": date
-        }
+        },
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
     response = view_workout_inputs(event, {})
@@ -94,6 +92,25 @@ def test_view_workout_inputs():
 
 def test_remove_inputs():
     create_extra_athlete("test3", "1236")
+    invite_athlete({
+        "body": json.dumps({
+            "athleteId": "1236"
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    accept_coach_invite({
+        "body": json.dumps({
+            "coachId": "123"
+        }),
+        "headers":generate_auth_header("1236", "Athlete", "test3")
+    }, {})
+    add_athlete_to_group({
+        "body": json.dumps({
+            "athleteId": "1236",
+            "groupId": "1"
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }, {})
     input_times(TestData.test_input_times, {})
     input_times({
         "body": json.dumps({
@@ -106,14 +123,16 @@ def test_remove_inputs():
                     'time': 12.5
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("1236", "Athlete", "test3")
     }, {})
 
     event = {
         'body': json.dumps({
             "athleteId": "1234",
             "inputIds": [1,3]  # Attempt to remove the first and third inputs
-        })
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
     response = remove_inputs(event, {})
@@ -122,6 +141,7 @@ def test_remove_inputs():
     # Check the database to ensure the input was removed
     inputs = fetch_all("SELECT athleteId, groupId, distance, time, id FROM athlete_inputs")
     assert inputs is not None
+    debug_table()
     assert len(inputs) == 2  # Only one input should be deleted
 
     # Convert list of tuples to a list of dictionaries for easier lookup

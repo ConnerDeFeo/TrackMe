@@ -16,7 +16,7 @@ def input_times(event, context):
         groupId = body['groupId']
 
         # Check to make sure user is in group
-        group = fetch_one("SELECT id FROM athlete_groups WHERE groupId=%s AND athleteId=%s", (groupId, user_id))
+        group = fetch_one("SELECT groupId FROM athlete_groups WHERE groupId=%s AND athleteId=%s", (groupId, user_id))
         if group is None:
             return {
                 'statusCode': 403,

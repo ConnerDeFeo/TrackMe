@@ -9,7 +9,6 @@ def get_user_info(event):
             'accountType': claims['custom:accountType'],
             'username': claims['cognito:username']
         }
-    asdf = "userId"
     # Else manual extraction is needed for local testing
     try:
         import json

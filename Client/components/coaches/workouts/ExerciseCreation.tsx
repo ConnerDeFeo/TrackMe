@@ -177,17 +177,30 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
                 value={part.distance ? `${part.distance}` : ''} 
                 inputMode="numeric"
                 onChangeText={text => {
-                  if(text===''){
-                    handleErrorChange(1); // Increment error count if field is cleared
-                  }
                   // Update distance if the input is empty or a valid number.
-                  if(text === '' || (text && !isNaN(Number(text)))) {
+                  if(text && !isNaN(Number(text))) {
                     const updatedParts = [...excercise.exerciseParts!];
-                    if(part.distance === 0) {
-                      handleErrorChange(-1); // Decrement error count if field was previously undefined
-                    }
                     updatedParts[partIdx].distance = Number(text); // Use the correct index for the part
-                    setExercises((prev) => prev.map((ex, index) => (index === idx ? { ...ex, exerciseParts: updatedParts } : ex)));
+                    setExercises((prev) => prev.map((ex, index) => {
+                      if (index === idx) {
+                        if (part.distance === 0) {
+                          handleErrorChange(1); // Increment error count if field was previously undefined
+                        }
+                      }
+                      return index === idx ? { ...ex, exerciseParts: updatedParts } : ex
+                    }));
+                  }
+                  if(text === '') {
+                    const updatedParts = [...excercise.exerciseParts!];
+                    updatedParts[partIdx].distance = 0; // Use the correct index for the part
+                    setExercises((prev) => prev.map((ex, index) => {
+                      if (index === idx) {
+                        if (part.distance !== 0) {
+                          handleErrorChange(-1); // Decrement error count if field was previously defined
+                        }
+                      }
+                      return index === idx ? { ...ex, exerciseParts: updatedParts } : ex
+                    }));
                   }
                 }} 
               />

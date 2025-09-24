@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import Exercise from "../../../types/Exersise";
 import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
@@ -24,7 +24,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
       'exercises': exercises
     };
     if(workout){
-      workoutData['workoutId'] = workout.groupWorkoutId;
+      workoutData['workoutId'] = workout.workoutId;
     }
     handleWorkoutCreation(workoutData);
   };
@@ -50,6 +50,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
       </View>
     );
   }
+  console.log(errors);
   return (
     <View className="mb-8">
       {/* WORKOUT TITLE INPUT */}

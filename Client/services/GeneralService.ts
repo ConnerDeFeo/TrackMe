@@ -29,7 +29,11 @@ const GeneralService = {
   },
   removeCoachAthlete: async (targetId:string) => {
     const userId = await UserService.getUserId();
-    return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${userId}&coachId=${targetId}`);
+    const accountType = await UserService.getAccountType();
+    if(accountType==="Athlete"){
+      return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${userId}&coachId=${targetId}`);
+    }
+    return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${targetId}&coachId=${userId}`);
   },
   getGroupWorkout: async (groupId:string, date?:string) => {
     let request = `${EXPO_PUBLIC_API_URL}/general/get_group_workout?&groupId=${groupId}`;

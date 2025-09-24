@@ -18,10 +18,10 @@ def create_workout_template(event, context):
             execute_commit(
                 """
                     UPDATE workouts
-                    SET isTemplate = FALSE
+                    SET isTemplate = %s
                     WHERE id = %s
                 """,
-                (workout_id,)
+                (False, workout_id)
             )
         # Create a new workout regardless
         workout_id = execute_commit_fetch_one(

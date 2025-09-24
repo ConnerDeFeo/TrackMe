@@ -5,7 +5,10 @@ from user_auth import get_user_info
 
 # Fetches dates for a given coach where there is a workout
 def get_available_history_dates(event, context):
-    query_params = event.get('queryStringParameters', {})
+    query_params = event.get('queryStringParameters')
+    if not query_params:
+        query_params = {}
+
     try:
         user_info = get_user_info(event)
         coach_id = user_info['userId']

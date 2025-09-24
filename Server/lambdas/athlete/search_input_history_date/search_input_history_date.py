@@ -7,7 +7,9 @@ from user_auth import get_user_info
 # Grabs the given date's input history for the given athlete from the database
 # Also grabs the 6 preceding inputs 
 def search_input_history_date(event, context):
-    query_params = event.get('queryStringParameters', {})
+    query_params = event.get('queryStringParameters')
+    if not query_params:
+        query_params = {}
 
     try:
         user_info = get_user_info(event)

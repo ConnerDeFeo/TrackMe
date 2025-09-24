@@ -1,6 +1,6 @@
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import Exercise from "../../../types/Exersise";
-import { JSX, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import Variables from "../../../assets/constants/Variables";
 /**
  * Component for creating and editing a single exercise within a workout.
@@ -14,6 +14,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
 
   // If current component deleted, remove its errors from total
   const [currentErrors, setCurrentErrors] = useState<number>(0);
+
   const handleErrorChange = (change:number)=>{
     setErrors(prev => prev + change);
     setCurrentErrors(prev => prev + change);
@@ -75,19 +76,29 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
           <TextInput className="text-center" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => {
             // Update state only if a valid number is entered.
             if(text && !isNaN(Number(text))) {
-              if(excercise[field] === undefined) {
-                handleErrorChange(-1); // Decrement error count if field was previously undefined
-              }
               const num = Number(text);
               if(num <= 99){
                 const updatedExcercise = { ...excercise, [field]: Number(text) };
-                setExercises((prev) => prev.map((ex, index) => index === idx ? updatedExcercise : ex));
-              }324
+                setExercises((prev) => prev.map((ex, index) => {
+                  if(index === idx){
+                    if(ex[field] === undefined) {
+                      handleErrorChange(-1); // Decrement error count if field was previously undefined
+                    }
+                  }
+                  return index === idx ? updatedExcercise : ex
+                }));
+              }
             }
             // If the input is cleared, remove the value from state.
             if(text === '') {
-              setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, [field]: undefined } : ex));
-              handleErrorChange(1); // Increment error count if field is cleared
+              setExercises((prev) => prev.map((ex, index) => {
+                if(index === idx){
+                  if(ex[field] !== undefined) {
+                    handleErrorChange(1); // Increment error count if field is cleared
+                  }
+                }
+                return index === idx ? { ...ex, [field]: undefined } : ex
+              }));
             }
           }} />
         </View>

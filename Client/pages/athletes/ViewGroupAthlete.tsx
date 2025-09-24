@@ -33,7 +33,7 @@ const ViewGroupAthlete = ()=>{
     return(
         <View className="px-4">
             {workouts.map((workout) => (
-                <DisplayWorkout key={workout.groupWorkoutId} workout={workout} onPress={() => {}} />
+                <DisplayWorkout key={workout.workoutId} workout={workout} onPress={() => {}} />
             ))}
             <Text className="text-2xl font-bold mt-2 mb-4">Athletes</Text>
             <View className="gap-y-2">

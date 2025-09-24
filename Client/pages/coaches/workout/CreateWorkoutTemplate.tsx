@@ -10,7 +10,6 @@ const CreateWorkout = () => {
   const { workout, isEdit } = (route.params as { workout?: any, isEdit: boolean }) || {};
 
   const handleWorkoutCreation = async (workoutData:any) => {
-    console.log(workoutData);
     const resp = await CoachWorkoutService.createWorkoutTemplate(workoutData);
     if (resp.ok){
       replace('WorkoutTemplates');

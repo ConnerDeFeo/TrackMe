@@ -93,10 +93,10 @@ const ViewGroup = () => {
 
       {workouts.map((workout) => (
         <DisplayWorkout 
-          key={workout.groupWorkoutId} 
+          key={workout.workoutId} 
           workout={workout} 
           onPress={() => navigate('AssignNewWorkout', {groupId: groupId, groupName: groupName, workout: workout })} 
-          onRemove={() => handleWorkoutRemoval(workout.groupWorkoutId)}
+          onRemove={() => handleWorkoutRemoval(workout.workoutId)}
         />
       ))}
 

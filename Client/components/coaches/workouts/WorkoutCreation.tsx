@@ -10,11 +10,15 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
   const [exercises, setExercises] = useState<Array<Exercise>>(workout?.exercises || []);
-  //errors on form
-  const [errors, setErrors] = useState<number>(0);
 
   const handleCreation = async () => {
-    if(errors > 0){
+    let valid = true;
+    workout?.exercises.forEach((exercise:Exercise) => {
+      if(!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0 || exercise?.reps === 0){
+        valid = false;
+      }
+    });
+    if(!valid || workout.title.trim() === "" ){
       alert("Please fill in all required fields");
       return;
     }
@@ -24,7 +28,12 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
       'exercises': exercises
     };
     if(workout){
-      workoutData['workoutId'] = workout.workoutId;
+      if (workout.workoutId) {
+        workoutData['workoutId'] = workout.workoutId;
+      }
+      if(workout.groupWorkoutId){
+        workoutData['groupWorkoutId'] = workout.groupWorkoutId;
+      }
     }
     handleWorkoutCreation(workoutData);
   };
@@ -50,7 +59,6 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
       </View>
     );
   }
-  console.log(errors);
   return (
     <View className="mb-8">
       {/* WORKOUT TITLE INPUT */}
@@ -63,7 +71,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
       <View className="mx-4">
       {/* Render each exercise input */}
       {exercises.map((exercise, idx) => (
-        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx} setErrors={setErrors}/>
+        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx}/>
       ))}
         <View className="flex flex-row justify-between items-center">
           {/* Button to add a new exercise */}

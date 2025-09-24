@@ -18,8 +18,8 @@ const CoachWorkoutService = {
     deleteWorkoutTemplate: async (workoutId:string) => {
         return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_workout_template?workoutId=${workoutId}`);
     },
-    deleteGroupWorkout: async (groupWorkoutId:string) => {
-        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_group_workout?groupWorkoutId=${groupWorkoutId}`);
+    deleteGroupWorkout: async (workoutId:string) => {
+        return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_group_workout?workoutId=${workoutId}`);
     },
     assignGroupWorkout: async (groupId:string, workoutData:any) => {
         const payload: Record<string, any> = { 

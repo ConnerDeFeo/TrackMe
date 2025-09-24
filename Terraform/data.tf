@@ -24,10 +24,15 @@ data "aws_security_group" "default" {
 
 # Rds layer for lambda functions to connect to RDS database
 data "archive_file" "rds_layer" {
-  
   type        = "zip"
   source_dir  = "${path.module}/../Server/layers/rds/"
   output_path = "${path.module}/../Server/layers/rds/rds.zip"
+}
+
+data "archive_file" "user_auth_layer" {
+  type        = "zip"
+  source_dir  = "${path.module}/../Server/layers/user_auth/"
+  output_path = "${path.module}/../Server/layers/user_auth/user_auth.zip"
 }
 
 # Mapping lambda function names to their locations for archive creation

@@ -13,11 +13,11 @@ locals {
     "coaches/get_athletes" = { lambda = aws_lambda_function.lambdas["get_athletes"], method = "GET" }
     "coaches/search_athletes" = { lambda = aws_lambda_function.lambdas["search_athletes"], method = "GET" }
     "coaches/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
+    "coaches/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
     "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"], method = "GET" }
     "general/view_group_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }
     "general/get_athletes_for_group" = { lambda = aws_lambda_function.lambdas["get_athletes_for_group"], method = "GET" }
     "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"], method = "GET" }
-    "general/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
     "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
     "general/get_pending_proposals" = { lambda = aws_lambda_function.lambdas["get_pending_proposals"], method = "GET" }
 

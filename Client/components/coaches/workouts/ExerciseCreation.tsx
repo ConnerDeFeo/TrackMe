@@ -8,17 +8,10 @@ import Variables from "../../../assets/constants/Variables";
  * @param {Exercise} props.excercise - The exercise object being created or edited.
  * @param {React.Dispatch<React.SetStateAction<Exercise[]>>} props.setExercise - The state setter function for the list of exercises.
  */
-const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }: 
-  { excercise: Exercise; setExercises: React.Dispatch<React.SetStateAction<Exercise[]>>; idx: number; setErrors: React.Dispatch<React.SetStateAction<number>>; }) => {
+const ExerciseCreation = ({ excercise, setExercises, idx }: 
+  { excercise: Exercise; setExercises: React.Dispatch<React.SetStateAction<Exercise[]>>; idx: number; }) => {
     const [displaySetsReps, setDisplaySetsReps] = useState<boolean>(excercise.reps !== undefined || excercise.sets !== undefined);
 
-  // If current component deleted, remove its errors from total
-  const [currentErrors, setCurrentErrors] = useState<number>(0);
-
-  const handleErrorChange = (change:number)=>{
-    setErrors(prev => prev + change);
-    setCurrentErrors(prev => prev + change);
-  }
   /**
    * Handles the creation of a new exercise part component.
    * It adds a new, empty part to the current exercise's `exerciseParts` array.
@@ -37,7 +30,6 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
     setExercises((prev) => prev.map((ex,index) => 
       index === idx ? { ...ex, exerciseParts:exerciseParts } : ex
     ));
-    handleErrorChange(1); // Increment error count as new part with distance 0 is added
   };
 
   const handleDistanceRemoval = (partIdx:number) => {
@@ -47,20 +39,45 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
       setExercises((prev) => prev.map((ex,index) => 
         index === idx ? { ...ex, exerciseParts:updatedParts } : ex
       ));
-      handleErrorChange(-1); // Decrement error count as part is removed
     }
   };
 
   const handleSetsRepsRemoval = ()=>{
     setDisplaySetsReps(false);
-    setExercises((prev) => prev.map((ex,index) => 
-      index === idx ? { ...ex, sets: undefined, reps: undefined } : ex
-    ));
+    setExercises((prev) => prev.map((ex,index) => {
+      const updateExercise = { ...ex};
+      delete updateExercise['sets'];
+      delete updateExercise['reps'];
+      return index === idx ? updateExercise : ex
+    }));
   }
 
   const handleSetsRepsAddition = ()=>{
     setDisplaySetsReps(true);
-    handleErrorChange(2);
+    setExercises((prev) => prev.map((ex,index) => {
+      return index === idx ? { ...ex, sets: 0, reps: 0 } : ex
+    }));
+  }
+
+  const handleSetsRepsChange = (field: 'sets' | 'reps', value: string) => {
+    // We’ll do two possible flows: valid number, or cleared input.
+    if (value && !isNaN(Number(value))) {
+      const num = Number(value);
+      if (num <= 99) {
+        // Update the shared exercises state using functional update
+        setExercises(prevExercises =>
+          prevExercises.map((ex, index) =>
+            index === idx ? { ...ex, [field]: num } : ex
+          )
+        );
+      }
+    } else if (value === '') {
+      setExercises(prevExercises =>
+        prevExercises.map((ex, index) =>
+          index === idx ? { ...ex, [field]: 0 } : ex
+        )
+      );
+    }
   }
 
   /**
@@ -73,34 +90,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
       <View>
         <Text className="text-lg font-bold">{field === 'sets' ? 'Sets' : 'Reps'}</Text>
         <View className={`border rounded-md bg-white h-12 ${excercise[field] && excercise[field] > 0 ? 'border-gray-300' : 'border-red-500'}`}>
-          <TextInput className="text-center" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => {
-            // Update state only if a valid number is entered.
-            if(text && !isNaN(Number(text))) {
-              const num = Number(text);
-              if(num <= 99){
-                const updatedExcercise = { ...excercise, [field]: Number(text) };
-                setExercises((prev) => prev.map((ex, index) => {
-                  if(index === idx){
-                    if(ex[field] === undefined) {
-                      handleErrorChange(-1); // Decrement error count if field was previously undefined
-                    }
-                  }
-                  return index === idx ? updatedExcercise : ex
-                }));
-              }
-            }
-            // If the input is cleared, remove the value from state.
-            if(text === '') {
-              setExercises((prev) => prev.map((ex, index) => {
-                if(index === idx){
-                  if(ex[field] !== undefined) {
-                    handleErrorChange(1); // Increment error count if field is cleared
-                  }
-                }
-                return index === idx ? { ...ex, [field]: undefined } : ex
-              }));
-            }
-          }} />
+          <TextInput className="text-center" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => handleSetsRepsChange(field, text)} />
         </View>
       </View>
     );
@@ -108,9 +98,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
 
   const handleExerciseDeletion = ()=>{
     setExercises((prev) => prev.filter((_, index) => index !== idx));
-    setErrors(prev => prev - currentErrors); // Remove this component's errors from total
   }
-
   return (
     <View className="border-2 bg-white rounded-lg shadow-lg my-3 p-4">
       {/* Exercise Name Section */}
@@ -125,7 +113,6 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
         <TextInput 
           className="border border-gray-300 rounded-md p-3 bg-white text-black"
           value={excercise.name} 
-          inputMode="numeric"
           onChangeText={text => {
             // Update the exercise name in the state.
             const updatedExercise = { ...excercise, name: text };
@@ -181,26 +168,12 @@ const ExerciseCreation = ({ excercise, setExercises, idx, setErrors }:
                   if(text && !isNaN(Number(text))) {
                     const updatedParts = [...excercise.exerciseParts!];
                     updatedParts[partIdx].distance = Number(text); // Use the correct index for the part
-                    setExercises((prev) => prev.map((ex, index) => {
-                      if (index === idx) {
-                        if (part.distance === 0) {
-                          handleErrorChange(1); // Increment error count if field was previously undefined
-                        }
-                      }
-                      return index === idx ? { ...ex, exerciseParts: updatedParts } : ex
-                    }));
+                    setExercises((prev) => prev.map((ex, index) =>  index === idx ? { ...ex, exerciseParts: updatedParts } : ex));
                   }
                   if(text === '') {
                     const updatedParts = [...excercise.exerciseParts!];
                     updatedParts[partIdx].distance = 0; // Use the correct index for the part
-                    setExercises((prev) => prev.map((ex, index) => {
-                      if (index === idx) {
-                        if (part.distance !== 0) {
-                          handleErrorChange(-1); // Decrement error count if field was previously defined
-                        }
-                      }
-                      return index === idx ? { ...ex, exerciseParts: updatedParts } : ex
-                    }));
+                    setExercises((prev) => prev.map((ex, index) => index === idx ? { ...ex, exerciseParts: updatedParts } : ex));
                   }
                 }} 
               />

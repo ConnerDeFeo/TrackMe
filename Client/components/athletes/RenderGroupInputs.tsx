@@ -79,7 +79,6 @@ const RenderGroupInputs: React.FC<
         }
     }
 
-    console.log(selectedSubmitedInputs);
     return(
         // Main container for the group with styling for card appearance
         <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 gap-y-4 mt-4">

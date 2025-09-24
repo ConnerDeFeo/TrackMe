@@ -13,6 +13,8 @@ const HistoricalData = ()=>{
     useEffect(() => {
         const fetchHistoricalData = async () => {
             const resp = await HistoryService.fetchHistoricalData(date);
+            console.log(date)
+            console.log(resp);
             if (resp.ok) {
                 const data = await resp.json();
                 setHistoricalData(data);
@@ -25,7 +27,7 @@ const HistoricalData = ()=>{
         <>
             <View className="min-h-screen">
                 {Object.keys(historicalData).length === 0 ? (
-                <Text className="text-center mt-10">No historical data available for this date.</Text>
+                    <Text className="text-center mt-10">No historical data available for this date.</Text>
                 ) : 
                 (Object.keys(historicalData).map((groupId) => (
                     <View key={groupId} className="bg-white border-2 border-gray-200 shadow-md p-5 mb-6">

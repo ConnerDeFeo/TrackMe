@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import GeneralService from "../../services/GeneralService";
 import usePersistentState from "../../hooks/usePersistentState";
 import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
+import { useFocusEffect } from "@react-navigation/native";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -16,13 +17,20 @@ const Inputs = ()=>{
     const [submittedInputs, setSubmittedInputs] = useState<Record<number, { time: number; distance: number, inputId: number }[]>>({});
 
     // Fetch previously submitted workout inputs from the server
-    const fetchSubmittedInputs = async () => {
+    const fetchSubmittedInputs = useCallback(async () => {
         const resp = await AthleteWorkoutService.viewWorkoutInputs();
-        if (resp.ok){
+        if (resp.ok) {
             const inputs = await resp.json();
             setSubmittedInputs(inputs);
         }
-    };
+    }, []);
+
+    // Fetch submitted inputs on component mount
+    useFocusEffect(
+        useCallback(() => {
+            fetchSubmittedInputs();
+        }, [fetchSubmittedInputs])
+    );
 
     // Initialize component by fetching groups and submitted inputs on mount
     useEffect(()=>{
@@ -34,7 +42,6 @@ const Inputs = ()=>{
             }
         };
         fetchGroups();
-        fetchSubmittedInputs();
     },[]);
 
     // Handle time input changes with validation (numbers only)

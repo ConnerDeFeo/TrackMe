@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import AthleteService from "../../services/AthleteService";
 import UserService from "../../services/UserService";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
 import GeneralService from "../../services/GeneralService";
 import { useNav } from "../../hooks/useNav";
+import { useFocusEffect } from "@react-navigation/native";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
@@ -21,8 +22,7 @@ const Coaches = ()=>{
     };
 
     //Fetches all current coaches for a given user
-    const fetchCoaches = async () => {
-        const userId = await UserService.getUserId();
+    const fetchCoaches = useCallback(async () => {
         const requestsResponse = await AthleteService.getCoaches();
         if (requestsResponse.ok) {
             const data = await requestsResponse.json();
@@ -32,17 +32,17 @@ const Coaches = ()=>{
             setCoaches([])
         }
         fetchInvites();
-    }
+    }, []);
 
     //Fetch all requests on load
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         fetchCoaches();
-    }, []);
+    }, [fetchCoaches]));
 
     return (
         <View className="flex-1 px-4 mt-4">
             <View className="flex flex-row justify-between items-center">
-                <TouchableOpacity onPress={() => navigate('CoachInvites',{fetchCoaches:fetchCoaches})}>
+                <TouchableOpacity onPress={() => navigate('CoachInvites')}>
                     <Text className="text-[#E63946] font-semibold">Invites({invites})</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigate('RequestCoaches')}>

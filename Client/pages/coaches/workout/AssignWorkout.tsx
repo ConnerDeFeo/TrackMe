@@ -27,7 +27,6 @@ const AssignWorkout = ()=>{
 
     const handleAssignTemplateWorkout = async (workoutId:string) => {
         const response = await CoachWorkoutService.assignWorkoutTemplateToGroup(workoutId, groupId);
-        console.log(response);
         if (response.ok) {
             goBack();
         }

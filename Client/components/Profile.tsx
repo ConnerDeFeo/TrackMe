@@ -105,18 +105,6 @@ const Profile = () => {
                     </View>
                 </View>
 
-                {/* Gender input field */}
-                <View>
-                    <Text className="text-gray-700 font-medium mb-2">Gender</Text>
-                    <TextInput
-                        className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm"
-                        placeholder="Gender"
-                        value={userData.gender}
-                        onChangeText={(text) => setUserData({ ...userData, gender: text })}
-                        onBlur={() => handleUpdateProfile('gender', userData.gender)} // Save on blur
-                    />
-                </View>
-
                 {/* Additional fields for athletes */}
                 {accountType==="Athlete" && (
                     <View>

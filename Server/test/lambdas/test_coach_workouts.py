@@ -10,7 +10,7 @@ from lambdas.coach.delete_group_workout.delete_group_workout import delete_group
 from data import TestData
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
-
+from testing_utils import *
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -76,10 +76,10 @@ def test_assign_group_workout_templates():
 
     event = {
         "body": json.dumps({ 
-            "coachId": "123",
             "groupId": "1",
             "workoutId": workout_id
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
     response = assign_group_workout_template(event, {})
     assert response['statusCode'] == 200
@@ -99,13 +99,13 @@ def test_assign_multiple_workout_templates():
             "groupId": "1",
             "workoutId": 1,
             "date": "2024-01-01" 
-        })
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     assign_group_workout_template(event, {})
     #Assign a second one to make sure first was overriden
     test_workout_2 = {
         "body": json.dumps({
-            'coachId': '123',
             'title': 'Test Workout 2',
             'description': 'This is a test workout 2',
             'exercises': [
@@ -113,18 +113,22 @@ def test_assign_multiple_workout_templates():
                     'name': 'lollygag',
                 }
             ]
-        })
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     response = create_workout_template(test_workout_2, {})
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
     workout_id = data['workout_id']
+
+    # update workout
     event = {
         "body": json.dumps({ 
             "groupId": "1",
             "workoutId": workout_id,
             "date": "2024-01-01" 
-        })
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     response = assign_group_workout_template(event, {})
     assert response['statusCode'] == 200
@@ -150,7 +154,6 @@ def test_get_workout_templates():
     create_workout_template(TestData.test_workout, {})
     create_workout_template({
         'body': json.dumps({
-            "coachId": "123",
             "title": "Test Workout 2",
             "description": "This is a test workout 2",
             "exercises": [
@@ -170,12 +173,11 @@ def test_get_workout_templates():
                     ]
                 }
             ]
-        })
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }, {})
     event = {
-        "queryStringParameters": {
-            "coachId": "123"
-        }
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
     response = get_workout_templates(event, {})
     assert response['statusCode'] == 200
@@ -185,9 +187,9 @@ def test_get_workout_templates():
     #Test to see if filtering works
     delete_workout_template({
         "queryStringParameters": {
-            "workoutId": 1,
-            "coachId": "123"
-        }
+            "workoutId": 1
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     },{})
 
     response = get_workout_templates(event, {})
@@ -195,7 +197,7 @@ def test_get_workout_templates():
     data = json.loads(response['body'])
     assert len(data) == 1
 
-def test_delete_workout():
+def test_delete_workout_template():
     response = create_workout_template(TestData.test_workout, {})
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
@@ -203,9 +205,9 @@ def test_delete_workout():
 
     event = {
         "queryStringParameters": {
-            "workoutId": workout_id,
-            "coachId": "123"
-        }
+            "workoutId": workout_id
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
     response = delete_workout_template(event, {})
     assert response['statusCode'] == 200
@@ -217,10 +219,10 @@ def test_delete_group_workout():
 
     event = {
         "body": json.dumps({ 
-            "coachId": "123",
             "groupId": "1",
             "workoutId": 1
-        })
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     response = assign_group_workout_template(event, {})
     assert response['statusCode'] == 200
@@ -236,7 +238,8 @@ def test_delete_group_workout():
     event = {
         "queryStringParameters": {
             "groupWorkoutId": 1
-        }
+        },
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     response = delete_group_workout(event, {})
     assert response['statusCode'] == 200

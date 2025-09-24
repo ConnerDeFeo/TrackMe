@@ -13,9 +13,11 @@ def delete_group_workout(event, context):
         #(Soft delete by setting deleted to True)
         execute_commit(
             """
-                DELETE gw FROM group_workouts gw
-                JOIN groups g ON gw.groupId = g.id
-                WHERE gw.id = %s AND g.coachId = %s
+                DELETE FROM group_workouts gw
+                USING groups g
+                WHERE gw.groupId = g.id 
+                    AND gw.id = %s
+                    AND g.coachId = %s
             """,
             (group_workout_id, coach_id)
         )

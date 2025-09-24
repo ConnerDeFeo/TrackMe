@@ -1,6 +1,6 @@
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView,View } from 'react-native';
 import './global.css'
-import { createStaticNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateAccount from './pages/authentication/CreateAccount';
 import { Amplify } from 'aws-amplify';
@@ -33,13 +33,13 @@ import InputHistory from './pages/athletes/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
 import HistoricalData from './pages/coaches/HistoricalData';
 import AssignNewWorkout from './pages/coaches/workout/AssignNewWorkout';
-import { ComponentType } from 'react';
+import { ComponentType, useEffect, useState } from 'react';
 import ForgotPassword from './pages/authentication/ForgotPassword';
 import ResetPassword from './pages/authentication/ResetPassword';
 import HeaderPlusButton from './components/HeaderPlusButton';
 import { HeaderBackButton } from '@react-navigation/elements';
-import { useNav } from './hooks/useNav';
 import MassInput from './pages/MassInput';
+import UserService from './services/UserService';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -76,6 +76,11 @@ const getPageTitle = (routeName:string, params:any) => {
     default: return routeName;
   }
 }
+
+const canGoBack = (routeName:string) => {
+  const noBackButtonRoutes = ['CoachGroups', 'AthleteGroups', 'CoachProfile', 'AthleteProfile','Inputs', 'WorkoutTemplates','Athletes','Coaches','InputHistory','CoachHistory'];
+  return !noBackButtonRoutes.includes(routeName);
+}
 const UserStack = createNativeStackNavigator();
 const UserLayoutWrapper = () => {
   return (
@@ -83,12 +88,12 @@ const UserLayoutWrapper = () => {
       <UserStack.Navigator screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
-        const canGoBack = navigation.canGoBack();
+        const canGoBackFlag = canGoBack(route.name);
         return{
           headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
-          headerLeft: canGoBack ? ()=><HeaderBackButton onPress={()=>goBackFunctions(route.name, navigation)}/> : ()=>null,
+          headerLeft: canGoBackFlag ? ()=><HeaderBackButton onPress={()=>goBackFunctions(route.name, navigation)}/> : ()=>null,
           headerBackVisible: false,
-          title: getPageTitle(route.name, params)
+          title: getPageTitle(route.name, params),
         }
       }}>
         <UserStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<CoachGroups />)} />
@@ -137,18 +142,41 @@ const AuthLayoutWrapper = () =>{
   );
 }
 
-const RootStack = createNativeStackNavigator({
-  screenOptions: {
-    headerShown: false
-  },
-  screens: {
-    Auth: AuthLayoutWrapper,
-    User: UserLayoutWrapper,
-  },
-});
-const Navigation = createStaticNavigation(RootStack);
-
+const RootStack = createNativeStackNavigator();
 //Return the navigation stack as the app
 export default function App() {
-  return <Navigation />;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    async function checkAuth() {
+      const userId = await UserService.getUserId();
+      if (userId) {
+        setAuthenticated(true);
+      }
+      setLoading(false);
+    }
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return (
+      <View className='flex-1 justify-center items-center'>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      <RootStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
+        {authenticated ? (
+          <RootStack.Screen name="User" component={UserLayoutWrapper} />
+        ) : (
+          <RootStack.Screen name="Auth" component={AuthLayoutWrapper} />
+        )}
+      </RootStack.Navigator>
+    </NavigationContainer>
+  );
 }

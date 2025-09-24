@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import UserService from "../services/UserService";
 import { useNavigation } from "@react-navigation/native";
 import GeneralService from "../services/GeneralService";

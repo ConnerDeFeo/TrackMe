@@ -46,6 +46,13 @@ const SignIn = ()=>{
         }
     }
 
+    const handleCreateAccountButtonPress = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'CreateAccount' }],
+        });
+    }
+
     return(
         <View className="relative h-full w-[85%] mx-auto">
             <AuthenticationHeader/>
@@ -69,7 +76,7 @@ const SignIn = ()=>{
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-4">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <TouchableOpacity onPress={()=>navigation.replace("Auth", {screen:'CreateAccount'})} className="bg-red-500 rounded-lg py-3">
+                    <TouchableOpacity onPress={handleCreateAccountButtonPress} className="bg-red-500 rounded-lg py-3">
                         <Text className="text-white text-xl font-bold text-center">Create Account</Text>
                     </TouchableOpacity>
                 </View>

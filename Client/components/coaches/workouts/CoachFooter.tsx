@@ -1,5 +1,4 @@
 import React from 'react';
-import { AccountType } from '../../../assets/constants/Enums';
 import Footer from '../../Footer';
 
 const buttons = [

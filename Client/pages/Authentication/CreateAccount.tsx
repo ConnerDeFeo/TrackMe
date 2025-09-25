@@ -4,13 +4,14 @@ import { useState } from "react";
 import { signUp } from 'aws-amplify/auth';
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
 import { useNavigation } from "@react-navigation/native";
+import { AccountType } from "../../assets/constants/Enums";
 
 //Create account page
 const CreateAccount = ()=>{
     const navigation = useNavigation<any>();
 
     const [message, setMessage] = useState<string>("");
-    const [accountType,setAccountType] = useState<string>("Athlete");
+    const [accountType,setAccountType] = useState<string>(AccountType.Athlete);
     const [username,setUsername] = useState<string>("");
     const [email,setEmail] = useState<string>("");
     const [password,setPassword] = useState<string>("");
@@ -66,6 +67,13 @@ const CreateAccount = ()=>{
         }
     }
 
+    const handleSignInButtonPress = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'SignIn' }],
+        });
+    }
+
     return(
         <View className="relative h-full w-[85%] mx-auto">
             <AuthenticationHeader />
@@ -77,16 +85,16 @@ const CreateAccount = ()=>{
             <View className="gap-y-8 bg-red-200 rounded-xl p-6">
                 <View className="rounded-lg h-12 flex flex-row overflow-hidden">
                 <TouchableOpacity 
-                    onPress={() => setAccountType("Athlete")} 
-                    className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Athlete' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
+                    onPress={() => setAccountType(AccountType.Athlete)} 
+                    className={`flex-1 items-center justify-center rounded-lg ${accountType === AccountType.Athlete ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
                 >
-                    <Text className={`text-xl ${accountType === 'Athlete' ? 'text-white font-bold' : 'text-black'}`}>Athlete</Text>
+                    <Text className={`text-xl ${accountType === AccountType.Athlete ? 'text-white font-bold' : 'text-black'}`}>Athlete</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    onPress={() => setAccountType("Coach")}
-                    className={`flex-1 items-center justify-center rounded-lg ${accountType === 'Coach' ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
+                    onPress={() => setAccountType(AccountType.Coach)}
+                    className={`flex-1 items-center justify-center rounded-lg ${accountType === AccountType.Coach ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
                 >
-                    <Text className={`text-xl ${accountType === 'Coach' ? 'text-white font-bold' : 'text-black'}`}>Coach</Text>
+                    <Text className={`text-xl ${accountType === AccountType.Coach ? 'text-white font-bold' : 'text-black'}`}>Coach</Text>
                 </TouchableOpacity>
                 </View>
                 <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
@@ -101,7 +109,7 @@ const CreateAccount = ()=>{
             {/**SIGN IN LINK*/}
             <View className="gap-y-6">
                 <Text className="text-center text-xl">Already have an account? </Text>
-                <TouchableOpacity onPress={()=>navigation.replace("Auth",{screen:'SignIn'})} className="bg-red-500 rounded-lg py-3">
+                <TouchableOpacity onPress={handleSignInButtonPress} className="bg-red-500 rounded-lg py-3">
                     <Text className="text-white text-xl font-bold text-center">Sign In</Text>
                 </TouchableOpacity>
             </View>

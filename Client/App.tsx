@@ -36,7 +36,6 @@ import { ComponentType, useEffect, useState } from 'react';
 import ForgotPassword from './pages/authentication/ForgotPassword';
 import ResetPassword from './pages/authentication/ResetPassword';
 import HeaderPlusButton from './components/HeaderPlusButton';
-import { HeaderBackButton } from '@react-navigation/elements';
 import MassInput from './pages/MassInput';
 import UserService from './services/UserService';
 import { AuthContext } from './context/AuthContext';
@@ -62,13 +61,6 @@ const getPlusButtonNavigationTarget = (routeName:string) => {
   }
 };
 
-const goBackFunctions = (routeName:string, navigation: any)=>{
-  switch(routeName) {
-    case 'ViewGroupCoach': return navigation.popTo("CoachGroups");
-    default: return navigation.goBack();
-  }
-}
-
 const getPageTitle = (routeName:string, params:any) => {
   switch(routeName) {
     case 'HistoricalData': return params.date;
@@ -80,12 +72,6 @@ const getPageTitle = (routeName:string, params:any) => {
   }
 }
 
-const canGoBack = (routeName:string) => {
-  const noBackButtonRoutes = ['CoachGroups', 'AthleteGroups', 'CoachProfile', 'AthleteProfile','Inputs', 'WorkoutTemplates','Athletes','Coaches','InputHistory','CoachHistory'];
-  return !noBackButtonRoutes.includes(routeName);
-}
-
-
 const AthleteStack = createNativeStackNavigator();
 const AthleteLayoutWrapper = () => {
   return (
@@ -93,12 +79,11 @@ const AthleteLayoutWrapper = () => {
       <AthleteStack.Navigator initialRouteName='AthleteGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
-        const canGoBackFlag = canGoBack(route.name);
+        const state = navigation.getState();
         return{
           headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
-          headerLeft: canGoBackFlag ? ()=><HeaderBackButton onPress={()=>goBackFunctions(route.name, navigation)}/> : ()=>null,
-          headerBackVisible: false,
           title: getPageTitle(route.name, params),
+          animation: state.index === 0 ? 'fade' : 'default', // No animation on initial screen
         }
       }}>
         <AthleteStack.Screen name="AthleteGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<AthleteGroups />)} />
@@ -124,12 +109,11 @@ const CoachLayoutWrapper = () => {
       <CoachStack.Navigator initialRouteName='CoachGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
-        const canGoBackFlag = canGoBack(route.name);
+        const state = navigation.getState();
         return{
           headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
-          headerLeft: canGoBackFlag ? ()=><HeaderBackButton onPress={()=>goBackFunctions(route.name, navigation)}/> : ()=>null,
-          headerBackVisible: false,
           title: getPageTitle(route.name, params),
+          animation: state.index === 0 ? 'fade' : 'default', // No animation on initial screen
         }
       }}>
         <CoachStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<CoachGroups />)} />
@@ -157,7 +141,7 @@ const AuthStack = createNativeStackNavigator();
 const AuthLayoutWrapper = () =>{
   return (
     <View className="flex-1 bg-white">
-      <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName='SignIn'>
+      <AuthStack.Navigator screenOptions={{ headerShown: false, animation:'fade' }} initialRouteName='SignIn'>
         <AuthStack.Screen name="SignIn" component={SignIn} />
         <AuthStack.Screen name="CreateAccount" component={CreateAccount} />
         <AuthStack.Screen name="ConfirmEmail" component={ConfirmEmail} />

@@ -105,7 +105,7 @@ const Profile = () => {
                 </View>
 
                 {/* Additional fields for athletes */}
-                {accountType==="Athlete" && (
+                {accountType===AccountType.Athlete && (
                     <View>
                         <Text className="text-gray-700 font-medium mb-2">Body Weight</Text>
                         <TextInput

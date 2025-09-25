@@ -1,3 +1,4 @@
+import { AccountType } from "../assets/constants/Enums";
 import API from "./API";
 import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -30,7 +31,7 @@ const GeneralService = {
   removeCoachAthlete: async (targetId:string) => {
     const userId = await UserService.getUserId();
     const accountType = await UserService.getAccountType();
-    if(accountType==="Athlete"){
+    if(accountType===AccountType.Athlete){
       return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${userId}&coachId=${targetId}`);
     }
     return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${targetId}&coachId=${userId}`);

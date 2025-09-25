@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
-import { useNavigation } from "@react-navigation/native";
 import UserService from "../../services/UserService";
-import usePersistentState from "../../hooks/usePersistentState";
-import AsyncStorage from "../../services/AsyncStorage";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 import { useNav } from "../../hooks/useNav";
 import InputTracking from "../InputTracking";

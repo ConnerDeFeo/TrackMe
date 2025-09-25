@@ -40,6 +40,8 @@ import HeaderPlusButton from './components/HeaderPlusButton';
 import { HeaderBackButton } from '@react-navigation/elements';
 import MassInput from './pages/MassInput';
 import UserService from './services/UserService';
+import { AuthContext } from './context/AuthContext';
+import { AccountType } from './assets/constants/Enums';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -81,11 +83,13 @@ const canGoBack = (routeName:string) => {
   const noBackButtonRoutes = ['CoachGroups', 'AthleteGroups', 'CoachProfile', 'AthleteProfile','Inputs', 'WorkoutTemplates','Athletes','Coaches','InputHistory','CoachHistory'];
   return !noBackButtonRoutes.includes(routeName);
 }
-const UserStack = createNativeStackNavigator();
-const UserLayoutWrapper = () => {
+
+
+const AthleteStack = createNativeStackNavigator();
+const AthleteLayoutWrapper = () => {
   return (
     <View className='flex-1 bg-white'>
-      <UserStack.Navigator screenOptions={({route, navigation})=> {
+      <AthleteStack.Navigator screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
         const canGoBackFlag = canGoBack(route.name);
@@ -96,32 +100,53 @@ const UserLayoutWrapper = () => {
           title: getPageTitle(route.name, params),
         }
       }}>
-        <UserStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<CoachGroups />)} />
-        <UserStack.Screen name="AthleteGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<AthleteGroups />)} />
-        <UserStack.Screen name="CoachProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
-        <UserStack.Screen name="AthleteProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
-        <UserStack.Screen name="CreateGroup" options={{ title: "Create Group" }} component={ScrollViewWrapper(<CreateGroup />)} />
-        <UserStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />
-        <UserStack.Screen name="AddAthlete" options={{ title: "Add Athlete" }} component={ScrollViewWrapper(<AddAthlete />)} />
-        <UserStack.Screen name="Athletes" options={{ title: "Athletes" }} component={ScrollViewWrapper(<Athletes />)} />
-        <UserStack.Screen name="Coaches" options={{ title: "Coaches" }} component={ScrollViewWrapper(<Coaches />)} />
-        <UserStack.Screen name="CoachInvites" options={{ title: "Coach Invites" }} component={ScrollViewWrapper(<CoachInvites />)} />
-        <UserStack.Screen name="AssignAthletes" options={{ title: "Assign Athletes" }} component={ScrollViewWrapper(<AssignAthletes />)} />
-        <UserStack.Screen name="CreateWorkoutTemplate" options={{ title: "Create Workout Template" }} component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
-        <UserStack.Screen name="WorkoutTemplates" options={{ title: "Workout Templates" }} component={ScrollViewWrapper(<WorkoutTemplates />)} />
-        <UserStack.Screen name="AssignWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignWorkout />)} />
-        <UserStack.Screen name="ViewGroupInputsCoach" component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
-        <UserStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
-        <UserStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
-        <UserStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
-        <UserStack.Screen name="AthleteRequests" options={{ title: "Athlete Requests" }} component={ScrollViewWrapper(<AthleteRequests />)} />
-        <UserStack.Screen name="RequestCoaches" options={{ title: "Request Coaches" }} component={ScrollViewWrapper(<RequestCoaches />)} />
-        <UserStack.Screen name="InputHistory" options={{ title: "Input History" }} component={ScrollViewWrapper(<InputHistory />)} />
-        <UserStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
-        <UserStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
-        <UserStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
-        <UserStack.Screen name="MassInput" component={ScrollViewWrapper(<MassInput />)} />
-      </UserStack.Navigator>
+        <AthleteStack.Screen name="AthleteGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<AthleteGroups />)} />
+        <AthleteStack.Screen name="AthleteProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <AthleteStack.Screen name="Coaches" options={{ title: "Coaches" }} component={ScrollViewWrapper(<Coaches />)} />
+        <AthleteStack.Screen name="CoachInvites" options={{ title: "Coach Invites" }} component={ScrollViewWrapper(<CoachInvites />)} />
+        <AthleteStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
+        <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
+        <AthleteStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
+        <AthleteStack.Screen name="RequestCoaches" options={{ title: "Request Coaches" }} component={ScrollViewWrapper(<RequestCoaches />)} />
+        <AthleteStack.Screen name="InputHistory" options={{ title: "Input History" }} component={ScrollViewWrapper(<InputHistory />)} />
+        <AthleteStack.Screen name="MassInput" component={ScrollViewWrapper(<MassInput />)} />
+      </AthleteStack.Navigator>
+      <Footer />
+    </View>
+  );
+}
+
+const CoachStack = createNativeStackNavigator();
+const CoachLayoutWrapper = () => {
+  return (
+    <View className="flex-1 bg-white">
+      <CoachStack.Navigator screenOptions={({route, navigation})=> {
+        const params = route.params;
+        const plusTarget = getPlusButtonNavigationTarget(route.name);
+        const canGoBackFlag = canGoBack(route.name);
+        return{
+          headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
+          headerLeft: canGoBackFlag ? ()=><HeaderBackButton onPress={()=>goBackFunctions(route.name, navigation)}/> : ()=>null,
+          headerBackVisible: false,
+          title: getPageTitle(route.name, params),
+        }
+      }}>
+        <CoachStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<CoachGroups />)} />
+        <CoachStack.Screen name="CoachProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <CoachStack.Screen name="CreateGroup" options={{ title: "Create Group" }} component={ScrollViewWrapper(<CreateGroup />)} />
+        <CoachStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />
+        <CoachStack.Screen name="AddAthlete" options={{ title: "Add Athlete" }} component={ScrollViewWrapper(<AddAthlete />)} />
+        <CoachStack.Screen name="Athletes" options={{ title: "Athletes" }} component={ScrollViewWrapper(<Athletes />)} />
+        <CoachStack.Screen name="AssignAthletes" options={{ title: "Assign Athletes" }} component={ScrollViewWrapper(<AssignAthletes />)} />
+        <CoachStack.Screen name="CreateWorkoutTemplate" options={{ title: "Create Workout Template" }} component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
+        <CoachStack.Screen name="WorkoutTemplates" options={{ title: "Workout Templates" }} component={ScrollViewWrapper(<WorkoutTemplates />)} />
+        <CoachStack.Screen name="AssignWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignWorkout />)} />
+        <CoachStack.Screen name="ViewGroupInputsCoach" component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
+        <CoachStack.Screen name="AthleteRequests" options={{ title: "Athlete Requests" }} component={ScrollViewWrapper(<AthleteRequests />)} />
+        <CoachStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
+        <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
+        <CoachStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
+      </CoachStack.Navigator>
       <Footer />
     </View>
   );
@@ -146,14 +171,14 @@ const RootStack = createNativeStackNavigator();
 //Return the navigation stack as the app
 export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [accountType, setAccountType] = useState<AccountType>(AccountType.SignedOut);
 
 
   useEffect(() => {
     async function checkAuth() {
-      const userId = await UserService.getUserId();
-      if (userId) {
-        setAuthenticated(true);
+      const accountType = await UserService.getAccountType();
+      if (accountType !== AccountType.SignedOut) {
+        setAccountType(accountType);
       }
       setLoading(false);
     }
@@ -169,14 +194,20 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
-        {authenticated ? (
-          <RootStack.Screen name="User" component={UserLayoutWrapper} />
-        ) : (
-          <RootStack.Screen name="Auth" component={AuthLayoutWrapper} />
-        )}
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <AuthContext.Provider value={accountType}>
+      <NavigationContainer>
+        <RootStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
+          {accountType === AccountType.SignedOut ? (
+            <RootStack.Screen name="Auth" component={AuthLayoutWrapper} />
+          ) : (
+            accountType === AccountType.Athlete ? (
+              <RootStack.Screen name="Athlete" component={AthleteLayoutWrapper} />
+            ) : (
+              <RootStack.Screen name="Coach" component={CoachLayoutWrapper} />
+            )
+          )}
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }

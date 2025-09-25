@@ -1,8 +1,8 @@
 import GeneralService from "../../services/GeneralService";
 import { useEffect, useState } from "react";
 import GroupDisplay from "./GroupDisplay";
-import AsyncStorage from "../../services/AsyncStorage";
 import { useNav } from "../../hooks/useNav";
+import UserService from "../../services/UserService";
 
 //View of all groups displayed in a list
 const Groups = () => {
@@ -26,9 +26,9 @@ const Groups = () => {
   }, []);
 
   const handleNavigation = async (groupName: string, groupId: string) => {
-    const accountType = await AsyncStorage.getData('accountType');
+    const accountType = await UserService.getAccountType();
     
-    if(accountType=='Athlete'){
+    if(accountType==='Athlete'){
       navigate("ViewGroupAthlete", { groupName, groupId });
     }
     else{

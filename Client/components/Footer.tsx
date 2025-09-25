@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, TouchableOpacity, Text, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '../services/AsyncStorage';
 import { useNav } from '../hooks/useNav';
+import UserService from '../services/UserService';
 
 // Import all images statically
 const images = {
@@ -39,8 +38,8 @@ const Footer = () => {
 
     useEffect(() => {
         const fetchAccountType = async () => {
-            const userType = await AsyncStorage.getData('accountType');
-            if(userType == 'Athlete'){
+            const accountType = await UserService.getAccountType();
+            if(accountType === 'Athlete'){
                 setButtons(layouts['athlete']);
                 return;
             }

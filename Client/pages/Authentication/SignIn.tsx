@@ -1,10 +1,9 @@
 import AuthInput from "../../components/authentication/AuthInput";
-import { Button, Text, TouchableOpacity, View } from "react-native";
-import { useEffect, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes  } from "aws-amplify/auth";
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
-import AsyncStorage from "../../services/AsyncStorage";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 //Create account page
@@ -38,20 +37,6 @@ const SignIn = ()=>{
             handleError(error);
         }
     }
-
-    useEffect(() => {
-        async function checkUser() {
-            const accountType = await UserService.getAccountType();
-            const userId = await UserService.getUserId();
-            if (accountType) {
-                AsyncStorage.storeData('accountType', accountType);
-                AsyncStorage.storeData('userId', userId!);
-                navigation.replace("User",{screen:`${accountType}Groups`});
-                return;
-            }
-        }
-        checkUser();
-    }, [navigation]);
 
     return(
         <View className="relative h-full w-[85%] mx-auto">

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import AsyncStorage from "../services/AsyncStorage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const globalSubscribers: { [key: string]: (() => void)[] } = {};
 
@@ -19,7 +19,7 @@ export const useWorkoutGroup = (groupId:string) =>{
     const loadWorkoutGroup = useCallback(async () => {
         try {
             setLoading(true);
-            const stored = await AsyncStorage.getData(key);
+            const stored = await AsyncStorage.getItem(key);
         if (stored) {
             setWorkoutGroup(JSON.parse(stored));
         }
@@ -55,7 +55,7 @@ export const useWorkoutGroup = (groupId:string) =>{
     const addAthlete = useCallback(async (athlete: {id: string, username: string}) => {
         try {
             const updatedGroup = [...workoutGroup, athlete];
-            await AsyncStorage.storeData(key, JSON.stringify(updatedGroup));
+            await AsyncStorage.setItem(key, JSON.stringify(updatedGroup));
             setWorkoutGroup(updatedGroup);
         } catch (error) {
             console.error('Error adding athlete to workout group:', error);
@@ -66,7 +66,7 @@ export const useWorkoutGroup = (groupId:string) =>{
     const removeAthlete = useCallback(async (athleteId: string) => {
         try {
             const updatedGroup = workoutGroup.filter(athlete => athlete.id !== athleteId);
-            await AsyncStorage.storeData(key, JSON.stringify(updatedGroup));
+            await AsyncStorage.setItem(key, JSON.stringify(updatedGroup));
             setWorkoutGroup(updatedGroup);
         } catch (error) {
             console.error('Error removing athlete from workout group:', error);

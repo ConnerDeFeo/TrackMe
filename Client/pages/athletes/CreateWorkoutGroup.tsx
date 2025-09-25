@@ -1,10 +1,10 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
-import { useNav } from "../../hooks/useNav";
+import { AccountType } from "../../assets/constants/Enums";
 
 //Create workout group for a given group
 /**
@@ -44,7 +44,7 @@ import { useNav } from "../../hooks/useNav";
  */
 const CreateWorkoutGroup = ()=>{
     // Navigation and routing setup
-    const { goBack } = useNav();
+    const navigation = useNavigation<any>();
     const route = useRoute();
     const {groupId} = route.params as { groupId: string };
     const [groupMembers, setGroupMembers] = useState<string[]>([]); // All available athletes from the source group
@@ -110,7 +110,7 @@ const CreateWorkoutGroup = ()=>{
             
             {/* Create Group Action Button */}
             <TouchableOpacity 
-                onPress={()=>goBack()}
+                onPress={() => navigation.goBack()}
                 className="p-4 rounded-xl shadow-lg"
                 style={{backgroundColor: '#E63946'}}
             >

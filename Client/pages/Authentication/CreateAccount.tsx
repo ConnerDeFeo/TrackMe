@@ -1,5 +1,5 @@
 import AuthInput from "../../components/authentication/AuthInput";
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { signUp } from 'aws-amplify/auth';
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";

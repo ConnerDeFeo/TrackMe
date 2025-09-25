@@ -1,25 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import UserService from "../services/UserService";
-import { useNavigation } from "@react-navigation/native";
 import GeneralService from "../services/GeneralService";
 import { useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { AccountType } from "../assets/constants/Enums";
 
 //Profile page for both coaches and athletes
 const Profile = () => {
-    const navigation = useNavigation<any>();
+    const context = useContext(AuthContext);
+    const [accountType, setAccountType] = context;
     // State to hold current user data being displayed/edited
     const [userData, setUserData] = useState<Record<string, any>>([]);
     // State to track original data for comparison to detect changes
     const [originalUserData, setOriginalUserData] = useState<Record<string, any>>([]);
     //Account type used to potentially render more input fields for athletes
-    const [accountType, setAccountType] = useState<string | null>(null);
 
     // Fetch user data when component mounts
     useEffect(()=>{
         const fetchUserData = async () => {
-            const accountType = await UserService.getAccountType();
-            setAccountType(accountType!);
             const userId = await UserService.getUserId();
             if(userId) {
                 const resp = await GeneralService.getUser();
@@ -36,7 +35,7 @@ const Profile = () => {
     // Handle user logout and navigate to sign in screen
     const handleLogout = async () => {
         await UserService.signOut();
-        navigation.navigate("Auth", { screen: "SignIn" });
+        setAccountType(AccountType.SignedOut);
     }
 
     // Update user profile only if field value has changed

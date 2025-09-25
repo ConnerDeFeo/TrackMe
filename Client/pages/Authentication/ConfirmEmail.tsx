@@ -1,10 +1,12 @@
 import { confirmSignUp, fetchUserAttributes, resendSignUpCode } from "aws-amplify/auth";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import UserService from "../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
+import { AuthContext } from "../../context/AuthContext";
+import { AccountType } from "../../assets/constants/Enums";
 
 
 //Confirm Email page
@@ -12,11 +14,11 @@ const ConfirmEmail = () => {
     const route = useRoute();
     const navigation = useNavigation<any>();
     const {username, password} = route.params as { username: string; password: string; };
-
     const [verificationCode, setVerificationCode] = useState<string>("");
     const [message, setMessage] = useState<string>("");
     const [resendCodeTimer, setResendCodeTimer] = useState<number>(0);
-
+    const context = useContext(AuthContext);
+    const setAccountType = context[1];
     // Whenever code is resent, start a 60 second timer
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -39,7 +41,7 @@ const ConfirmEmail = () => {
             const accountType = attribute['custom:accountType'];
             //Create the account in the database
             let rdsResp;
-            if(accountType === "Athlete"){
+            if(accountType === AccountType.Athlete){
                 rdsResp = await AthleteService.createAthlete();
             }
             else{
@@ -49,8 +51,7 @@ const ConfirmEmail = () => {
                 setMessage("Failed to create account. Please try again.");
                 return;
             }
-
-            navigation.replace("User", { screen: `${accountType}Groups` });
+            setAccountType(accountType as AccountType);
 
         } catch (error: any) {
             setMessage(error.message);

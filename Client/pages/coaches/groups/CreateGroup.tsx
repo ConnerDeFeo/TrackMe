@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
-import { useNav } from "../../../hooks/useNav";
+import { useNavigation } from "@react-navigation/native";
 
 
 //Page where coaches can create a new group
 const CreateGroup = () => {
-    const { navigate } = useNav();
+    const navigation = useNavigation<any>();
     const [groupName, setGroupName] = useState("");
 
     //handles groups creation and redirection
@@ -15,7 +15,7 @@ const CreateGroup = () => {
             const resp = await CoachGroupService.createGroup(groupName);
             if(resp.ok){
                 const data = await resp.json();
-                navigate('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });
+                navigation.navigate('ViewGroupCoach', { groupId: data.groupId, groupName: groupName });
             }
         } catch (error) {
             console.log("Error creating group:", error);

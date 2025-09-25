@@ -1,10 +1,12 @@
 import AuthInput from "../../components/authentication/AuthInput";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes  } from "aws-amplify/auth";
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
+import { AccountType } from "../../assets/constants/Enums";
 
 //Create account page
 const SignIn = ()=>{
@@ -12,6 +14,8 @@ const SignIn = ()=>{
     const route = useRoute();
     const { resetPasswordMessage } = route.params as { resetPasswordMessage?: string } || {};
     const [showResetPasswordMessage, setShowResetPasswordMessage] = useState<boolean>(!!resetPasswordMessage);
+    const authContext = useContext(AuthContext);
+    const [accountType, setAccountType] = authContext;
 
     const [username,setUsername] = useState<string>("");
     const [password,setPassword] = useState<string>("");
@@ -32,7 +36,11 @@ const SignIn = ()=>{
             await UserService.signIn(username,password);
             const attribute = await fetchUserAttributes();
             const accountType = attribute['custom:accountType'];
-            navigation.replace("User",{screen:`${accountType}Groups`});
+            if(accountType === AccountType.Athlete || accountType === AccountType.Coach){
+                setAccountType(accountType);
+                return;
+            }
+            setError("Account type not recognized. Please contact support.");
         }catch (error:any) {
             handleError(error);
         }

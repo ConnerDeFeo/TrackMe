@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
-import { useNav } from "../../hooks/useNav";
 import InputTracking from "../InputTracking";
 import TimeDistanceDisplay from "../TimeDistanceDisplay";
+import { useNavigation } from "@react-navigation/native";
 
 //Component used to render input fields for a specific group
 /**
@@ -44,11 +44,11 @@ const RenderGroupInputs: React.FC<
             onSubmit,
         })=>{
 
-    const {navigate} = useNav();
     //Current workout group members
     const { workoutGroup } = useWorkoutGroup(groupId);
     // List of input IDs that have been submitted and selected by user
     const [selectedSubmitedInputs, setSelectedSubmitedInputs] = useState<number[]>([]);
+    const navigation = useNavigation<any>();
 
     const handleInputSubmission = async () => {
         const date = new Date().toISOString().split("T")[0];
@@ -82,12 +82,12 @@ const RenderGroupInputs: React.FC<
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <TouchableOpacity onPress={()=>navigate('CreateWorkoutGroup', { groupId })}>
+                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
                     <Text className="text-[#E63946]">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
                 </TouchableOpacity>
             </View>
             {/* Go to mass inputs */}
-            <TouchableOpacity onPress={()=>navigate('MassInput', { groupId, groupName})}>
+            <TouchableOpacity onPress={()=>navigation.navigate('MassInput', { groupId, groupName})}>
                 <Text className="text-[#E63946] ml-auto">Mass Input</Text>
             </TouchableOpacity>
 

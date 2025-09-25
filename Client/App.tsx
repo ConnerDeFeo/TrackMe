@@ -9,7 +9,6 @@ import ConfirmEmail from './pages/authentication/ConfirmEmail';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import SignIn from './pages/authentication/SignIn';
-import Footer from './components/Footer';
 import CoachGroups from './pages/coaches/groups/CoachGroups';
 import AthleteGroups from './pages/athletes/AthleteGroups';
 import CreateGroup from './pages/coaches/groups/CreateGroup';
@@ -42,6 +41,8 @@ import MassInput from './pages/MassInput';
 import UserService from './services/UserService';
 import { AuthContext } from './context/AuthContext';
 import { AccountType } from './assets/constants/Enums';
+import CoachFooter from './components/coaches/workouts/CoachFooter';
+import AthleteFooter from './components/athletes/AthleteFooter';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -89,7 +90,7 @@ const AthleteStack = createNativeStackNavigator();
 const AthleteLayoutWrapper = () => {
   return (
     <View className='flex-1 bg-white'>
-      <AthleteStack.Navigator screenOptions={({route, navigation})=> {
+      <AthleteStack.Navigator initialRouteName='AthleteGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
         const canGoBackFlag = canGoBack(route.name);
@@ -111,7 +112,7 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="InputHistory" options={{ title: "Input History" }} component={ScrollViewWrapper(<InputHistory />)} />
         <AthleteStack.Screen name="MassInput" component={ScrollViewWrapper(<MassInput />)} />
       </AthleteStack.Navigator>
-      <Footer />
+      <AthleteFooter />
     </View>
   );
 }
@@ -120,7 +121,7 @@ const CoachStack = createNativeStackNavigator();
 const CoachLayoutWrapper = () => {
   return (
     <View className="flex-1 bg-white">
-      <CoachStack.Navigator screenOptions={({route, navigation})=> {
+      <CoachStack.Navigator initialRouteName='CoachGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
         const canGoBackFlag = canGoBack(route.name);
@@ -147,7 +148,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <CoachStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
       </CoachStack.Navigator>
-      <Footer />
+      <CoachFooter />
     </View>
   );
 }
@@ -166,8 +167,6 @@ const AuthLayoutWrapper = () =>{
     </View>
   );
 }
-
-const RootStack = createNativeStackNavigator();
 //Return the navigation stack as the app
 export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -194,19 +193,17 @@ export default function App() {
   }
 
   return (
-    <AuthContext.Provider value={accountType}>
+    <AuthContext.Provider value={[accountType, setAccountType]}>
       <NavigationContainer>
-        <RootStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
           {accountType === AccountType.SignedOut ? (
-            <RootStack.Screen name="Auth" component={AuthLayoutWrapper} />
+            <AuthLayoutWrapper/>
           ) : (
             accountType === AccountType.Athlete ? (
-              <RootStack.Screen name="Athlete" component={AthleteLayoutWrapper} />
+              <AthleteLayoutWrapper/>
             ) : (
-              <RootStack.Screen name="Coach" component={CoachLayoutWrapper} />
+              <CoachLayoutWrapper/>
             )
           )}
-        </RootStack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
   );

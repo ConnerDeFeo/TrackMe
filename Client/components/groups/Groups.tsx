@@ -1,13 +1,16 @@
 import GeneralService from "../../services/GeneralService";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GroupDisplay from "./GroupDisplay";
-import { useNav } from "../../hooks/useNav";
-import UserService from "../../services/UserService";
+import { AccountType } from "../../assets/constants/Enums";
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
 
 //View of all groups displayed in a list
 const Groups = () => {
   const [groups, setGroups] = useState<string[][]>([]);
-  const {navigate} = useNav();
+  const navigation = useNavigation<any>();
+  const context = useContext(AuthContext);
+  const accountType = context[0];
 
   //Fetch groups from the server
   useEffect(() => {
@@ -26,13 +29,11 @@ const Groups = () => {
   }, []);
 
   const handleNavigation = async (groupName: string, groupId: string) => {
-    const accountType = await UserService.getAccountType();
-    
-    if(accountType==='Athlete'){
-      navigate("ViewGroupAthlete", { groupName, groupId });
+    if(accountType===AccountType.Athlete){
+      navigation.navigate("ViewGroupAthlete", { groupName, groupId });
     }
     else{
-      navigate("ViewGroupCoach", { groupName, groupId });
+      navigation.navigate("ViewGroupCoach", { groupName, groupId });
     }
   };
 

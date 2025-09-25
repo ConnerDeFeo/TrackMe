@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
-import { useNav } from '../hooks/useNav';
-import UserService from '../services/UserService';
+import { useNavigation } from '@react-navigation/native';
+import { View, TouchableOpacity, Image } from 'react-native';
 
 // Import all images statically
 const images = {
@@ -14,46 +12,23 @@ const images = {
     'History': require('../assets/images/History.png'),
 };
 
-const layouts = {
-  'athlete': [
-    ['Inputs', 'Inputs'], 
-    ['History', 'InputHistory'], 
-    ['Groups', 'AthleteGroups'], 
-    ['Coaches', 'Coaches'], 
-    ['Profile', 'AthleteProfile']
-  ],
-  'coach': [
-    ['Workouts', 'WorkoutTemplates'], 
-    ['History', 'CoachHistory'], 
-    ['Groups', 'CoachGroups'], 
-    ['Athletes', 'Athletes'], 
-    ['Profile', 'CoachProfile']
-  ]
-}
-
 //Footer at bottom of the screen with navigation buttons
-const Footer = () => {
-    const {replace} = useNav();
-    const [buttons, setButtons] = React.useState<string[][]>([]);
+const Footer = ({buttons}: {buttons: string[][]}) => {
+    const navigation = useNavigation<any>();
 
-    useEffect(() => {
-        const fetchAccountType = async () => {
-            const accountType = await UserService.getAccountType();
-            if(accountType === 'Athlete'){
-                setButtons(layouts['athlete']);
-                return;
-            }
-            setButtons(layouts['coach']);
-        }
-        fetchAccountType();
-    }, []);
+    const handleNavigation = (destination: string) => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: destination }],
+        });
+    };
 
     return (
         <View className='h-[6rem] border-t flex-row justify-around items-top pt-4'>
             {buttons.map(([imageName, destination], idx) => (
                 <TouchableOpacity
                     key={idx}
-                    onPress={() => replace(destination)}
+                    onPress={() => handleNavigation(destination)}
                 >
                     <Image source={images[imageName as keyof typeof images]} className="h-12 w-12" />
                 </TouchableOpacity>

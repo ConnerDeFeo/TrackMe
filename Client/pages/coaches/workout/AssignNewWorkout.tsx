@@ -10,7 +10,7 @@ const AssignNewWorkout = () => {
     const handleWorkoutCreation = async (workoutData:any) => {
         const resp = await CoachWorkoutService.assignGroupWorkout(groupId, workoutData);
         if(resp.ok) {
-            navigation.navigate("ViewGroupCoach", { groupId, groupName });
+            navigation.popTo("ViewGroupCoach", { groupId, groupName });
         }
     }
     return (

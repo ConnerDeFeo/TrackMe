@@ -83,7 +83,7 @@ const AthleteLayoutWrapper = () => {
         return{
           headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
           title: getPageTitle(route.name, params),
-          animation: state.index === 0 ? 'fade' : 'default', // No animation on initial screen
+          animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
         }
       }}>
         <AthleteStack.Screen name="AthleteGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<AthleteGroups />)} />
@@ -113,7 +113,7 @@ const CoachLayoutWrapper = () => {
         return{
           headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
           title: getPageTitle(route.name, params),
-          animation: state.index === 0 ? 'fade' : 'default', // No animation on initial screen
+          animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
         }
       }}>
         <CoachStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<CoachGroups />)} />
@@ -141,7 +141,7 @@ const AuthStack = createNativeStackNavigator();
 const AuthLayoutWrapper = () =>{
   return (
     <View className="flex-1 bg-white">
-      <AuthStack.Navigator screenOptions={{ headerShown: false, animation:'fade' }} initialRouteName='SignIn'>
+      <AuthStack.Navigator screenOptions={{ headerShown: false, animation:'none' }} initialRouteName='SignIn'>
         <AuthStack.Screen name="SignIn" component={SignIn} />
         <AuthStack.Screen name="CreateAccount" component={CreateAccount} />
         <AuthStack.Screen name="ConfirmEmail" component={ConfirmEmail} />

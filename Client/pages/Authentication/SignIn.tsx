@@ -65,7 +65,7 @@ const SignIn = ()=>{
                     <AuthInput value={username} setValue={setUsername} placeholder="Username or Email"/>
                     <View className="gap-y-2">
                         <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
-                        <TouchableOpacity onPress={()=>navigation.replace("Auth", {screen:'ForgotPassword'})}>
+                        <TouchableOpacity onPress={()=>navigation.reset({index: 0, routes: [{ name: "ForgotPassword" }],})}>
                             <Text className="text-right">Forgot Password?</Text>
                         </TouchableOpacity>
                     </View>

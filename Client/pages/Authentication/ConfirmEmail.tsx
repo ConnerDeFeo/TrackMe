@@ -106,7 +106,7 @@ const ConfirmEmail = () => {
                         </TouchableOpacity>
                         <TouchableOpacity 
                             className="bg-black rounded-lg py-3 px-4"
-                            onPress={() => navigation.replace("Auth", { screen: 'SignIn' })}
+                            onPress={() => navigation.reset({index: 0,routes: [{ name: "SignIn" }],})}
                         >
                             <Text className="text-white text-center font-semibold">Back to Sign In</Text>
                         </TouchableOpacity>

@@ -60,7 +60,7 @@ const CreateAccount = ()=>{
                 return;
             }
 
-            navigation.replace("Auth",{screen:'ConfirmEmail',params:{username:username,password:password}});
+            navigation.reset({index: 0,routes: [{ name: "ConfirmEmail", params: { username: username, password: password } }],});
         }
         catch (error:any) {
             handleError(error);

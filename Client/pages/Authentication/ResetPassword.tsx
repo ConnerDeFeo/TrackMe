@@ -36,7 +36,7 @@ const ResetPassword = () => {
                 confirmationCode,
                 newPassword
             });
-            navigation.replace("Auth", { screen: 'SignIn', params: { resetPasswordMessage:"Password reset successful" } });
+            navigation.reset({index: 0, routes: [{ name: "SignIn", params: { resetPasswordMessage:"Password reset successful" } }],})
         } catch (error: any) {
             handleError(error);
         }

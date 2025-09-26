@@ -9,7 +9,7 @@ const buttons = [
     ['Profile', 'AthleteProfile']
   ]
 
-//Footer at bottom of the screen with navigation buttons
+//Footer for the athlete pages
 const AthleteFooter = () => {
     return (
         <Footer buttons={buttons}/>

@@ -10,6 +10,7 @@ from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 import json
 from rds import execute_file
+from testing_utils import *
 
 
 @pytest.fixture(autouse=True)
@@ -18,19 +19,37 @@ def setup_before_each_test(): #This will run before each test
     execute_file('./setup.sql')
     yield
 
-def test_add_athlete_to_group():
+def setup_coach_athlete_relationship():
+    """Creates a coach and an athlete and establishes a relationship between them."""
     create_coach(TestData.test_coach, {})
-    create_group(TestData.test_group, {})
     create_athlete(TestData.test_athlete, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
 
-    response = add_athlete_to_group(TestData.test_add_athlete_to_group, {})
-    assert response['statusCode'] == 200
+def test_add_athlete_to_group_and_verify_access():
+    # Arrange
+    # 1. Create a coach and an athlete with an established relationship
+    setup_coach_athlete_relationship()
+    
+    # 2. Create a group for the coach
+    create_group(TestData.test_group, {})
+    
+    # 3. Define the event to add the athlete to the group
+    add_event = TestData.test_add_athlete_to_group
 
-    #Check if athlete is actually added to group
-    response = get_groups(TestData.test_get_group_athlete, {})
-    assert response['statusCode'] == 200
-    groups = json.loads(response['body'])
+    # Act
+    # 4. Add the athlete to the group
+    add_response = add_athlete_to_group(add_event, {})
+
+    # Assert
+    # 5. Verify the add operation was successful
+    assert add_response['statusCode'] == 200
+
+    # 6. Verify the athlete can now see the group they were added to
+    get_groups_event = TestData.test_get_group_athlete
+    get_groups_response = get_groups(get_groups_event, {})
+    
+    assert get_groups_response['statusCode'] == 200
+    groups = json.loads(get_groups_response['body'])
     assert len(groups) == 1
-    assert 'Test Group' == groups[0][0]
+    assert groups[0][0] == 'Test Group'

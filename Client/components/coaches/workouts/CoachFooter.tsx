@@ -9,7 +9,7 @@ const buttons = [
     ['Profile', 'CoachProfile']
   ]
 
-//Footer at bottom of the screen with navigation buttons
+//Footer at bottom of the coach screens with navigation buttons
 const CoachFooter = () => {
 
     return (

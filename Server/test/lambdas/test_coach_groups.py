@@ -31,194 +31,253 @@ def generate_athlete(username, userId):
         })
     },{})
 
-def test_create_group():
-    response = create_group(TestData.test_group, {})
+def setup_athlete_with_group():
+    """Set up a coach, athlete, group, and link them."""
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
+
+def setup_absent_athletes_scenario():
+    """Set up a scenario with one athlete in a group and one not."""
+    setup_athlete_with_group()
+    create_athlete({
+        "headers": generate_auth_header("1235", "Athlete", "testathlete2"),
+    }, {})
+    invite_athlete({
+        "body": json.dumps({"athleteId": "1235"}),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    accept_coach_invite({
+        "body": json.dumps({"coachId": "123"}),
+        "headers": generate_auth_header("1235", "Athlete", "testathlete2")
+    }, {})
+
+def test_create_group_returns_success():
+    # Arrange
+    event = TestData.test_group
+
+    # Act
+    response = create_group(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
+
+def test_create_group_returns_correct_group_id():
+    # Arrange
+    event = TestData.test_group
+
+    # Act
+    response = create_group(event, {})
+
+    # Assert
     group_id = json.loads(response['body'])
     assert group_id['groupId'] == 1
 
-def test_invite_athlete():
+def test_invite_athlete_returns_success():
+    # Arrange
     create_group(TestData.test_group, {})
     create_athlete(TestData.test_athlete, {})
-    response = invite_athlete(TestData.test_invite, {})
+    event = TestData.test_invite
+
+    # Act
+    response = invite_athlete(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
-    #Check if athlete is invited
-    response =  fetch_one("""
-        SELECT * FROM athlete_coach_invites WHERE athleteId = %s AND coachId = %s
-    """, ("1234", "123"))
+def test_invite_athlete_creates_invite_in_db():
+    # Arrange
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    event = TestData.test_invite
+
+    # Act
+    invite_athlete(event, {})
+
+    # Assert
+    response = fetch_one("SELECT * FROM athlete_coach_invites WHERE athleteId = %s AND coachId = %s", ("1234", "123"))
     assert response is not None
     assert response[1] == "1234"
     assert response[2] == '123'
 
-def test_add_athlete_to_group():
+def test_add_athlete_to_group_returns_success():
+    # Arrange
     create_group(TestData.test_group, {})
     create_athlete(TestData.test_athlete, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
-
     event = {
-        "body": json.dumps({
-            "athleteId": "1234",
-            "groupId": "1"
-        }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+        "body": json.dumps({"athleteId": "1234", "groupId": "1"}),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
+    # Act
     response = add_athlete_to_group(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
-    # Check if athlete is added to group
-    response = fetch_one("""
-        SELECT * FROM athlete_groups WHERE athleteId = %s AND groupId = %s
-    """, ("1234", "1"))
+def test_add_athlete_to_group_persists_relationship():
+    # Arrange
+    create_group(TestData.test_group, {})
+    create_athlete(TestData.test_athlete, {})
+    invite_athlete(TestData.test_invite, {})
+    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    event = {
+        "body": json.dumps({"athleteId": "1234", "groupId": "1"}),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    add_athlete_to_group(event, {})
+
+    # Assert
+    response = fetch_one("SELECT * FROM athlete_groups WHERE athleteId = %s AND groupId = %s", ("1234", "1"))
     assert response is not None
     assert response[0] == "1234"
     assert response[1] == 1
 
-#Setups the following tests for getting group athletes
-def setup_get_tests():
-    create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
-    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
-    create_athlete({
-        "headers":generate_auth_header("1235", "Athlete", "testathlete2"),
-    }, {})
-    invite_athlete({
-        "body": json.dumps({
-            "athleteId": "1235",
-        }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    accept_coach_invite({
-        "body": json.dumps({
-            "coachId": "123"
-        }),
-        "headers":generate_auth_header("1235", "Athlete", "testathlete2")
-    }, {})
-
-def test_get_absent_group_athletes():
-    setup_get_tests()
-
+def test_get_absent_group_athletes_returns_success():
+    # Arrange
+    setup_absent_athletes_scenario()
     event = {
-        "queryStringParameters": {
-            "groupId": "1",
-        },
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+        "queryStringParameters": {"groupId": "1"},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
+    # Act
     response = get_absent_group_athletes(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
+def test_get_absent_group_athletes_returns_correct_athletes():
+    # Arrange
+    setup_absent_athletes_scenario()
+    event = {
+        "queryStringParameters": {"groupId": "1"},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = get_absent_group_athletes(event, {})
+
+    # Assert
     body = json.loads(response['body'])
     assert len(body) == 1
+    assert body[0] == ["1235", "testathlete2"]
 
-    assert body[0][0] == "1235"
-    assert body[0][1] == "testathlete2"
-
-def test_remove_group_athlete():
-    create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
-    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
-
+def test_remove_group_athlete_returns_success():
+    # Arrange
+    setup_athlete_with_group()
     event = {
-        "queryStringParameters": {
-            "groupId": "1",
-            "athleteId": "1234"
-        },
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+        "queryStringParameters": {"groupId": "1", "athleteId": "1234"},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
+    # Act
     response = remove_group_athlete(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
-    # Check if athlete is removed from group
+def test_remove_group_athlete_soft_deletes_relationship():
+    # Arrange
+    setup_athlete_with_group()
     event = {
-        "queryStringParameters": {
-            "groupId": "1"
-        }
+        "queryStringParameters": {"groupId": "1", "athleteId": "1234"},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
-    response = get_athletes_for_group(event, {})
+    # Act
+    remove_group_athlete(event, {})
+
+    # Assert
+    response = get_athletes_for_group({"queryStringParameters": {"groupId": "1"}}, {})
     assert response['statusCode'] == 404
 
-    event = {
-        "queryStringParameters": {
-            "groupId": "1",
-        },
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+    absent_event = {
+        "queryStringParameters": {"groupId": "1"},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
-
-    response = get_absent_group_athletes(event, {})
+    response = get_absent_group_athletes(absent_event, {})
     assert response['statusCode'] == 200
     assert json.loads(response['body']) == [['1234', "test_athlete"]]
 
-def test_delete_group():
+def test_delete_group_returns_success():
+    # Arrange
     create_group(TestData.test_group, {})
-
     event = {
-        "queryStringParameters": {
-            "groupId": 1,
-        },
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+        "queryStringParameters": {"groupId": 1},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
+    # Act
     response = delete_group(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
-    response = fetch_one("""
-        SELECT * FROM groups WHERE id = %s
-    """, (1,))
-    assert response is not None
-    assert response[4] is True  # Check if deleted flag is set to True
-
-def test_assign_group_workout():
+def test_delete_group_soft_deletes_group():
+    # Arrange
     create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
-    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
+    event = {
+        "queryStringParameters": {"groupId": 1},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
 
+    # Act
+    delete_group(event, {})
+
+    # Assert
+    response = fetch_one("SELECT * FROM groups WHERE id = %s", (1,))
+    assert response is not None
+    assert response[4] is True
+
+def test_assign_group_workout_returns_success():
+    # Arrange
+    setup_athlete_with_group()
     event = {
         "body": json.dumps({
             "groupId": 1,
             "title": "Test Workout",
             "description": "This is a test workout",
-            "exercises": [
-                {
-                    "name": "Push Ups",
-                    "sets": 3,
-                    "reps": 10
-                },
-                {
-                    "name": "Squats",
-                    "sets": 3,
-                    "reps": 15
-                }
-            ]
+            "exercises": [{"name": "Push Ups", "sets": 3, "reps": 10}]
         }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
+    # Act
     response = assign_group_workout(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
+def test_assign_group_workout_creates_workout_and_assignment():
+    # Arrange
+    setup_athlete_with_group()
+    event = {
+        "body": json.dumps({
+            "groupId": 1,
+            "title": "Test Workout",
+            "description": "This is a test workout",
+            "exercises": [{"name": "Push Ups", "sets": 3, "reps": 10}]
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = assign_group_workout(event, {})
+
+    # Assert
     body = json.loads(response['body'])
     assert body['workout_id'] == 1
 
-    # Check if workout is assigned to group
-    response = fetch_one("""
-        SELECT * FROM group_workouts WHERE groupId = %s AND workoutId = %s
-    """, (1, 1))
-    assert response is not None
+    group_workout = fetch_one("SELECT * FROM group_workouts WHERE groupId = %s AND workoutId = %s", (1, 1))
+    assert group_workout is not None
 
-    # Check if workout is NOT a template
-    response = fetch_one("""
-        SELECT isTemplate FROM workouts WHERE id = %s
-    """, (1,))
-    assert response is not None
-    assert response[0] is False
+    workout = fetch_one("SELECT isTemplate FROM workouts WHERE id = %s", (1,))
+    assert workout is not None
+    assert workout[0] is False

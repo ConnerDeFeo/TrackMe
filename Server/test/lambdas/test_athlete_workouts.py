@@ -46,28 +46,7 @@ def create_extra_athlete(username,id):
     }
     create_athlete(extra_athlete, {})
 
-def test_input_times():
-    response = input_times(TestData.test_input_times, {})
-    assert response['statusCode'] == 200
-
-    #Make sure the input was recorded in the database
-    inputs = fetch_all("SELECT athleteId, groupId, distance, time FROM athlete_inputs")
-    assert inputs is not None
-    assert len(inputs) == 2  # Two inputs recorded
-
-    input1 = inputs[0]
-    assert input1[0] == '1234'  # athleteId
-    assert input1[1] == 1
-    assert input1[2] == 100  # distance
-    assert input1[3] == 10.8   # time
-
-    input2 = inputs[1]
-    assert input2[0] == '1234'  # athleteId
-    assert input2[1] == 1
-    assert input2[2] == 200  # distance
-    assert input2[3] == 30   # time
-
-def test_view_workout_inputs():
+def setup_view_workout_inputs():
     create_extra_athlete("test2", "1235")
     create_extra_athlete("test3", "1236")
     input_times(TestData.test_input_times, {})
@@ -79,18 +58,14 @@ def test_view_workout_inputs():
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
-    response = view_workout_inputs(event, {})
-    assert response['statusCode'] == 200
+    expected_inputs = [
+        {"distance": 100, "time": 10.8, "inputId": 1},
+        {"distance": 200, "time": 30, "inputId": 2}
+    ]
 
-    body = json.loads(response['body'])
-    assert len(body) == 1
-    inputs = body['1'] # GroupId
+    return event, expected_inputs
 
-    assert len(inputs) == 2
-    assert {"distance": 100, "time": 10.8, "inputId":1} in inputs
-    assert {"distance": 200, "time": 30, "inputId":2} in inputs
-
-def test_remove_inputs():
+def setup_remove_inputs_event():
     create_extra_athlete("test3", "1236")
     invite_athlete({
         "body": json.dumps({
@@ -130,30 +105,106 @@ def test_remove_inputs():
     event = {
         'body': json.dumps({
             "athleteId": "1234",
-            "inputIds": [1,3]  # Attempt to remove the first and third inputs
+            "inputIds": [1,3]
         }),
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
-    response = remove_inputs(event, {})
+    expected_remaining_inputs = [
+        {'athleteId': '1234', 'groupId': 1, 'distance': 200, 'time': 30.0, 'id': 2},
+        {'athleteId': '1236', 'groupId': 1, 'distance': 100, 'time': 12.5, 'id': 3}
+    ]
+
+    return event, expected_remaining_inputs
+
+def test_input_times_returns_success():
+    # Arrange
+    event = TestData.test_input_times
+
+    # Act
+    response = input_times(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
-    # Check the database to ensure the input was removed
+
+def test_input_times_persists_inputs_for_athlete():
+    # Arrange
+    event = TestData.test_input_times
+
+    # Act
+    input_times(event, {})
+
+    # Assert
+    inputs = fetch_all("SELECT athleteId, groupId, distance, time FROM athlete_inputs")
+    assert inputs is not None
+    assert len(inputs) == 2
+
+    first_input, second_input = inputs
+    assert first_input[0] == '1234'
+    assert first_input[1] == 1
+    assert first_input[2] == 100
+    assert first_input[3] == 10.8
+
+    assert second_input[0] == '1234'
+    assert second_input[1] == 1
+    assert second_input[2] == 200
+    assert second_input[3] == 30
+
+def test_view_workout_inputs_returns_success():
+    # Arrange
+    event, _ = setup_view_workout_inputs()
+
+    # Act
+    response = view_workout_inputs(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+
+
+def test_view_workout_inputs_returns_group_inputs():
+    # Arrange
+    event, expected_inputs = setup_view_workout_inputs()
+
+    # Act
+    response = view_workout_inputs(event, {})
+
+    # Assert
+    body = json.loads(response['body'])
+    assert len(body) == 1
+
+    inputs = body['1']
+    assert len(inputs) == len(expected_inputs)
+    for expected_input in expected_inputs:
+        assert expected_input in inputs
+
+def test_remove_inputs_returns_success():
+    # Arrange
+    event, _ = setup_remove_inputs_event()
+
+    # Act
+    response = remove_inputs(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+
+
+def test_remove_inputs_deletes_only_specified_inputs():
+    # Arrange
+    event, expected_remaining_inputs = setup_remove_inputs_event()
+
+    # Act
+    remove_inputs(event, {})
+
+    # Assert
     inputs = fetch_all("SELECT athleteId, groupId, distance, time, id FROM athlete_inputs")
     assert inputs is not None
-    debug_table()
-    assert len(inputs) == 2  # Only one input should be deleted
+    assert len(inputs) == len(expected_remaining_inputs)
 
-    # Convert list of tuples to a list of dictionaries for easier lookup
     remaining_inputs = [
         {'athleteId': row[0], 'groupId': row[1], 'distance': row[2], 'time': row[3], 'id': row[4]}
         for row in inputs
     ]
 
-    # Expected remaining inputs
-    expected_input_2 = {'athleteId': '1234', 'groupId': 1, 'distance': 200, 'time': 30.0, 'id': 2}
-    expected_input_3 = {'athleteId': '1236', 'groupId': 1, 'distance': 100, 'time': 12.5, 'id': 3}
-
-    # Check that both expected inputs are present, regardless of order
-    assert expected_input_2 in remaining_inputs
-    assert expected_input_3 in remaining_inputs
+    for expected_input in expected_remaining_inputs:
+        assert expected_input in remaining_inputs

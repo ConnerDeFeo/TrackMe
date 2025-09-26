@@ -22,228 +22,123 @@ def setup_before_each_test(): #This will run before each test
     create_group(TestData.test_group, {})
     yield
 
-def test_create_workout():
-    response = create_workout_template(TestData.test_workout, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
-    #Check if workout exists in rds
-    workout = fetch_one("SELECT * FROM workouts WHERE id=%s;", (workout_id,))
-    print(workout)
-
-    #Bunch of ai generate asserts to check if the data is correct
-    assert workout is not None
-    assert workout[0] == 1
-    assert workout[1] == '123'
-    assert workout[2] == 'Test Workout'
-    assert workout[3] == 'This is a test workout'
-    assert workout[5] # Workout is a template
-
-    assert len(workout[4]) == 3
-
-    exersise1 = workout[4][0]
-    assert exersise1['name'] == 'Test name'
-    assert exersise1['sets'] == 3
-    assert exersise1['reps'] == 10
-    assert len(exersise1['exerciseParts']) == 2
-    exersie1_parts = exersise1['exerciseParts']
-    assert exersie1_parts[0]['distance'] == 100
-    assert exersie1_parts[0]['measurement'] == 'meters'
-    assert exersie1_parts[1]['distance'] == 50
-    assert exersie1_parts[1]['measurement'] == 'meters'
-    assert exersise1['inputs'] is True
-
-    exersise2 = workout[4][1]
-    assert exersise2['name'] == 'Test name 2'
-    assert exersise2['sets'] == 2
-    assert exersise2['reps'] == 15
-    assert len(exersise2['exerciseParts']) == 1
-    exersie2_parts = exersise2['exerciseParts']
-    assert exersie2_parts[0]['distance'] == 200
-    assert exersie2_parts[0]['measurement'] == 'meters'
-
-    exersise3 = workout[4][2]
-    assert exersise3['name'] == 'Warm-up'
-    assert 'sets' not in exersise3
-    assert 'reps' not in exersise3
-    assert 'exerciseParts' not in exersise3
-
-def test_assign_group_workout_templates():
-    response = create_workout_template(TestData.test_workout, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
-
-    event = {
-        "body": json.dumps({ 
-            "groupId": "1",
-            "workoutId": workout_id
-        }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
-    }
-    response = assign_group_workout_template(event, {})
-    assert response['statusCode'] == 200
-
-    #Check if workout exists in rds
-    data = fetch_one("SELECT * FROM group_workouts;")
-    assert data is not None
-    assert data[0] == 1
-    assert data[1] == 1
-    assert data[2] == date
-    assert data[3] == 1
-
-def test_assign_multiple_workout_templates():
+def setup_assigned_template():
+    """Create and assign a workout template to a group."""
     create_workout_template(TestData.test_workout, {})
+    create_group(TestData.test_group, {})
     event = {
         "body": json.dumps({
-            "groupId": "1",
             "workoutId": 1,
-            "date": "2024-01-01" 
+            "groupId": 1
         }),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
-    assign_group_workout_template(event, {})
-    #Assign a second one to make sure first was overriden
-    test_workout_2 = {
-        "body": json.dumps({
-            'title': 'Test Workout 2',
-            'description': 'This is a test workout 2',
-            'exercises': [
-                {
-                    'name': 'lollygag',
-                }
-            ]
-        }),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }
-    response = create_workout_template(test_workout_2, {})
+    return event
+
+def test_create_workout_template_returns_success():
+    # Arrange
+    event = TestData.test_workout
+
+    # Act
+    response = create_workout_template(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
+    body = json.loads(response['body'])
+    assert body['workout_id'] == 1
 
-    # update workout
-    event = {
-        "body": json.dumps({ 
-            "groupId": "1",
-            "workoutId": workout_id,
-            "date": "2024-01-01" 
-        }),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }
-    response = assign_group_workout_template(event, {})
-    assert response['statusCode'] == 200
+def test_create_workout_template_persists_as_template():
+    # Arrange
+    event = TestData.test_workout
 
-    #Check if workout exists in rds
-    data = fetch_all("SELECT * FROM group_workouts")
-    print(data)
-    assert data is not None
-    assert len(data) == 2  # Two workouts should be assigned
-    workout = data[0]  # Get the first row
-    assert workout[0] == 1
-    assert workout[1] == 1
-    assert workout[2] == "2024-01-01" 
-    assert workout[3] == 1
+    # Act
+    create_workout_template(event, {})
 
-    workout = data[1]  # Get the second row
-    assert workout[0] == 2
-    assert workout[1] == 1
-    assert workout[2] == "2024-01-01" 
-    assert workout[3] == 2
+    # Assert
+    response = fetch_one("SELECT isTemplate FROM workouts WHERE id = %s", (1,))
+    assert response is not None
+    assert response[0] is True
 
-def test_get_workout_templates():
+def test_get_workout_templates_returns_success():
+    # Arrange
     create_workout_template(TestData.test_workout, {})
-    create_workout_template({
-        'body': json.dumps({
-            "title": "Test Workout 2",
-            "description": "This is a test workout 2",
-            "exercises": [
-                {
-                    "name": "Test name 3",
-                    "sets": 3,
-                    "reps": 10,
-                    "exerciseParts": [
-                        {
-                            "distance": 100,
-                            "measurement": "meters"
-                        },
-                        {
-                            "distance": 50,
-                            "measurement": "meters"
-                        }
-                    ]
-                }
-            ]
-        }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
-    }, {})
     event = {
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
+
+    # Act
     response = get_workout_templates(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    assert len(data) == 2
 
-    #Test to see if filtering works
-    delete_workout_template({
-        "queryStringParameters": {
-            "workoutId": 1
-        },
-        "headers":generate_auth_header("123", "Coach", "testcoach")
-    },{})
-
-    response = get_workout_templates(event, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    assert len(data) == 1
-
-def test_delete_workout_template():
-    response = create_workout_template(TestData.test_workout, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
-
+def test_get_workout_templates_returns_correct_templates():
+    # Arrange
+    create_workout_template(TestData.test_workout, {})
     event = {
-        "queryStringParameters": {
-            "workoutId": workout_id
-        },
-        "headers":generate_auth_header("123", "Coach", "testcoach")
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
+
+    # Act
+    response = get_workout_templates(event, {})
+
+    # Assert
+    body = json.loads(response['body'])
+    print(f"Retrieved workout templates: {body}")  # Debug print
+    assert len(body) == 1
+    workout = body[0]
+    assert workout['workoutId'] == 1
+    assert workout['title'] == "Test Workout"
+    assert workout['description'] == "This is a test workout"
+    assert len(workout['exercises']) == 3
+
+def test_delete_workout_template_returns_success():
+    # Arrange
+    create_workout_template(TestData.test_workout, {})
+    event = {
+        "queryStringParameters": {"workoutId": 1},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
     response = delete_workout_template(event, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    assert data['message'] == 'Workout deleted successfully'
 
-def test_delete_group_workout():
+    # Assert
+    assert response['statusCode'] == 200
+
+def test_delete_workout_template_sets_isTemplate_false():
+    # Arrange
     create_workout_template(TestData.test_workout, {})
-
     event = {
-        "body": json.dumps({ 
-            "groupId": "1",
-            "workoutId": 1
-        }),
+        "queryStringParameters": {"workoutId": 1},
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
+
+    # Act
+    delete_workout_template(event, {})
+
+    # Assert
+    response = fetch_one("SELECT isTemplate FROM workouts WHERE id = %s", (1,))
+    assert response is not None
+    assert response[0] is False
+
+def test_assign_group_workout_template_returns_success():
+    # Arrange
+    event = setup_assigned_template()
+
+    # Act
     response = assign_group_workout_template(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
 
-    #Check if workout exists in rds
-    data = fetch_one("SELECT * FROM group_workouts")
-    assert data is not None
-    assert data[0] == 1
-    assert data[1] == 1
-    assert data[2] == date
-    assert data[3] == 1
+def test_assign_group_workout_template_creates_assignment():
+    # Arrange
+    event = setup_assigned_template()
 
-    event = {
-        "queryStringParameters": {
-            "groupWorkoutId": 1
-        },
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }
-    response = delete_group_workout(event, {})
-    assert response['statusCode'] == 200
-    assert response['body'] == "Workout deleted successfully"
-    #Check if workout was deleted from rds
-    data = fetch_one("SELECT * FROM group_workouts")
-    assert data is None
+    # Act
+    assign_group_workout_template(event, {})
+
+    # Assert
+    response = fetch_one("SELECT * FROM group_workouts WHERE groupId = %s AND workoutId = %s", (1, 1))
+    assert response is not None

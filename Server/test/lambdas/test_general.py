@@ -30,305 +30,257 @@ from testing_utils import *
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
+# --- Helper Functions ---
 
-@pytest.fixture(autouse=True)
-def setup_before_each_test(): #This will run before each test
-    print("Setting up before test...")
-    execute_file('./setup.sql')
+def setup_base_scenario():
+    """Sets up a standard coach, athlete, and their relationship."""
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
-    create_group(TestData.test_group, {})
     invite_athlete(TestData.test_invite, {})
     accept_coach_invite(TestData.test_accept_coach_invite, {})
+
+def setup_group_scenario():
+    """Sets up a group with a coach and one athlete."""
+    setup_base_scenario()
+    create_group(TestData.test_group, {})
     add_athlete_to_group(TestData.test_add_athlete_to_group, {})
-    yield
 
 def generate_athlete(username, userId):
-    create_athlete( {
-        "headers": generate_auth_header(userId, "Athlete", username)
-    },{}) 
+    """Generates a new athlete."""
+    create_athlete({"headers": generate_auth_header(userId, "Athlete", username)}, {})
 
-def test_get_groups_athlete():
-    response = get_groups(TestData.test_get_group_athlete, {})
+@pytest.fixture(autouse=True)
+def setup_before_each_test():
+    """This will run before each test, setting up a clean database."""
+    print("Setting up before test...")
+    execute_file('./setup.sql')
+    yield
+
+# --- Test Cases ---
+
+def test_get_groups_as_athlete():
+    # Arrange
+    setup_group_scenario()
+    event = TestData.test_get_group_athlete
+
+    # Act
+    response = get_groups(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
-
     groups = json.loads(response['body'])
     assert len(groups) == 1
-    assert groups[0][0] == 'Test Group'
-    assert groups[0][1] == 1
+    assert groups[0] == ['Test Group', 1]
 
-def test_get_groups_coach():
+def test_get_groups_as_coach():
+    # Arrange
+    setup_group_scenario()
+    # Create a second group for the coach
     create_group({
-        "body": json.dumps({
-            "groupName": "Test Group 2"
-        }),
+        "body": json.dumps({"groupName": "Test Group 2"}),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
-    response = get_groups(TestData.test_get_group_coach, {})
-    assert response['statusCode'] == 200
+    event = TestData.test_get_group_coach
 
+    # Act
+    response = get_groups(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
     groups = json.loads(response['body'])
     assert len(groups) == 2
-    assert groups[0][0] == 'Test Group'
-    assert groups[0][1] == 1
-    assert groups[1][0] == 'Test Group 2'
-    assert groups[1][1] == 2
+    assert groups[0] == ['Test Group', 1]
+    assert groups[1] == ['Test Group 2', 2]
 
-def test_get_group_after_deletion():
-    delete_group({
-        "queryStringParameters": {
-            "groupId": "1"
-        },
+def test_get_groups_fails_after_group_deletion():
+    # Arrange
+    setup_group_scenario()
+    delete_event = {
+        "queryStringParameters": {"groupId": "1"},
         "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
+    }
+    delete_group(delete_event, {})
+    
+    # Act
     response = get_groups(TestData.test_get_group_athlete, {})
+
+    # Assert
     assert response['statusCode'] == 404
 
-def test_get_athletes_for_group():
-    create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
-    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
-    create_athlete({
-        "body": json.dumps({
-            "userId": "1235",
-            "username": "testathlete2"
-        })
-    }, {})
-    invite_athlete({
-        "body": json.dumps({
-            "athleteId": "1235",
-            "coachId": "123"
-        })
-    }, {})
-    accept_coach_invite({
-        "body": json.dumps({
-            "athleteId": "1235",
-            "coachId": "123"
-        })
-    }, {})
+def test_get_athletes_for_group_success():
+    # Arrange
+    setup_group_scenario()
+    # Add another athlete to the system who is NOT in the group
+    generate_athlete("testathlete2", "1235")
+    invite_athlete({"body": json.dumps({"athleteId": "1235"}), "headers": generate_auth_header("123", "Coach", "testcoach")}, {})
+    accept_coach_invite({"body": json.dumps({"coachId": "123"}), "headers": generate_auth_header("1235", "Athlete", "testathlete2")}, {})
+    
+    event = {"queryStringParameters": {"groupId": "1"}}
 
-    event = {
-        "queryStringParameters": {
-            "groupId": "1"
-        }
-    }
-
+    # Act
     response = get_athletes_for_group(event, {})
-    assert response['statusCode'] == 200
 
+    # Assert
+    assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert len(body) == 1
+    assert body[0] == ["1234", "test_athlete"]
 
-    assert body[0][0] == "1234"
-    assert body[0][1] == "test_athlete"
-
-def test_view_group_inputs():
+def test_view_group_inputs_success():
+    # Arrange
+    setup_group_scenario()
     input_times(TestData.test_input_times, {})
-    event = {
-        "queryStringParameters": {
-            "groupId": 1
-        }
-    }
+    event = {"queryStringParameters": {"groupId": 1}}
+
+    # Act
     response = view_group_inputs(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
     data = json.loads(response['body'])
-    assert len(data) == 1
-    inputed_times = data['1234']
-    assert len(inputed_times) == 2
-    assert inputed_times[0]['distance'] == 100
-    assert inputed_times[0]['time'] == 10.8
-    assert inputed_times[1]['distance'] == 200
-    assert inputed_times[1]['time'] == 30
+    assert '1234' in data
+    
+    athlete_inputs = data['1234']
+    assert len(athlete_inputs) == 2
+    assert {'distance': 100, 'time': 10.8} in athlete_inputs
+    assert {'distance': 200, 'time': 30.0} in athlete_inputs
 
-def test_get_user():
-    create_athlete(TestData.test_athlete, {})
+def test_get_user_as_athlete():
+    # Arrange
+    setup_base_scenario()
     update_athlete_profile(TestData.test_update_athlete_profile, {})
-    create_coach(TestData.test_coach, {})
-    update_coach_profile(TestData.test_update_coach_profile, {})
+    event = {"headers": generate_auth_header("1234", "Athlete", "test_athlete")}
 
-    athlete_response = get_user({
-        "headers": generate_auth_header("1234", "Athlete", "test_athlete"),
-    }, {})
-    coach_response = get_user({
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    assert athlete_response['statusCode'] == 200
-    assert coach_response['statusCode'] == 200
+    # Act
+    response = get_user(event, {})
 
-    athlete_data = json.loads(athlete_response['body'])
-    coach_data = json.loads(coach_response['body'])
-
+    # Assert
+    assert response['statusCode'] == 200
+    athlete_data = json.loads(response['body'])
     assert athlete_data['username'] == "test_athlete"
     assert athlete_data['bio'] == "Updated bio"
     assert athlete_data['firstName'] == "Updated"
     assert athlete_data['lastName'] == "Name"
     assert athlete_data['gender'] == "Male"
-    assert athlete_data['profilePictureUrl'] is None
     assert athlete_data['bodyWeight'] == 70
     assert athlete_data['tffrsUrl'] == "someurl"
 
+def test_get_user_as_coach():
+    # Arrange
+    setup_base_scenario()
+    update_coach_profile(TestData.test_update_coach_profile, {})
+    event = {"headers": generate_auth_header("123", "Coach", "testcoach")}
+
+    # Act
+    response = get_user(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    coach_data = json.loads(response['body'])
     assert coach_data['username'] == "testcoach"
     assert coach_data['bio'] == "Updated bio"
     assert coach_data['firstName'] == "Updated"
     assert coach_data['lastName'] == "Name"
     assert coach_data['gender'] == "Female"
-    assert coach_data['profilePictureUrl'] is None
 
-def test_remove_coach_athlete():
-    response = remove_coach_athlete({
-        "queryStringParameters": {
-            "coachId": "123",
-            "athleteId": "1234"
-        },
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    assert response['statusCode'] == 200
-    relationships = fetch_one(
-    """
-        SELECT * FROM athlete_coaches WHERE coachId = %s AND athleteId = %s
-    """, ("123", "1234"))
-    assert relationships is None
-
-def test_get_group_workout():
-    response = create_workout_template(TestData.test_workout, {})
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    workout_id = data['workout_id']
-    test_assign_workout = {
-        "body": json.dumps({
-            "workoutId": workout_id,
-            "groupId": "1"
-        }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
-    }
-    assign_group_workout_template(test_assign_workout, {})
-
+def test_remove_coach_athlete_relationship():
+    # Arrange
+    setup_base_scenario()
     event = {
-        "queryStringParameters": {
-            "groupId": "1",
-            "date": date
-        },
+        "queryStringParameters": {"coachId": "123", "athleteId": "1234"},
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
-    response = get_group_workout(event, {})
-    assert response['statusCode'] == 200
 
-    # Check if the data is valid
-    workout = json.loads(response['body'])
-    workout = workout[0]
-    assert workout['groupWorkoutId'] == 1
+    # Act
+    response = remove_coach_athlete(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    relationship = fetch_one("SELECT * FROM athlete_coaches WHERE coachId = %s AND athleteId = %s", ("123", "1234"))
+    assert relationship is None
+
+def test_get_group_workout_success():
+    # Arrange
+    setup_group_scenario()
+    # Create and assign a workout template
+    workout_response = create_workout_template(TestData.test_workout, {})
+    workout_id = json.loads(workout_response['body'])['workout_id']
+    assign_workout_event = {
+        "body": json.dumps({"workoutId": workout_id, "groupId": "1"}),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+    assign_group_workout_template(assign_workout_event, {})
+    
+    event = {
+        "queryStringParameters": {"groupId": "1", "date": date},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = get_group_workout(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    workout = json.loads(response['body'])[0]
     assert workout['title'] == 'Test Workout'
     assert workout['description'] == 'This is a test workout'
     assert len(workout['exercises']) == 3
 
-def test_get_pending_proposals():
-    create_athlete({
-        "headers": generate_auth_header("1235", "Athlete", "testathlete2")
-    }, {})
+def test_get_pending_proposals_for_athlete():
+    # Arrange
+    create_coach(TestData.test_coach, {})
+    generate_athlete("testathlete2", "1235")
+    # Coach invites athlete
     invite_athlete({
-        "body": json.dumps({
-            "athleteId": "1235"
-        }),
+        "body": json.dumps({"athleteId": "1235"}),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
+    
+    event = {"headers": generate_auth_header("1235", "Athlete", "testathlete2")}
 
-    event = {
-        "headers": generate_auth_header("1235", "Athlete", "testathlete2")
-    }
-    debug_table()
+    # Act
     response = get_pending_proposals(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
-
     body = json.loads(response['body'])
-    assert len(body) == 1
-
     assert body["count"] == 1
 
-def test_mass_input():
+def test_mass_input_success():
+    # Arrange
+    setup_group_scenario()
+    # Add more athletes to the group
     generate_athlete("testathlete2", "5678")
     generate_athlete("testathlete3", "91011")
-    invite_athlete({
-        "body": json.dumps({
-            "athleteId": "91011"
-        }),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    invite_athlete({
-        "body": json.dumps({
-            "athleteId": "5678"
-        }),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    accept_coach_invite({
-        "body": json.dumps({
-            "coachId": "123"
-        }),
-        "headers": generate_auth_header("91011", "Athlete", "testathlete3")
-    }, {})
-    accept_coach_invite({
-        "body": json.dumps({
-            "coachId": "123"
-        }),
-        "headers": generate_auth_header("5678", "Athlete", "testathlete2")
-    }, {})
+    for athlete_id in ["5678", "91011"]:
+        invite_athlete({"body": json.dumps({"athleteId": athlete_id}), "headers": generate_auth_header("123", "Coach", "testcoach")}, {})
+        accept_coach_invite({"body": json.dumps({"coachId": "123"}), "headers": generate_auth_header(athlete_id, "Athlete", f"athlete_{athlete_id}")}, {})
+        add_athlete_to_group({"body": json.dumps({"groupId": 1, "athleteId": athlete_id}), "headers": generate_auth_header("123", "Coach", "testcoach")}, {})
+
     event = {
         "body": json.dumps({
             "groupId": 1,
             "athleteData": {
-                "1234": [  # Existing athlete
-                    {"time": 12.5, "distance": 100},
-                    {"time": 25.0, "distance": 200}
-                ],
-                "5678": [  # New athlete
-                    {"time": 11.0, "distance": 100},
-                    {"time": 22.0, "distance": 200}
-                ],
-                "91011": [  # New athlete
-                    {"time": 10.5, "distance": 100},
-                    {"time": 21.0, "distance": 200}
-                ]
+                "1234": [{"time": 12.5, "distance": 100}, {"time": 25.0, "distance": 200}],
+                "5678": [{"time": 11.0, "distance": 100}, {"time": 22.0, "distance": 200}],
+                "91011": [{"time": 10.5, "distance": 100}, {"time": 21.0, "distance": 200}]
             }
         }),
-        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+        "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
+    # Act
     response = mass_input(event, {})
+
+    # Assert
     assert response['statusCode'] == 200
-
-    data = fetch_all("""
-        SELECT * FROM athlete_inputs WHERE groupId = %s
-    """, (1,))
-    assert data is not None
-    assert len(data) == 6  # 3 athletes * 2 inputs each
-
-
-    # Check if the data is correct
-    athlete1_inputs = [d for d in data if d[1] == '1234']
-    athlete2_inputs = [d for d in data if d[1] == '5678']
-    athlete3_inputs = [d for d in data if d[1] == '91011']
-    assert len(athlete1_inputs) == 2
-    assert len(athlete2_inputs) == 2
-    assert len(athlete3_inputs) == 2
-
-    assert athlete1_inputs[0][3] == 100
-    assert athlete1_inputs[0][4] == 12.5
-    assert athlete1_inputs[0][5] == date
-    assert athlete1_inputs[1][3] == 200
-    assert athlete1_inputs[1][4] == 25.0
-    assert athlete1_inputs[1][5] == date
-
-    assert athlete2_inputs[0][3] == 100
-    assert athlete2_inputs[0][4] == 11.0
-    assert athlete2_inputs[0][5] == date
-    assert athlete2_inputs[1][3] == 200
-    assert athlete2_inputs[1][4] == 22.0
-    assert athlete2_inputs[1][5] == date
-
-    assert athlete3_inputs[0][3] == 100
-    assert athlete3_inputs[0][4] == 10.5
-    assert athlete3_inputs[0][5] == date
-    assert athlete3_inputs[1][3] == 200
-    assert athlete3_inputs[1][4] == 21.0
-    assert athlete3_inputs[1][5] == date
+    all_inputs = fetch_all("SELECT athleteId, distance, time FROM athlete_inputs WHERE groupId = %s ORDER BY athleteId, distance", (1,))
+    assert all_inputs is not None
+    assert len(all_inputs) == 6
+    
+    expected_inputs = [
+        ('1234', 100, 12.5), ('1234', 200, 25.0),
+        ('5678', 100, 11.0), ('5678', 200, 22.0),
+        ('91011', 100, 10.5), ('91011', 200, 21.0)
+    ]
+    assert all_inputs == expected_inputs

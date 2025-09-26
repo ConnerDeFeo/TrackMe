@@ -90,7 +90,7 @@ const ExerciseCreation = ({ excercise, setExercises, idx }:
     return (
       <View>
         <Text className="text-lg font-bold">{field === 'sets' ? 'Sets' : 'Reps'}</Text>
-        <View className={`border rounded-md bg-white h-12 ${excercise[field] && excercise[field] > 0 ? 'border-gray-300' : 'border-red-500'}`}>
+        <View className={`border rounded-md bg-white h-12 flex items-center ${excercise[field] && excercise[field] > 0 ? 'border-gray-300' : 'border-red-500'}`}>
           <TextInput className="text-center" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => handleSetsRepsChange(field, text)} />
         </View>
       </View>

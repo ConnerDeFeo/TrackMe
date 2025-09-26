@@ -1,5 +1,6 @@
 import { TextInput } from "react-native";
 
+// Search bar component for any generic purpose search functionality
 const SearchBar: React.FC<{ searchTerm: string; handleSearch: (term: string) => void, placeholder: string }> 
 = ({ searchTerm, handleSearch, placeholder }) => {
     return (

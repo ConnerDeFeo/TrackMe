@@ -10,10 +10,11 @@ def assign_group_workout(event, context):
         user_info = get_user_info(event)
         coach_id = user_info["userId"]
         group_id = body['groupId']
-        title = body['title']
+        title = body.get('title', '')
         description = body.get('description', '')
         sections = body.get('sections', [])
         group_workout_id = body.get('groupWorkoutId')
+        date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         jsonSections = json.dumps(sections)
         
@@ -62,10 +63,10 @@ def assign_group_workout(event, context):
             # Else linkl the new workout to the group
             execute_commit(
                 """
-                    INSERT INTO group_workouts (groupId, workoutId)
-                    VALUES (%s, %s)
+                    INSERT INTO group_workouts (groupId, workoutId, date)
+                    VALUES (%s, %s, %s)
                 """,
-                (group_id, workout_id[0])
+                (group_id, workout_id[0], date)
             )
             return {
                 'statusCode': 200,

@@ -605,6 +605,22 @@ Resources:
   #
   #
   #
+  GetWeeklyScheduleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/get_weekly_schedule/
+      Handler: get_weekly_schedule.get_weekly_schedule
+      Events:
+        GetWeeklyScheduleApi:
+          Type: Api
+          Properties:
+            Path: /general/get_weekly_schedule/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   MassInput:
     Type: AWS::Serverless::Function
     Properties:

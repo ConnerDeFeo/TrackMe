@@ -64,6 +64,7 @@ locals {
     "get_group_workout",
     "get_pending_proposals",
     "mass_input",
+    "get_weekly_schedule"
   ]
 }
 

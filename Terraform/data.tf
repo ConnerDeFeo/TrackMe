@@ -213,7 +213,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/mass_input"
       output_path = "${path.module}/../Server/lambdas/general/zips/mass_input.zip"
     }
-  }
+    "get_weekly_schedule" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_weekly_schedule"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_weekly_schedule.zip"
+    }
 }
 
 # Archive files using for_each

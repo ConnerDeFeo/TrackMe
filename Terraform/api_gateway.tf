@@ -20,6 +20,7 @@ locals {
     "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"], method = "GET" }
     "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
     "general/get_pending_proposals" = { lambda = aws_lambda_function.lambdas["get_pending_proposals"], method = "GET" }
+    "general/get_weekly_schedule" = { lambda = aws_lambda_function.lambdas["get_weekly_schedule"], method = "GET" }
 
     # POST Lambdas
     "athletes/request_coach" = { lambda = aws_lambda_function.lambdas["request_coach"], method = "POST" }

@@ -173,11 +173,11 @@ const ViewGroup = () => {
       {/* Group deletion confirmation controls */}
       {deletionMode ? (
         <View className="flex flex-row justify-between items-center mt-4">
-          <Pressable onPress={handleGroupDeletion}>
-            <Text className="trackme-red text-md">Confirm</Text>
-          </Pressable>
           <Pressable onPress={() => setDeletionMode(false)}>
             <Text className="text-md trackme-blue">Cancel</Text>
+          </Pressable>
+          <Pressable onPress={handleGroupDeletion}>
+            <Text className="trackme-red text-md">Confirm</Text>
           </Pressable>
         </View>
       ) : (

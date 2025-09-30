@@ -1,6 +1,7 @@
 import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
+from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.delete_group.delete_group import delete_group
@@ -24,8 +25,9 @@ from lambdas.coach.create_workout_template.create_workout_template import create
 from rds import execute_file, fetch_one, fetch_all
 from data import TestData
 from lambdas.athlete.update_athlete_profile.update_athlete_profile import update_athlete_profile
+from lambdas.general.get_weekly_schedule.get_weekly_schedule import get_weekly_schedule
 from lambdas.general.mass_input.mass_input import mass_input
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from testing_utils import *
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -44,6 +46,60 @@ def setup_group_scenario():
     setup_base_scenario()
     create_group(TestData.test_group, {})
     add_athlete_to_group(TestData.test_add_athlete_to_group, {})
+
+def setup_get_weekly_schedule_scenario():
+    five_days_ago = (datetime.now(timezone.utc) - timedelta(days=5)).strftime("%Y-%m-%d")
+    six_days_ago = (datetime.now(timezone.utc) - timedelta(days=6)).strftime("%Y-%m-%d")
+    # Arrange
+    setup_group_scenario()
+    # Create and assign a workout template
+    create_workout_template(TestData.test_workout, {})
+    assign_group_workout_template(TestData.test_assign_group_workout, {})
+    assign_group_workout({
+        "body": json.dumps({
+            'title': 'Test Workout 2', 
+            'description': 'This is a test workout 2',
+            'sections': [
+                {
+                    'name': 'Test2',
+                    'sets': 2,
+                }
+            ],
+            'groupId': 1,
+            'date': five_days_ago
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    assign_group_workout({
+        "body": json.dumps({
+            'title': 'Test Workout 3', 
+            'description': 'This is a test workout 3',
+            'sections': [
+                {
+                    'name': 'Test3',
+                    'sets': 5,
+                }
+            ],
+            'groupId': 1,
+            'date': six_days_ago
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    assign_group_workout({
+        "body": json.dumps({
+            'title': 'Test Workout 4', 
+            'description': 'This is a test workout 4',
+            'sections': [
+                {
+                    'name': 'Test4',
+                    'sets': 5,
+                }
+            ],
+            'groupId': 1,
+            'date': six_days_ago
+        }),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }, {})
 
 def generate_athlete(username, userId):
     """Generates a new athlete."""
@@ -284,3 +340,49 @@ def test_mass_input_success():
         ('91011', 100, 10.5), ('91011', 200, 21.0)
     ]
     assert all_inputs == expected_inputs
+
+def test_get_weekly_schedule_coach_success():
+    five_days_ago = (datetime.now(timezone.utc) - timedelta(days=5)).strftime("%Y-%m-%d")
+    six_days_ago = (datetime.now(timezone.utc) - timedelta(days=6)).strftime("%Y-%m-%d")
+    # Arrange
+    setup_get_weekly_schedule_scenario()
+
+    event = {
+        "queryStringParameters": {"startDate": (datetime.now(timezone.utc) - timedelta(days=8)).strftime("%Y-%m-%d"), "groupId": "1"},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = get_weekly_schedule(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    debug_table()
+    assert len(body) == 2 # Should return two workouts within the week
+    assert five_days_ago in body
+    assert six_days_ago in body
+    assert len(body[six_days_ago])==2
+
+def test_get_weekly_schedule_athlete_success():
+    five_days_ago = (datetime.now(timezone.utc) - timedelta(days=5)).strftime("%Y-%m-%d")
+    six_days_ago = (datetime.now(timezone.utc) - timedelta(days=6)).strftime("%Y-%m-%d")
+    # Arrange
+    setup_get_weekly_schedule_scenario()
+
+    event = {
+        "queryStringParameters": {"startDate": (datetime.now(timezone.utc) - timedelta(days=8)).strftime("%Y-%m-%d"), "groupId": "1"},
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = get_weekly_schedule(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    debug_table()
+    assert len(body) == 2 # Should return two workouts within the week
+    assert five_days_ago in body
+    assert six_days_ago in body
+    assert len(body[six_days_ago])==2

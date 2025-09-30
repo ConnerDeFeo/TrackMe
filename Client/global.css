@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-.trackme-blue{
+.bg-trackme{
+    background-color: #007AFF;
+}
+.color-trackme{
     color: #007AFF;
 }

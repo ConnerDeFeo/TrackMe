@@ -47,7 +47,7 @@ Amplify.configure(awsConfig);
 
 function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
   return ()=>(
-      <ScrollView className='bg-white flex-1' showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+      <ScrollView className='bg-white' showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         {content}
       </ScrollView>
     ); 
@@ -75,7 +75,7 @@ const getPageTitle = (routeName:string, params:any) => {
 const AthleteStack = createNativeStackNavigator();
 const AthleteLayoutWrapper = () => {
   return (
-    <View className='flex-1 bg-white'>
+    <View className='flex-1'>
       <AthleteStack.Navigator initialRouteName='AthleteGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
@@ -105,7 +105,7 @@ const AthleteLayoutWrapper = () => {
 const CoachStack = createNativeStackNavigator();
 const CoachLayoutWrapper = () => {
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1">
       <CoachStack.Navigator initialRouteName='CoachGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);

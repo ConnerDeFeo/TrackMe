@@ -26,7 +26,7 @@ const CoachWorkoutService = {
                 'groupId': groupId, 
                 'title': workoutData.title,
                 'description': workoutData.description,
-                'exercises': workoutData.exercises,
+                'sections': workoutData.sections,
             };
         if (workoutData.workoutId){
             payload['workoutId'] = workoutData.workoutId;

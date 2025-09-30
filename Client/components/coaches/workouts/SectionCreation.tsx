@@ -93,7 +93,7 @@ const SectionCreation = ({ section, setSections, idx }:
           </TouchableOpacity>
         </View>
         <TextInput 
-          className="border border-gray-300 rounded-md p-3 bg-white text-black"
+          className={`border rounded-md p-3 bg-white text-black ${section.name ? 'border-gray-300' : 'border-red-500'}`}
           value={section.name} 
           onChangeText={handleNameChange} 
           placeholder="e.g., Warm-up, Main Set, Cool-down"

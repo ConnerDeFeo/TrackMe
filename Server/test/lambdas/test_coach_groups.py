@@ -244,7 +244,7 @@ def test_assign_group_workout_returns_success():
             "groupId": 1,
             "title": "Test Workout",
             "description": "This is a test workout",
-            "exercises": [{"name": "Push Ups", "sets": 3, "reps": 10}]
+            "sections": [{"name": "Push Ups", "sets": 3, "reps": 10}]
         }),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
@@ -263,7 +263,7 @@ def test_assign_group_workout_creates_workout_and_assignment():
             "groupId": 1,
             "title": "Test Workout",
             "description": "This is a test workout",
-            "exercises": [{"name": "Push Ups", "sets": 3, "reps": 10}]
+            "sections": [{"name": "Push Ups", "sets": 3, "reps": 10}]
         }),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
@@ -278,6 +278,7 @@ def test_assign_group_workout_creates_workout_and_assignment():
     group_workout = fetch_one("SELECT * FROM group_workouts WHERE groupId = %s AND workoutId = %s", (1, 1))
     assert group_workout is not None
 
-    workout = fetch_one("SELECT isTemplate FROM workouts WHERE id = %s", (1,))
+    workout = fetch_one("SELECT isTemplate, sections FROM workouts WHERE id = %s", (1,))
     assert workout is not None
     assert workout[0] is False
+    assert workout[1] == [{"name": "Push Ups", "sets": 3, "reps": 10}]

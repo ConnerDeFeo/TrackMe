@@ -9,7 +9,7 @@ def get_athletes(event, context):
         coach_id = user_info['userId']
         #Fetch athletes from the database
         athletes = fetch_all("""
-            SELECT a.userId, a.username
+            SELECT a.userId, a.username, a.firstName, a.lastName
             FROM athletes a
             JOIN athlete_coaches ac ON a.userId = ac.athleteId
             JOIN coaches c ON ac.coachId = c.userId

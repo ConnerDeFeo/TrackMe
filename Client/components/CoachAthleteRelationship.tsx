@@ -1,5 +1,6 @@
 import { Text, Pressable, View } from "react-native";
 import GeneralService from "../services/GeneralService";
+import UserDisplay from "./display/UserDisplay";
 
 // Component that renders individual coach-athlete relationships on display pages
 // Shows user name and provides removal functionality
@@ -19,7 +20,7 @@ const CoachAthleteRelationship:React.FC<{ user: string[]; fetchUsers: () => void
     return (
         <View className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex flex-row justify-between items-center">
             {/* Display user name (user[1] contains the name) */}
-            <Text className="text-lg font-medium">{user[1]}</Text>
+            <UserDisplay username={user[1]} firstName={user[2]} lastName={user[3]} />
             
             {/* Remove button - uses user[0] as the ID */}
             <Pressable

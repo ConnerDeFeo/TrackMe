@@ -8,6 +8,7 @@ import GeneralService from "../../../services/GeneralService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import DateService from "../../../services/DateService";
 import ArrowButton from "../../../components/ArrowButton";
+import UserDisplay from "../../../components/display/UserDisplay";
 
 // Page component for viewing and managing a coach's group
 const ViewGroup = () => {
@@ -147,14 +148,7 @@ const ViewGroup = () => {
         {/* Show participants or placeholder text */}
         {participants.length > 0 ? (
           participants.map((participant) => (
-            <View
-              key={participant[0]}
-              className="py-2 border-b border-gray-100 last:border-b-0 flex flex-row justify-between items-center"
-            >
-              <Text className="text-gray-800 font-medium">
-                {participant[1]}
-              </Text>
-            </View>
+            <UserDisplay key={participant[0]} username={participant[1]} firstName={participant[2]} lastName={participant[3]} className="mb-4 ml-2" />
           ))
         ) : (
           <Text className="text-gray-500 italic">

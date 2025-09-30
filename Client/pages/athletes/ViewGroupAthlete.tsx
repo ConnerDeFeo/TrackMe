@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import DisplayWorkout from "../../components/display/DisplayWorkout";
 import GeneralService from "../../services/GeneralService";
+import UserDisplay from "../../components/display/UserDisplay";
 
 //Pages that displays an athletes groupp for a given date
 const ViewGroupAthlete = ()=>{
@@ -37,9 +38,9 @@ const ViewGroupAthlete = ()=>{
                 onPress={() =>
                     navigation.navigate('GroupSchedule', { groupId, groupName })
                 }
-                className="rounded-lg py-3"
+                className="rounded-lg py-3 px-4"
             >
-                <Text className="trackme-blue font-semibold text-center">
+                <Text className="trackme-blue font-semibold">
                     Schedule
                 </Text>
             </Pressable>
@@ -48,8 +49,8 @@ const ViewGroupAthlete = ()=>{
             ))}
             <Text className="text-2xl font-bold mt-2 mb-4">Athletes</Text>
             <View className="gap-y-2">
-                {athletes.map((athlete, index) => (
-                    <Text key={index} className="text-lg font-medium text-gray-800 rounded-lg p-3 border">{athlete[1]}</Text>
+                {athletes.map((athlete) => (
+                    <UserDisplay key={athlete[0]} username={athlete[1]} firstName={athlete[2]} lastName={athlete[3]} className="mb-2 border border-gray-300 rounded-lg p-2" />
                 ))}
             </View>
         </View>

@@ -42,6 +42,7 @@ import { AuthContext } from './context/AuthContext';
 import { AccountType } from './assets/constants/Enums';
 import CoachFooter from './components/coaches/CoachFooter';
 import AthleteFooter from './components/athletes/AthleteFooter';
+import GroupSchedule from './pages/coaches/groups/GroupSchedule';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -131,6 +132,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
         <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <CoachStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
+        <CoachStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />
       </CoachStack.Navigator>
       <CoachFooter />
     </View>

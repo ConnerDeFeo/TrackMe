@@ -91,12 +91,12 @@ const ViewGroup = () => {
       <View className="flex flex-row items-center justify-between mb-2 mx-4">
         <Pressable
           onPress={() =>
-            navigation.navigate('AssignWorkout', { groupId, groupName })
+            navigation.navigate('GroupSchedule', { groupId, groupName })
           }
           className="rounded-lg py-3"
         >
           <Text className="trackme-blue font-semibold text-center">
-            Send Workout
+            Schedule
           </Text>
         </Pressable>
 

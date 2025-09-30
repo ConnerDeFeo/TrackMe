@@ -5,6 +5,7 @@ import GeneralService from "../services/GeneralService";
 import usePersistentState from "../hooks/usePersistentState";
 import InputTracking from "../components/InputTracking";
 import TimeDistanceDisplay from "../components/TimeDistanceDisplay";
+import DateService from "../services/DateService";
 
 const MassInput = () => {
   const route = useRoute();
@@ -63,7 +64,7 @@ const MassInput = () => {
     }
 
     const handleInputSubmission = async () => {
-        const date = new Date().toISOString().split("T")[0];
+        const date = DateService.getCurrentDate();
         const resp = await GeneralService.massInput(currentInputs, groupId, date);
         if(resp.ok){
           setCurrentInputs({});

@@ -90,7 +90,7 @@ def test_get_workout_templates_returns_correct_templates():
     assert workout['workoutId'] == 1
     assert workout['title'] == "Test Workout"
     assert workout['description'] == "This is a test workout"
-    assert len(workout['exercises']) == 3
+    assert len(workout['sections']) == 3
 
 def test_delete_workout_template_returns_success():
     # Arrange

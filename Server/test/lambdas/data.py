@@ -44,19 +44,31 @@ class TestData:
         "body": json.dumps({
             'title': 'Test Workout', 
             'description': 'This is a test workout',
-            'exercises': [
+            'sections': [
                 {
                     'name': 'Test name',
                     'sets': 3,
-                    'reps': 10,
-                    'exerciseParts': [
+                    'exercises': [
                         {
                             'distance': 100,
-                            'measurement': 'meters'
+                            'measurement': 'meters',
+                            'type': 'run'
+                        },
+                        {
+                            'type': 'rest',
+                            'duration': 60,
+                            'description': 'Walk back'
                         },
                         {
                             'distance': 50,
-                            'measurement': 'meters'
+                            'measurement': 'meters',
+                            'type': 'run',
+                            'reps': 2
+                        },
+                        {
+                            'type': 'strength',
+                            'description': 'Push-ups',
+                            'reps': 10
                         }
                     ],
                     "inputs":True
@@ -64,7 +76,6 @@ class TestData:
                 {
                     'name': 'Test name 2',
                     'sets': 2,
-                    'reps': 15,
                     'exerciseParts': [
                         {
                             'distance': 200,

@@ -12,21 +12,21 @@ def assign_group_workout(event, context):
         group_id = body['groupId']
         title = body['title']
         description = body.get('description', '')
-        exercises = body.get('exercises', [])
+        sections = body.get('sections', [])
         group_workout_id = body.get('groupWorkoutId')
 
-        jsonExercises = json.dumps(exercises)
+        jsonSections = json.dumps(sections)
         
         if group_workout_id:
             # If workoutId is provided, update the existing workout
             updated = execute_commit_fetch_one(
                 """
                     UPDATE workouts
-                    SET title = %s, description = %s, exercises = %s
+                    SET title = %s, description = %s, sections = %s
                     WHERE id = (SELECT workoutId FROM group_workouts WHERE id = %s) AND coachId = %s AND isTemplate = %s
                     RETURNING id
                 """,
-                (title, description, jsonExercises, group_workout_id, coach_id, False)
+                (title, description, jsonSections, group_workout_id, coach_id, False)
             )
             # Only return for updating non workout template
             if updated:
@@ -37,11 +37,11 @@ def assign_group_workout(event, context):
         # Create a new workout and fetch the id
         workout_id = execute_commit_fetch_one(
             """
-                INSERT INTO workouts (coachId, title, description, exercises, isTemplate)
+                INSERT INTO workouts (coachId, title, description, sections, isTemplate)
                 VALUES (%s, %s, %s, %s, %s)
                 RETURNING id
             """,
-            (coach_id, title, description, jsonExercises, False)
+            (coach_id, title, description, jsonSections, False)
         )
         if workout_id:
             # This implies the workout is a workout template and the previous group workout needs to be updated

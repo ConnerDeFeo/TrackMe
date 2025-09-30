@@ -48,7 +48,7 @@ const HistoricalData = ()=>{
                             return (
                                 <View key={athleteId} className="mb-4">
                                     <Text className="text-md font-bold mb-2">{athleteData.username}</Text>
-                                    <View className="space-y-2">
+                                    <View className="gap-y-2">
                                         {athleteData.inputs.map((input: Record<string, any>, index: number) => (
                                         <View key={index} className="bg-gray-100 rounded-lg p-3 flex-row justify-between items-center">
                                             <Text className="text-gray-800 font-medium">Distance: {input.distance}m</Text>

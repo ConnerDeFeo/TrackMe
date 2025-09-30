@@ -79,7 +79,7 @@ const ConfirmEmail = () => {
                 </View>
             ) : null}
             <View className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 gap-y-6">
-                <View className="items-center space-y-2">
+                <View className="items-center gap-y-2">
                     <Text className="text-2xl font-bold text-gray-800">Confirm Email</Text>
                     <Text className="text-gray-600 text-center">
                     Enter the verification code sent to your email.

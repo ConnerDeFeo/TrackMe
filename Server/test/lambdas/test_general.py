@@ -224,7 +224,7 @@ def test_get_group_workout_success():
     workout = json.loads(response['body'])[0]
     assert workout['title'] == 'Test Workout'
     assert workout['description'] == 'This is a test workout'
-    assert len(workout['exercises']) == 3
+    assert len(workout['sections']) == 3
 
 def test_get_pending_proposals_for_athlete():
     # Arrange

@@ -76,7 +76,7 @@ CREATE TABLE workouts(
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
     title VARCHAR(50) NOT NULL,
     description TEXT,
-    exercises JSONB,
+    sections JSONB,
     isTemplate BOOLEAN DEFAULT FALSE
 );
 

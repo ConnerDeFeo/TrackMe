@@ -13,7 +13,7 @@ def get_group_workout(event,context):
         #Get the workout title for the given date
         workouts = fetch_all(
             """
-                SELECT gw.id, w.title, w.description, w.exercises
+                SELECT gw.id, w.title, w.description, w.sections
                 FROM group_workouts gw
                 JOIN workouts w ON gw.workoutId = w.id
                 JOIN groups g ON gw.groupId = g.id
@@ -29,7 +29,7 @@ def get_group_workout(event,context):
                     'groupWorkoutId': workout[0],
                     'title': workout[1],
                     'description': workout[2],
-                    'exercises': workout[3]
+                    'sections': workout[3]
                 })
             return {
                 'statusCode': 200,

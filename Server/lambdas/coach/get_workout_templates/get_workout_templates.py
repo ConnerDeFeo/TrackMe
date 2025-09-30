@@ -11,7 +11,7 @@ def get_workout_templates(event, context):
         #Grab all workouts accosiated with the coach_id
         workouts = fetch_all(
             """
-                SELECT id, title, description, exercises 
+                SELECT id, title, description, sections 
                 FROM workouts 
                 WHERE coachId = %s AND isTemplate = %s
             """,
@@ -25,7 +25,7 @@ def get_workout_templates(event, context):
                     'workoutId': workout[0],
                     'title': workout[1],
                     'description': workout[2],
-                    'exercises': workout[3]
+                    'sections': workout[3]
                 }
                 converted_workouts.append(converted_workout)
             return {

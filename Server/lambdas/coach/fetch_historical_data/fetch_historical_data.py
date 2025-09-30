@@ -12,7 +12,7 @@ def fetch_historical_data(event, context):
         # Grab all workouts for the given coach on the specified date
         workouts = fetch_all(
             """
-                SELECT g.id, g.name, w.title, w.description, w.exercises 
+                SELECT g.id, g.name, w.title, w.description, w.sections 
                 FROM group_workouts gw
                 JOIN groups g ON gw.groupId = g.id
                 JOIN workouts w ON gw.workoutId = w.id
@@ -45,7 +45,7 @@ def fetch_historical_data(event, context):
             filtered_data[group_id]["workouts"].append({
                 "title": workout[2],
                 "description": workout[3],
-                "exercises": workout[4]
+                "sections": workout[4]
             })
         for input in athlete_inputs:
             group_id = input[0]

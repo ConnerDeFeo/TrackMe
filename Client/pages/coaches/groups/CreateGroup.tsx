@@ -30,7 +30,7 @@ const CreateGroup = () => {
 
     return (
         <View className="flex-1 justify-center items-center px-6 bg-gray-50 mt-4">
-            <View className="w-full max-w-sm space-y-4">
+            <View className="w-full max-w-sm gap-y-4">
             <TextInput
                 placeholder="Enter Group Name"
                 value={groupName}

@@ -1,0 +1,143 @@
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import Variables from "../../../assets/constants/Variables";
+import ExerciseCreation from "./ExerciseCreation";
+import Section from "../../../types/Sections";
+import { Exercise } from "../../../types/Exercise";
+import { ExerciseType } from "../../../assets/constants/Enums";
+
+/**
+ * Component for creating and editing a single exercise section within a workout.
+ * @param {object} props - The component props.
+ * @param {Section} props.section - The section object being created or edited.
+ * @param {React.Dispatch<React.SetStateAction<Section[]>>} props.setSections - The state setter function for the list of sections.
+ * @param {number} props.idx - The index of this section in the parent sections array.
+ */
+const SectionCreation = ({ section, setSections, idx }: 
+  { section: Section; setSections: React.Dispatch<React.SetStateAction<Section[]>>; idx: number; }) => {
+
+  /**
+   * Handles adding a new exercise of a specific type to the current section.
+   */
+  const handleExerciseAddition = (type: ExerciseType) => {
+    const exercises = section.exercises ? [...section.exercises] : [];
+    let newExercise: Exercise;
+
+    switch (type) {
+      case ExerciseType.Run:
+        newExercise = { type: ExerciseType.Run, distance: 0, measurement: Variables.meters };
+        break;
+      case ExerciseType.Strength:
+        newExercise = { type: ExerciseType.Strength, description: '', reps: 0 };
+        break;
+      case ExerciseType.Rest:
+        newExercise = { type: ExerciseType.Rest, duration: 0 };
+        break;
+    }
+
+    exercises.push(newExercise);
+    
+    setSections((prev) => prev.map((s, index) => 
+      index === idx ? { ...s, exercises: exercises } : s
+    ));
+  };
+
+  /**
+   * Handles removing an exercise from the current section.
+   */
+  const handleExerciseRemoval = (partIdx: number) => {
+    if (section.exercises) {
+      const updatedExercises = [...section.exercises];
+      updatedExercises.splice(partIdx, 1);
+      setSections((prev) => prev.map((s, index) => 
+        index === idx ? { ...s, exercises: updatedExercises } : s
+      ));
+    }
+  };
+
+  /**
+   * Handles changes to the 'sets' input field.
+   */
+  const handleSetsChange = (value: string) => {
+    const num = value ? parseInt(value, 10) : 0;
+    if (!isNaN(num) && num <= 99) {
+      setSections(prevSections =>
+        prevSections.map((s, index) =>
+          index === idx ? { ...s, sets: num } : s
+        )
+      );
+    }
+  };
+
+  /**
+   * Handles changes to the section's name.
+   */
+  const handleNameChange = (text: string) => {
+    setSections((prev) => prev.map((s, index) => (index === idx ? { ...s, name: text } : s)));
+  };
+
+  /**
+   * Handles deleting the entire section.
+   */
+  const handleSectionDeletion = () => {
+    setSections((prev) => prev.filter((_, index) => index !== idx));
+  };
+
+  return (
+    <View className="border-2 bg-white rounded-lg shadow-lg my-3 p-4">
+      {/* Section Name and Remove Button */}
+      <View className="mb-4">
+        <View className="flex-row justify-between items-center">
+          <Text className="text-lg font-bold mb-2">Section Name</Text>
+          <TouchableOpacity onPress={handleSectionDeletion}>
+            <Text className="text-[#E63946]">Remove Section</Text>
+          </TouchableOpacity>
+        </View>
+        <TextInput 
+          className="border border-gray-300 rounded-md p-3 bg-white text-black"
+          value={section.name} 
+          onChangeText={handleNameChange} 
+          placeholder="e.g., Warm-up, Main Set, Cool-down"
+        />
+      </View>
+
+      {/* Add Exercise Buttons */}
+      <View className="flex-row justify-around items-center mb-4 border-y border-gray-200 py-3">
+          <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Run)}>
+            <Text className="font-medium text-[#457B9D]">Add Run</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Strength)}>
+            <Text className="font-medium text-[#457B9D]">Add Strength</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Rest)}>
+            <Text className="font-medium text-[#457B9D]">Add Rest</Text>
+          </TouchableOpacity>
+      </View>
+
+      {/* Sets Input */}
+      <View className="flex-row justify-between w-[75%] mx-auto items-center mb-3">
+        <Text className="text-lg font-bold">Sets</Text>
+        <View className={`border rounded-md bg-white h-12 flex items-center justify-center w-20 ${section.sets && section.sets > 0 ? 'border-gray-300' : 'border-red-500'}`}>
+          <TextInput 
+            className="text-center text-lg" 
+            value={section.sets ? `${section.sets}` : ''} 
+            onChangeText={handleSetsChange} 
+            keyboardType="numeric" 
+            maxLength={2} 
+          />
+        </View>
+      </View>
+      
+      {/* Dynamically rendered Exercises */}
+      {section.exercises && section.exercises.length > 0 &&
+        <ExerciseCreation 
+          exercises={section.exercises} 
+          handleExerciseRemoval={handleExerciseRemoval} 
+          setSections={setSections} 
+          idx={idx} 
+        />
+      }
+    </View>
+  );
+};
+
+export default SectionCreation;

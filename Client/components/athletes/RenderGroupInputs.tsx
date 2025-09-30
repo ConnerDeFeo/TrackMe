@@ -6,6 +6,7 @@ import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 import InputTracking from "../InputTracking";
 import TimeDistanceDisplay from "../TimeDistanceDisplay";
 import { useNavigation } from "@react-navigation/native";
+import DateService from "../../services/DateService";
 
 //Component used to render input fields for a specific group
 /**
@@ -51,7 +52,7 @@ const RenderGroupInputs: React.FC<
     const navigation = useNavigation<any>();
 
     const handleInputSubmission = async () => {
-        const date = new Date().toISOString().split("T")[0];
+        const date = DateService.getCurrentDate();
         const userId = await UserService.getUserId();
         if(userId){
             //All athletes in workout group plus the logged in user

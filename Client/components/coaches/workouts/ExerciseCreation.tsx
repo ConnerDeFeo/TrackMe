@@ -1,163 +1,133 @@
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import Exercise from "../../../types/Exersise";
-import { JSX, useEffect, useState } from "react";
-import Variables from "../../../assets/constants/Variables";
-import ExercisePartCreation from "./ExercisePartCreation";
-/**
- * Component for creating and editing a single exercise within a workout.
- * @param {object} props - The component props.
- * @param {Exercise} props.excercise - The exercise object being created or edited.
- * @param {React.Dispatch<React.SetStateAction<Exercise[]>>} props.setExercise - The state setter function for the list of exercises.
- */
-const ExerciseCreation = ({ excercise, setExercises, idx }: 
-  { excercise: Exercise; setExercises: React.Dispatch<React.SetStateAction<Exercise[]>>; idx: number; }) => {
-    const [displaySetsReps, setDisplaySetsReps] = useState<boolean>(excercise.reps !== undefined || excercise.sets !== undefined);
+import { Exercise } from "../../../types/Exercise";
+import Section from "../../../types/Sections";
+import { Rest } from "../../../types/Rest";
+import { ExerciseType } from "../../../assets/constants/Enums";
 
-  /**
-   * Handles the creation of a new exercise part component.
-   * It adds a new, empty part to the current exercise's `exerciseParts` array.
-   */
-  const handleDistanceAddition = () => {
-    let exerciseParts = excercise.exerciseParts;
-    let exists = true;
-    // If no exercise parts exist yet, initialize the array.
-    if (!exerciseParts) {
-      exerciseParts = [];
-      exists = false;
+const ExerciseCreation = ({exercises, handleExerciseRemoval, setSections, idx}:
+    {
+        exercises: Exercise[], 
+        handleExerciseRemoval: (partIdx:number)=>void, 
+        setSections: React.Dispatch<React.SetStateAction<Section[]>>, 
+        idx: number
     }
-    // Add a new exercise part with default values.
-    exerciseParts.push({ 'distance': 0, 'measurement': Variables.meters });
-    // Update the state for the specific exercise being modified.
-    setExercises((prev) => prev.map((ex,index) => 
-      index === idx ? { ...ex, exerciseParts:exerciseParts } : ex
+) => {
+
+  const handleExerciseChange = (partIdx: number, field: string, value: any) => {
+    const updatedExercises = [...exercises];
+    (updatedExercises[partIdx] as any)[field] = value;
+    
+    setSections(prevSections => prevSections.map((section, sectionIdx) => 
+      sectionIdx === idx ? { ...section, exercises: updatedExercises } : section
     ));
   };
 
-  const handleDistanceRemoval = (partIdx:number) => {
-    if(excercise.exerciseParts){
-      const updatedParts = [...excercise.exerciseParts];
-      updatedParts.splice(partIdx, 1);
-      setExercises((prev) => prev.map((ex,index) => 
-        index === idx ? { ...ex, exerciseParts:updatedParts } : ex
-      ));
+  const handleRestChange = (partIdx: number, unit: 'minutes' | 'seconds', value: string) => {
+    const numericValue = value ? parseInt(value) : 0;
+    if (isNaN(numericValue)) return;
+
+    const currentExercise = exercises[partIdx] as Rest;
+
+    const currentMinutes = Math.floor(currentExercise.duration / 60);
+    const currentSeconds = currentExercise.duration % 60;
+
+    let newDuration = 0;
+    if (unit === 'minutes') {
+      newDuration = numericValue * 60 + currentSeconds;
+    } else {
+      newDuration = currentMinutes * 60 + numericValue;
     }
+    handleExerciseChange(partIdx, 'duration', newDuration);
   };
 
-  const handleSetsRepsRemoval = ()=>{
-    setDisplaySetsReps(false);
-    setExercises((prev) => prev.map((ex,index) => {
-      const updateExercise = { ...ex};
-      delete updateExercise['sets'];
-      delete updateExercise['reps'];
-      return index === idx ? updateExercise : ex
-    }));
-  }
-
-  const handleSetsRepsAddition = ()=>{
-    setDisplaySetsReps(true);
-    setExercises((prev) => prev.map((ex,index) => {
-      return index === idx ? { ...ex, sets: 0, reps: 0 } : ex
-    }));
-  }
-
-  const handleSetsRepsChange = (field: 'sets' | 'reps', value: string) => {
-    // We’ll do two possible flows: valid number, or cleared input.
-    if (value && !isNaN(Number(value))) {
-      const num = Number(value);
-      if (num <= 99) {
-        // Update the shared exercises state using functional update
-        setExercises(prevExercises =>
-          prevExercises.map((ex, index) =>
-            index === idx ? { ...ex, [field]: num } : ex
-          )
-        );
-      }
-    } else if (value === '') {
-      setExercises(prevExercises =>
-        prevExercises.map((ex, index) =>
-          index === idx ? { ...ex, [field]: 0 } : ex
-        )
-      );
-    }
-  }
-
-  /**
-   * Renders a TextInput for either 'sets' or 'reps' and handles state updates.
-   * @param {'sets' | 'reps'} field - The field to be updated.
-   * @returns {JSX.Element} A TextInput component.
-   */
-  const setsReps = (field: 'sets' | 'reps'): JSX.Element => {
-    return (
-      <View>
-        <Text className="text-lg font-bold">{field === 'sets' ? 'Sets' : 'Reps'}</Text>
-        <View className={`border rounded-md bg-white h-12 flex items-center ${excercise[field] && excercise[field] > 0 ? 'border-gray-300' : 'border-red-500'}`}>
-          <TextInput className="text-center" value={excercise[field] ? `${excercise[field]}` : ''} onChangeText={text => handleSetsRepsChange(field, text)} />
-        </View>
-      </View>
-    );
-  }
-
-  const handleExerciseDeletion = ()=>{
-    setExercises((prev) => prev.filter((_, index) => index !== idx));
-  }
-  return (
-    <View className="border-2 bg-white rounded-lg shadow-lg my-3 p-4">
-      {/* Exercise Name Section */}
-      <View className="mb-4">
-        <View className="flex flex-row justify-between items-center">
-          <Text className="text-lg font-bold mb-2">Name</Text>
-          {/* Button to remove the entire exercise */}
-          <TouchableOpacity onPress={handleExerciseDeletion}>
-            <Text className="text-[#E63946]">Remove</Text>
-          </TouchableOpacity>
-        </View>
-        <TextInput 
-          className="border border-gray-300 rounded-md p-3 bg-white text-black"
-          value={excercise.name} 
-          onChangeText={text => {
-            // Update the exercise name in the state.
-            const updatedExercise = { ...excercise, name: text };
-            setExercises((prev) => prev.map((ex, index) => (index === idx ? updatedExercise : ex)));
-          }} 
-        />
-      </View>
-      <View className="flex flex-row justify-between items-center mb-4">
-          {displaySetsReps ? 
-            <TouchableOpacity onPress={handleSetsRepsRemoval}>
-              <Text className="font-medium text-[#E63946]">Remove Sets/Reps</Text>
-            </TouchableOpacity>
-            :
-            <TouchableOpacity onPress={handleSetsRepsAddition}>
-              <Text className="font-medium text-[#E63946]">Add Sets/Reps</Text>
-            </TouchableOpacity>
-          }
-          {/* Button to add a new exercise part */}
-          <TouchableOpacity onPress={handleDistanceAddition}>
-            <Text className="font-medium text-[#E63946]">Add Distance</Text>
-          </TouchableOpacity>
-      </View>
-      { displaySetsReps &&
-          /* Sets and Reps Section */
-          <View className="flex flex-row justify-between w-[75%] mx-auto items-center mb-3">
-            {setsReps('sets')}
-            <View className="flex flex-col items-center justify-end">
-              <Text className="text-4xl font-bold">X</Text>
+  return(
+    <View className="bg-gray-50 rounded-lg p-4 mb-4 gap-y-4">
+        <Text className="text-lg font-bold text-center">Exercises</Text>
+        {exercises.map((exercise: Exercise, partIdx: number) => (
+        <View key={partIdx} className="p-3 border border-gray-200 rounded-lg bg-white">
+            <View className="flex-row justify-between items-center mb-2">
+                <Text className="font-bold text-gray-600">
+                    {exercise.type.charAt(0).toUpperCase() + exercise.type.slice(1)}
+                </Text>
+                <TouchableOpacity onPress={() => handleExerciseRemoval(partIdx)}>
+                    <Text className="text-[#E63946]">Remove</Text>
+                </TouchableOpacity>
             </View>
-            {setsReps('reps')}
-          </View>
-      }
 
-      {/* Dynamically rendered Exercise Parts */}
-      {excercise.exerciseParts && excercise.exerciseParts.length > 0 &&
-        <ExercisePartCreation 
-          exerciseParts={excercise.exerciseParts} 
-          handleDistanceRemoval={handleDistanceRemoval} 
-          setExercises={setExercises} 
-          idx={idx} 
-        />
-      }
+            {exercise.type === ExerciseType.Run && (
+                <View className="gap-y-3">
+                    <View>
+                        <Text className="text-sm font-medium text-gray-500 mb-1">Distance (m)</Text>
+                        <TextInput 
+                            className={`border rounded-md p-3 bg-white text-black ${exercise.distance === 0 ? 'border-red-500' : 'border-gray-300'}`}
+                            value={exercise.distance ? `${exercise.distance}` : ''} 
+                            keyboardType="numeric"
+                            onChangeText={text => handleExerciseChange(partIdx, 'distance', text ? Number(text) : 0)} 
+                        />
+                    </View>
+                    <View>
+                        <Text className="text-sm font-medium text-gray-500 mb-1">Reps (Optional)</Text>
+                        <TextInput 
+                            className="border border-gray-300 rounded-md p-3 bg-white text-black"
+                            value={exercise.reps ? `${exercise.reps}` : ''}
+                            keyboardType="numeric"
+                            onChangeText={text => handleExerciseChange(partIdx, 'reps', text ? Number(text) : 0)}
+                        />
+                    </View>
+                </View>
+            )}
+
+            {exercise.type === ExerciseType.Strength && (
+                <View className="gap-y-3">
+                    <View>
+                        <Text className="text-sm font-medium text-gray-500 mb-1">Description</Text>
+                        <TextInput 
+                            className={`border rounded-md p-3 bg-white text-black ${!exercise.description ? 'border-red-500' : 'border-gray-300'}`}
+                            value={exercise.description}
+                            onChangeText={text => handleExerciseChange(partIdx, 'description', text)}
+                            placeholder="e.g., Bench Press, Squats"
+                        />
+                    </View>
+                    <View>
+                        <Text className="text-sm font-medium text-gray-500 mb-1">Reps (Optional)</Text>
+                        <TextInput 
+                            className="border border-gray-300 rounded-md p-3 bg-white text-black"
+                            value={exercise.reps ? `${exercise.reps}` : ''}
+                            keyboardType="numeric"
+                            onChangeText={text => handleExerciseChange(partIdx, 'reps', text ? Number(text) : 0)}
+                        />
+                    </View>
+                </View>
+            )}
+
+            {exercise.type === ExerciseType.Rest && (
+                <View>
+                    <Text className="text-sm font-medium text-gray-500 mb-1">Duration</Text>
+                    <View className="flex-row items-center gap-x-2">
+                        <TextInput
+                            className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'border-gray-300'}`}
+                            placeholder="Mins"
+                            keyboardType="numeric"
+                            onChangeText={text => handleRestChange(partIdx, 'minutes', text)}
+                            maxLength={2}
+                            value={exercise.duration / 60 === 0 ? '' : Math.floor(exercise.duration / 60).toString()}
+                        />
+                        <Text className="font-bold text-lg">:</Text>
+                        <TextInput
+                            className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'border-gray-300'}`}
+                            placeholder="Secs"
+                            keyboardType="numeric"
+                            onChangeText={text => handleRestChange(partIdx, 'seconds', text)}
+                            maxLength={2}
+                            value={exercise.duration % 60 === 0 ? '' :(exercise.duration % 60).toString()}
+                        />
+                    </View>
+                </View>
+            )}
+        </View>
+        ))}
     </View>
   );
-};
+}
 
 export default ExerciseCreation;

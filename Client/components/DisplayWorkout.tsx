@@ -1,65 +1,57 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import Exercise from "../types/Exersise";
+import Section from "../types/Sections";
+import RenderExercise from "./RenderExercise";
 
 const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id: string) => void }> = ({ workout, onPress, onRemove }) => {
-    // Extract exercises array from workout, defaulting to empty array if undefined
-    const exercises: Array<Exercise> = workout.exercises || [];
+    const sections: Array<Section> = workout.sections || [];
     
-    // Don't render anything if workout doesn't have a title
     if (!workout['title'])
-        return <></>;
+        return null;
+
     return (
-        // Main touchable container that navigates to CreateWorkout screen when pressed
         <TouchableOpacity 
             onPress={onPress}
+            className="my-3 mx-2"
         >
-            {/* Main workout card container */}
-            <View className="bg-white border border-gray-200 shadow-md my-3 mx-2 p-5 rounded-xl">
-                {/* Workout header section with title and description */}
-                <View className="mb-4">
-                    <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-xl font-bold text-gray-800 max-w-[80%]">{workout.title}</Text>
+            <View className="bg-white shadow-md rounded-2xl overflow-hidden">
+                {/* Workout Header */}
+                <View className="p-4 bg-gray-50 border-b border-gray-200">
+                    <View className="flex-row justify-between items-start">
+                        <Text className="text-lg font-bold text-gray-800 max-w-[85%]" numberOfLines={2}>{workout.title}</Text>
                         {onRemove && 
-                            <TouchableOpacity onPress={() => onRemove(workout.workoutId)}>
-                                <Text className="text-[#E63946]">Remove</Text>
+                            <TouchableOpacity onPress={() => onRemove(workout.workoutId)} className="py-1">
+                                <Text className="text-red-500 font-semibold">Remove</Text>
                             </TouchableOpacity>
                         }
                     </View>
-                    <Text className="text-gray-600 text-sm leading-5">{workout.description}</Text>
+                    {workout.description && <Text className="text-gray-600 text-sm mt-1">{workout.description}</Text>}
                 </View>
                 
-                {/* Exercises list container */}
-                <View className="space-y-4">
-                    {exercises.map((exercise, index) => (
-                        /* Individual exercise card */
-                        <View key={index} className="bg-gray-50 p-4 rounded-lg border-l-4 border-l-red-500">
-                            {/* Exercise number header */}
-                            <Text className="font-semibold text-red-600 mb-3 text-base">
-                                {exercise.name}
-                            </Text>
-
-                            {/* Exercise details container */}
-                            {exercise.sets && exercise.reps && (
-                                <View className="gap-y-2">
-                                    {/* Number of sets and reps */}
-                                    <Text className="font-semibold text-md">
-                                        {exercise.sets} x {exercise.reps}
+                {/* Sections Container */}
+                <View className="p-4">
+                    {sections.map((section, index) => (
+                        <View key={index}>
+                            {/* Section Header */}
+                            <View className="flex-row items-center mb-3">
+                                <Text className="text-md font-semibold text-red-600 uppercase tracking-wider">{section.name}</Text>
+                                {section.sets && (
+                                    <Text className="text-md font-semibold text-gray-500 ml-2">
+                                        ({section.sets} Sets)
                                     </Text>
-                                </View>
-                            )}
-                            {/* Exercise parts section (if any exist) */}
-                            {exercise.exerciseParts && exercise.exerciseParts.length > 0 && (
-                                <View>
-                                    {exercise.exerciseParts.map((part, partIndex) => (
-                                        /* Individual exercise part with distance and measurement */
-                                        <View key={partIndex} className="ml-3 py-1">
-                                            <Text className="text-gray-700">
-                                                {part.distance} {part.measurement}
-                                            </Text>
-                                        </View>
+                                )}
+                            </View>
+
+                            {/* Exercises List */}
+                            {section.exercises && section.exercises.length > 0 && (
+                                <View className="ml-2 gap-y-3">
+                                    {section.exercises.map((exercise, partIndex) => (
+                                        <RenderExercise key={partIndex} exercise={exercise} />
                                     ))}
                                 </View>
                             )}
+                            
+                            {/* Divider between sections */}
+                            {index < sections.length - 1 && <View className="border-b border-gray-200 my-4" />}
                         </View>
                     ))}
                 </View>

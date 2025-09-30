@@ -40,7 +40,7 @@ import MassInput from './pages/MassInput';
 import UserService from './services/UserService';
 import { AuthContext } from './context/AuthContext';
 import { AccountType } from './assets/constants/Enums';
-import CoachFooter from './components/coaches/workouts/CoachFooter';
+import CoachFooter from './components/coaches/CoachFooter';
 import AthleteFooter from './components/athletes/AthleteFooter';
 //Root component used to render everything
 Amplify.configure(awsConfig);

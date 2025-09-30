@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Text, TextInput, View, TouchableOpacity } from "react-native";
-import Exercise from "../../../types/Exersise";
-import ExerciseCreation from "../../../components/coaches/workouts/ExerciseCreation";
+import Exercise from "../../../types/Sections";
+import SectionCreation from "./SectionCreation";
 
 //Page for workout creation by coaches
 const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}: 
@@ -9,13 +9,13 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
 
   const [title, setTitle] = useState<string>(workout?.title || "");
   const [description, setDescription] = useState<string>(workout?.description || "");
-  const [exercises, setExercises] = useState<Array<Exercise>>(workout?.exercises || []);
+  const [sections, setSections] = useState<Array<Exercise>>(workout?.sections || []);
 
   const handleCreation = async () => {
     let valid = true;
-    if(exercises.length > 0){
-      exercises.forEach((exercise:Exercise) => {
-        if(!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0 || exercise?.reps === 0){
+    if(sections.length > 0){
+      sections.forEach((exercise:Exercise) => {
+        if(!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0){
           valid = false;
         }
       });
@@ -27,7 +27,7 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
     const workoutData:Record<string, any> = {
       'title': title,
       'description': description,
-      'exercises': exercises
+      'sections': sections
     };
     if(workout){
       if (workout.workoutId) {
@@ -48,16 +48,18 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
 
   const titleDescriptionLayout = (text:string)=>{
     return(
-      <View className="border-2 rounded-lg m-4 p-3 bg-white">
-        <Text className="font-bold">{text}</Text>
-        <TextInput
-          value={text === "Title" ? title : description}
-          onChangeText={text === "Title" ? handleTitleChange : setDescription}
-          className="border-b text-black py-1 mt-1"
-          placeholder={`Enter workout ${text}`}
-          placeholderTextColor="#888"
-          multiline
-        />
+      <View className="m-4">
+        <Text className=" text-xl font-bold mb-2">{text}</Text>
+        <View className="border-2 rounded-lg p-3 bg-white">
+          <TextInput
+            value={text === "Title" ? title : description}
+            onChangeText={text === "Title" ? handleTitleChange : setDescription}
+            className="text-black py-1 mt-1"
+            placeholder={text}
+            placeholderTextColor="#888"
+            multiline
+          />
+        </View>
       </View>
     );
   }
@@ -72,15 +74,15 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
       {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
       <View className="mx-4">
       {/* Render each exercise input */}
-      {exercises.map((exercise, idx) => (
-        <ExerciseCreation key={idx} excercise={exercise} setExercises={setExercises} idx={idx}/>
+      {sections.map((section, idx) => (
+        <SectionCreation key={idx} section={section} setSections={setSections} idx={idx}/>
       ))}
         <View className="flex flex-row justify-between items-center">
           {/* Button to add a new exercise */}
           <TouchableOpacity
-            onPress={() => setExercises([...exercises, { name: ''}])}
+            onPress={() => setSections([...sections, { name: ''}])}
           >
-            <Text className="font-bold text-[#E63946]">Add exercise</Text>
+            <Text className="font-bold text-[#E63946]">Add section</Text>
           </TouchableOpacity>
           {/* CREATE WORKOUT BUTTON */}
           <TouchableOpacity

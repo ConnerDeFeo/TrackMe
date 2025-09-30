@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.trackme-blue{
+    color: #007AFF;
+}

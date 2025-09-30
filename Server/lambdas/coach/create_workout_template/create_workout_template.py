@@ -10,7 +10,7 @@ def create_workout_template(event, context):
         workout_id = body.get('workoutId', '')
         title = body['title']
         description = body.get('description', '')
-        exercises = body.get('exercises', [])
+        sections = body.get('sections', [])
 
         # If given workout id, edit current workout
         if workout_id:
@@ -26,11 +26,11 @@ def create_workout_template(event, context):
         # Create a new workout regardless
         workout_id = execute_commit_fetch_one(
             """
-                INSERT INTO workouts (coachId, title, description, exercises, isTemplate)
+                INSERT INTO workouts (coachId, title, description, sections, isTemplate)
                 VALUES (%s, %s, %s, %s, TRUE)
                 RETURNING id
             """,
-            (coach_id, title, description, json.dumps(exercises))
+            (coach_id, title, description, json.dumps(sections))
         )
         if not workout_id:
             return {

@@ -85,7 +85,7 @@ const RequestCoaches = () => {
             {loading ? (
                 <Text className="text-center text-gray-500 text-base mt-4">Searching...</Text>
             ) : (
-                <View className="space-y-3">
+                <View className="gap-y-3">
                     {coaches.map((coach) => (
                         renderCoach({ item: coach })
                     ))}

@@ -9,7 +9,7 @@ Insert into athlete_groups (athleteId, groupId) values ('912b25e0-c091-700b-a580
 Insert into athlete_groups (athleteId, groupId) values ('51cb2510-30c1-7063-474c-bbc37fc07bcc', 1);
 Insert into athlete_groups (athleteId, groupId) values ('912b25e0-c091-700b-a580-dbad51f124e6', 2);
 Insert into athlete_groups (athleteId, groupId) values ('51cb2510-30c1-7063-474c-bbc37fc07bcc', 2);
-INSERT INTO workouts (coachId, title, description, exercises, isTemplate) 
+INSERT INTO workouts (coachId, title, description, sections, isTemplate) 
 VALUES (
     '81cbd5d0-c0a1-709a-560f-ceb88b7d53d9',
     'Test Workout',
@@ -18,15 +18,21 @@ VALUES (
         {
             "name": "Test name",
             "sets": 3,
-            "reps": 10,
-            "exerciseParts": [
+            "exercises": [
                 {
                     "distance": 100,
-                    "measurement": "meters"
+                    "measurement": "meters",
+                    "reps": 2,
+                    "type": "run"
                 },
                 {
-                    "distance": 50,
-                    "measurement": "meters"
+                    "type": "rest",
+                    "duration": 60
+                },
+                {
+                    "description": "Push-ups",
+                    "reps": 4,
+                    "type": "strength"
                 }
             ],
             "inputs": true
@@ -34,11 +40,11 @@ VALUES (
         {
             "name": "Test name 2",
             "sets": 2,
-            "reps": 15,
-            "exerciseParts": [
+            "exercises": [
                 {
                     "distance": 200,
-                    "measurement": "meters"
+                    "measurement": "meters",
+                    "type": "run"
                 }
             ]
         },

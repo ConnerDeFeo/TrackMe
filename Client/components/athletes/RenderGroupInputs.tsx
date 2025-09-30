@@ -52,7 +52,7 @@ const RenderGroupInputs: React.FC<
     const navigation = useNavigation<any>();
 
     const handleInputSubmission = async () => {
-        const date = DateService.getCurrentDate();
+        const date = DateService.formatDate(new Date());
         const userId = await UserService.getUserId();
         if(userId){
             //All athletes in workout group plus the logged in user

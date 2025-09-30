@@ -29,7 +29,7 @@ const AssignWorkout = () => {
 
     // Assign the selected template workout to the group and navigate back on success
     const handleAssignTemplateWorkout = async (workoutId: string) => {
-        const date = DateService.getCurrentDate();
+        const date = DateService.formatDate(new Date());
         const response = await CoachWorkoutService.assignWorkoutTemplateToGroup(workoutId, groupId, date);
         if (response.ok) {
             navigation.goBack();

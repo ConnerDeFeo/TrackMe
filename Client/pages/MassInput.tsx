@@ -64,7 +64,7 @@ const MassInput = () => {
     }
 
     const handleInputSubmission = async () => {
-        const date = DateService.getCurrentDate();
+        const date = DateService.formatDate(new Date());
         const resp = await GeneralService.massInput(currentInputs, groupId, date);
         if(resp.ok){
           setCurrentInputs({});

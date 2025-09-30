@@ -7,7 +7,7 @@ import DisplayWorkout from "../../../components/display/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import DateService from "../../../services/DateService";
-import { Ionicons } from "@expo/vector-icons";
+import ArrowButton from "../../../components/ArrowButton";
 
 // Page component for viewing and managing a coach's group
 const ViewGroup = () => {
@@ -41,7 +41,7 @@ const ViewGroup = () => {
    * and updates the `workouts` state.
    */
   const fetchWorkout = useCallback(async () => {
-    const date = DateService.getCurrentDate();
+    const date = DateService.formatDate(new Date());
     const resp = await GeneralService.getGroupWorkout(groupId, date);
     if (resp.ok) {
       const workouts = await resp.json();
@@ -141,14 +141,7 @@ const ViewGroup = () => {
           <Text className="text-lg font-semibold text-gray-900">
             Athletes ({participants.length})
           </Text>
-          <Pressable
-            onPress={() =>
-              navigation.navigate('AssignAthletes', { groupId })
-            }
-            className="flex items-center"
-          >
-             <Ionicons name="chevron-forward" size={24} color="#007AFF" /> 
-          </Pressable>
+          <ArrowButton onPress={() => navigation.navigate('AssignAthletes', { groupId })} />
         </View>
 
         {/* Show participants or placeholder text */}

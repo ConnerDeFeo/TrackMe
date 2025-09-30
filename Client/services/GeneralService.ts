@@ -52,6 +52,9 @@ const GeneralService = {
       groupId,
       date
     });
+  },
+  getWeeklyGroupSchedule: async (groupId:string, startDate:string) => {
+    return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_weekly_schedule?groupId=${groupId}&startDate=${startDate}`);
   }
 };
 

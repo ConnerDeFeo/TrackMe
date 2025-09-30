@@ -38,7 +38,7 @@ const ViewGroupAthlete = ()=>{
             <Text className="text-2xl font-bold mt-2 mb-4">Athletes</Text>
             <View className="gap-y-2">
                 {athletes.map((athlete, index) => (
-                    <Text key={index} className="text-lg font-medium text-gray-800 rounded-lg p-3 border border-red-500">{athlete[1]}</Text>
+                    <Text key={index} className="text-lg font-medium text-gray-800 rounded-lg p-3 border">{athlete[1]}</Text>
                 ))}
             </View>
         </View>

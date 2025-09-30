@@ -45,7 +45,7 @@ const GroupSchedule = () => {
 
     return (
         <View className="flex-1 p-4">
-            <View className="flex-row justify-between items-center mb-5 py-2.5 border-b border-gray-300">
+            <View className="flex-row justify-between items-center mb-5 py-2.5">
                 <ArrowButton onPress={navigateBack} direction="left" />
                 
                 <Text className="text-lg font-bold">

@@ -95,7 +95,6 @@ const ViewGroup = () => {
     }
   };
 
-  console.log(workouts)
   return (
     <View className="pb-12 px-4 mt-4">
       {/* Action buttons: Send workout and view group inputs */}

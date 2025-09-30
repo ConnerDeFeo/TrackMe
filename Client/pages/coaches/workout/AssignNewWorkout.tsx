@@ -5,10 +5,10 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const AssignNewWorkout = () => {
     const route = useRoute();
     const navigation = useNavigation<any>();
-    const { groupId, groupName, workout } = route.params as { groupId: string, groupName: string, workout?: any };
+    const { groupId, groupName, workout, date } = route.params as { groupId: string, groupName: string, workout?: any, date: string };
 
     const handleWorkoutCreation = async (workoutData:any) => {
-        const resp = await CoachWorkoutService.assignGroupWorkout(groupId, workoutData);
+        const resp = await CoachWorkoutService.assignGroupWorkout(groupId, workoutData, date);
         if(resp.ok) {
             navigation.popTo("ViewGroupCoach", { groupId, groupName });
         }

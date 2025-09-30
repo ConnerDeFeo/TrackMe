@@ -21,12 +21,13 @@ const CoachWorkoutService = {
     deleteGroupWorkout: async (groupWorkoutId:string) => {
         return await API.delete(`${EXPO_PUBLIC_API_URL}/coaches/delete_group_workout?groupWorkoutId=${groupWorkoutId}`);
     },
-    assignGroupWorkout: async (groupId:string, workoutData:any) => {
+    assignGroupWorkout: async (groupId:string, workoutData:any, date:string) => {
         const payload: Record<string, any> = { 
                 'groupId': groupId, 
                 'title': workoutData.title,
                 'description': workoutData.description,
                 'sections': workoutData.sections,
+                'date': date
             };
         if (workoutData.workoutId){
             payload['workoutId'] = workoutData.workoutId;

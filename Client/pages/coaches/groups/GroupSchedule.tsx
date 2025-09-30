@@ -1,10 +1,10 @@
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import DateService from "../../../services/DateService";
 import ArrowButton from "../../../components/ArrowButton";
 import Workout from "../../../types/Workout";
 import GeneralService from "../../../services/GeneralService";
-import { useRoute } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import DisplayWorkout from "../../../components/display/DisplayWorkout";
 
 const GroupSchedule = () => {
@@ -13,21 +13,27 @@ const GroupSchedule = () => {
     const sunday = DateService.getSunday(currentWeek);
     const saturday = DateService.getSaturday(sunday);
     const route = useRoute();
-    const { groupId } = route.params as { groupId: string };
+    const { groupId, groupName } = route.params as { groupId: string; groupName: string };
+    const navigation = useNavigation<any>();
+    const isFocused = useIsFocused();
+
+    // Fetch workouts for the current week
+    const fetchWorkouts = async () => {
+        const resp = await GeneralService.getWeeklyGroupSchedule(groupId, DateService.formatDate(currentWeek));
+        if (resp.ok) {
+            const data = await resp.json();
+            setWorkouts(data);
+        } else {
+            setWorkouts({});
+        }
+    }
+        
 
     useEffect(() => {
-        // Fetch workouts for the current week
-        const fetchWorkouts = async () => {
-            const resp = await GeneralService.getWeeklyGroupSchedule(groupId, DateService.formatDate(currentWeek));
-            if (resp.ok) {
-                const data = await resp.json();
-                setWorkouts(data);
-            } else {
-                setWorkouts({});
-            }
+        if (isFocused) {
+            fetchWorkouts();
         }
-        fetchWorkouts();
-    }, [currentWeek]);
+    }, [currentWeek, groupId, isFocused]);
 
     const navigateBack = () => {
         // Logic to navigate back, e.g., using navigation.goBack() if using React Navigation
@@ -63,9 +69,14 @@ const GroupSchedule = () => {
                         const dayWorkouts = workouts[dateKey] || [];
                         return (
                             <View key={i} className="mb-6 bg-white rounded-lg shadow-sm border border-gray-100 p-4">
-                                <Text className="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
-                                    {day.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-                                </Text>
+                                <View className="flex flex-row justify-between items-center border-b border-gray-200 pb-2 mb-2">
+                                    <Text className="text-lg font-semibold text-gray-800">
+                                        {day.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                                    </Text>
+                                    <Pressable onPress={() => navigation.navigate('AssignWorkout', { groupId, groupName, date: dateKey })}>
+                                        <Text className="trackme-blue">Add Workout</Text>
+                                    </Pressable>
+                                </View>
                                 {dayWorkouts.length > 0 ? (
                                     <View className="space-y-2">
                                         {dayWorkouts.map((workout, idx) => (

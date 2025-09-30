@@ -75,7 +75,7 @@ const ConfirmEmail = () => {
         <View className="flex-1 justify-center items-center bg-gray-50 px-6">
             {message ? (
                 <View className="bg-red-50 border border-red-200 rounded-lg p-3 m-3">
-                    <Text className="text-red-600 text-center">{message}</Text>
+                    <Text className="text-red-500 text-center">{message}</Text>
                 </View>
             ) : null}
             <View className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 gap-y-6">

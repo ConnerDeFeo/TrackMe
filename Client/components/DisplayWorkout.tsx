@@ -17,10 +17,10 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
                 {/* Workout Header */}
                 <View className="p-4 bg-gray-50 border-b border-gray-200">
                     <View className="flex-row justify-between items-start">
-                        <Text className="text-lg font-bold text-gray-800 max-w-[85%]" numberOfLines={2}>{workout.title}</Text>
+                        <Text className="text-xl font-bold text-gray-800 max-w-[85%]" numberOfLines={2}>{workout.title}</Text>
                         {onRemove && 
                             <TouchableOpacity onPress={() => onRemove(workout.workoutId)} className="py-1">
-                                <Text className="text-red-500 font-semibold">Remove</Text>
+                                <Text className="trackme-red font-semibold">Remove</Text>
                             </TouchableOpacity>
                         }
                     </View>
@@ -33,7 +33,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
                         <View key={index}>
                             {/* Section Header */}
                             <View className="flex-row items-center mb-3">
-                                <Text className="text-md font-semibold text-red-600 uppercase tracking-wider">{section.name}</Text>
+                                <Text className="text-md font-semibold uppercase tracking-wider">{section.name}</Text>
                                 {section.sets && (
                                     <Text className="text-md font-semibold text-gray-500 ml-2">
                                         ({section.sets} Sets)
@@ -43,7 +43,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
 
                             {/* Exercises List */}
                             {section.exercises && section.exercises.length > 0 && (
-                                <View className="ml-2 gap-y-3">
+                                <View className="ml-6 gap-y-3">
                                     {section.exercises.map((exercise, partIndex) => (
                                         <RenderExercise key={partIndex} exercise={exercise} />
                                     ))}

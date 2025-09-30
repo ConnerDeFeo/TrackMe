@@ -70,7 +70,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
             </Text>
             {/* Button to remove this exercise */}
             <TouchableOpacity onPress={() => handleExerciseRemoval(partIdx)}>
-              <Text className="text-[#E63946]">Remove</Text>
+              <Text className="trackme-red">Remove</Text>
             </TouchableOpacity>
           </View>
 

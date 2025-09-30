@@ -84,12 +84,12 @@ const RenderGroupInputs: React.FC<
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
                 <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
-                    <Text className="text-[#E63946]">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
+                    <Text className="trackme-blue">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
                 </TouchableOpacity>
             </View>
             {/* Go to mass inputs */}
             <TouchableOpacity onPress={()=>navigation.navigate('MassInput', { groupId, groupName})}>
-                <Text className="text-[#E63946] ml-auto">Mass Input</Text>
+                <Text className="trackme-blue ml-auto">Mass Input</Text>
             </TouchableOpacity>
 
             {/**Current workout group and their inputs */}
@@ -111,7 +111,7 @@ const RenderGroupInputs: React.FC<
                         {
                             selectedSubmitedInputs.length > 0 && (
                                 <TouchableOpacity onPress={handleInputRemoval}>
-                                    <Text className="text-[#E63946]">Remove Inputs</Text>
+                                    <Text className="trackme-red">Remove Inputs</Text>
                                 </TouchableOpacity>
                             )
                         }

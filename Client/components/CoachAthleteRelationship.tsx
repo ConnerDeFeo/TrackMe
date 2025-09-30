@@ -25,7 +25,7 @@ const CoachAthleteRelationship:React.FC<{ user: string[]; fetchUsers: () => void
             <TouchableOpacity
                 onPress={() => handleRemoval(user[0])}
             >
-                <Text className="text-[#E63946]">Remove</Text>
+                <Text className="trackme-red">Remove</Text>
             </TouchableOpacity>
         </View>
     );

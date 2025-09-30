@@ -156,7 +156,7 @@ const ViewGroup = () => {
             }
             className="flex items-center"
           >
-            <Text className="text-[#E63946]">Add Athletes</Text>
+            <Text className="trackme-blue">Add Athletes</Text>
           </TouchableOpacity>
         </View>
 
@@ -173,7 +173,7 @@ const ViewGroup = () => {
               <TouchableOpacity
                 onPress={() => removeAthleteFromGroup(participant[0])}
               >
-                <Text className="text-[#E63946] text-md">Remove</Text>
+                <Text className="trackme-red text-md">Remove</Text>
               </TouchableOpacity>
             </View>
           ))
@@ -188,7 +188,7 @@ const ViewGroup = () => {
       {deletionMode ? (
         <View className="flex flex-row justify-between items-center mt-4">
           <Pressable onPress={handleGroupDeletion}>
-            <Text className="text-[#E63946] text-md">Confirm</Text>
+            <Text className="trackme-blue text-md">Confirm</Text>
           </Pressable>
           <TouchableOpacity onPress={() => setDeletionMode(false)}>
             <Text className="text-md">Cancel</Text>

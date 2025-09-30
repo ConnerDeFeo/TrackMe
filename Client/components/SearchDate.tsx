@@ -55,7 +55,7 @@ const SearchDate: React.FC<{
                 />
                 <TouchableOpacity
                     onPress={handleSearch}
-                    className="bg-red-500 px-4 py-2 rounded-lg"
+                    className="trackme-bg-blue px-4 py-2 rounded-lg"
                 >
                     <Text className="text-white font-medium">Search</Text>
                 </TouchableOpacity>

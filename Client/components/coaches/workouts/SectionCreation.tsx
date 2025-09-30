@@ -89,7 +89,7 @@ const SectionCreation = ({ section, setSections, idx }:
         <View className="flex-row justify-between items-center">
           <Text className="text-lg font-bold mb-2">Section Name</Text>
           <TouchableOpacity onPress={handleSectionDeletion}>
-            <Text className="text-[#E63946]">Remove Section</Text>
+            <Text className="trackme-red">Remove Section</Text>
           </TouchableOpacity>
         </View>
         <TextInput 
@@ -103,13 +103,13 @@ const SectionCreation = ({ section, setSections, idx }:
       {/* Add Exercise Buttons */}
       <View className="flex-row justify-around items-center mb-4 border-y border-gray-200 py-3">
           <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Run)}>
-            <Text className="font-medium text-[#457B9D]">Add Run</Text>
+            <Text className="font-medium trackme-blue">Add Run</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Strength)}>
-            <Text className="font-medium text-[#457B9D]">Add Strength</Text>
+            <Text className="font-medium trackme-blue">Add Strength</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Rest)}>
-            <Text className="font-medium text-[#457B9D]">Add Rest</Text>
+            <Text className="font-medium trackme-blue">Add Rest</Text>
           </TouchableOpacity>
       </View>
 

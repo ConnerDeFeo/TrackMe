@@ -40,7 +40,7 @@ const InputHistory = () => {
       
       <View className="p-4">
         {Object.keys(InputHistory).sort((a, b) => new Date(b).getTime() - new Date(a).getTime()).map((date) => (
-          <View key={date} className="mb-6 bg-white shadow-md border-l-4 border-l-red-500 rounded-lg p-4">
+          <View key={date} className="mb-6 bg-white shadow-md border-l-4 rounded-lg p-4">
             <Text className="text-2xl font-bold text-gray-800 mb-3">{date}</Text>
             {Object.keys(InputHistory[date]).map((groupId) => (
               <View key={groupId} className="ml-4 mb-2">

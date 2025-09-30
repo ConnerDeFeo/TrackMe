@@ -50,7 +50,7 @@ const ViewGroupInputsCoach = ()=>{
         <View className="px-4 mt-4">
             {/* Map over the list of athletes to display each one's data. */}
             {athletes.map((athlete)=>(
-            <View key={athlete[0]} className="bg-white rounded-lg shadow-lg p-6 mb-6 border-l-4" style={{borderLeftColor: '#E63946'}}>
+            <View key={athlete[0]} className="bg-white rounded-lg shadow-lg p-6 mb-6 border-l-4">
                 {/* Display the athlete's name. */}
                 <Text className="text-xl font-semibold text-black mb-4">{athlete[1]}</Text>
                 {/* Map over the workout inputs for the current athlete and display them. */}

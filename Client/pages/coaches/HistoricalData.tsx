@@ -32,7 +32,7 @@ const HistoricalData = ()=>{
                         <Text className="text-3xl font-bold text-gray-900 mb-4">{historicalData[groupId].name}</Text>
                         
                         <View className="mb-4">
-                            <Text className="text-lg font-semibold mb-3 text-red-500">Workouts</Text>
+                            <Text className="text-lg font-semibold mb-3">Workouts</Text>
                             {historicalData[groupId].workouts.map((workout: Record<string, any>, idx: number) =>
                             <DisplayWorkout
                                 workout={workout}
@@ -42,7 +42,7 @@ const HistoricalData = ()=>{
                         </View>
 
                         <View className="border-t border-gray-200 pt-4">
-                            <Text className="text-lg font-semibold mb-3 text-red-500">Athlete Inputs</Text>
+                            <Text className="text-lg font-semibold mb-3">Athlete Inputs</Text>
                             {Object.keys(historicalData[groupId].athleteInputs).map((athleteId) => {
                             const athleteData = historicalData[groupId].athleteInputs[athleteId];
                             return (

@@ -82,13 +82,13 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
           <TouchableOpacity
             onPress={() => setSections([...sections, { name: ''}])}
           >
-            <Text className="font-bold text-[#E63946]">Add section</Text>
+            <Text className="font-bold trackme-blue">Add section</Text>
           </TouchableOpacity>
           {/* CREATE WORKOUT BUTTON */}
           <TouchableOpacity
             onPress={handleCreation}
           >
-            <Text className="font-bold text-[#E63946]">{buttonText}</Text>
+            <Text className="font-bold trackme-blue">{buttonText}</Text>
           </TouchableOpacity>
         </View>
       </View>

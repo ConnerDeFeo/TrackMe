@@ -45,7 +45,7 @@ const CoachHistory = () => {
                 {availableDates.map((date) => (
                     <TouchableOpacity
                         key={date}
-                        className="mb-6 bg-white shadow-md border-l-4 border-l-red-500 rounded-lg p-4"
+                        className="mb-6 bg-white shadow-md border-l-4 rounded-lg p-4"
                         onPress={() =>
                             navigation.navigate('HistoricalData', { date })
                         }

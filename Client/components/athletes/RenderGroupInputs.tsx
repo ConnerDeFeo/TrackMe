@@ -4,7 +4,7 @@ import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 import InputTracking from "../InputTracking";
-import TimeDistanceDisplay from "../TimeDistanceDisplay";
+import TimeDistanceDisplay from "../display/TimeDistanceDisplay";
 import { useNavigation } from "@react-navigation/native";
 import DateService from "../../services/DateService";
 

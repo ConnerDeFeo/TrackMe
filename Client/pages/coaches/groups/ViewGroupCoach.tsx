@@ -3,7 +3,7 @@ import { Pressable, Text, View } from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import CoachGroupService from "../../../services/CoachGroupService";
-import DisplayWorkout from "../../../components/DisplayWorkout";
+import DisplayWorkout from "../../../components/display/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import DateService from "../../../services/DateService";

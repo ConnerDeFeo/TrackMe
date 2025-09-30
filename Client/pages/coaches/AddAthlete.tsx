@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable} from 'react-native';
 import CoachService from '../../services/CoachService';
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/display/SearchBar';
 
 //Page for adding athletes to a coaches group
 const AddAthlete= () => {

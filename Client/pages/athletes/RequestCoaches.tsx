@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable} from 'react-native';
 import AthleteService from '../../services/AthleteService';
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/display/SearchBar';
 import UserService from '../../services/UserService';
 
 

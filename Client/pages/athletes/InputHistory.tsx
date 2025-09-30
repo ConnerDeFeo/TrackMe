@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import UserService from "../../services/UserService";
 import HistoryService from "../../services/HistoryService";
 import SearchDate from "../../components/SearchDate";
-import TimeDistanceDisplay from "../../components/TimeDistanceDisplay";
+import TimeDistanceDisplay from "../../components/display/TimeDistanceDisplay";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});

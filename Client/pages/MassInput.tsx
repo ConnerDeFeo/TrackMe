@@ -4,7 +4,7 @@ import { Text, TextInput, Pressable, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../hooks/usePersistentState";
 import InputTracking from "../components/InputTracking";
-import TimeDistanceDisplay from "../components/TimeDistanceDisplay";
+import TimeDistanceDisplay from "../components/display/TimeDistanceDisplay";
 import DateService from "../services/DateService";
 
 const MassInput = () => {

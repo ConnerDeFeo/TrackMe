@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
-import DisplayWorkout from "../../../components/DisplayWorkout";
+import DisplayWorkout from "../../../components/display/DisplayWorkout";
 import { useNavigation } from "@react-navigation/native";
 const WorkoutTemplates = () => {
   // Hook to navigate between screens

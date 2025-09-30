@@ -1,7 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import DisplayWorkout from "../../components/DisplayWorkout";
+import DisplayWorkout from "../../components/display/DisplayWorkout";
 import GeneralService from "../../services/GeneralService";
 
 //Pages that displays an athletes groupp for a given date

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AthleteService from "../../services/AthleteService";
-import RequestsInvites from "../../components/RequestsInvites";
+import RequestsInvites from "../../components/display/RequestsInvites";
 
 const CoachInvites = () =>{
     // State to store the list of athlete requests

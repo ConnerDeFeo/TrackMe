@@ -123,7 +123,7 @@ const Profile = () => {
                 <View className="mt-8">
                     <TouchableOpacity
                         onPress={handleLogout}
-                        className="bg-red-500 p-3 rounded items-center"
+                        className="trackme-bg-red p-3 rounded items-center"
                     >
                         <Text className="text-white font-semibold text-base">Sign Out</Text>
                     </TouchableOpacity>

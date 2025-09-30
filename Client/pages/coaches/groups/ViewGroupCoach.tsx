@@ -104,7 +104,7 @@ const ViewGroup = () => {
           onPress={() =>
             navigation.navigate('AssignWorkout', { groupId, groupName })
           }
-          className="bg-[#E63946] rounded-lg py-3"
+          className="trackme-bg-red rounded-lg py-3"
         >
           <Text className="text-white font-semibold text-center">
             Send Workout

@@ -80,7 +80,7 @@ const ResetPassword = () => {
             <View className="gap-y-6">
                 <TouchableOpacity 
                 onPress={() => navigation.navigate("Auth", { screen: 'SignIn' })} 
-                className="bg-[#E63946] py-3 rounded"
+                className="trackme-bg-red py-3 rounded"
                 >
                     <Text className="text-white text-center font-medium">Back to Sign In</Text>
                 </TouchableOpacity>

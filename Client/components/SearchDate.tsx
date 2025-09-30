@@ -68,7 +68,7 @@ const SearchDate: React.FC<{
                         Filtering by: {selectedDate}
                     </Text>
                     <TouchableOpacity onPress={handleClearDateFilter}>
-                        <Text className="text-red-500 font-medium">Clear</Text>
+                        <Text className="trackme-red font-medium">Clear</Text>
                     </TouchableOpacity>
                 </View>
             )}

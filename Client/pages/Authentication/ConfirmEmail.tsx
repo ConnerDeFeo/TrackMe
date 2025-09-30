@@ -99,7 +99,7 @@ const ConfirmEmail = () => {
                     
                     <View className="gap-y-3">
                         <TouchableOpacity 
-                            className="bg-red-600 rounded-lg py-3 px-4"
+                            className="trackme-bg-red rounded-lg py-3 px-4"
                             onPress={handleConfirmEmail}
                         >
                             <Text className="text-white text-center font-semibold">Confirm Email</Text>

@@ -41,7 +41,7 @@ const AssignWorkout = () => {
             {/* Button to navigate to the screen for creating a new workout */}
             <TouchableOpacity
                 onPress={() => navigation.navigate('AssignNewWorkout', { groupId, groupName })}
-                className="bg-[#E63946] rounded-lg py-3 mx-4"
+                className="trackme-bg-red rounded-lg py-3 mx-4"
             >
                 <Text className="text-white font-semibold text-center">Assign New Workout</Text>
             </TouchableOpacity>

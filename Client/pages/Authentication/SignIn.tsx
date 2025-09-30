@@ -76,7 +76,7 @@ const SignIn = ()=>{
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-4">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <TouchableOpacity onPress={handleCreateAccountButtonPress} className="bg-red-500 rounded-lg py-3">
+                    <TouchableOpacity onPress={handleCreateAccountButtonPress} className="trackme-bg-red rounded-lg py-3">
                         <Text className="text-white text-xl font-bold text-center">Create Account</Text>
                     </TouchableOpacity>
                 </View>

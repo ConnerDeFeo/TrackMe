@@ -96,7 +96,7 @@ const CreateWorkoutGroup = ()=>{
                             {/* Selection toggle button */}
                             <TouchableOpacity 
                                 onPress={() => handleWorkoutGroupChange({id: athlete[0], username: athlete[1]})}
-                                className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'bg-red-500'}`}
+                                className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'trackme-bg-red'}`}
                                 style={{backgroundColor: isSelected ? '#f3f4f6' : '#E63946'}}
                             >
                             <Text className={`font-semibold ${isSelected ? 'text-black' : 'text-white'}`}>

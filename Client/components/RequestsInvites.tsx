@@ -33,7 +33,7 @@ const RequestsInvites = ({ proposals, handleAcceptance, handleDecline}: { propos
                                 </TouchableOpacity>
                                 {/* Decline button */}
                                 <TouchableOpacity 
-                                    className="bg-red-500 rounded-lg py-2 px-3"
+                                    className="trackme-bg-red rounded-lg py-2 px-3"
                                     onPress={() => handleDecline(proposal[0])}
                                 >
                                     <Text className="text-white font-semibold text-center">Decline</Text>

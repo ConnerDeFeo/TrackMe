@@ -47,7 +47,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
             <View className="flex flex-row items-center justify-between">
                 {/* Button to remove the last input pair from the current group */}
                 <TouchableOpacity
-                    className="bg-[#E63946] rounded-lg p-2 w-[45%]"
+                    className="trackme-bg-red rounded-lg p-2 w-[45%]"
                     onPress={() => {
                     setCurrentInputs(prev => {
                         // Get the current inputs for the identifier and remove the last element
@@ -61,7 +61,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
 
                 {/* Button to add a new, empty input pair to the current group */}
                 <TouchableOpacity 
-                    className="bg-[#E63946] rounded-lg p-2 w-[45%]"
+                    className="trackme-bg-red rounded-lg p-2 w-[45%]"
                     onPress={() => {
                         // Get the existing inputs for this identifier, or an empty array if none exist
                         const existingInputs = currentInputs[identifierId] || [];

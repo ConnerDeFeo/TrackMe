@@ -26,7 +26,7 @@ const RequestsInvites = ({ proposals, handleAcceptance, handleDecline}: { propos
                             <View className="flex-row gap-x-2">
                                 {/* Accept button */}
                                 <TouchableOpacity
-                                    className="bg-black rounded-lg py-2 px-3"
+                                    className="trackme-bg-blue rounded-lg py-2 px-3"
                                     onPress={() => handleAcceptance(proposal[0])}
                                 >
                                     <Text className="text-white font-semibold text-center">Accept</Text>

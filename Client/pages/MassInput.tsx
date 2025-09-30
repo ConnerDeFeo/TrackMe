@@ -95,7 +95,7 @@ const MassInput = () => {
         />
       </View>
       ))}
-      <TouchableOpacity className="bg-black rounded-lg p-3 mt-2" onPress={handleInputSubmission}>
+      <TouchableOpacity className="trackme-bg-blue rounded-lg p-3 mt-2" onPress={handleInputSubmission}>
         <Text className="text-white text-center">Submit</Text>
       </TouchableOpacity>
     </View>

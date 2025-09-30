@@ -62,7 +62,7 @@ const RequestCoaches = () => {
             default:
                 joinedStatus = (
                     <TouchableOpacity
-                        className="bg-black px-4 py-2 rounded"
+                        className="trackme-bg-blue px-4 py-2 rounded"
                         onPress={() => handleRequest(userId)}
                     >
                         <Text className="text-white font-medium">Request</Text>

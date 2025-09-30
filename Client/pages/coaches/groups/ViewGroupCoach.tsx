@@ -98,33 +98,31 @@ const ViewGroup = () => {
   return (
     <View className="pb-12 px-4 mt-4">
       {/* Action buttons: Send workout and view group inputs */}
-      <View className="gap-y-4 mb-8">
+      <View className="flex flex-row items-center justify-between mb-2 mx-4">
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('AssignWorkout', { groupId, groupName })
           }
-          className="trackme-bg-red rounded-lg py-3"
+          className="rounded-lg py-3"
         >
-          <Text className="text-white font-semibold text-center">
+          <Text className="trackme-blue font-semibold text-center">
             Send Workout
           </Text>
         </TouchableOpacity>
 
-        {workouts.length > 0 && (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('ViewGroupInputsCoach', {
-                groupId,
-                groupName,
-              })
-            }
-            className="bg-black rounded-lg py-3 mt-2"
-          >
-            <Text className="text-white font-semibold text-center">
-              Group Inputs
-            </Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('ViewGroupInputsCoach', {
+              groupId,
+              groupName,
+            })
+          }
+          className="rounded-lg py-3 mt-2"
+        >
+          <Text className="trackme-blue font-semibold text-center">
+            Group Inputs
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Display assigned workouts with remove option */}
@@ -187,16 +185,16 @@ const ViewGroup = () => {
       {deletionMode ? (
         <View className="flex flex-row justify-between items-center mt-4">
           <Pressable onPress={handleGroupDeletion}>
-            <Text className="trackme-blue text-md">Confirm</Text>
+            <Text className="trackme-red text-md">Confirm</Text>
           </Pressable>
           <TouchableOpacity onPress={() => setDeletionMode(false)}>
-            <Text className="text-md">Cancel</Text>
+            <Text className="text-md trackme-blue">Cancel</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <TouchableOpacity
           onPress={() => setDeletionMode(true)}
-          className="bg-black rounded-lg py-3 px-4 mt-2"
+          className="trackme-bg-red rounded-lg py-3 px-4 mt-2"
         >
           <Text className="text-white font-semibold text-center">
             Delete Group

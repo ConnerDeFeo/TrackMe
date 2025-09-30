@@ -9,8 +9,8 @@ const RenderExercise = ({ exercise }: { exercise: Exercise }) => {
             return (
                 <View className="flex-row items-center">
                     <FontAwesome5 name="dumbbell" size={14} color="#4B5563" />
-                    <Text className="text-gray-700 ml-3 text-base">
-                        {exercise.reps && <Text className="font-bold">{exercise.reps}x </Text>}
+                    <Text className="text-gray-700 ml-3 font-bold">
+                        {exercise.reps && `${exercise.reps}x `}
                         {exercise.description}
                     </Text>
                 </View>

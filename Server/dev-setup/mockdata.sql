@@ -49,7 +49,8 @@ VALUES (
             ]
         },
         {
-            "name": "Warm-up"
+            "name": "Warm-up",
+            "sets": 1,
         }
     ]'::jsonb,
     true

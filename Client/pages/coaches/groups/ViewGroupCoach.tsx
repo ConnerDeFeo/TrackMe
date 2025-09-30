@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Pressable, Text,View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import CoachGroupService from "../../../services/CoachGroupService";
@@ -7,6 +7,7 @@ import DisplayWorkout from "../../../components/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import DateService from "../../../services/DateService";
+import { Ionicons } from "@expo/vector-icons";
 
 // Page component for viewing and managing a coach's group
 const ViewGroup = () => {
@@ -58,17 +59,6 @@ const ViewGroup = () => {
       fetchWorkout();
     }, [fetchParticipants, fetchWorkout])
   );
-
-  /**
-   * Removes a single athlete from the group on the server,
-   * then refreshes the participants list.
-   */
-  const removeAthleteFromGroup = async (athleteId: string) => {
-    const resp = await CoachGroupService.removeAthleteFromGroup(athleteId, groupId);
-    if (resp.ok) {
-      await fetchParticipants();
-    }
-  };
 
   /**
    * Deletes the entire group on the server,
@@ -142,7 +132,11 @@ const ViewGroup = () => {
       ))}
 
       {/* Athletes list panel */}
-      <View className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <Pressable className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
+        onPress={() =>
+          navigation.navigate('AssignAthletes', { groupId })
+        }
+      >
         <View className="flex flex-row justify-between items-center mb-4">
           <Text className="text-lg font-semibold text-gray-900">
             Athletes ({participants.length})
@@ -153,7 +147,7 @@ const ViewGroup = () => {
             }
             className="flex items-center"
           >
-            <Text className="trackme-blue">Add Athletes</Text>
+             <Ionicons name="chevron-forward" size={24} color="#007AFF" /> 
           </Pressable>
         </View>
 
@@ -167,11 +161,6 @@ const ViewGroup = () => {
               <Text className="text-gray-800 font-medium">
                 {participant[1]}
               </Text>
-              <Pressable
-                onPress={() => removeAthleteFromGroup(participant[0])}
-              >
-                <Text className="trackme-red text-md">Remove</Text>
-              </Pressable>
             </View>
           ))
         ) : (
@@ -179,7 +168,7 @@ const ViewGroup = () => {
             No athletes assigned yet
           </Text>
         )}
-      </View>
+      </Pressable>
 
       {/* Group deletion confirmation controls */}
       {deletionMode ? (

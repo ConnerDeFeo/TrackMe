@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import Section from "../types/Sections";
 import RenderExercise from "./RenderExercise";
 
@@ -9,7 +9,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
         return null;
 
     return (
-        <TouchableOpacity 
+        <Pressable 
             onPress={onPress}
             className="my-3 mx-2"
         >
@@ -19,9 +19,9 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
                     <View className="flex-row justify-between items-start">
                         <Text className="text-xl font-bold text-gray-800 max-w-[85%]" numberOfLines={2}>{workout.title}</Text>
                         {onRemove && 
-                            <TouchableOpacity onPress={() => onRemove(workout.workoutId)} className="py-1">
+                            <Pressable onPress={() => onRemove(workout.workoutId)} className="py-1">
                                 <Text className="trackme-red font-semibold">Remove</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         }
                     </View>
                     {workout.description && <Text className="text-gray-600 text-sm mt-1">{workout.description}</Text>}
@@ -56,7 +56,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
                     ))}
                 </View>
             </View>
-        </TouchableOpacity>
+        </Pressable>
     );
 }
 

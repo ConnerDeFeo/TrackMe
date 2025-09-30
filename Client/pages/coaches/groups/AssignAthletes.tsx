@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {Text, TouchableOpacity, View } from "react-native";
+import {Text, Pressable, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
 import { useRoute } from "@react-navigation/native";
 
@@ -44,9 +44,9 @@ const AssignAthletes = ()=>{
                         <View className="bg-green-100 px-3 py-1 rounded-full">
                             <Text className="text-green-800 font-medium">Assigned</Text>
                         </View> : 
-                        <TouchableOpacity className="bg-[#E63946] px-4 py-2 rounded-lg" onPress={() => handleAssignAthlete(athlete[0])}>
+                        <Pressable className="bg-[#E63946] px-4 py-2 rounded-lg" onPress={() => handleAssignAthlete(athlete[0])}>
                             <Text className="text-white font-semibold">Assign</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     }
                 </View>
             ))}

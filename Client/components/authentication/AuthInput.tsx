@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, TextInput, Pressable, View } from "react-native";
 
 /**
  * Default input component for create account and sign in pages
@@ -23,12 +23,12 @@ const AuthInput = ( {value, setValue, placeholder, sensitive}:
             /> 
             {/* Show eye icon for password fields on=-ly */}
             {sensitive &&
-                <TouchableOpacity className="absolute right-3 top-2" onPress={() => setHidePassword(!hidePassword)}>
+                <Pressable className="absolute right-3 top-2" onPress={() => setHidePassword(!hidePassword)}>
                     {/* Eye icon to toggle password visibility */}
                     <Image source={require('../../assets/images/Eye.png')} className="w-8 h-8" />
                     {/* Strike-through line when password is hidden */}
                     {hidePassword && <View className="absolute w-6 h-[0.15rem] bg-black rotate-45 top-[0.9rem] right-1"/>}
-                </TouchableOpacity>
+                </Pressable>
             }
         </View>
     );

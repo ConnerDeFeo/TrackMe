@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Pressable, Text,TouchableOpacity,View } from "react-native";
+import { Pressable, Text,View } from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import CoachGroupService from "../../../services/CoachGroupService";
@@ -99,7 +99,7 @@ const ViewGroup = () => {
     <View className="pb-12 px-4 mt-4">
       {/* Action buttons: Send workout and view group inputs */}
       <View className="flex flex-row items-center justify-between mb-2 mx-4">
-        <TouchableOpacity
+        <Pressable
           onPress={() =>
             navigation.navigate('AssignWorkout', { groupId, groupName })
           }
@@ -108,9 +108,9 @@ const ViewGroup = () => {
           <Text className="trackme-blue font-semibold text-center">
             Send Workout
           </Text>
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity
+        <Pressable
           onPress={() =>
             navigation.navigate('ViewGroupInputsCoach', {
               groupId,
@@ -122,7 +122,7 @@ const ViewGroup = () => {
           <Text className="trackme-blue font-semibold text-center">
             Group Inputs
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Display assigned workouts with remove option */}
@@ -147,14 +147,14 @@ const ViewGroup = () => {
           <Text className="text-lg font-semibold text-gray-900">
             Athletes ({participants.length})
           </Text>
-          <TouchableOpacity
+          <Pressable
             onPress={() =>
               navigation.navigate('AssignAthletes', { groupId })
             }
             className="flex items-center"
           >
             <Text className="trackme-blue">Add Athletes</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Show participants or placeholder text */}
@@ -167,11 +167,11 @@ const ViewGroup = () => {
               <Text className="text-gray-800 font-medium">
                 {participant[1]}
               </Text>
-              <TouchableOpacity
+              <Pressable
                 onPress={() => removeAthleteFromGroup(participant[0])}
               >
                 <Text className="trackme-red text-md">Remove</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           ))
         ) : (
@@ -187,19 +187,19 @@ const ViewGroup = () => {
           <Pressable onPress={handleGroupDeletion}>
             <Text className="trackme-red text-md">Confirm</Text>
           </Pressable>
-          <TouchableOpacity onPress={() => setDeletionMode(false)}>
+          <Pressable onPress={() => setDeletionMode(false)}>
             <Text className="text-md trackme-blue">Cancel</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       ) : (
-        <TouchableOpacity
+        <Pressable
           onPress={() => setDeletionMode(true)}
           className="trackme-bg-red rounded-lg py-3 px-4 mt-2"
         >
           <Text className="text-white font-semibold text-center">
             Delete Group
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );

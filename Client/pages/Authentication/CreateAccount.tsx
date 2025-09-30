@@ -1,5 +1,5 @@
 import AuthInput from "../../components/authentication/AuthInput";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import { useState } from "react";
 import { signUp } from 'aws-amplify/auth';
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
@@ -84,34 +84,34 @@ const CreateAccount = ()=>{
             {/**CREATE ACCOUNT FORM*/}
             <View className="gap-y-8 bg-red-200 rounded-xl p-6">
                 <View className="rounded-lg h-12 flex flex-row overflow-hidden">
-                <TouchableOpacity 
+                <Pressable 
                     onPress={() => setAccountType(AccountType.Athlete)} 
                     className={`flex-1 items-center justify-center rounded-lg ${accountType === AccountType.Athlete ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
                 >
                     <Text className={`text-xl ${accountType === AccountType.Athlete ? 'text-white font-bold' : 'text-black'}`}>Athlete</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
+                </Pressable>
+                <Pressable 
                     onPress={() => setAccountType(AccountType.Coach)}
                     className={`flex-1 items-center justify-center rounded-lg ${accountType === AccountType.Coach ? 'bg-black' : 'bg-white border-2 border-gray-400'}`}
                 >
                     <Text className={`text-xl ${accountType === AccountType.Coach ? 'text-white font-bold' : 'text-black'}`}>Coach</Text>
-                </TouchableOpacity>
+                </Pressable>
                 </View>
                 <AuthInput value={email} setValue={setEmail} placeholder="Email"/>
                 <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
                 <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
                 <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
-                <TouchableOpacity onPress={handleCreateAccount} className="bg-black rounded-lg py-3 items-center">
+                <Pressable onPress={handleCreateAccount} className="bg-black rounded-lg py-3 items-center">
                     <Text className="text-white text-xl font-bold">Create Account</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
 
             {/**SIGN IN LINK*/}
             <View className="gap-y-6">
                 <Text className="text-center text-xl">Already have an account? </Text>
-                <TouchableOpacity onPress={handleSignInButtonPress} className="trackme-bg-red rounded-lg py-3">
+                <Pressable onPress={handleSignInButtonPress} className="trackme-bg-red rounded-lg py-3">
                     <Text className="text-white text-xl font-bold text-center">Sign In</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
             </View>
         </View>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity} from 'react-native';
+import { View, Text, Pressable} from 'react-native';
 import AthleteService from '../../services/AthleteService';
 import SearchBar from '../../components/SearchBar';
 import UserService from '../../services/UserService';
@@ -61,12 +61,12 @@ const RequestCoaches = () => {
                 break;
             default:
                 joinedStatus = (
-                    <TouchableOpacity
+                    <Pressable
                         className="trackme-bg-blue px-4 py-2 rounded"
                         onPress={() => handleRequest(userId)}
                     >
                         <Text className="text-white font-medium">Request</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 );
                 break;
         }

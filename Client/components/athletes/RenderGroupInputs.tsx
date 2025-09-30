@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
@@ -83,14 +83,14 @@ const RenderGroupInputs: React.FC<
             {/* Group header with title and create group button */}
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
+                <Pressable onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
                     <Text className="trackme-blue">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
             {/* Go to mass inputs */}
-            <TouchableOpacity onPress={()=>navigation.navigate('MassInput', { groupId, groupName})}>
+            <Pressable onPress={()=>navigation.navigate('MassInput', { groupId, groupName})}>
                 <Text className="trackme-blue ml-auto">Mass Input</Text>
-            </TouchableOpacity>
+            </Pressable>
 
             {/**Current workout group and their inputs */}
             {workoutGroup.length > 0 && (
@@ -110,14 +110,14 @@ const RenderGroupInputs: React.FC<
                         <Text className="font-semibold text-gray-500 uppercase">Entries</Text>
                         {
                             selectedSubmitedInputs.length > 0 && (
-                                <TouchableOpacity onPress={handleInputRemoval}>
+                                <Pressable onPress={handleInputRemoval}>
                                     <Text className="trackme-red">Remove Inputs</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             )
                         }
                     </View>
                     {submitedInputs[groupId].map((input, idx) => (
-                        <TouchableOpacity key={idx} onPress={()=>{
+                        <Pressable key={idx} onPress={()=>{
                             if(selectedSubmitedInputs.includes(input.inputId)){
                                 setSelectedSubmitedInputs(prev => prev.filter(id => id !== input.inputId));
                             } else {
@@ -125,7 +125,7 @@ const RenderGroupInputs: React.FC<
                             }
                         }}>
                             <TimeDistanceDisplay key={idx} time={input.time} distance={input.distance} selected={selectedSubmitedInputs.includes(input.inputId)} />
-                        </TouchableOpacity>
+                        </Pressable>
                     ))}
                 </View>
             }
@@ -139,9 +139,9 @@ const RenderGroupInputs: React.FC<
             />
 
             {/* Submit the current inputs for the current group */}
-            <TouchableOpacity className="trackme-bg-blue rounded-lg p-3" onPress={handleInputSubmission}>
+            <Pressable className="trackme-bg-blue rounded-lg p-3" onPress={handleInputSubmission}>
                 <Text className="text-white text-center font-medium">Submit</Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     );
 }

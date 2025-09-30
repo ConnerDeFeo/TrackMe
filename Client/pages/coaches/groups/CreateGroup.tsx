@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, Pressable, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
 import { useNavigation } from "@react-navigation/native";
 
@@ -38,14 +38,14 @@ const CreateGroup = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-800 placeholder-gray-400 shadow-sm"
             />
             <View className="mt-6">
-                <TouchableOpacity
+                <Pressable
                     onPress={handleCreateGroup}
                     className="bg-red-500 px-6 py-3 rounded-lg"
                 >
                     <Text className="text-white text-center font-semibold">
                         Create Group
                     </Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
             </View>
         </View>

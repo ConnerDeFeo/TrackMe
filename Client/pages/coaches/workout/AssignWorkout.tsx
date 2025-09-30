@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DisplayWorkout from "../../../components/DisplayWorkout";
@@ -39,12 +39,12 @@ const AssignWorkout = () => {
     return (
         <View className="mt-4">
             {/* Button to navigate to the screen for creating a new workout */}
-            <TouchableOpacity
+            <Pressable
                 onPress={() => navigation.navigate('AssignNewWorkout', { groupId, groupName })}
-                className="trackme-bg-red rounded-lg py-3 mx-4"
+                className="trackme-bg-blue rounded-lg py-3 mx-4"
             >
                 <Text className="text-white font-semibold text-center">Assign New Workout</Text>
-            </TouchableOpacity>
+            </Pressable>
 
             {/* List of fetched workout templates */}
             <View className="flex gap-y-2">

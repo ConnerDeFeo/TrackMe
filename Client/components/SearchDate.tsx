@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, Pressable, View } from "react-native";
 import { useState } from "react";
 
 // SearchDate component props:
@@ -53,12 +53,12 @@ const SearchDate: React.FC<{
                     placeholder="Enter date (YYYY-MM-DD)"
                     className="flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white"
                 />
-                <TouchableOpacity
+                <Pressable
                     onPress={handleSearch}
                     className="trackme-bg-blue px-4 py-2 rounded-lg"
                 >
                     <Text className="text-white font-medium">Search</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
 
             {/* Display active filter and clear button if a date is selected */}
@@ -67,9 +67,9 @@ const SearchDate: React.FC<{
                     <Text className="text-gray-700">
                         Filtering by: {selectedDate}
                     </Text>
-                    <TouchableOpacity onPress={handleClearDateFilter}>
+                    <Pressable onPress={handleClearDateFilter}>
                         <Text className="trackme-red font-medium">Clear</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             )}
         </View>

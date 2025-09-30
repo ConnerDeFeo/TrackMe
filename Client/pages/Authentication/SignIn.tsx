@@ -1,5 +1,5 @@
 import AuthInput from "../../components/authentication/AuthInput";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import { useContext, useState } from "react";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes  } from "aws-amplify/auth";
@@ -65,20 +65,20 @@ const SignIn = ()=>{
                     <AuthInput value={username} setValue={setUsername} placeholder="Username or Email"/>
                     <View className="gap-y-2">
                         <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
-                        <TouchableOpacity onPress={()=>navigation.reset({index: 0, routes: [{ name: "ForgotPassword" }],})}>
+                        <Pressable onPress={()=>navigation.reset({index: 0, routes: [{ name: "ForgotPassword" }],})}>
                             <Text className="text-right">Forgot Password?</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
-                    <TouchableOpacity onPress={handleSignIn} className="bg-black rounded-lg py-3">
+                    <Pressable onPress={handleSignIn} className="bg-black rounded-lg py-3">
                         <Text className="text-white text-xl font-bold text-center">Login</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-4">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <TouchableOpacity onPress={handleCreateAccountButtonPress} className="trackme-bg-red rounded-lg py-3">
+                    <Pressable onPress={handleCreateAccountButtonPress} className="trackme-bg-red rounded-lg py-3">
                         <Text className="text-white text-xl font-bold text-center">Create Account</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </View>
         </View>

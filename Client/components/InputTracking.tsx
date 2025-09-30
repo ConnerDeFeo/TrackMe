@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, Pressable, View } from "react-native";
 
 /**
  * A component for dynamically adding and removing time and distance input fields.
@@ -46,7 +46,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
             ))}
             <View className="flex flex-row items-center justify-between">
                 {/* Button to remove the last input pair from the current group */}
-                <TouchableOpacity
+                <Pressable
                     className="trackme-bg-red rounded-lg p-2 w-[45%]"
                     onPress={() => {
                     setCurrentInputs(prev => {
@@ -57,10 +57,10 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                     });
                 }}>
                     <Text className="text-white text-center">Remove</Text>
-                </TouchableOpacity>
+                </Pressable>
 
                 {/* Button to add a new, empty input pair to the current group */}
-                <TouchableOpacity 
+                <Pressable 
                     className="trackme-bg-red rounded-lg p-2 w-[45%]"
                     onPress={() => {
                         // Get the existing inputs for this identifier, or an empty array if none exist
@@ -73,7 +73,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                     }
                 }>
                     <Text className="text-white text-center">Add</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </>
     );

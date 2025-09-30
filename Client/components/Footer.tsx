@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { View, Pressable, Image } from 'react-native';
 
 // Import all images statically
 const images = {
@@ -26,12 +26,12 @@ const Footer = ({buttons}: {buttons: string[][]}) => {
     return (
         <View className='h-[6rem] border-t flex-row justify-around items-top pt-4'>
             {buttons.map(([imageName, destination], idx) => (
-                <TouchableOpacity
+                <Pressable
                     key={idx}
                     onPress={() => handleNavigation(destination)}
                 >
                     <Image source={images[imageName as keyof typeof images]} className="h-12 w-12" />
-                </TouchableOpacity>
+                </Pressable>
             ))}
         </View>
     );

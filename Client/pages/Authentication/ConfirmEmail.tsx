@@ -1,6 +1,6 @@
 import { confirmSignUp, fetchUserAttributes, resendSignUpCode } from "aws-amplify/auth";
 import { useContext, useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, Pressable, View } from "react-native";
 import UserService from "../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AthleteService from "../../services/AthleteService";
@@ -98,22 +98,22 @@ const ConfirmEmail = () => {
                     />
                     
                     <View className="gap-y-3">
-                        <TouchableOpacity 
+                        <Pressable 
                             className="trackme-bg-red rounded-lg py-3 px-4"
                             onPress={handleConfirmEmail}
                         >
                             <Text className="text-white text-center font-semibold">Confirm Email</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
+                        </Pressable>
+                        <Pressable 
                             className="bg-black rounded-lg py-3 px-4"
                             onPress={() => navigation.reset({index: 0,routes: [{ name: "SignIn" }],})}
                         >
                             <Text className="text-white text-center font-semibold">Back to Sign In</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                         <View className="flex flex-row justify-between items-center">
-                            <TouchableOpacity onPress={handleResendCode} disabled={resendCodeTimer > 0}>
+                            <Pressable onPress={handleResendCode} disabled={resendCodeTimer > 0}>
                                 <Text>Resend Code</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                             {resendCodeTimer > 0 &&
                                 <View className=" px-3 py-1">
                                     <Text className="text-gray-600">Resend in {resendCodeTimer}s</Text>

@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, Pressable, View } from "react-native";
 import Variables from "../../../assets/constants/Variables";
 import ExerciseCreation from "./ExerciseCreation";
 import Section from "../../../types/Sections";
@@ -88,9 +88,9 @@ const SectionCreation = ({ section, setSections, idx }:
       <View className="mb-4">
         <View className="flex-row justify-between items-center">
           <Text className="text-lg font-bold mb-2">Section Name</Text>
-          <TouchableOpacity onPress={handleSectionDeletion}>
+          <Pressable onPress={handleSectionDeletion}>
             <Text className="trackme-red">Remove Section</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
         <TextInput 
           className={`border rounded-md p-3 bg-white text-black ${section.name ? 'border-gray-300' : 'border-red-500'}`}
@@ -102,15 +102,15 @@ const SectionCreation = ({ section, setSections, idx }:
 
       {/* Add Exercise Buttons */}
       <View className="flex-row justify-around items-center mb-4 border-y border-gray-200 py-3">
-          <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Run)}>
+          <Pressable onPress={() => handleExerciseAddition(ExerciseType.Run)}>
             <Text className="font-medium trackme-blue">Add Run</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Strength)}>
+          </Pressable>
+          <Pressable onPress={() => handleExerciseAddition(ExerciseType.Strength)}>
             <Text className="font-medium trackme-blue">Add Strength</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleExerciseAddition(ExerciseType.Rest)}>
+          </Pressable>
+          <Pressable onPress={() => handleExerciseAddition(ExerciseType.Rest)}>
             <Text className="font-medium trackme-blue">Add Rest</Text>
-          </TouchableOpacity>
+          </Pressable>
       </View>
 
       {/* Sets Input */}

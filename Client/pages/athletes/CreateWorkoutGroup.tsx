@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
@@ -94,7 +94,7 @@ const CreateWorkoutGroup = ()=>{
                             {/* Athlete name display */}
                             <Text className="text-lg text-black font-medium">{athlete[1]}</Text>
                             {/* Selection toggle button */}
-                            <TouchableOpacity 
+                            <Pressable 
                                 onPress={() => handleWorkoutGroupChange({id: athlete[0], username: athlete[1]})}
                                 className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'trackme-bg-red'}`}
                                 style={{backgroundColor: isSelected ? '#f3f4f6' : '#E63946'}}
@@ -102,20 +102,20 @@ const CreateWorkoutGroup = ()=>{
                             <Text className={`font-semibold ${isSelected ? 'text-black' : 'text-white'}`}>
                                 {isSelected ? "Deselect" : "Select"}
                             </Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                     );
                 })}
             </View>
             
             {/* Create Group Action Button */}
-            <TouchableOpacity 
+            <Pressable 
                 onPress={() => navigation.goBack()}
                 className="p-4 rounded-xl shadow-lg"
                 style={{backgroundColor: '#E63946'}}
             >
                 <Text className="text-white text-xl font-bold text-center">Finish</Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     )
 };

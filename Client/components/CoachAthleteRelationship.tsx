@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 
 // Component that renders individual coach-athlete relationships on display pages
@@ -22,11 +22,11 @@ const CoachAthleteRelationship:React.FC<{ user: string[]; fetchUsers: () => void
             <Text className="text-lg font-medium">{user[1]}</Text>
             
             {/* Remove button - uses user[0] as the ID */}
-            <TouchableOpacity
+            <Pressable
                 onPress={() => handleRemoval(user[0])}
             >
                 <Text className="trackme-red">Remove</Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     );
 }

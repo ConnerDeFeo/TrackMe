@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import SearchDate from "../../components/SearchDate";
 import HistoryService from "../../services/HistoryService";
 import { useNavigation } from "@react-navigation/native";
@@ -43,7 +43,7 @@ const CoachHistory = () => {
             <View className="p-4">
                 {/* Render a button for each available date */}
                 {availableDates.map((date) => (
-                    <TouchableOpacity
+                    <Pressable
                         key={date}
                         className="mb-6 bg-white shadow-md border-l-4 rounded-lg p-4"
                         onPress={() =>
@@ -53,7 +53,7 @@ const CoachHistory = () => {
                         <Text className="text-2xl font-bold text-gray-800">
                             {date}
                         </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 ))}
             </View>
         </View>

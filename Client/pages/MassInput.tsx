@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, Pressable, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../hooks/usePersistentState";
 import InputTracking from "../components/InputTracking";
@@ -95,9 +95,9 @@ const MassInput = () => {
         />
       </View>
       ))}
-      <TouchableOpacity className="trackme-bg-blue rounded-lg p-3 mt-2" onPress={handleInputSubmission}>
+      <Pressable className="trackme-bg-blue rounded-lg p-3 mt-2" onPress={handleInputSubmission}>
         <Text className="text-white text-center">Submit</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 
 /**
  * Renders a list of proposals (requests or invites) with accept and decline actions.
@@ -25,19 +25,19 @@ const RequestsInvites = ({ proposals, handleAcceptance, handleDecline}: { propos
                             {/* Action buttons container */}
                             <View className="flex-row gap-x-2">
                                 {/* Accept button */}
-                                <TouchableOpacity
+                                <Pressable
                                     className="trackme-bg-blue rounded-lg py-2 px-3"
                                     onPress={() => handleAcceptance(proposal[0])}
                                 >
                                     <Text className="text-white font-semibold text-center">Accept</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                                 {/* Decline button */}
-                                <TouchableOpacity 
+                                <Pressable 
                                     className="trackme-bg-red rounded-lg py-2 px-3"
                                     onPress={() => handleDecline(proposal[0])}
                                 >
                                     <Text className="text-white font-semibold text-center">Decline</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                         </View>
                     </View>

@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, Pressable, View } from "react-native";
 import { Exercise } from "../../../types/Exercise";
 import Section from "../../../types/Sections";
 import { Rest } from "../../../types/Rest";
@@ -69,9 +69,9 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
               {exercise.type.charAt(0).toUpperCase() + exercise.type.slice(1)}
             </Text>
             {/* Button to remove this exercise */}
-            <TouchableOpacity onPress={() => handleExerciseRemoval(partIdx)}>
+            <Pressable onPress={() => handleExerciseRemoval(partIdx)}>
               <Text className="trackme-red">Remove</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Conditional rendering for 'Run' exercises */}

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import AthleteService from "../../services/AthleteService";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
 import GeneralService from "../../services/GeneralService";
@@ -40,12 +40,12 @@ const Coaches = ()=>{
     return (
         <View className="flex-1 px-4 mt-4">
             <View className="flex flex-row justify-between items-center">
-                <TouchableOpacity onPress={() => navigation.navigate('CoachInvites')}>
+                <Pressable onPress={() => navigation.navigate('CoachInvites')}>
                     <Text className="trackme-blue font-semibold">Invites({invites})</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('RequestCoaches')}>
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate('RequestCoaches')}>
                     <Text className="trackme-blue font-semibold">Add Coaches</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
             <View className="bg-white rounded-lg p-4 mb-6">
             {coaches.length > 0 ? (

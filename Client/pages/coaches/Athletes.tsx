@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native"
+import { View, Text, Pressable } from "react-native"
 import { useEffect } from "react";
 import CoachService from "../../services/CoachService";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
@@ -41,12 +41,12 @@ const Athletes = () => {
     return (
         <View className="flex-1 px-4 mt-4">
             <View className="mb-6 flex flex-row justify-between items-center">
-                <TouchableOpacity onPress={() => navigation.navigate("AthleteRequests", {fetchAthletes:fetchAthletes})}>
+                <Pressable onPress={() => navigation.navigate("AthleteRequests", {fetchAthletes:fetchAthletes})}>
                     <Text className="trackme-blue font-semibold">Requests({requests})</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("AddAthlete")}>
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate("AddAthlete")}>
                     <Text className="trackme-blue font-semibold">Add Athlete</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
             
             <View className="gap-y-3">

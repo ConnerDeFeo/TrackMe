@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Text, TextInput, View, Pressable } from "react-native";
 import Exercise from "../../../types/Sections";
 import SectionCreation from "./SectionCreation";
 
@@ -79,17 +79,17 @@ const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}:
       ))}
         <View className="flex flex-row justify-between items-center">
           {/* Button to add a new exercise */}
-          <TouchableOpacity
+          <Pressable
             onPress={() => setSections([...sections, { name: ''}])}
           >
             <Text className="font-bold trackme-blue">Add section</Text>
-          </TouchableOpacity>
+          </Pressable>
           {/* CREATE WORKOUT BUTTON */}
-          <TouchableOpacity
+          <Pressable
             onPress={handleCreation}
           >
             <Text className="font-bold trackme-blue">{buttonText}</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </View>

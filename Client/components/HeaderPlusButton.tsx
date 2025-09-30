@@ -1,9 +1,9 @@
-import { Image, TouchableOpacity } from "react-native";
+import { Image, Pressable } from "react-native";
 
 const PlusButton = ({onPress}:{onPress: () => void}) => (
-  <TouchableOpacity onPress={onPress}>
+  <Pressable onPress={onPress}>
     <Image source={require("../assets/images/Plus.png")} className="h-6 w-6"/>
-  </TouchableOpacity>
+  </Pressable>
 );
 
 export default PlusButton;

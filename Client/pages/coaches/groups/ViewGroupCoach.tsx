@@ -86,7 +86,7 @@ const ViewGroup = () => {
   };
 
   return (
-    <View className="pb-12 px-4 mt-4">
+    <View className="px-4 my-1">
       {/* Action buttons: Send workout and view group inputs */}
       <View className="flex flex-row items-center justify-between mb-2 mx-4">
         <Pressable

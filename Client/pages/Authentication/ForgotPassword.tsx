@@ -54,7 +54,7 @@ const ForgotPassword = () => {
                 {/**BACK TO SIGN IN*/}
                 <View className="gap-y-6">
                     <Pressable 
-                        onPress={() => navigation.navigate("Auth", { screen: 'SignIn' })} 
+                        onPress={() => navigation.reset({index: 0, routes: [{ name: "SignIn"}],})} 
                         className="py-3 rounded"
                         style={{ backgroundColor: "#E63946" }}
                     >

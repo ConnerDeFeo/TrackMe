@@ -79,7 +79,7 @@ const ResetPassword = () => {
             {/**BACK TO SIGN IN*/}
             <View className="gap-y-6">
                 <Pressable 
-                onPress={() => navigation.navigate("Auth", { screen: 'SignIn' })} 
+                onPress={() => navigation.reset({index: 0, routes: [{ name: "SignIn"}],})} 
                 className="trackme-bg-red py-3 rounded"
                 >
                     <Text className="text-white text-center font-medium">Back to Sign In</Text>

@@ -1,6 +1,6 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import DisplayWorkout from "../../components/display/DisplayWorkout";
 import GeneralService from "../../services/GeneralService";
 
@@ -10,6 +10,7 @@ const ViewGroupAthlete = ()=>{
     const { groupName, groupId } = route.params as { groupName: string, groupId: string } || {};
     const [workouts, setWorkouts] = useState<Array<any>>([]);
     const [athletes, setAthletes] = useState<string[]>([]);
+    const navigation = useNavigation<any>();
 
     useEffect(() => {
         // Fetch workout data for the group
@@ -32,6 +33,16 @@ const ViewGroupAthlete = ()=>{
     }, [groupId]);
     return(
         <View className="px-4">
+            <Pressable
+                onPress={() =>
+                    navigation.navigate('GroupSchedule', { groupId, groupName })
+                }
+                className="rounded-lg py-3"
+            >
+                <Text className="trackme-blue font-semibold text-center">
+                    Schedule
+                </Text>
+            </Pressable>
             {workouts.map((workout) => (
                 <DisplayWorkout key={workout.groupWorkoutId} workout={workout} onPress={() => {}} />
             ))}

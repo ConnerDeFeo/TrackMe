@@ -1,11 +1,13 @@
 import API from "./API";
+import DateService from "./DateService";
 import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const AthleteWorkoutService = {
     viewWorkoutInputs: async() =>{
         const userId = await UserService.getUserId();
-        let query = `${EXPO_PUBLIC_API_URL}/athletes/view_workout_inputs?athleteId=${userId}`;
+        const date = DateService.formatDate(new Date());
+        let query = `${EXPO_PUBLIC_API_URL}/athletes/view_workout_inputs?athleteId=${userId}&date=${date}`;
         return await API.get(query);
     },
     inputTimes: async ( athleteIds:string[], groupId:string, date:string, inputs: { time?: string; distance?: string }[]) => {

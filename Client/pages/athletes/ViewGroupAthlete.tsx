@@ -5,35 +5,50 @@ import DisplayWorkout from "../../components/display/DisplayWorkout";
 import GeneralService from "../../services/GeneralService";
 import UserDisplay from "../../components/display/UserDisplay";
 
-//Pages that displays an athletes groupp for a given date
-const ViewGroupAthlete = ()=>{
-    const route = useRoute();
-    const { groupName, groupId } = route.params as { groupName: string, groupId: string } || {};
-    const [workouts, setWorkouts] = useState<Array<any>>([]);
-    const [athletes, setAthletes] = useState<string[]>([]);
+/**
+ * Page: ViewGroupAthlete
+ * Displays the workouts and athletes for a specific group.
+ */
+const ViewGroupAthlete = () => {
+    // Navigation and route hooks
     const navigation = useNavigation<any>();
+    const route = useRoute();
+
+    // Extract groupName and groupId from route parameters
+    const { groupName, groupId } =
+        (route.params as { groupName: string; groupId: string }) || {};
+
+    // State for storing fetched workouts and athletes
+    const [workouts, setWorkouts] = useState<any[]>([]);
+    const [athletes, setAthletes] = useState<string[][]>([]);
 
     useEffect(() => {
-        // Fetch workout data for the group
+        // Fetch workouts for the current group
         const fetchWorkout = async () => {
             const resp = await GeneralService.getGroupWorkout(groupId);
             if (resp.ok) {
-                const workouts = await resp.json();
-                setWorkouts(workouts);
+                const data = await resp.json();
+                setWorkouts(data);
             }
         };
-        const fetchAthletes = async ()=>{
+
+        // Fetch athletes belonging to the current group
+        const fetchAthletes = async () => {
             const resp = await GeneralService.getAthletesForGroup(groupId);
             if (resp.ok) {
                 const data = await resp.json();
                 setAthletes(data);
             }
         };
-        fetchAthletes();
+
+        // Trigger data fetch when component mounts or groupId changes
         fetchWorkout();
+        fetchAthletes();
     }, [groupId]);
-    return(
+
+    return (
         <View className="px-4">
+            {/* Button to navigate to the group's schedule */}
             <Pressable
                 onPress={() =>
                     navigation.navigate('GroupSchedule', { groupId, groupName })
@@ -44,17 +59,40 @@ const ViewGroupAthlete = ()=>{
                     Schedule
                 </Text>
             </Pressable>
+
+            {/* Render each workout */}
             {workouts.map((workout) => (
-                <DisplayWorkout key={workout.groupWorkoutId} workout={workout} onPress={() => {}} />
+                <DisplayWorkout
+                    key={workout.groupWorkoutId}
+                    workout={workout}
+                    onPress={() => {
+                        /* TODO: handle workout selection */
+                    }}
+                />
             ))}
-            <Text className="text-2xl font-bold mt-2 mb-4">Athletes</Text>
+
+            <Text className="text-2xl font-bold mt-2 mb-4">
+                Athletes
+            </Text>
+
+            {/* List all athletes in the group */}
             <View className="gap-y-2">
-                {athletes.map((athlete) => (
-                    <UserDisplay key={athlete[0]} username={athlete[1]} firstName={athlete[2]} lastName={athlete[3]} className="mb-2 border border-gray-300 rounded-lg p-2" />
-                ))}
+                {athletes.map((athlete) => {
+                    // athlete array format: [id, username, firstName, lastName]
+                    const [id, username, firstName, lastName] = athlete;
+                    return (
+                        <UserDisplay
+                            key={id}
+                            username={username}
+                            firstName={firstName}
+                            lastName={lastName}
+                            className="mb-2 border border-gray-300 rounded-lg p-2"
+                        />
+                    );
+                })}
             </View>
         </View>
     );
-}
+};
 
 export default ViewGroupAthlete;

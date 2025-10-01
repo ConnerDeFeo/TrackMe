@@ -76,72 +76,88 @@ const RenderGroupInputs: React.FC<
             onSubmit();
         }
     }
-
     return(
-        // Main container for the group with styling for card appearance
-        <View key={groupId} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 gap-y-4 mt-4">
-            {/* Group header with title and create group button */}
-            <View className="flex flex-row justify-between items-center">
-                <Text className="text-lg font-semibold text-gray-700">{groupName}</Text>
-                <Pressable onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
-                    <Text className="trackme-blue">{workoutGroup.length>0 ? "Update Workout Group" : "Create Workout Group"}</Text>
+        // Main container for the group with modern card styling
+        <View key={groupId} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            {/* Group header section */}
+            <View className="px-5 py-4 bg-gray-50 border-b border-gray-100">
+                <View className="flex flex-row justify-between items-start mb-3">
+                    <Text className="text-xl font-bold text-gray-900">{groupName}</Text>
+                    <View className="flex flex-row gap-3">
+                        <Pressable onPress={()=>navigation.navigate('MassInput', { groupId, groupName })}>
+                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-3 py-1.5 rounded-full">Mass Input</Text>
+                        </Pressable>
+                        <Pressable onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
+                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-3 py-1.5 rounded-full">
+                                {workoutGroup.length>0 ? "Update Group" : "Create Group"}
+                            </Text>
+                        </Pressable>
+                    </View>
+                </View>
+
+                {/* Current workout group members */}
+                {workoutGroup.length > 0 && (
+                    <View>
+                        <Text className="text-sm font-medium text-gray-600 mb-2">Workout Partners</Text>
+                        <View className="flex flex-row flex-wrap gap-2">
+                            {workoutGroup.map((member, idx) => (
+                                <View key={idx} className="bg-white border border-gray-200 rounded-full px-3 py-1">
+                                    <Text className="text-sm font-medium text-gray-700">{member.username}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                )}
+            </View>
+
+            {/* Content section */}
+            <View className="px-5 py-5 gap-y-5">
+                {/* Previous entries section */}
+                {submitedInputs[groupId] && (
+                    <View>
+                        <View className="flex flex-row items-center justify-between mb-3">
+                            <Text className="text-base font-semibold text-gray-800">Previous Entries</Text>
+                            {selectedSubmitedInputs.length > 0 && (
+                                <Pressable onPress={handleInputRemoval}>
+                                    <Text className="text-sm font-medium trackme-red underline">
+                                        Remove ({selectedSubmitedInputs.length})
+                                    </Text>
+                                </Pressable>
+                            )}
+                        </View>
+                        <View className="gap-y-2">
+                            {submitedInputs[groupId].map((input, idx) => (
+                                <Pressable key={idx} onPress={()=>{
+                                    if(selectedSubmitedInputs.includes(input.inputId)){
+                                        setSelectedSubmitedInputs(prev => prev.filter(id => id !== input.inputId));
+                                    } else {
+                                        setSelectedSubmitedInputs(prev => [...prev, input.inputId]);
+                                    }
+                                }}>
+                                    <TimeDistanceDisplay time={input.time} distance={input.distance} selected={selectedSubmitedInputs.includes(input.inputId)} />
+                                </Pressable>
+                            ))}
+                        </View>
+                    </View>
+                )}
+
+                {/* New inputs section */}
+                <InputTracking
+                    currentInputs={currentInputs}
+                    setCurrentInputs={setCurrentInputs}
+                    identifierId={groupId}
+                    handleTimeChange={handleTimeChange}
+                    handleDistanceChange={handleDistanceChange}
+                />
+
+                {/* Submit button */}
+                <Pressable 
+                    className="trackme-bg-blue rounded-xl py-3 shadow-sm" 
+                    onPress={handleInputSubmission}
+                >
+                    <Text className="text-white text-center font-semibold text-base">Submit Entry</Text>
                 </Pressable>
             </View>
-            {/* Go to mass inputs */}
-            <Pressable onPress={()=>navigation.navigate('MassInput', { groupId, groupName})}>
-                <Text className="trackme-blue ml-auto">Mass Input</Text>
-            </Pressable>
-
-            {/**Current workout group and their inputs */}
-            {workoutGroup.length > 0 && (
-                <View className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                    <Text className="text-base font-medium text-gray-800 mb-2">Current Workout Group:</Text>
-                    <View className="flex flex-row flex-wrap gap-2">
-                        {workoutGroup.map((member, idx) => (
-                            <Text key={idx} className="text-white text-sm font-medium bg-[#E63946] rounded-full px-3 py-1">{member.username}</Text>
-                        ))}
-                    </View>
-                </View>
-            )}
-            {/**Submitted inputs that will be displayed */}
-            {submitedInputs[groupId] &&
-                <View>
-                    <View className="flex flex-row items-center justify-between mb-4">
-                        <Text className="font-semibold text-gray-500 uppercase">Entries</Text>
-                        {
-                            selectedSubmitedInputs.length > 0 && (
-                                <Pressable onPress={handleInputRemoval}>
-                                    <Text className="trackme-red">Remove Inputs</Text>
-                                </Pressable>
-                            )
-                        }
-                    </View>
-                    {submitedInputs[groupId].map((input, idx) => (
-                        <Pressable key={idx} onPress={()=>{
-                            if(selectedSubmitedInputs.includes(input.inputId)){
-                                setSelectedSubmitedInputs(prev => prev.filter(id => id !== input.inputId));
-                            } else {
-                                setSelectedSubmitedInputs(prev => [...prev, input.inputId]);
-                            }
-                        }}>
-                            <TimeDistanceDisplay key={idx} time={input.time} distance={input.distance} selected={selectedSubmitedInputs.includes(input.inputId)} />
-                        </Pressable>
-                    ))}
-                </View>
-            }
-            {/* Render all existing input pairs for this group */}
-            <InputTracking
-                currentInputs={currentInputs}
-                setCurrentInputs={setCurrentInputs}
-                identifierId={groupId}
-                handleTimeChange={handleTimeChange}
-                handleDistanceChange={handleDistanceChange}
-            />
-
-            {/* Submit the current inputs for the current group */}
-            <Pressable className="trackme-bg-blue rounded-lg p-3" onPress={handleInputSubmission}>
-                <Text className="text-white text-center font-medium">Submit</Text>
-            </Pressable>
         </View>
     );
 }

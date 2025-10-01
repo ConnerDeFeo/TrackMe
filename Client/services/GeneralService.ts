@@ -1,5 +1,6 @@
 import { AccountType } from "../assets/constants/Enums";
 import API from "./API";
+import DateService from "./DateService";
 import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -11,10 +12,8 @@ const GeneralService = {
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_athletes_for_group?groupId=${groupId}`);
   },
   viewGroupInputs: async (groupId:string, date?:string) => {
-      let query = `${EXPO_PUBLIC_API_URL}/general/view_group_inputs?groupId=${groupId}`;
-      if(date){
-          query += `&date=${date}`;
-      }
+      date ??= DateService.formatDate(new Date()); 
+      const query = `${EXPO_PUBLIC_API_URL}/general/view_group_inputs?groupId=${groupId}&date=${date}`;
       return await API.get(query);
   },
   getUser: async () => {

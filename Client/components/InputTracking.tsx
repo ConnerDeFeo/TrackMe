@@ -21,58 +21,78 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
 ) => {   
     return(
         <>
-            {/* Render all existing input pairs for the given identifierId */}
-            {currentInputs[identifierId]?.map((input, idx) => (
-                <View key={idx} className="flex flex-row justify-between items-center mb-2">
-                    {/* Time input field */}
-                    <TextInput
-                        placeholder="Time"
-                        keyboardType="numeric"
-                        value={input?.time}
-                        className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
-                        onChangeText={text => handleTimeChange(identifierId, idx, text)}
-                    />
-                    {/* Distance input field */}
-                    <TextInput
-                        placeholder="Distance"
-                        keyboardType="numeric"
-                        className="border border-gray-300 rounded-lg p-2 flex-1 mr-2"
-                        value={input?.distance}
-                        onChangeText={text => handleDistanceChange(identifierId, idx, text)}
-                    />
-                    {/* Units label */}
-                    <Text>Meters</Text>
+            {/* Input entries */}
+            {currentInputs[identifierId]?.length > 0 ? (
+                <View className="gap-y-3">
+                    {currentInputs[identifierId]?.map((input, idx) => (
+                        <View key={idx} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                            <View className="flex flex-row items-center gap-x-3">
+                                {/* Time input field */}
+                                <View className="flex-1">
+                                    <Text className="text-xs font-medium text-gray-600 mb-1">Time (seconds)</Text>
+                                    <TextInput
+                                        placeholder="0.00"
+                                        keyboardType="numeric"
+                                        value={input?.time}
+                                        className="border border-gray-300 rounded-lg p-3 bg-white text-center font-medium"
+                                        onChangeText={text => handleTimeChange(identifierId, idx, text)}
+                                    />
+                                </View>
+                                
+                                {/* Distance input field */}
+                                <View className="flex-1">
+                                    <Text className="text-xs font-medium text-gray-600 mb-1">Distance</Text>
+                                    <View className="flex flex-row items-center">
+                                        <TextInput
+                                            placeholder="0"
+                                            keyboardType="numeric"
+                                            className="border border-gray-300 rounded-lg p-3 bg-white text-center font-medium flex-1"
+                                            value={input?.distance}
+                                            onChangeText={text => handleDistanceChange(identifierId, idx, text)}
+                                        />
+                                        <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    ))}
                 </View>
-            ))}
-            <View className="flex flex-row items-center justify-between">
-                {/* Button to remove the last input pair from the current group */}
-                <Pressable
-                    className="trackme-bg-red rounded-lg p-2 w-[45%]"
-                    onPress={() => {
-                    setCurrentInputs(prev => {
-                        // Get the current inputs for the identifier and remove the last element
-                        const updatedGroup = prev[identifierId]?.slice(0, -1) || [];
-                        // Return the updated state
-                        return { ...prev, [identifierId]: updatedGroup };
-                    });
-                }}>
-                    <Text className="text-white text-center">Remove</Text>
-                </Pressable>
+            ) : (
+                <View className="py-8 items-center">
+                    <Text className="text-gray-500 text-sm">No entries yet</Text>
+                    <Text className="text-gray-400 text-xs mt-1">Tap "Add Entry" to get started</Text>
+                </View>
+            )}
+            
+            {/* Action buttons */}
+            <View className="flex flex-row justify-between mt-4 gap-x-3">
+                {/* Remove button - only show if there are inputs */}
+                {currentInputs[identifierId]?.length > 0 && (
+                    <Pressable
+                        className="flex-1 bg-gray-200 rounded-lg py-3"
+                        onPress={() => {
+                            setCurrentInputs(prev => {
+                                const updatedGroup = prev[identifierId]?.slice(0, -1) || [];
+                                return { ...prev, [identifierId]: updatedGroup };
+                            });
+                        }}
+                    >
+                        <Text className="text-gray-600 text-center font-medium">Remove Last</Text>
+                    </Pressable>
+                )}
 
-                {/* Button to add a new, empty input pair to the current group */}
+                {/* Add button */}
                 <Pressable 
-                    className="trackme-bg-red rounded-lg p-2 w-[45%]"
+                    className="flex-1 trackme-bg-blue rounded-lg py-3"
                     onPress={() => {
-                        // Get the existing inputs for this identifier, or an empty array if none exist
                         const existingInputs = currentInputs[identifierId] || [];
-                        // Create a new array with the existing inputs plus one new empty input
                         const updatedInputs = [...existingInputs, { time: '', distance: '' }];
-                        
-                        // Update the state with the new array for this identifier
                         setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs }));
-                    }
-                }>
-                    <Text className="text-white text-center">Add</Text>
+                    }}
+                >
+                    <Text className="text-white text-center font-medium">
+                        {currentInputs[identifierId]?.length > 0 ? 'Add Another' : 'Add Entry'}
+                    </Text>
                 </Pressable>
             </View>
         </>

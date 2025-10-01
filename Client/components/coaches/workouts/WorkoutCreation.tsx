@@ -7,11 +7,13 @@ import SectionCreation from "./SectionCreation";
 const WorkoutCreation = ({
   workout,
   handleWorkoutCreation,
-  buttonText
+  buttonText,
+  onRemove
 }: {
   workout?: any
   handleWorkoutCreation: (workoutData: any) => void
   buttonText: string
+  onRemove?: () => void
 }) => {
 
   // Local state for title, description and sections list
@@ -118,6 +120,11 @@ const WorkoutCreation = ({
           </Pressable>
         </View>
       </View>
+      {onRemove &&
+        <Pressable className="trackme-bg-red py-2 mx-4 rounded-lg mt-6 mb-2">
+          <Text className="text-center font-bold text-white" onPress={onRemove}>Remove</Text>
+        </Pressable>
+      }
     </View>
   )
 }

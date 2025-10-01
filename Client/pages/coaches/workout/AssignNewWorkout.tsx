@@ -36,12 +36,25 @@ const AssignNewWorkout = () => {
         }
     };
 
+     /**
+     * Deletes a specific group workout on the server,
+     * then refreshes the workouts list.
+     */
+    const handleWorkoutRemoval = async () => {
+        const groupWorkoutId = workout?.groupWorkoutId;
+        if (!groupWorkoutId) return;
+        const resp = await CoachWorkoutService.deleteGroupWorkout(groupWorkoutId);
+        if (resp.ok) {
+            navigation.goBack();
+        }
+    };
     return (
         // Render the workout creation form
         <WorkoutCreation
             buttonText="Assign"
             handleWorkoutCreation={handleWorkoutCreation}
             workout={workout}
+            onRemove={workout ? handleWorkoutRemoval : undefined}
         />
     );
 };

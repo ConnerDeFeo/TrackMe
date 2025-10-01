@@ -2,7 +2,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Pressable, Text, View } from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import CoachGroupService from "../../../services/CoachGroupService";
 import DisplayWorkout from "../../../components/display/DisplayWorkout";
 import GeneralService from "../../../services/GeneralService";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
@@ -60,16 +59,6 @@ const ViewGroup = () => {
     }, [fetchParticipants, fetchWorkout])
   );
 
-  /**
-   * Deletes a specific group workout on the server,
-   * then refreshes the workouts list.
-   */
-  const handleWorkoutRemoval = async (groupWorkoutId: string) => {
-    const resp = await CoachWorkoutService.deleteGroupWorkout(groupWorkoutId);
-    if (resp.ok) {
-      await fetchWorkout();
-    }
-  };
 
   return (
     <View className="px-4 mb-8">
@@ -110,10 +99,9 @@ const ViewGroup = () => {
             navigation.navigate('AssignNewWorkout', {
               groupId,
               groupName,
-              workout,
+              workout
             })
           }
-          onRemove={() => handleWorkoutRemoval(workout.groupWorkoutId)}
         />
       ))}
 

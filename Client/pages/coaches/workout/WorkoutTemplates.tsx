@@ -23,16 +23,6 @@ const WorkoutTemplates = () => {
 
     fetchWorkouts()
   }, [])
-
-  // Handler to delete a workout template
-  const onRemove = async (workoutId: string) => {
-    const resp = await CoachWorkoutService.deleteWorkoutTemplate(workoutId)
-    if (resp.ok) {
-      // Remove deleted template from local state
-      setWorkouts(prev => prev.filter(w => w.workoutId !== workoutId))
-    }
-  }
-
   // Render a scrollable list of DisplayWorkout components
   return (
     <ScrollView>
@@ -40,12 +30,8 @@ const WorkoutTemplates = () => {
         <DisplayWorkout
           key={idx}
           workout={workout}
-          onRemove={onRemove}
           onPress={() =>
-            navigation.navigate('CreateWorkoutTemplate', {
-              workout,
-              isEdit: true,
-            })
+            navigation.navigate('CreateWorkoutTemplate', {workout})
           }
         />
       ))}

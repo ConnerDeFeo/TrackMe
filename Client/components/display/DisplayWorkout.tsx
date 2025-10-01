@@ -13,7 +13,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void}> = ({ workout,
             onPress={onPress}
             className="my-3 mx-2"
         >
-            <View className="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-300">
+            <View className="bg-white shadow-md rounded-2xl overflow-hidden border trackme-border-gray">
                 {/* Workout Header */}
                 <View className="p-4 bg-gray-50 border-b border-gray-200">
                     <Text className="text-xl font-bold text-gray-800" numberOfLines={2}>{workout.title}</Text>

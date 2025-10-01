@@ -88,7 +88,7 @@ const ConfirmEmail = () => {
                 
                 <View className="gap-y-4">
                     <TextInput
-                        className="border border-gray-300 rounded-lg px-4 py-3 text-base bg-white"
+                        className="border trackme-border-gray rounded-lg px-4 py-3 text-base bg-white"
                         placeholder="verification code"
                         keyboardType="numeric"
                         value={verificationCode}

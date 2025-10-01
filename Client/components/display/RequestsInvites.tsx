@@ -18,7 +18,7 @@ const RequestsInvites = ({ proposals, handleAcceptance, handleDecline}: { propos
                 {proposals.length > 0 ? (
                     // If there are proposals, map over them and render each one.
                     proposals.map(proposal => (
-                    <View key={proposal[0]} className="bg-white rounded-lg p-4 mx-auto w-[90%] border border-gray-300">
+                    <View key={proposal[0]} className="bg-white rounded-lg p-4 mx-auto w-[90%] border trackme-border-gray">
                         <View className="flex-row items-center justify-between">
                             {/* Display the name from the proposal. Assumes name is the second element. */}
                             <Text className="text-xl font-medium flex-1">{proposal[1]}</Text>

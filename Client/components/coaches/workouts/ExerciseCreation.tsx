@@ -80,7 +80,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Distance (m)</Text>
                 <TextInput
-                  className={`border rounded-md p-3 bg-white text-black ${exercise.distance === 0 ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`border rounded-md p-3 bg-white text-black ${exercise.distance === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
                   value={exercise.distance ? `${exercise.distance}` : ''}
                   keyboardType="numeric"
                   onChangeText={text => handleExerciseChange(partIdx, 'distance', text ? Number(text) : 0)}
@@ -89,7 +89,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Reps (Optional)</Text>
                 <TextInput
-                  className="border border-gray-300 rounded-md p-3 bg-white text-black"
+                  className="border trackme-border-gray rounded-md p-3 bg-white text-black"
                   value={exercise.reps ? `${exercise.reps}` : ''}
                   keyboardType="numeric"
                   onChangeText={text => handleRepsChange(partIdx, text)}
@@ -104,7 +104,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Description</Text>
                 <TextInput
-                  className={`border rounded-md p-3 bg-white text-black ${!exercise.description ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`border rounded-md p-3 bg-white text-black ${!exercise.description ? 'border-red-500' : 'trackme-border-gray'}`}
                   value={exercise.description}
                   onChangeText={text => handleExerciseChange(partIdx, 'description', text)}
                   placeholder="e.g., Bench Press, Squats"
@@ -113,7 +113,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Reps (Optional)</Text>
                 <TextInput
-                  className="border border-gray-300 rounded-md p-3 bg-white text-black"
+                  className="border trackme-border-gray rounded-md p-3 bg-white text-black"
                   value={exercise.reps ? `${exercise.reps}` : ''}
                   keyboardType="numeric"
                   onChangeText={text => handleRepsChange(partIdx, text)}
@@ -129,7 +129,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
               <View className="flex-row items-center gap-x-2">
                 {/* Minutes input */}
                 <TextInput
-                  className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
                   placeholder="Mins"
                   keyboardType="numeric"
                   onChangeText={text => handleRestChange(partIdx, 'minutes', text)}
@@ -139,7 +139,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                 <Text className="font-bold text-lg">:</Text>
                 {/* Seconds input */}
                 <TextInput
-                  className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
                   placeholder="Secs"
                   keyboardType="numeric"
                   onChangeText={text => handleRestChange(partIdx, 'seconds', text)}

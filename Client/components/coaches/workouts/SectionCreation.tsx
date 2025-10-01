@@ -83,7 +83,7 @@ const SectionCreation = ({ section, setSections, idx }:
   };
 
   return (
-    <View className="border-2 border-gray-300 bg-white rounded-lg shadow-lg my-3 p-4">
+    <View className="border-2 trackme-border-gray bg-white rounded-lg shadow-lg my-3 p-4">
       {/* Section Name and Remove Button */}
       <View className="mb-4">
         <View className="flex-row justify-between items-center">
@@ -93,7 +93,7 @@ const SectionCreation = ({ section, setSections, idx }:
           </Pressable>
         </View>
         <TextInput 
-          className={`border rounded-md p-3 bg-white text-black ${section.name ? 'border-gray-300' : 'border-red-500'}`}
+          className={`border rounded-md p-3 bg-white text-black ${section.name ? 'trackme-border-gray' : 'border-red-500'}`}
           value={section.name} 
           onChangeText={handleNameChange} 
           placeholder="e.g., Warm-up, Main Set, Cool-down"
@@ -116,7 +116,7 @@ const SectionCreation = ({ section, setSections, idx }:
       {/* Sets Input */}
       <View className="flex-row justify-between w-[75%] mx-auto items-center mb-3">
         <Text className="text-lg font-bold">Sets</Text>
-        <View className={`border rounded-md bg-white h-12 flex items-center justify-center w-20 ${section.sets && section.sets > 0 ? 'border-gray-300' : 'border-red-500'}`}>
+        <View className={`border rounded-md bg-white h-12 flex items-center justify-center w-20 ${section.sets && section.sets > 0 ? 'trackme-border-gray' : 'border-red-500'}`}>
           <TextInput 
             className="text-center text-lg" 
             value={section.sets ? `${section.sets}` : ''} 

@@ -34,7 +34,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                                         placeholder="0.00"
                                         keyboardType="numeric"
                                         value={input?.time}
-                                        className="border border-gray-300 rounded-lg p-3 bg-white text-center font-medium"
+                                        className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
                                         onChangeText={text => handleTimeChange(identifierId, idx, text)}
                                     />
                                 </View>
@@ -46,7 +46,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                                         <TextInput
                                             placeholder="0"
                                             keyboardType="numeric"
-                                            className="border border-gray-300 rounded-lg p-3 bg-white text-center font-medium flex-1"
+                                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
                                             value={input?.distance}
                                             onChangeText={text => handleDistanceChange(identifierId, idx, text)}
                                         />

@@ -35,7 +35,7 @@ const CreateGroup = () => {
                 placeholder="Enter Group Name"
                 value={groupName}
                 onChangeText={handleGroupNameChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-800 placeholder-gray-400 shadow-sm"
+                className="w-full px-4 py-3 border trackme-border-gray rounded-lg bg-white text-gray-800 placeholder-gray-400 shadow-sm"
             />
             <Pressable
                 onPress={handleCreateGroup}

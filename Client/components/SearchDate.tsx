@@ -51,7 +51,7 @@ const SearchDate: React.FC<{
                     value={dateInput}
                     onChangeText={setDateInput}
                     placeholder="Enter date (YYYY-MM-DD)"
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white"
+                    className="flex-1 border trackme-border-gray rounded-lg px-3 py-2 bg-white"
                 />
                 <Pressable
                     onPress={handleSearch}

@@ -86,7 +86,7 @@ const ViewGroupAthlete = () => {
                             username={username}
                             firstName={firstName}
                             lastName={lastName}
-                            className="mb-2 border border-gray-300 rounded-lg p-2"
+                            className="mb-2 border trackme-border-gray rounded-lg p-2"
                         />
                     );
                 })}

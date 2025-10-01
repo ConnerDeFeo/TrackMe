@@ -5,7 +5,7 @@ const SearchBar: React.FC<{ searchTerm: string; handleSearch: (term: string) => 
 = ({ searchTerm, handleSearch, placeholder }) => {
     return (
         <TextInput
-            className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-base bg-gray-50"
+            className="border trackme-border-gray rounded-lg px-4 py-3 mb-4 text-base bg-gray-50"
             placeholder={placeholder}
             value={searchTerm}
             onChangeText={handleSearch}

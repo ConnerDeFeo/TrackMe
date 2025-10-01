@@ -20,7 +20,6 @@ const ViewGroup = () => {
   // Local state for participants, workouts, and deletion confirmation mode
   const [participants, setParticipants] = useState<string[]>([]);
   const [workouts, setWorkouts] = useState<Array<any>>([]);
-  const [deletionMode, setDeletionMode] = useState<boolean>(false);
 
   /**
    * Fetches all athletes in the current group from the server
@@ -62,20 +61,6 @@ const ViewGroup = () => {
   );
 
   /**
-   * Deletes the entire group on the server,
-   * then resets navigation to the CoachGroups list.
-   */
-  const handleGroupDeletion = async () => {
-    const resp = await CoachGroupService.deleteGroup(groupId);
-    if (resp.ok) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'CoachGroups' }],
-      });
-    }
-  };
-
-  /**
    * Deletes a specific group workout on the server,
    * then refreshes the workouts list.
    */
@@ -87,9 +72,9 @@ const ViewGroup = () => {
   };
 
   return (
-    <View className="px-4 my-1">
+    <View className="px-4 mb-8">
       {/* Action buttons: Send workout and view group inputs */}
-      <View className="flex flex-row items-center justify-between mb-2 mx-4">
+      <View className="flex flex-row items-center justify-between mx-4">
         <Pressable
           onPress={() =>
             navigation.navigate('GroupSchedule', { groupId, groupName })
@@ -156,27 +141,6 @@ const ViewGroup = () => {
           </Text>
         )}
       </Pressable>
-
-      {/* Group deletion confirmation controls */}
-      {deletionMode ? (
-        <View className="flex flex-row justify-between items-center mt-4">
-          <Pressable onPress={() => setDeletionMode(false)}>
-            <Text className="text-md trackme-blue">Cancel</Text>
-          </Pressable>
-          <Pressable onPress={handleGroupDeletion}>
-            <Text className="trackme-red text-md">Confirm</Text>
-          </Pressable>
-        </View>
-      ) : (
-        <Pressable
-          onPress={() => setDeletionMode(true)}
-          className="trackme-bg-red rounded-lg py-3 px-4 mt-2"
-        >
-          <Text className="text-white font-semibold text-center">
-            Delete Group
-          </Text>
-        </Pressable>
-      )}
     </View>
   );
 };

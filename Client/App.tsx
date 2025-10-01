@@ -1,6 +1,6 @@
-import { ActivityIndicator, ScrollView,View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import './global.css'
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateAccount from './pages/authentication/CreateAccount';
 import { Amplify } from 'aws-amplify';
@@ -35,7 +35,6 @@ import AssignNewWorkout from './pages/coaches/workout/AssignNewWorkout';
 import { ComponentType, useEffect, useState } from 'react';
 import ForgotPassword from './pages/authentication/ForgotPassword';
 import ResetPassword from './pages/authentication/ResetPassword';
-import HeaderPlusButton from './components/HeaderPlusButton';
 import MassInput from './pages/MassInput';
 import UserService from './services/UserService';
 import { AuthContext } from './context/AuthContext';
@@ -44,6 +43,8 @@ import CoachFooter from './components/coaches/CoachFooter';
 import AthleteFooter from './components/athletes/AthleteFooter';
 import GroupSchedule from './pages/GroupSchedule';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import HeaderRightButton from './components/HeaderRightButton';
+import GroupSettings from './pages/coaches/groups/GroupSettings';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -62,10 +63,21 @@ function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
     ); 
   
 }
-const getPlusButtonNavigationTarget = (routeName:string) => {
+const getRightButtonData = (route:RouteProp<ParamListBase, string>): { navigation: string; image: "plus" | "settings" } | null => {
+  const routeName = route.name;
   switch(routeName) {
-    case 'CoachGroups': return 'CreateGroup';
-    case 'WorkoutTemplates': return 'CreateWorkoutTemplate';
+    case 'CoachGroups': return {
+      navigation: 'CreateGroup',
+      image: 'plus'
+    };
+    case 'WorkoutTemplates': return{
+      navigation: 'CreateWorkoutTemplate',
+      image: 'plus'
+    };
+    case 'ViewGroupCoach': return {
+      navigation: 'GroupSettings',
+      image: 'settings'
+    };
     default: return null;
   }
 };
@@ -87,10 +99,10 @@ const AthleteLayoutWrapper = () => {
     <>
       <AthleteStack.Navigator initialRouteName='AthleteGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
-        const plusTarget = getPlusButtonNavigationTarget(route.name);
+        const rightButtonData = getRightButtonData(route);
         const state = navigation.getState();
         return{
-          headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
+          headerRight: rightButtonData ? ()=><HeaderRightButton onPress={() => navigation.navigate(rightButtonData.navigation,route.params)} image={rightButtonData.image} /> : ()=>null,
           title: getPageTitle(route.name, params),
           animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
         }
@@ -118,10 +130,10 @@ const CoachLayoutWrapper = () => {
     <>
       <CoachStack.Navigator initialRouteName='CoachGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
-        const plusTarget = getPlusButtonNavigationTarget(route.name);
+        const rightButtonData = getRightButtonData(route);
         const state = navigation.getState();
         return{
-          headerRight: plusTarget ? ()=><HeaderPlusButton onPress={() => navigation.navigate(plusTarget)} /> : ()=>null,
+          headerRight: rightButtonData ? ()=><HeaderRightButton onPress={() => navigation.navigate(rightButtonData.navigation, route.params)} image={rightButtonData.image} /> : ()=>null,
           title: getPageTitle(route.name, params),
           animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
         }
@@ -142,6 +154,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <CoachStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
         <CoachStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />
+        <CoachStack.Screen name="GroupSettings" options={{ title: "Settings" }} component={ScrollViewWrapper(<GroupSettings />)} />
       </CoachStack.Navigator>
       <CoachFooter />
     </>

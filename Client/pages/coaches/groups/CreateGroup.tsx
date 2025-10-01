@@ -29,7 +29,7 @@ const CreateGroup = () => {
     }
 
     return (
-        <View className="flex-1 justify-center items-center px-6 bg-gray-50 mt-4">
+        <View className="flex-1 justify-center items-center px-6 my-4">
             <View className="w-full max-w-sm gap-y-4">
             <TextInput
                 placeholder="Enter Group Name"
@@ -37,16 +37,14 @@ const CreateGroup = () => {
                 onChangeText={handleGroupNameChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-800 placeholder-gray-400 shadow-sm"
             />
-            <View className="mt-6">
-                <Pressable
-                    onPress={handleCreateGroup}
-                    className="bg-red-500 px-6 py-3 rounded-lg"
-                >
-                    <Text className="text-white text-center font-semibold">
-                        Create Group
-                    </Text>
-                </Pressable>
-            </View>
+            <Pressable
+                onPress={handleCreateGroup}
+                className="trackme-bg-blue px-6 py-3 rounded-lg"
+            >
+                <Text className="text-white text-center font-semibold">
+                    Create Group
+                </Text>
+            </Pressable>
             </View>
         </View>
     );

@@ -96,8 +96,7 @@ const CreateWorkoutGroup = ()=>{
                             {/* Selection toggle button */}
                             <Pressable 
                                 onPress={() => handleWorkoutGroupChange({id: athlete[0], username: athlete[1]})}
-                                className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'trackme-bg-red'}`}
-                                style={{backgroundColor: isSelected ? '#f3f4f6' : '#E63946'}}
+                                className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'trackme-bg-blue'}`}
                             >
                             <Text className={`font-semibold ${isSelected ? 'text-black' : 'text-white'}`}>
                                 {isSelected ? "Deselect" : "Select"}
@@ -111,8 +110,7 @@ const CreateWorkoutGroup = ()=>{
             {/* Create Group Action Button */}
             <Pressable 
                 onPress={() => navigation.goBack()}
-                className="p-4 rounded-xl shadow-lg"
-                style={{backgroundColor: '#E63946'}}
+                className="p-4 rounded-xl shadow-lg trackme-bg-blue"
             >
                 <Text className="text-white text-xl font-bold text-center">Finish</Text>
             </Pressable>

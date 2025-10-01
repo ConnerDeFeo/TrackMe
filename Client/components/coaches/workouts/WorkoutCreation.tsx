@@ -106,7 +106,7 @@ const WorkoutCreation = ({
           />
         ))}
 
-        <View className="flex flex-row justify-between items-center">
+        <View className="flex flex-row justify-between items-center my-4">
           {/* Button to add a new section */}
           <Pressable onPress={() => setSections([...sections, { name: "" }])}>
             <Text className="font-bold trackme-blue">Add section</Text>

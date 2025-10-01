@@ -3,97 +3,123 @@ import { Text, TextInput, View, Pressable } from "react-native";
 import Exercise from "../../../types/Sections";
 import SectionCreation from "./SectionCreation";
 
-//Page for workout creation by coaches
-const WorkoutCreation = ({workout, handleWorkoutCreation, buttonText}: 
-    {workout?: any; handleWorkoutCreation: (workoutData:any) => void; buttonText: string;}) => {
+// Page for workout creation by coaches
+const WorkoutCreation = ({
+  workout,
+  handleWorkoutCreation,
+  buttonText
+}: {
+  workout?: any
+  handleWorkoutCreation: (workoutData: any) => void
+  buttonText: string
+}) => {
 
-  const [title, setTitle] = useState<string>(workout?.title || "");
-  const [description, setDescription] = useState<string>(workout?.description || "");
-  const [sections, setSections] = useState<Array<Exercise>>(workout?.sections || []);
+  // Local state for title, description and sections list
+  const [title, setTitle] = useState<string>(workout?.title || "")
+  const [description, setDescription] = useState<string>(workout?.description || "")
+  const [sections, setSections] = useState<Array<Exercise>>(workout?.sections || [])
 
+  // Validate inputs and call parent handler
   const handleCreation = async () => {
-    let valid = true;
-    if(sections.length > 0){
-      sections.forEach((exercise:Exercise) => {
-        if(!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0){
-          valid = false;
-        }
-      });
-    }
-    if(!valid || workout?.title?.trim() === "" ){
-      alert("Please fill in all required fields");
-      return;
-    }
-    const workoutData:Record<string, any> = {
-      'title': title,
-      'description': description,
-      'sections': sections
-    };
-    if(workout){
-      if (workout.workoutId) {
-        workoutData['workoutId'] = workout.workoutId;
-      }
-      if(workout.groupWorkoutId){
-        workoutData['groupWorkoutId'] = workout.groupWorkoutId;
-      }
-    }
-    handleWorkoutCreation(workoutData);
-  };
+    let valid = true
 
-  const handleTitleChange = (text:string) => {
-    if(text.length <= 50){
-      setTitle(text);
+    // Ensure each section has a name and at least one set
+    if (sections.length > 0) {
+      sections.forEach((exercise: Exercise) => {
+        if (!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0) {
+          valid = false
+        }
+      })
+    }
+
+    // Ensure title is not empty
+    if (!valid || title.trim() === "") {
+      alert("Please fill in all required fields")
+      return
+    }
+
+    // Build workout payload
+    const workoutData: Record<string, any> = {
+      title,
+      description,
+      sections
+    }
+
+    // Include IDs if editing existing workout
+    if (workout) {
+      if (workout.workoutId) {
+        workoutData.workoutId = workout.workoutId
+      }
+      if (workout.groupWorkoutId) {
+        workoutData.groupWorkoutId = workout.groupWorkoutId
+      }
+    }
+
+    // Pass data to parent component
+    handleWorkoutCreation(workoutData)
+  }
+
+  // Restrict title length to 50 characters
+  const handleTitleChange = (text: string) => {
+    if (text.length <= 50) {
+      setTitle(text)
     }
   }
 
-  const titleDescriptionLayout = (text:string)=>{
-    return(
+  // Render a labeled input for title or description
+  const titleDescriptionLayout = (label: string) => {
+    const isTitle = label === "Title"
+    return (
       <View className="m-4">
-        <Text className=" text-xl font-bold mb-2">{text}</Text>
+        <Text className="text-xl font-bold mb-2">{label}</Text>
         <View className="border-2 rounded-lg p-3 bg-white">
           <TextInput
-            value={text === "Title" ? title : description}
-            onChangeText={text === "Title" ? handleTitleChange : setDescription}
+            value={isTitle ? title : description}
+            onChangeText={isTitle ? handleTitleChange : setDescription}
             className="text-black py-1 mt-1"
-            placeholder={text}
+            placeholder={label}
             placeholderTextColor="#888"
             multiline
           />
         </View>
       </View>
-    );
+    )
   }
+
   return (
     <View className="mb-8">
-      {/* WORKOUT TITLE INPUT */}
+      {/* Workout title input */}
       {titleDescriptionLayout("Title")}
 
-      {/* WORKOUT DESCRIPTION INPUT */}
+      {/* Workout description input */}
       {titleDescriptionLayout("Description")}
 
-      {/* EXERCISES LIST AND ADD EXERCISE BUTTON */}
+      {/* List of sections and action buttons */}
       <View className="mx-4">
-      {/* Render each exercise input */}
-      {sections.map((section, idx) => (
-        <SectionCreation key={idx} section={section} setSections={setSections} idx={idx}/>
-      ))}
+        {/* Render each section creation form */}
+        {sections.map((section, idx) => (
+          <SectionCreation
+            key={idx}
+            section={section}
+            setSections={setSections}
+            idx={idx}
+          />
+        ))}
+
         <View className="flex flex-row justify-between items-center">
-          {/* Button to add a new exercise */}
-          <Pressable
-            onPress={() => setSections([...sections, { name: ''}])}
-          >
+          {/* Button to add a new section */}
+          <Pressable onPress={() => setSections([...sections, { name: "" }])}>
             <Text className="font-bold trackme-blue">Add section</Text>
           </Pressable>
-          {/* CREATE WORKOUT BUTTON */}
-          <Pressable
-            onPress={handleCreation}
-          >
+
+          {/* Button to submit the workout creation/edit */}
+          <Pressable onPress={handleCreation}>
             <Text className="font-bold trackme-blue">{buttonText}</Text>
           </Pressable>
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default WorkoutCreation;
+export default WorkoutCreation

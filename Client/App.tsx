@@ -43,14 +43,22 @@ import { AccountType } from './assets/constants/Enums';
 import CoachFooter from './components/coaches/CoachFooter';
 import AthleteFooter from './components/athletes/AthleteFooter';
 import GroupSchedule from './pages/GroupSchedule';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
 function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
   return ()=>(
-      <ScrollView className='bg-white' showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView 
+        className='bg-white flex-1' 
+        showsHorizontalScrollIndicator={false} 
+        showsVerticalScrollIndicator={false}
+        enableOnAndroid={true}
+        extraScrollHeight={20}
+        keyboardShouldPersistTaps="handled"
+      >
         {content}
-      </ScrollView>
+      </KeyboardAwareScrollView>
     ); 
   
 }
@@ -76,7 +84,7 @@ const getPageTitle = (routeName:string, params:any) => {
 const AthleteStack = createNativeStackNavigator();
 const AthleteLayoutWrapper = () => {
   return (
-    <View className='flex-1'>
+    <>
       <AthleteStack.Navigator initialRouteName='AthleteGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
@@ -100,14 +108,14 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />
       </AthleteStack.Navigator>
       <AthleteFooter />
-    </View>
+    </>
   );
 }
 
 const CoachStack = createNativeStackNavigator();
 const CoachLayoutWrapper = () => {
   return (
-    <View className="flex-1">
+    <>
       <CoachStack.Navigator initialRouteName='CoachGroups' screenOptions={({route, navigation})=> {
         const params = route.params;
         const plusTarget = getPlusButtonNavigationTarget(route.name);
@@ -136,7 +144,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />
       </CoachStack.Navigator>
       <CoachFooter />
-    </View>
+    </>
   );
 }
 

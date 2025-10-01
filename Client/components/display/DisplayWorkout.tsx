@@ -13,7 +13,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void, onRemove?: (id
             onPress={onPress}
             className="my-3 mx-2"
         >
-            <View className="bg-white shadow-md rounded-2xl overflow-hidden">
+            <View className="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-300">
                 {/* Workout Header */}
                 <View className="p-4 bg-gray-50 border-b border-gray-200">
                     <View className="flex-row justify-between items-start">

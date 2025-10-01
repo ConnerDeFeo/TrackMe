@@ -6,6 +6,7 @@ import usePersistentState from "../hooks/usePersistentState";
 import InputTracking from "../components/InputTracking";
 import TimeDistanceDisplay from "../components/display/TimeDistanceDisplay";
 import DateService from "../services/DateService";
+import UserDisplay from "../components/display/UserDisplay";
 
 const MassInput = () => {
   const route = useRoute();
@@ -75,7 +76,7 @@ const MassInput = () => {
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(
       <View key={athlete[0]} className="bg-white rounded-xl shadow-md p-4 mb-4" >
-        <Text className="text-2xl font-bold text-gray-800 mb-3">{athlete[1]}</Text>
+        <UserDisplay firstName={athlete[2]} lastName={athlete[3]} username={athlete[1]} />
         
         {workoutInputs[athlete[0]] && workoutInputs[athlete[0]].length > 0 && (
           <View className="mb-4">

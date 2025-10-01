@@ -1,16 +1,5 @@
-DROP TABLE IF EXISTS athlete_inputs CASCADE;
-DROP TABLE IF EXISTS group_workouts CASCADE;
-DROP TABLE IF EXISTS athlete_coach_invites CASCADE;
-DROP TABLE IF EXISTS athlete_coach_requests CASCADE;
-DROP TABLE IF EXISTS athlete_coaches CASCADE;
-DROP TABLE IF EXISTS athlete_groups CASCADE;
-DROP TABLE IF EXISTS groups CASCADE;
-DROP TABLE IF EXISTS athletes CASCADE;
-DROP TABLE IF EXISTS coaches CASCADE;
-DROP TABLE IF EXISTS workouts CASCADE;
-
 --User and user relation related tables--
-CREATE TABLE coaches (
+CREATE TABLE IF NOT EXISTS coaches (
     userId VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     bio TEXT,
@@ -20,7 +9,7 @@ CREATE TABLE coaches (
     profilePictureUrl VARCHAR(255)
 );
 
-CREATE TABLE athletes (
+CREATE TABLE IF NOT EXISTS athletes (
     userId VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     bio TEXT,
@@ -32,7 +21,7 @@ CREATE TABLE athletes (
     tffrsUrl VARCHAR(255)
 );
 
-CREATE TABLE groups (
+CREATE TABLE IF NOT EXISTS groups (
     id SERIAL PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
     dateCreated VARCHAR(10) DEFAULT CURRENT_DATE,
@@ -41,14 +30,14 @@ CREATE TABLE groups (
     UNIQUE (name, coachId)
 );
 
-CREATE TABLE athlete_groups (
+CREATE TABLE IF NOT EXISTS athlete_groups (
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupId INT REFERENCES groups(id) NOT NULL,
     PRIMARY KEY (athleteId, groupId),
     removed BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE athlete_coaches (
+CREATE TABLE IF NOT EXISTS athlete_coaches (
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
@@ -56,7 +45,7 @@ CREATE TABLE athlete_coaches (
 );
 
 -- Coaches requesting athletes to be coached by them
-CREATE TABLE athlete_coach_invites (
+CREATE TABLE IF NOT EXISTS athlete_coach_invites (
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
@@ -64,14 +53,14 @@ CREATE TABLE athlete_coach_invites (
 );
 
 -- Athletes requesting to be coached by a coach (reverse of above table)
-CREATE TABLE athlete_coach_requests (
+CREATE TABLE IF NOT EXISTS athlete_coach_requests (
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
     UNIQUE (athleteId, coachId)
 );
 
-CREATE TABLE workouts(
+CREATE TABLE IF NOT EXISTS workouts(
     id SERIAL PRIMARY KEY,
     coachId VARCHAR(255) REFERENCES coaches(userId) NOT NULL,
     title VARCHAR(50) NOT NULL,
@@ -80,7 +69,7 @@ CREATE TABLE workouts(
     isTemplate BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE group_workouts (
+CREATE TABLE IF NOT EXISTS group_workouts (
     id SERIAL PRIMARY KEY,
     groupId INT REFERENCES groups(id) NOT NULL,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
@@ -88,7 +77,7 @@ CREATE TABLE group_workouts (
     UNIQUE (groupId, workoutId, date)
 );
 
-CREATE TABLE athlete_inputs(
+CREATE TABLE IF NOT EXISTS athlete_inputs(
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES athletes(userId) NOT NULL,
     groupId INT REFERENCES groups(id) NOT NULL,

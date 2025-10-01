@@ -45,38 +45,3 @@ resource "aws_db_instance" "default" {
   db_subnet_group_name = aws_db_subnet_group.rds_private.name
   skip_final_snapshot  = true
 }
-
-# Setup table for RDS database
-resource "null_resource" "setup_rds_table" {
-  depends_on = [aws_instance.bastion_host, aws_db_instance.default]
-
-  connection {
-    type        = "ssh"
-    user        = "ec2-user"
-    private_key = file(var.keypair_path)
-    host        = aws_instance.bastion_host.public_ip
-  }
-
-  # Upload the SQL file to bastion
-  provisioner "file" {
-    source      = "../Server/setup.sql"
-    destination = "/tmp/setup.sql"
-  }
-
-  # Execute on bastion host
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum update -y",
-      "sudo amazon-linux-extras install postgresql13 -y",
-      "echo 'File uploaded successfully:'",
-      "ls -la /tmp/setup.sql",
-      "echo 'Running database setup...'",
-      "export PGPASSWORD='${var.db_password}'",
-      "psql -h ${aws_db_instance.default.address} -p 5432 -U trackme_admin -d trackme -f /tmp/setup.sql"
-    ]
-  }
-
-  triggers = {
-    schema_hash = filemd5("../Server/setup.sql")
-  }
-}

@@ -83,7 +83,7 @@ const SectionCreation = ({ section, setSections, idx }:
   };
 
   return (
-    <View className="border-2 bg-white rounded-lg shadow-lg my-3 p-4">
+    <View className="border-2 border-gray-300 bg-white rounded-lg shadow-lg my-3 p-4">
       {/* Section Name and Remove Button */}
       <View className="mb-4">
         <View className="flex-row justify-between items-center">

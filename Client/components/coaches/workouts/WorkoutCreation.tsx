@@ -73,8 +73,8 @@ const WorkoutCreation = ({
     const isTitle = label === "Title"
     return (
       <View className="m-4">
-        <Text className="text-xl font-bold mb-2">{label}</Text>
-        <View className="border-2 rounded-lg p-3 bg-white">
+        <Text className="text-xl font-semibold mb-2">{label}</Text>
+        <View className="border-2 border-gray-300 rounded-lg p-3 bg-white">
           <TextInput
             value={isTitle ? title : description}
             onChangeText={isTitle ? handleTitleChange : setDescription}

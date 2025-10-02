@@ -4,6 +4,7 @@ import AthleteService from "../../services/AthleteService";
 import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
 import GeneralService from "../../services/GeneralService";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import TextButton from "../../components/display/TextButton";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
@@ -40,12 +41,8 @@ const Coaches = ()=>{
     return (
         <View className="flex-1 px-4 mt-4">
             <View className="flex flex-row justify-between items-center">
-                <Pressable onPress={() => navigation.navigate('CoachInvites')}>
-                    <Text className="trackme-blue font-semibold">Invites({invites})</Text>
-                </Pressable>
-                <Pressable onPress={() => navigation.navigate('RequestCoaches')}>
-                    <Text className="trackme-blue font-semibold">Add Coaches</Text>
-                </Pressable>
+                <TextButton text={`Invites(${invites})`} onPress={() => navigation.navigate('CoachInvites')}/>
+                <TextButton text="Add Coaches" onPress={() => navigation.navigate('RequestCoaches')} />
             </View>
             <View className="bg-white rounded-lg p-4 mb-6">
             {coaches.length > 0 ? (

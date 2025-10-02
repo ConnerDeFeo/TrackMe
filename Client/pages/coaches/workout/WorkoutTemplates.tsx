@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
+import { View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import DisplayWorkout from "../../../components/display/DisplayWorkout";
 import { useNavigation } from "@react-navigation/native";
@@ -25,7 +25,7 @@ const WorkoutTemplates = () => {
   }, [])
   // Render a scrollable list of DisplayWorkout components
   return (
-    <ScrollView>
+    <View className="mx-2 my-4 gap-y-4">
       {workouts.map((workout, idx) => (
         <DisplayWorkout
           key={idx}
@@ -35,7 +35,7 @@ const WorkoutTemplates = () => {
           }
         />
       ))}
-    </ScrollView>
+    </View>
   )
 }
 

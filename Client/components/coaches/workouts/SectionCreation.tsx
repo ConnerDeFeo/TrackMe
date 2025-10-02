@@ -4,7 +4,6 @@ import ExerciseCreation from "./ExerciseCreation";
 import Section from "../../../types/Sections";
 import { Exercise } from "../../../types/Exercise";
 import { ExerciseType } from "../../../assets/constants/Enums";
-import RNPickerSelect from "react-native-picker-select";
 import TextButton from "../../display/TextButton";
 
 /**

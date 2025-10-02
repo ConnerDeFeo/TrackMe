@@ -11,7 +11,6 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void}> = ({ workout,
     return (
         <Pressable 
             onPress={onPress}
-            className="my-3 mx-2"
         >
             <View className="bg-white shadow-md rounded-2xl overflow-hidden border trackme-border-gray">
                 {/* Workout Header */}

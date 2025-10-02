@@ -82,7 +82,7 @@ const RenderGroupInputs: React.FC<
             {/* Group header section */}
             <View className="px-5 py-4 bg-gray-50 border-b border-gray-100">
                 <View className="flex flex-row justify-between items-start mb-3">
-                    <Text className="text-xl font-bold text-gray-900">{groupName}</Text>
+                    <Text className="text-lg font-bold text-gray-900 max-w-[50%]">{groupName}</Text>
                     <View className="flex flex-row gap-3">
                         <Pressable onPress={()=>navigation.navigate('MassInput', { groupId, groupName })}>
                             <Text className="text-sm font-medium trackme-blue bg-blue-50 px-3 py-1.5 rounded-full">Mass Input</Text>

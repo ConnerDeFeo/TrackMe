@@ -53,23 +53,25 @@ const ViewGroupAthlete = () => {
                 onPress={() =>
                     navigation.navigate('GroupSchedule', { groupId, groupName })
                 }
-                className="rounded-lg py-3 px-4"
+                className="rounded-lg py-3 px-2 mt-2"
             >
                 <Text className="trackme-blue font-semibold">
                     Schedule
                 </Text>
             </Pressable>
-
-            {/* Render each workout */}
-            {workouts.map((workout) => (
-                <DisplayWorkout
-                    key={workout.groupWorkoutId}
-                    workout={workout}
-                    onPress={() => {
-                        /* TODO: handle workout selection */
-                    }}
-                />
-            ))}
+            
+            <View className="my-2">
+                {/* Render each workout */}
+                {workouts.map((workout) => (
+                    <DisplayWorkout
+                        key={workout.groupWorkoutId}
+                        workout={workout}
+                        onPress={() => {
+                            /* TODO: handle workout selection */
+                        }}
+                    />
+                ))}
+            </View>
 
             <Text className="text-2xl font-bold mt-2 mb-4">
                 Athletes

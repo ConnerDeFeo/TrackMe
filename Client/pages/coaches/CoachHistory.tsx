@@ -3,6 +3,7 @@ import { Text, Pressable, View } from "react-native";
 import SearchDate from "../../components/SearchDate";
 import HistoryService from "../../services/HistoryService";
 import { useNavigation } from "@react-navigation/native";
+import NavigationContainer from "../../components/display/NavigationContainer";
 
 const CoachHistory = () => {
     // Local state to hold the list of dates for which history exists
@@ -39,23 +40,10 @@ const CoachHistory = () => {
                 handleDateSearch={handleDateSearch}
                 handleClear={fetchAvailableHistoryDates}
             />
-
-            <View className="p-4">
-                {/* Render a button for each available date */}
-                {availableDates.map((date) => (
-                    <Pressable
-                        key={date}
-                        className="mb-6 bg-white shadow-md border-l-4 rounded-lg p-4"
-                        onPress={() =>
-                            navigation.navigate('HistoricalData', { date })
-                        }
-                    >
-                        <Text className="text-2xl font-bold text-gray-800">
-                            {date}
-                        </Text>
-                    </Pressable>
-                ))}
-            </View>
+            {/* Render a button for each available date */}
+            {availableDates.map((date) => (
+                <NavigationContainer key={date} navigateTo={() => navigation.navigate('HistoricalData', { date })} text={date} />
+            ))}
         </View>
     );
 };

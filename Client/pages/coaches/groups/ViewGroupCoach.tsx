@@ -63,7 +63,7 @@ const ViewGroup = () => {
   return (
     <View className="px-4 mb-8">
       {/* Action buttons: Send workout and view group inputs */}
-      <View className="flex flex-row items-center justify-between mx-4">
+      <View className="flex flex-row items-center justify-between mx-2 mt-2">
         <Pressable
           onPress={() =>
             navigation.navigate('GroupSchedule', { groupId, groupName })
@@ -82,7 +82,7 @@ const ViewGroup = () => {
               groupName,
             })
           }
-          className="rounded-lg py-3 mt-2"
+          className="rounded-lg py-3"
         >
           <Text className="trackme-blue font-semibold text-center">
             Group Inputs
@@ -90,20 +90,22 @@ const ViewGroup = () => {
         </Pressable>
       </View>
 
-      {/* Display assigned workouts with remove option */}
-      {workouts.map((workout) => (
-        <DisplayWorkout
-          key={workout.groupWorkoutId}
-          workout={workout}
-          onPress={() =>
-            navigation.navigate('AssignNewWorkout', {
-              groupId,
-              groupName,
-              workout
-            })
-          }
-        />
-      ))}
+      <View className="my-2">
+        {/* Display assigned workouts with remove option */}
+        {workouts.map((workout) => (
+          <DisplayWorkout
+            key={workout.groupWorkoutId}
+            workout={workout}
+            onPress={() =>
+              navigation.navigate('AssignNewWorkout', {
+                groupId,
+                groupName,
+                workout
+              })
+            }
+          />
+        ))}
+      </View>
 
       {/* Athletes list panel */}
       <Pressable className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"

@@ -1,6 +1,6 @@
 import { Text, TextInput, Pressable, View } from "react-native";
 import { Exercise } from "../../../types/Exercise";
-import Section from "../../../types/Sections";
+import Section from "../../../types/Section";
 import { Rest } from "../../../types/Rest";
 import { ExerciseType } from "../../../assets/constants/Enums";
 

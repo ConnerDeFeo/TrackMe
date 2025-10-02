@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Text, TextInput, View, Pressable } from "react-native";
-import Exercise from "../../../types/Sections";
 import SectionCreation from "./SectionCreation";
 import TextButton from "../../display/TextButton";
+import Section from "../../../types/Section";
+import { Exercise } from "../../../types/Exercise";
+import { ExerciseType } from "../../../assets/constants/Enums";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({
@@ -20,25 +22,40 @@ const WorkoutCreation = ({
   // Local state for title, description and sections list
   const [title, setTitle] = useState<string>(workout?.title || "")
   const [description, setDescription] = useState<string>(workout?.description || "")
-  const [sections, setSections] = useState<Array<Exercise>>(workout?.sections || [])
+  const [sections, setSections] = useState<Array<Section>>(workout?.sections || [])
 
   // Validate inputs and call parent handler
   const handleCreation = async () => {
-    let valid = true
+    let isValid = true;
+    // Ensure title is not empty
+    if (title.trim() === "") {
+      alert("Please fill in all required fields")
+      return
+    }
 
     // Ensure each section has a name and at least one set
     if (sections.length > 0) {
-      sections.forEach((exercise: Exercise) => {
-        if (!exercise.name || exercise.name.trim() === "" || exercise?.sets === 0) {
-          valid = false
-        }
+      sections.forEach((section: Section) => {
+        section.exercises?.forEach((exercise: Exercise) => {
+          switch (exercise.type) {
+            case ExerciseType.Run:
+              if (exercise.time === 0 || exercise.distance === 0) isValid = false;
+              break;
+            case ExerciseType.Strength:
+              if (!exercise.description) isValid = false;
+              break;
+            case ExerciseType.Rest:
+              if (exercise.duration === 0) isValid = false;
+              break;
+          }
+        })
+        if (!section.name || section.name.trim() === "" || section?.sets === 0) isValid = false;
       })
     }
 
-    // Ensure title is not empty
-    if (!valid || title.trim() === "") {
-      alert("Please fill in all required fields")
-      return
+    if (!isValid) {
+      alert("Please fill in all required fields");
+      return;
     }
 
     // Build workout payload

@@ -1,4 +1,4 @@
-import Groups from "../../components/groups/Groups";
+import Groups from "../../components/Groups";
 
 //Athlete view when they are looking at all ther groups
 const AthleteGroups = () => {

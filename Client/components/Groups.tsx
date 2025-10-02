@@ -1,9 +1,9 @@
-import GeneralService from "../../services/GeneralService";
+import GeneralService from "../services/GeneralService";
 import { useContext, useEffect, useState } from "react";
-import GroupDisplay from "./GroupDisplay";
-import { AccountType } from "../../assets/constants/Enums";
+import { AccountType } from "../assets/constants/Enums";
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
+import NavigationContainer from "./display/NavigationContainer";
 
 //View of all groups displayed in a list
 const Groups = () => {
@@ -40,7 +40,7 @@ const Groups = () => {
   return (
     <>
       {groups.map((group, index) => (
-        <GroupDisplay key={index} groupName={group[0]} navigateTo={() => handleNavigation(group[0], group[1])} />
+        <NavigationContainer key={index} text={group[0]} navigateTo={() => handleNavigation(group[0], group[1])} />
       ))}
     </>
   );

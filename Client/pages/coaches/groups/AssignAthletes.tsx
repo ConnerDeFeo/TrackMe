@@ -71,7 +71,7 @@ const AssignAthletes = ()=>{
     return (
         <View className="flex-1 mt-4">
             {athletes.map(athlete => (
-                <View key={athlete[0]} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center justify-between mb-4">
+                <View key={athlete[0]} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center justify-between">
                     <Text className="text-lg font-medium text-gray-800 flex-1">{athlete[1]}</Text>
                     <Pressable className="trackme-bg-red px-4 py-2 rounded-lg" onPress={() => removeAthleteFromGroup(athlete[0])}>
                         <Text className="text-white font-semibold">Remove</Text>

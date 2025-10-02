@@ -1,4 +1,4 @@
-import Groups from "../../../components/groups/Groups";
+import Groups from "../../../components/Groups";
 
 //Page where coaches can see and manage their groups
 const CoachGroups = () => {

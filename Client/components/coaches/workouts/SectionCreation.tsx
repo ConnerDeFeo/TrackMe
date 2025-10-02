@@ -4,6 +4,8 @@ import ExerciseCreation from "./ExerciseCreation";
 import Section from "../../../types/Sections";
 import { Exercise } from "../../../types/Exercise";
 import { ExerciseType } from "../../../assets/constants/Enums";
+import RNPickerSelect from "react-native-picker-select";
+import TextButton from "../../display/TextButton";
 
 /**
  * Component for creating and editing a single exercise section within a workout.
@@ -14,14 +16,20 @@ import { ExerciseType } from "../../../assets/constants/Enums";
  */
 const SectionCreation = ({ section, setSections, idx }: 
   { section: Section; setSections: React.Dispatch<React.SetStateAction<Section[]>>; idx: number; }) => {
+    // Available numbers for sets
+    const setOptions = Array.from({ length: 20 }, (_, i) => ({
+      label: `${i + 1}`,
+      value: i + 1,
+    }));
+    const pickerStyle = {width: 100};
 
   /**
    * Handles adding a new exercise of a specific type to the current section.
    */
   const handleExerciseAddition = (type: ExerciseType) => {
     const exercises = section.exercises ? [...section.exercises] : [];
-    let newExercise: Exercise;
 
+    let newExercise: Exercise;
     switch (type) {
       case ExerciseType.Run:
         newExercise = { type: ExerciseType.Run, distance: 0, measurement: Variables.meters };
@@ -86,9 +94,9 @@ const SectionCreation = ({ section, setSections, idx }:
     <View className="border-2 trackme-border-gray bg-white rounded-lg shadow-lg my-3 p-4">
       {/* Section Name and Remove Button */}
       <View className="mb-4">
-        <View className="flex-row justify-between items-center">
-          <Text className="text-lg font-bold mb-2">Section Name</Text>
-          <Pressable onPress={handleSectionDeletion}>
+        <View className="flex-row justify-between items-center mb-2">
+          <Text className="text-lg font-bold">Section Description</Text>
+          <Pressable onPress={handleSectionDeletion} className="py-3 pl-4">
             <Text className="trackme-red">Remove Section</Text>
           </Pressable>
         </View>
@@ -100,33 +108,17 @@ const SectionCreation = ({ section, setSections, idx }:
         />
       </View>
 
-      {/* Add Exercise Buttons */}
-      <View className="flex-row justify-around items-center mb-4 border-y border-gray-200 py-3">
-          <Pressable onPress={() => handleExerciseAddition(ExerciseType.Run)}>
-            <Text className="font-medium trackme-blue">Add Run</Text>
-          </Pressable>
-          <Pressable onPress={() => handleExerciseAddition(ExerciseType.Strength)}>
-            <Text className="font-medium trackme-blue">Add Strength</Text>
-          </Pressable>
-          <Pressable onPress={() => handleExerciseAddition(ExerciseType.Rest)}>
-            <Text className="font-medium trackme-blue">Add Rest</Text>
-          </Pressable>
-      </View>
-
       {/* Sets Input */}
       <View className="flex-row justify-between w-[75%] mx-auto items-center mb-3">
         <Text className="text-lg font-bold">Sets</Text>
-        <View className={`border rounded-md bg-white h-12 flex items-center justify-center w-20 ${section.sets && section.sets > 0 ? 'trackme-border-gray' : 'border-red-500'}`}>
-          <TextInput 
-            className="text-center text-lg" 
-            value={section.sets ? `${section.sets}` : ''} 
-            onChangeText={handleSetsChange} 
-            keyboardType="numeric" 
-            maxLength={2} 
+        <View className="border trackme-border-gray rounded-lg p-1 bg-white">
+          <TextInput
+            value={section.sets ? section.sets.toString() : ''}
+            onChangeText={handleSetsChange}
+            className="w-12 text-center"
           />
         </View>
       </View>
-      
       {/* Dynamically rendered Exercises */}
       {section.exercises && section.exercises.length > 0 &&
         <ExerciseCreation 
@@ -136,6 +128,12 @@ const SectionCreation = ({ section, setSections, idx }:
           idx={idx} 
         />
       }
+      {/* Add Exercise Buttons */}
+      <View className="flex-row justify-around items-center mb-4 border-y border-gray-200 py-3">
+        <TextButton text="Add Run" onPress={() => handleExerciseAddition(ExerciseType.Run)} />
+        <TextButton text="Add Strength" onPress={() => handleExerciseAddition(ExerciseType.Strength)} />
+        <TextButton text="Add Rest" onPress={() => handleExerciseAddition(ExerciseType.Rest)} />
+      </View>
     </View>
   );
 };

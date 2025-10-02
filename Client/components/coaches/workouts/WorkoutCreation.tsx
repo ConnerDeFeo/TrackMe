@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Text, TextInput, View, Pressable } from "react-native";
 import Exercise from "../../../types/Sections";
 import SectionCreation from "./SectionCreation";
+import TextButton from "../../display/TextButton";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({
@@ -72,8 +73,8 @@ const WorkoutCreation = ({
   const titleDescriptionLayout = (label: string) => {
     const isTitle = label === "Title"
     return (
-      <View className="m-4">
-        <Text className="text-xl font-semibold mb-2">{label}</Text>
+      <>
+        <Text className="text-xl font-semibold my-2">{label}</Text>
         <View className="border-2 trackme-border-gray rounded-lg p-3 bg-white">
           <TextInput
             value={isTitle ? title : description}
@@ -84,44 +85,37 @@ const WorkoutCreation = ({
             multiline
           />
         </View>
-      </View>
+      </>
     )
   }
 
   return (
-    <View className="mb-8">
+    <View className="mb-8 mx-2">
       {/* Workout title input */}
       {titleDescriptionLayout("Title")}
 
       {/* Workout description input */}
       {titleDescriptionLayout("Description")}
 
-      {/* List of sections and action buttons */}
-      <View className="mx-4">
-        {/* Render each section creation form */}
-        {sections.map((section, idx) => (
-          <SectionCreation
-            key={idx}
-            section={section}
-            setSections={setSections}
-            idx={idx}
-          />
-        ))}
+      {/* Render each section creation form */}
+      {sections.map((section, idx) => (
+        <SectionCreation
+          key={idx}
+          section={section}
+          setSections={setSections}
+          idx={idx}
+        />
+      ))}
 
-        <View className="flex flex-row justify-between items-center my-4">
-          {/* Button to add a new section */}
-          <Pressable onPress={() => setSections([...sections, { name: "" }])}>
-            <Text className="font-bold trackme-blue">Add section</Text>
-          </Pressable>
+      <View className="flex flex-row justify-between items-center mt-2 mb-4">
+        {/* Button to add a new section */}
+        <TextButton text="Add section" onPress={() => setSections([...sections, { name: "", sets:1}])} />
 
-          {/* Button to submit the workout creation/edit */}
-          <Pressable onPress={handleCreation}>
-            <Text className="font-bold trackme-blue">{buttonText}</Text>
-          </Pressable>
-        </View>
+        {/* Button to submit the workout creation/edit */}
+        <TextButton text={buttonText} onPress={handleCreation} />
       </View>
       {onRemove &&
-        <Pressable className="trackme-bg-red py-2 mx-4 rounded-lg mt-6 mb-2">
+        <Pressable className="trackme-bg-red py-2 mx-4 rounded-lg mb-2">
           <Text className="text-center font-bold text-white" onPress={onRemove}>Remove</Text>
         </Pressable>
       }

@@ -6,7 +6,7 @@ const ArrowButton = ({onPress, className, direction = "right"}:{onPress: () => v
     const name = Platform.OS === 'ios' ? "chevron-" : "arrow-";
     const color = Platform.OS === 'ios' ? "#007AFF" : "#000";
     return(
-        <Pressable onPress={onPress} className={className}>
+        <Pressable onPress={onPress} className={`p-2 ${className}`}>
             <Ionicons name={direction === "right" ? `${name}forward` : `${name}back`} size={24} color={color} /> 
         </Pressable>
     );

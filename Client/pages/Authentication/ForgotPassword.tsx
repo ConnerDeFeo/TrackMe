@@ -24,7 +24,7 @@ const ForgotPassword = () => {
         }
         try {
             await resetPassword({ username });
-            navigation.navigate("Auth", { screen: 'ResetPassword', params: { username } });
+            navigation.reset({index: 0, routes: [{ name: "ResetPassword", params: { username } }],});
         } catch (error: any) {
             handleError(error);
         }

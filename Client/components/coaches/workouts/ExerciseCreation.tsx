@@ -63,13 +63,13 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
 
       {exercises.map((exercise: Exercise, partIdx: number) => (
         <View key={partIdx} className="p-3 border border-gray-200 rounded-lg bg-white">
-          <View className="flex-row justify-between items-center mb-2">
+          <View className="flex-row justify-between items-center mb-1">
             {/* Display the exercise type with capitalization */}
             <Text className="font-bold text-gray-600">
               {exercise.type.charAt(0).toUpperCase() + exercise.type.slice(1)}
             </Text>
             {/* Button to remove this exercise */}
-            <Pressable onPress={() => handleExerciseRemoval(partIdx)}>
+            <Pressable onPress={() => handleExerciseRemoval(partIdx)} className="py-3 pl-4">
               <Text className="trackme-red">Remove</Text>
             </Pressable>
           </View>

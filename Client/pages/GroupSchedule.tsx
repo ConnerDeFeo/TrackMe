@@ -108,6 +108,7 @@ const GroupSchedule = () => {
                                                 date: dateKey,
                                             })
                                         }
+                                        className="py-2 pl-4"
                                     >
                                         <Text className="trackme-blue">Add Workout</Text>
                                     </Pressable>

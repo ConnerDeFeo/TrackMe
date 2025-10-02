@@ -80,15 +80,15 @@ const RenderGroupInputs: React.FC<
         // Main container for the group with modern card styling
         <View key={groupId} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {/* Group header section */}
-            <View className="px-5 py-4 bg-gray-50 border-b border-gray-100">
+            <View className="px-5 pt-4 pb-1 bg-gray-50 border-b border-gray-100">
                 <View className="flex flex-row justify-between items-start mb-3">
                     <Text className="text-lg font-bold text-gray-900 max-w-[50%]">{groupName}</Text>
                     <View className="flex flex-row gap-3">
                         <Pressable onPress={()=>navigation.navigate('MassInput', { groupId, groupName })}>
-                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-3 py-1.5 rounded-full">Mass Input</Text>
+                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-4 py-2 rounded-full">Mass Input</Text>
                         </Pressable>
                         <Pressable onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
-                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-3 py-1.5 rounded-full">
+                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-4 py-2 rounded-full">
                                 {workoutGroup.length>0 ? "Update Group" : "Create Group"}
                             </Text>
                         </Pressable>

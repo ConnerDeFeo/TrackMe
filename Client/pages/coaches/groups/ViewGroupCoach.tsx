@@ -8,6 +8,7 @@ import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import DateService from "../../../services/DateService";
 import ArrowButton from "../../../components/ArrowButton";
 import UserDisplay from "../../../components/display/UserDisplay";
+import TextButton from "../../../components/display/TextButton";
 
 // Page component for viewing and managing a coach's group
 const ViewGroup = () => {
@@ -63,31 +64,9 @@ const ViewGroup = () => {
   return (
     <View className="px-4 mb-8">
       {/* Action buttons: Send workout and view group inputs */}
-      <View className="flex flex-row items-center justify-between mx-2 mt-2">
-        <Pressable
-          onPress={() =>
-            navigation.navigate('GroupSchedule', { groupId, groupName })
-          }
-          className="rounded-lg py-3"
-        >
-          <Text className="trackme-blue font-semibold text-center">
-            Schedule
-          </Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() =>
-            navigation.navigate('ViewGroupInputsCoach', {
-              groupId,
-              groupName,
-            })
-          }
-          className="rounded-lg py-3"
-        >
-          <Text className="trackme-blue font-semibold text-center">
-            Group Inputs
-          </Text>
-        </Pressable>
+      <View className="flex flex-row items-center justify-between mt-2 mb-2">
+        <TextButton text="Schedule" onPress={() => navigation.navigate('GroupSchedule', { groupId, groupName })} />
+        <TextButton text="Group Inputs" onPress={() => navigation.navigate('ViewGroupInputsCoach', {groupId, groupName})}/>
       </View>
 
       <View className="my-2">

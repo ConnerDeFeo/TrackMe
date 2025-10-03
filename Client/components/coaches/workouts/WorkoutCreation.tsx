@@ -39,13 +39,13 @@ const WorkoutCreation = ({
         section.exercises?.forEach((exercise: Exercise) => {
           switch (exercise.type) {
             case ExerciseType.Run:
-              if (exercise.time === 0 || exercise.distance === 0) isValid = false;
+              if (exercise.distance === 0) isValid = false;
               break;
             case ExerciseType.Strength:
               if (!exercise.description) isValid = false;
               break;
             case ExerciseType.Rest:
-              if (exercise.duration === 0) isValid = false;
+              if (!exercise.minReps || exercise.minReps === 0) isValid = false;
               break;
           }
         })

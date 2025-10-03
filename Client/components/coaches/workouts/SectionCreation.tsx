@@ -34,10 +34,10 @@ const SectionCreation = ({ section, setSections, idx }:
         newExercise = { type: ExerciseType.Run, distance: 0, measurement: Variables.meters };
         break;
       case ExerciseType.Strength:
-        newExercise = { type: ExerciseType.Strength, description: '', reps: 0 };
+        newExercise = { type: ExerciseType.Strength, description: '' };
         break;
       case ExerciseType.Rest:
-        newExercise = { type: ExerciseType.Rest, duration: 0 };
+        newExercise = { type: ExerciseType.Rest };
         break;
     }
 

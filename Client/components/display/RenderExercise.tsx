@@ -4,6 +4,14 @@ import { Exercise } from "../../types/Exercise";
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const RenderExercise = ({ exercise }: { exercise: Exercise }) => {
+
+    const displayRepRange = (minReps?: number, maxReps?: number) => {
+        if(!minReps) return '';
+        if(maxReps && maxReps !== minReps) {
+            return `${minReps}-${maxReps} x `;
+        }
+        return `${minReps} x `;
+    }
     // Choose rendering based on the exercise type
     switch (exercise.type) {
         case ExerciseType.Strength:
@@ -13,7 +21,7 @@ const RenderExercise = ({ exercise }: { exercise: Exercise }) => {
                     <FontAwesome5 name="dumbbell" size={14} color="#4B5563" />
                     <Text className="text-gray-700 ml-3 font-bold">
                         {/* Show reps if available */}
-                        {exercise.reps ? `${exercise.reps}x ` : ''}
+                        {displayRepRange(exercise.minReps, exercise.maxReps)}
                         {exercise.description}
                     </Text>
                 </View>
@@ -25,20 +33,34 @@ const RenderExercise = ({ exercise }: { exercise: Exercise }) => {
                 <View className="flex-row items-center">
                     <FontAwesome5 name="running" size={14} color="#4B5563" />
                     <Text className="text-gray-700 ml-3 text-base">
-                        <Text className="font-bold">{exercise.distance}m</Text>
+                        <Text className="font-bold">
+                            {/* Show reps if available */}
+                            {displayRepRange(exercise.minReps, exercise.maxReps)}
+                            {exercise.distance}m
+                        </Text>
                     </Text>
                 </View>
             );
 
         default:
-            // Rest period: calculate minutes and seconds, show clock icon
-            const minutes = Math.floor(exercise.duration / 60);
-            const seconds = (exercise.duration % 60).toString().padStart(2, '0');
+            if (!exercise.minReps) return null;
+            let display:string;
+            if (exercise.maxReps) {
+                const minMinutes = Math.floor(exercise.minReps / 60);
+                const minSeconds = (exercise.minReps % 60).toString().padStart(2, '0');
+                const maxMinutes = Math.floor(exercise.maxReps / 60);
+                const maxSeconds = (exercise.maxReps % 60).toString().padStart(2, '0');
+                display = `${minMinutes}:${minSeconds} - ${maxMinutes}:${maxSeconds}`;
+            } else {
+                const minutes = Math.floor(exercise.minReps / 60);
+                const seconds = (exercise.minReps % 60).toString().padStart(2, '0');
+                display = `${minutes}:${seconds}`;
+            }
             return (
                 <View className="flex-row items-center">
                     <FontAwesome5 name="clock" size={14} color="#9CA3AF" />
                     <Text className="text-gray-400 ml-3 text-base">
-                        Rest: {minutes}:{seconds}
+                        Rest: {display}
                     </Text>
                 </View>
             );

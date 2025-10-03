@@ -26,15 +26,16 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
     ));
   };
 
-  // Specialized handler for rest durations: minutes or seconds
-  const handleRestChange = (partIdx: number, unit: 'minutes' | 'seconds', value: string) => {
+  // Specialized handler for rest durations: minutes or seconds for min/max ranges
+  const handleRestChange = (partIdx: number, field: 'minReps' | 'maxReps', unit: 'minutes' | 'seconds', value: string) => {
     const numericValue = value ? parseInt(value) : 0;
     if (isNaN(numericValue)) return;
 
-    // Cast the current exercise to a Rest type to access duration
+    // Get current exercise and the current duration for the specified field
     const currentExercise = exercises[partIdx] as Rest;
-    const currentMinutes = Math.floor(currentExercise.duration / 60);
-    const currentSeconds = currentExercise.duration % 60;
+    const currentDuration = currentExercise[field] || 0;
+    const currentMinutes = Math.floor(currentDuration / 60);
+    const currentSeconds = currentDuration % 60;
 
     // Recalculate total duration based on which unit was updated
     let newDuration = 0;
@@ -44,17 +45,13 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
       newDuration = currentMinutes * 60 + numericValue;
     }
     // Delegate to the generic change handler
-    handleExerciseChange(partIdx, 'duration', newDuration);
+    handleExerciseChange(partIdx, field, newDuration);
   };
 
-  const handleRepsChange = (partIdx: number, value: string) => {
-    const numericValue = value ? parseInt(value) : 0;
-    if (isNaN(numericValue)) return;
-    if(numericValue === 0){
-      handleExerciseChange(partIdx, 'reps', undefined);
-      return;
-    }
-    handleExerciseChange(partIdx, 'reps', numericValue);
+  const handleRepsChange = (partIdx: number, field: 'minReps' | 'maxReps', value: string) => {
+    const numericValue = value ? parseInt(value) : undefined;
+    if (value && isNaN(numericValue!)) return;
+    handleExerciseChange(partIdx, field, numericValue);
   }
 
   return (
@@ -87,13 +84,24 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                 />
               </View>
               <View>
-                <Text className="text-sm font-medium text-gray-500 mb-1">Reps (Optional)</Text>
-                <TextInput
-                  className="border trackme-border-gray rounded-md p-3 bg-white text-black"
-                  value={exercise.reps ? `${exercise.reps}` : ''}
-                  keyboardType="numeric"
-                  onChangeText={text => handleRepsChange(partIdx, text)}
-                />
+                <Text className="text-sm font-medium text-gray-500 mb-1">Reps Range (Optional)</Text>
+                <View className="flex-row items-center gap-x-2">
+                  <TextInput
+                    className="border trackme-border-gray rounded-md p-3 bg-white text-black flex-1"
+                    placeholder="Min"
+                    value={exercise.minReps ? `${exercise.minReps}` : ''}
+                    keyboardType="numeric"
+                    onChangeText={text => handleRepsChange(partIdx, 'minReps', text)}
+                  />
+                  <Text className="text-gray-500 font-medium">to</Text>
+                  <TextInput
+                    className="border trackme-border-gray rounded-md p-3 bg-white text-black flex-1"
+                    placeholder="Max"
+                    value={exercise.maxReps ? `${exercise.maxReps}` : ''}
+                    keyboardType="numeric"
+                    onChangeText={text => handleRepsChange(partIdx, 'maxReps', text)}
+                  />
+                </View>
               </View>
             </View>
           )}
@@ -111,41 +119,78 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                 />
               </View>
               <View>
-                <Text className="text-sm font-medium text-gray-500 mb-1">Reps (Optional)</Text>
-                <TextInput
-                  className="border trackme-border-gray rounded-md p-3 bg-white text-black"
-                  value={exercise.reps ? `${exercise.reps}` : ''}
-                  keyboardType="numeric"
-                  onChangeText={text => handleRepsChange(partIdx, text)}
-                />
+                <Text className="text-sm font-medium text-gray-500 mb-1">Reps Range (Optional)</Text>
+                <View className="flex-row items-center gap-x-2">
+                  <TextInput
+                    className="border trackme-border-gray rounded-md p-3 bg-white text-black flex-1"
+                    placeholder="Min"
+                    value={exercise.minReps ? `${exercise.minReps}` : ''}
+                    keyboardType="numeric"
+                    onChangeText={text => handleRepsChange(partIdx, 'minReps', text)}
+                  />
+                  <Text className="text-gray-500 font-medium">to</Text>
+                  <TextInput
+                    className="border trackme-border-gray rounded-md p-3 bg-white text-black flex-1"
+                    placeholder="Max"
+                    value={exercise.maxReps ? `${exercise.maxReps}` : ''}
+                    keyboardType="numeric"
+                    onChangeText={text => handleRepsChange(partIdx, 'maxReps', text)}
+                  />
+                </View>
               </View>
             </View>
           )}
 
           {/* Conditional rendering for 'Rest' exercises */}
           {exercise.type === ExerciseType.Rest && (
-            <View>
-              <Text className="text-sm font-medium text-gray-500 mb-1">Duration</Text>
-              <View className="flex-row items-center gap-x-2">
-                {/* Minutes input */}
-                <TextInput
-                  className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
-                  placeholder="Mins"
-                  keyboardType="numeric"
-                  onChangeText={text => handleRestChange(partIdx, 'minutes', text)}
-                  maxLength={2}
-                  value={exercise.duration / 60 === 0 ? '' : Math.floor(exercise.duration / 60).toString()}
-                />
-                <Text className="font-bold text-lg">:</Text>
-                {/* Seconds input */}
-                <TextInput
-                  className={`border rounded-md p-3 bg-white text-black text-center w-20 ${exercise.duration === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
-                  placeholder="Secs"
-                  keyboardType="numeric"
-                  onChangeText={text => handleRestChange(partIdx, 'seconds', text)}
-                  maxLength={2}
-                  value={exercise.duration % 60 === 0 ? '' : (exercise.duration % 60).toString()}
-                />
+            <View className="gap-y-3">
+              <View>
+                <Text className="text-sm font-medium text-gray-500 mb-1">Minimum Duration</Text>
+                <View className="flex-row items-center gap-x-2">
+                  {/* Minutes input */}
+                  <TextInput
+                    className={`border rounded-md p-3 bg-white text-black text-center w-20 ${(exercise.minReps || 0) === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
+                    placeholder="Mins"
+                    keyboardType="numeric"
+                    onChangeText={text => handleRestChange(partIdx, 'minReps', 'minutes', text)}
+                    maxLength={2}
+                    value={(exercise.minReps || 0) / 60 === 0 ? '' : Math.floor((exercise.minReps || 0) / 60).toString()}
+                  />
+                  <Text className="font-bold text-lg">:</Text>
+                  {/* Seconds input */}
+                  <TextInput
+                    className={`border rounded-md p-3 bg-white text-black text-center w-20 ${(exercise.minReps || 0) === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
+                    placeholder="Secs"
+                    keyboardType="numeric"
+                    onChangeText={text => handleRestChange(partIdx, 'minReps', 'seconds', text)}
+                    maxLength={2}
+                    value={(exercise.minReps || 0) % 60 === 0 ? '' : ((exercise.minReps || 0) % 60).toString()}
+                  />
+                </View>
+              </View>
+              <View>
+                <Text className="text-sm font-medium text-gray-500 mb-1">Maximum Duration (Optional)</Text>
+                <View className="flex-row items-center gap-x-2">
+                  {/* Minutes input */}
+                  <TextInput
+                    className="border trackme-border-gray rounded-md p-3 bg-white text-black text-center w-20"
+                    placeholder="Mins"
+                    keyboardType="numeric"
+                    onChangeText={text => handleRestChange(partIdx, 'maxReps', 'minutes', text)}
+                    maxLength={2}
+                    value={(exercise.maxReps || 0) / 60 === 0 ? '' : Math.floor((exercise.maxReps || 0) / 60).toString()}
+                  />
+                  <Text className="font-bold text-lg">:</Text>
+                  {/* Seconds input */}
+                  <TextInput
+                    className="border trackme-border-gray rounded-md p-3 bg-white text-black text-center w-20"
+                    placeholder="Secs"
+                    keyboardType="numeric"
+                    onChangeText={text => handleRestChange(partIdx, 'maxReps', 'seconds', text)}
+                    maxLength={2}
+                    value={(exercise.maxReps || 0) % 60 === 0 ? '' : ((exercise.maxReps || 0) % 60).toString()}
+                  />
+                </View>
               </View>
             </View>
           )}

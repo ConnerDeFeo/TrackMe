@@ -22,16 +22,19 @@ VALUES (
                 {
                     "distance": 100,
                     "measurement": "meters",
-                    "reps": 2,
+                    "minReps": 2,
+                    "maxReps": 4,
                     "type": "run"
                 },
                 {
                     "type": "rest",
-                    "duration": 60
+                    "minReps": 60,
+                    "maxReps": 90
                 },
                 {
                     "description": "Push-ups",
-                    "reps": 4,
+                    "minReps": 4,
+                    "maxReps": 8,
                     "type": "strength"
                 }
             ],

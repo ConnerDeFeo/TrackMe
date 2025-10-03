@@ -1,6 +1,7 @@
 import { ExerciseType } from "../assets/constants/Enums";
 
 export interface ExerciseBase {
-    reps?: number;
+    minReps?: number;
+    maxReps?: number;
     type: ExerciseType;
 }

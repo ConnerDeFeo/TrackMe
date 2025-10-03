@@ -1,7 +1,7 @@
 import { Exercise } from "./Exercise";
 
 type Section = {
-  name: string;
+  name?: string;
   sets?: number;
   exercises?: Exercise[];
 };

@@ -55,14 +55,14 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
   }
 
   return (
-    <View className="bg-gray-50 rounded-lg p-4 mb-4 gap-y-4">
-      <Text className="text-lg font-bold text-center">Exercises</Text>
+    <View className="rounded-lg mb-4">
+      <Text className="text-xl font-bold text-center mt-2 border-y py-3 trackme-border-gray">Exercises</Text>
 
       {exercises.map((exercise: Exercise, partIdx: number) => (
-        <View key={partIdx} className="p-3 border border-gray-200 rounded-lg bg-white">
+        <View key={partIdx} className="p-3 border-b trackme-border-gray rounded-lg bg-white">
           <View className="flex-row justify-between items-center mb-1">
             {/* Display the exercise type with capitalization */}
-            <Text className="font-bold text-gray-600">
+            <Text className="font-semibold">
               {exercise.type.charAt(0).toUpperCase() + exercise.type.slice(1)}
             </Text>
             {/* Button to remove this exercise */}
@@ -73,8 +73,8 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
 
           {/* Conditional rendering for 'Run' exercises */}
           {exercise.type === ExerciseType.Run && (
-            <View className="gap-y-3">
-              <View>
+            <View className="gap-y-3 flex flex-row justify-between">
+              <View className="w-[47.5%]">
                 <Text className="text-sm font-medium text-gray-500 mb-1">Distance (m)</Text>
                 <TextInput
                   className={`border rounded-md p-3 bg-white text-black ${exercise.distance === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
@@ -83,7 +83,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                   onChangeText={text => handleExerciseChange(partIdx, 'distance', text ? Number(text) : 0)}
                 />
               </View>
-              <View>
+              <View className="w-[47.5%]">
                 <Text className="text-sm font-medium text-gray-500 mb-1">Reps Range (Optional)</Text>
                 <View className="flex-row items-center gap-x-2">
                   <TextInput
@@ -108,8 +108,8 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
 
           {/* Conditional rendering for 'Strength' exercises */}
           {exercise.type === ExerciseType.Strength && (
-            <View className="gap-y-3">
-              <View>
+            <View className="gap-y-3 flex flex-row justify-between">
+              <View className="w-[47.5%]">
                 <Text className="text-sm font-medium text-gray-500 mb-1">Description</Text>
                 <TextInput
                   className={`border rounded-md p-3 bg-white text-black ${!exercise.description ? 'border-red-500' : 'trackme-border-gray'}`}
@@ -118,7 +118,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                   placeholder="e.g., Bench Press, Squats"
                 />
               </View>
-              <View>
+              <View className="w-[47.5%]">
                 <Text className="text-sm font-medium text-gray-500 mb-1">Reps Range (Optional)</Text>
                 <View className="flex-row items-center gap-x-2">
                   <TextInput
@@ -143,9 +143,9 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
 
           {/* Conditional rendering for 'Rest' exercises */}
           {exercise.type === ExerciseType.Rest && (
-            <View className="gap-y-3">
+            <View className="gap-y-3 flex flex-row justify-between">
               <View>
-                <Text className="text-sm font-medium text-gray-500 mb-1">Minimum Duration</Text>
+                <Text className="text-sm font-medium text-gray-500 mb-1">Min Duration</Text>
                 <View className="flex-row items-center gap-x-2">
                   {/* Minutes input */}
                   <TextInput
@@ -169,7 +169,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                 </View>
               </View>
               <View>
-                <Text className="text-sm font-medium text-gray-500 mb-1">Maximum Duration (Optional)</Text>
+                <Text className="text-sm font-medium text-gray-500 mb-1">Max Duration (Optional)</Text>
                 <View className="flex-row items-center gap-x-2">
                   {/* Minutes input */}
                   <TextInput

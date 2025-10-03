@@ -25,7 +25,7 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void}> = ({ workout,
                         <View key={index}>
                             {/* Section Header */}
                             <View className="flex-row items-center mb-3">
-                                <Text className="text-md font-semibold uppercase tracking-wider">{section.name}</Text>
+                                {section.name && <Text className="text-md font-semibold uppercase tracking-wider">{section.name}</Text>}
                                 {section.sets && (
                                     <Text className="text-md font-semibold text-gray-500 ml-2">
                                         ({section.sets} Sets)

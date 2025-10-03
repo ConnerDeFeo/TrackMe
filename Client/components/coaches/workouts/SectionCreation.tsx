@@ -100,7 +100,7 @@ const SectionCreation = ({ section, setSections, idx }:
           </Pressable>
         </View>
         <TextInput 
-          className={`border rounded-md p-3 bg-white text-black ${section.name ? 'trackme-border-gray' : 'border-red-500'}`}
+          className="border rounded-md p-3 bg-white text-black trackme-border-gray"
           value={section.name} 
           onChangeText={handleNameChange} 
           placeholder="e.g., Warm-up, Main Set, Cool-down"

@@ -49,7 +49,7 @@ const WorkoutCreation = ({
               break;
           }
         })
-        if (!section.name || section.name.trim() === "" || section?.sets === 0) isValid = false;
+        if ( section?.sets === 0) isValid = false;
       })
     }
 
@@ -91,7 +91,7 @@ const WorkoutCreation = ({
     const isTitle = label === "Title"
     return (
       <>
-        <Text className="text-xl font-semibold my-2">{label}</Text>
+        <Text className="text-xl font-semibold my-2 ml-2">{label}</Text>
         <View className="border-2 trackme-border-gray rounded-lg p-3 bg-white">
           <TextInput
             value={isTitle ? title : description}

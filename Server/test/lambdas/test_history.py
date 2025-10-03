@@ -92,6 +92,7 @@ def setup_workout_for_today():
 def setup_before_each_test():
     """This will run before each test, setting up a clean database."""
     print("Setting up before test...")
+    execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
     yield
 

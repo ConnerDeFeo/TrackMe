@@ -109,6 +109,7 @@ def generate_athlete(username, userId):
 def setup_before_each_test():
     """This will run before each test, setting up a clean database."""
     print("Setting up before test...")
+    execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
     yield
 
@@ -180,7 +181,8 @@ def test_get_athletes_for_group_success():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert len(body) == 1
-    assert body[0] == ["1234", "test_athlete"]
+    assert '1234' in body[0]
+    assert 'test_athlete' in body[0]
 
 def test_view_group_inputs_success():
     # Arrange

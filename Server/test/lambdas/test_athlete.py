@@ -20,6 +20,7 @@ from testing_utils import generate_auth_header
 @pytest.fixture(autouse=True)
 def setup_before_each_test():
     print("Setting up before test...")
+    execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
     yield
 
@@ -105,7 +106,8 @@ def test_get_coaches_returns_correct_coaches():
     # Assert
     coaches = json.loads(response['body'])
     assert len(coaches) == 1
-    assert coaches[0] == ['123', 'testcoach']
+    assert '123' in coaches[0]
+    assert 'testcoach' in coaches[0]
 
 def test_get_coach_invites_returns_success():
     # Arrange

@@ -68,6 +68,7 @@ def setup_multi_status_athletes_scenario():
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
+    execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
     yield
 

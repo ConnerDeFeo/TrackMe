@@ -1,6 +1,7 @@
 import { Text, TextInput, Pressable, View } from "react-native";
 import { Input } from "../common/types/inputs/Input";
 import { InputType } from "../common/constants/Enums";
+import TimeInput from "./TimeInput";
 
 /**
  * A component for dynamically adding and removing time and distance input fields.
@@ -28,7 +29,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
             <View>
                 {currentInputs[identifierId]?.map((input, idx) => (
                     <View key={idx} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
-                        <View className="flex flex-row items-center gap-x-3">
+                        <View className="flex flex-row items-center gap-x-3 justify-center">
                             {(() => {
                                 switch (input.type) {
                                     case InputType.Run:
@@ -68,16 +69,20 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                                         );
                                     case InputType.Rest:
                                         return (
-                                            <View className="flex-1">
+                                            <View>
                                                 <Text className="text-xs font-medium text-gray-600 mb-1">
                                                     Rest Time (seconds)
                                                 </Text>
-                                                <TextInput
-                                                    placeholder="0.00"
-                                                    keyboardType="numeric"
-                                                    value={input?.restTime.toString()}
-                                                    className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                                                    onChangeText={text => handleRestChange(identifierId, idx, text)}
+                                                <TimeInput
+                                                    currSeconds={input?.restTime || 0}
+                                                    handleMinutesChange={(text) => {
+                                                        const totalSeconds = parseInt(text) * 60 + (input?.restTime || 0) % 60;
+                                                        handleRestChange(identifierId, idx, totalSeconds.toString());
+                                                    }}
+                                                    handleSecondsChange={(text) => {
+                                                        const totalSeconds = Math.floor((input?.restTime || 0) / 60) * 60 + parseInt(text);
+                                                        handleRestChange(identifierId, idx, totalSeconds.toString());
+                                                    }}
                                                 />
                                             </View>
                                         );

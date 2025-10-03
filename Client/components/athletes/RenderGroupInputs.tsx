@@ -186,16 +186,16 @@ const RenderGroupInputs: React.FC<
                                         key={idx}
                                         onPress={() => {
                                             if(!input.inputId) return;
-                                            const alreadySelected = selectedSubmitedInputs.includes(input.inputId);
+                                            const alreadySelected = selectedSubmitedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type);
                                             // Toggle selection state
                                             setSelectedSubmitedInputs(prev =>
                                                 alreadySelected
-                                                    ? prev.filter(id => id !== input.inputId) as number[]
-                                                    : [...prev, input.inputId] as number[]
+                                                    ? prev.filter(selected => !(selected.inputId === input.inputId && selected.type === input.type))
+                                                    : [...prev, {inputId: input.inputId, type: input.type}] as {inputId: number, type: InputType}[]
                                             );
                                         }}
                                     >
-                                        <InputDisplay input={input} selected={selectedSubmitedInputs.includes(input.inputId)} />
+                                        <InputDisplay input={input} selected={selectedSubmitedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type)} />
                                     </Pressable>
                                 );
                             })}

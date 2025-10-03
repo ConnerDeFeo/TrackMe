@@ -19,7 +19,7 @@ const AthleteWorkoutService = {
             'inputs': inputs
         });
     },
-    removeInputs: async (inputIds:number[]) => {
+    removeInputs: async (inputIds:{inputId: number, type: string}[]) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/remove_inputs`,
             {
                 'inputIds': inputIds

@@ -128,14 +128,12 @@ def test_input_times_returns_success():
     # Assert
     assert response['statusCode'] == 200
 
-
 def test_input_times_persists_inputs_for_athlete():
     # Arrange
     event = TestData.test_input_times
 
     # Act
     input_times(event, {})
-
     # Assert
     inputs = fetch_all("SELECT athleteId, groupId, distance, time FROM athlete_inputs")
     assert inputs is not None

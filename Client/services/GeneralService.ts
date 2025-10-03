@@ -1,5 +1,5 @@
-import { AccountType } from "../assets/constants/Enums";
-import { Input } from "../types/inputs/Input";
+import { AccountType } from "../common/constants/Enums";
+import { Input } from "../common/types/inputs/Input";
 import API from "./API";
 import DateService from "./DateService";
 import UserService from "./UserService";

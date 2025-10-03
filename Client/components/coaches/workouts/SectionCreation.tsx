@@ -1,9 +1,9 @@
 import { Text, TextInput, Pressable, View } from "react-native";
-import Variables from "../../../assets/constants/Variables";
+import Variables from "../../../common/constants/Variables";
 import ExerciseCreation from "./ExerciseCreation";
-import Section from "../../../types/workouts/Section";
-import { Exercise } from "../../../types/workouts/Exercise";
-import { ExerciseType } from "../../../assets/constants/Enums";
+import Section from "../../../common/types/workouts/Section";
+import { Exercise } from "../../../workouts/Exercise";
+import { ExerciseType } from "../../../common/constants/Enums";
 import TextButton from "../../display/TextButton";
 
 /**

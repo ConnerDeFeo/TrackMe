@@ -1,4 +1,4 @@
-import { Input } from "../types/inputs/Input";
+import { Input } from "../common/types/inputs/Input";
 import API from "./API";
 import DateService from "./DateService";
 import UserService from "./UserService";

@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { Text, Pressable, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import UserService from "../../services/UserService";
-import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
-import { AccountType } from "../../assets/constants/Enums";
+import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
 
 //Create workout group for a given group
 /**

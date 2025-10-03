@@ -3,8 +3,8 @@ import { Text, TextInput, Pressable, View, ScrollView, Alert } from "react-nativ
 import UserService from "../services/UserService";
 import GeneralService from "../services/GeneralService";
 import { useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { AccountType } from "../assets/constants/Enums";
+import { AuthContext } from "../common/context/AuthContext";
+import { AccountType } from "../common/constants/Enums";
 
 //Profile page for both coaches and athletes
 const Profile = () => {

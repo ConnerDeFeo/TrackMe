@@ -1,6 +1,6 @@
 import { Text, TextInput, Pressable, View } from "react-native";
-import { Input } from "../types/inputs/Input";
-import { InputType } from "../assets/constants/Enums";
+import { Input } from "../common/types/inputs/Input";
+import { InputType } from "../common/constants/Enums";
 
 /**
  * A component for dynamically adding and removing time and distance input fields.

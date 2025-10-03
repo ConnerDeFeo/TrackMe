@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import GeneralService from "../../services/GeneralService";
-import usePersistentState from "../../hooks/usePersistentState";
+import usePersistentState from "../../common/hooks/usePersistentState";
 import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { useFocusEffect } from "@react-navigation/native";
-import { Input } from "../../types/inputs/Input";
+import { Input } from "../../common/types/inputs/Input";
 
 //Page where athletes input times
 const Inputs = ()=>{

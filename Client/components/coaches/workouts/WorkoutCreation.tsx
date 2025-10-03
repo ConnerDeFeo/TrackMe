@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Text, TextInput, View, Pressable } from "react-native";
 import SectionCreation from "./SectionCreation";
 import TextButton from "../../display/TextButton";
-import Section from "../../../types/workouts/Section";
-import { Exercise } from "../../../types/workouts/Exercise";
-import { ExerciseType } from "../../../assets/constants/Enums";
+import Section from "../../../common/types/workouts/Section";
+import { Exercise } from "../../../workouts/Exercise";
+import { ExerciseType } from "../../../common/constants/Enums";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({

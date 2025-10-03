@@ -1,4 +1,4 @@
-import { InputType } from "../../assets/constants/Enums";
+import { InputType } from "../../constants/Enums";
 
 export interface InputBase {
     inputId?: number;

@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import { Text, Pressable, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import UserService from "../../services/UserService";
-import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
+import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
 import InputTracking from "../InputTracking";
-import TimeDistanceDisplay from "../display/TimeDistanceDisplay";
 import { useNavigation } from "@react-navigation/native";
 import DateService from "../../services/DateService";
-import { Input } from "../../types/inputs/Input";
-import { InputType } from "../../assets/constants/Enums";
-import RestDisplay from "../display/RestDisplay";
+import { Input } from "../../common/types/inputs/Input";
 import InputDisplay from "../display/InputDisplay";
 
 //Component used to render input fields for a specific group

@@ -5,8 +5,8 @@ import UserService from "../../services/UserService";
 import { fetchUserAttributes  } from "aws-amplify/auth";
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { AuthContext } from "../../context/AuthContext";
-import { AccountType } from "../../assets/constants/Enums";
+import { AuthContext } from "../../common/context/AuthContext";
+import { AccountType } from "../../common/constants/Enums";
 
 //Create account page
 const SignIn = ()=>{

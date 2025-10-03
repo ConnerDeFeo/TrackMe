@@ -2,12 +2,12 @@ import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, TextInput, Pressable, View } from "react-native";
 import GeneralService from "../services/GeneralService";
-import usePersistentState from "../hooks/usePersistentState";
+import usePersistentState from "../common/hooks/usePersistentState";
 import InputTracking from "../components/InputTracking";
 import TimeDistanceDisplay from "../components/display/TimeDistanceDisplay";
 import DateService from "../services/DateService";
 import UserDisplay from "../components/display/UserDisplay";
-import { Input } from "../types/inputs/Input";
+import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../components/display/InputDisplay";
 
 const MassInput = () => {

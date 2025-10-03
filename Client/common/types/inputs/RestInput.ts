@@ -1,4 +1,4 @@
-import { InputType } from "../../assets/constants/Enums";
+import { InputType } from "../../constants/Enums";
 import { InputBase } from "./InputBase";
 
 export interface RestInput extends InputBase {

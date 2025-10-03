@@ -1,5 +1,5 @@
 import { fetchUserAttributes, getCurrentUser, signIn, signOut } from "aws-amplify/auth";
-import { AccountType } from "../assets/constants/Enums";
+import { AccountType } from "../common/constants/Enums";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const UserService = {
   //gets the account type of the currently signed in user

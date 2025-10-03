@@ -4,7 +4,7 @@ import { useState } from "react";
 import { signUp } from 'aws-amplify/auth';
 import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
 import { useNavigation } from "@react-navigation/native";
-import { AccountType } from "../../assets/constants/Enums";
+import { AccountType } from "../../common/constants/Enums";
 
 //Create account page
 const CreateAccount = ()=>{

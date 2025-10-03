@@ -5,8 +5,8 @@ import UserService from "../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AthleteService from "../../services/AthleteService";
 import CoachService from "../../services/CoachService";
-import { AuthContext } from "../../context/AuthContext";
-import { AccountType } from "../../assets/constants/Enums";
+import { AuthContext } from "../../common/context/AuthContext";
+import { AccountType } from "../../common/constants/Enums";
 
 
 //Confirm Email page

@@ -201,7 +201,7 @@ def test_view_group_inputs_success():
     athlete_time_inputs = data['1234']
     assert len(athlete_time_inputs) == 3
     # Should be in correct insertion order
-    assert athlete_time_inputs == [{'distance': 100, 'time': 10.8}, {'restTime': 5}, {'distance': 200, 'time': 30.0}]
+    assert athlete_time_inputs == [{'distance': 100, 'time': 10.8, 'type': 'run'}, {'restTime': 5, 'type': 'rest'}, {'distance': 200, 'time': 30.0, 'type': 'run'}]
 
 def test_get_user_as_athlete():
     # Arrange

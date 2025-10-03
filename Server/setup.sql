@@ -109,7 +109,7 @@ SELECT
     time,
     NULL AS restTime,
     timeStamp,
-    'input' AS type
+    'run' AS type
 FROM athlete_time_inputs
 UNION ALL
 SELECT 

@@ -158,13 +158,16 @@ def test_timestamps_unique_for_inputs_and_rest_inputs():
     input_times(event, {})
 
     # Assert
-    inputs = fetch_all("SELECT timeStamp FROM athlete_time_inputs")
-    rest_inputs = fetch_all("SELECT timeStamp FROM athlete_rest_inputs")
+    inputs = fetch_all("SELECT timeStamp, type from athlete_inputs order by timeStamp")
 
     assert inputs is not None
-    assert rest_inputs is not None
-    all_timestamps = [row[0] for row in inputs] + [row[0] for row in rest_inputs]
-    assert len(all_timestamps) == len(set(all_timestamps)), "Timestamps are not unique"
+    prev = inputs[0][0]
+    assert inputs[0][1] == 'run'
+    order = ['rest', 'run']
+    for i, input in enumerate(inputs[1:]):
+        assert input[0] > prev, "Timestamps are not unique"
+        prev = input[0]
+        assert input[1] == order[i], "Timestamps are not in the correct order"
 
 def test_view_workout_inputs_returns_success():
     # Arrange

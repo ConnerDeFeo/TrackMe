@@ -56,19 +56,22 @@ class TestData:
                         },
                         {
                             'type': 'rest',
-                            'duration': 60,
+                            'minDuration': 60,
+                            'maxDuration': 90,
                             'description': 'Walk back'
                         },
                         {
                             'distance': 50,
                             'measurement': 'meters',
                             'type': 'run',
-                            'reps': 2
+                            'minReps': 2,
+                            'maxReps': 4
                         },
                         {
                             'type': 'strength',
                             'description': 'Push-ups',
-                            'reps': 10
+                            'minReps': 10,
+                            'maxReps': 20
                         }
                     ],
                     "inputs":True

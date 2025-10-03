@@ -22,48 +22,40 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
     return(
         <>
             {/* Input entries */}
-            {currentInputs[identifierId]?.length > 0 ? (
-                <View className="gap-y-3">
-                    {currentInputs[identifierId]?.map((input, idx) => (
-                        <View key={idx} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
-                            <View className="flex flex-row items-center gap-x-3">
-                                {/* Time input field */}
-                                <View className="flex-1">
-                                    <Text className="text-xs font-medium text-gray-600 mb-1">Time (seconds)</Text>
+            <View>
+                {currentInputs[identifierId]?.map((input, idx) => (
+                    <View key={idx} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                        <View className="flex flex-row items-center gap-x-3">
+                            {/* Time input field */}
+                            <View className="flex-1">
+                                <Text className="text-xs font-medium text-gray-600 mb-1">Time (seconds)</Text>
+                                <TextInput
+                                    placeholder="0.00"
+                                    keyboardType="numeric"
+                                    value={input?.time}
+                                    className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                                    onChangeText={text => handleTimeChange(identifierId, idx, text)}
+                                />
+                            </View>
+                            
+                            {/* Distance input field */}
+                            <View className="flex-1">
+                                <Text className="text-xs font-medium text-gray-600 mb-1">Distance</Text>
+                                <View className="flex flex-row items-center">
                                     <TextInput
-                                        placeholder="0.00"
+                                        placeholder="0"
                                         keyboardType="numeric"
-                                        value={input?.time}
-                                        className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                                        onChangeText={text => handleTimeChange(identifierId, idx, text)}
+                                        className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
+                                        value={input?.distance}
+                                        onChangeText={text => handleDistanceChange(identifierId, idx, text)}
                                     />
-                                </View>
-                                
-                                {/* Distance input field */}
-                                <View className="flex-1">
-                                    <Text className="text-xs font-medium text-gray-600 mb-1">Distance</Text>
-                                    <View className="flex flex-row items-center">
-                                        <TextInput
-                                            placeholder="0"
-                                            keyboardType="numeric"
-                                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
-                                            value={input?.distance}
-                                            onChangeText={text => handleDistanceChange(identifierId, idx, text)}
-                                        />
-                                        <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
-                                    </View>
+                                    <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
                                 </View>
                             </View>
                         </View>
-                    ))}
-                </View>
-            ) : (
-                <View className="py-8 items-center">
-                    <Text className="text-gray-500 text-sm">No entries yet</Text>
-                    <Text className="text-gray-400 text-xs mt-1">Tap "Add Entry" to get started</Text>
-                </View>
-            )}
-            
+                    </View>
+                ))}
+            </View>
             {/* Action buttons */}
             <View className="flex flex-row justify-between mt-4 gap-x-3">
                 {/* Remove button - only show if there are inputs */}

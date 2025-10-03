@@ -111,15 +111,15 @@ const RenderGroupInputs: React.FC<
             </View>
 
             {/* Content section */}
-            <View className="px-5 py-5 gap-y-5">
+            <View className="p-5 gap-y-3">
                 {/* Previous entries section */}
                 {submitedInputs[groupId] && (
                     <View>
                         <View className="flex flex-row items-center justify-between mb-3">
                             <Text className="text-base font-semibold text-gray-800">Previous Entries</Text>
                             {selectedSubmitedInputs.length > 0 && (
-                                <Pressable onPress={handleInputRemoval}>
-                                    <Text className="text-sm font-medium trackme-red underline">
+                                <Pressable onPress={handleInputRemoval} className="pl-4 py-2">
+                                    <Text className="text-sm font-medium trackme-red">
                                         Remove ({selectedSubmitedInputs.length})
                                     </Text>
                                 </Pressable>

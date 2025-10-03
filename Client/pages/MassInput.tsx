@@ -76,14 +76,13 @@ const MassInput = () => {
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(
       <View key={athlete[0]} className="bg-white rounded-xl shadow-md p-4 mb-4" >
-        <UserDisplay firstName={athlete[2]} lastName={athlete[3]} username={athlete[1]} />
+        <UserDisplay firstName={athlete[2]} lastName={athlete[3]} username={athlete[1]} className="mb-4"/>
         
         {workoutInputs[athlete[0]] && workoutInputs[athlete[0]].length > 0 && (
-          <View className="mb-4">
-          <Text className="font-semibold text-gray-500 uppercase mb-2">Entries</Text>
-          {workoutInputs[athlete[0]].map((input, index) => (
-            <TimeDistanceDisplay key={index} time={input.time} distance={input.distance} />
-          ))}
+          <View className="mb-4 gap-y-2">
+            {workoutInputs[athlete[0]].map((input, index) => (
+              <TimeDistanceDisplay key={index} time={input.time} distance={input.distance} />
+            ))}
           </View>
         )}
 

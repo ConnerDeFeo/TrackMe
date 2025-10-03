@@ -2,9 +2,9 @@ import { Text, TextInput, Pressable, View } from "react-native";
 import Variables from "../../../common/constants/Variables";
 import ExerciseCreation from "./ExerciseCreation";
 import Section from "../../../common/types/workouts/Section";
-import { Exercise } from "../../../workouts/Exercise";
 import { ExerciseType } from "../../../common/constants/Enums";
 import TextButton from "../../display/TextButton";
+import { Exercise } from "../../../common/types/workouts/Exercise";
 
 /**
  * Component for creating and editing a single exercise section within a workout.
@@ -64,12 +64,23 @@ const SectionCreation = ({ section, setSections, idx }:
   /**
    * Handles changes to the 'sets' input field.
    */
-  const handleSetsChange = (value: string) => {
+  const handleMinSetsChange = (value: string) => {
     const num = value ? parseInt(value, 10) : 0;
     if (!isNaN(num) && num <= 99) {
       setSections(prevSections =>
         prevSections.map((s, index) =>
-          index === idx ? { ...s, sets: num } : s
+          index === idx ? { ...s, minSets: num } : s
+        )
+      );
+    }
+  };
+
+  const handleMaxSetsChange = (value: string) => {
+    const num = value ? parseInt(value, 10) : 0;
+    if (!isNaN(num) && num <= 99) {
+      setSections(prevSections =>
+        prevSections.map((s, index) =>
+          index === idx ? { ...s, maxSets: num } : s
         )
       );
     }
@@ -107,15 +118,27 @@ const SectionCreation = ({ section, setSections, idx }:
         />
       </View>
 
-      {/* Sets Input */}
-      <View className="flex-row justify-between w-[75%] mx-auto items-center mb-3">
-        <Text className="text-lg font-bold">Sets</Text>
-        <View className="border trackme-border-gray rounded-lg p-1 bg-white">
-          <TextInput
-            value={section.sets ? section.sets.toString() : ''}
-            onChangeText={handleSetsChange}
-            className="w-12 text-center"
-          />
+      {/* Min Sets Input */}
+      <View className="flex-row justify-between w-[85%] mx-auto items-center mb-3">
+        <Text className="text-lg font-bold mt-4">Set Range</Text>
+        <View className="flex flex-row justify-between w-[70%] items-center">
+          <View className="w-[40%]">
+            <Text className="text-sm text-gray-500">Min</Text>
+            <TextInput
+              value={section.minSets ? section.minSets.toString() : ''}
+              onChangeText={handleMinSetsChange}
+              className={`border rounded-md p-3 bg-white text-black ${section.minSets === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
+            />
+          </View>
+          <Text className="text-lg font-bold text-gray-500 mt-4">to</Text>
+          <View className="w-[40%]">
+            <Text className="text-sm text-gray-500">Max (Optional)</Text>
+            <TextInput
+              value={section.maxSets ? section.maxSets.toString() : ''}
+              onChangeText={handleMaxSetsChange}
+              className="border trackme-border-gray rounded-md p-3 bg-white text-black"
+            />
+          </View>
         </View>
       </View>
       {/* Dynamically rendered Exercises */}

@@ -6,7 +6,7 @@ import { Exercise } from "../../common/types/workouts/Exercise";
 const RenderExercise = ({ exercise }: { exercise: Exercise }) => {
 
     const displayRepRange = (minReps?: number, maxReps?: number) => {
-        if(!minReps) return '';
+        if(!minReps || (minReps <=1 && !maxReps)) return '';
         if(maxReps && maxReps !== minReps) {
             return `${minReps}-${maxReps} x `;
         }

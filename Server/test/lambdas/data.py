@@ -47,7 +47,8 @@ class TestData:
             'sections': [
                 {
                     'name': 'Test name',
-                    'sets': 3,
+                    'minSets': 3,
+                    'maxSets': 5,
                     'exercises': [
                         {
                             'distance': 100,
@@ -78,7 +79,8 @@ class TestData:
                 },
                 {
                     'name': 'Test name 2',
-                    'sets': 2,
+                    'minSets': 2,
+                    'maxSets': 2,
                     'exerciseParts': [
                         {
                             'distance': 200,

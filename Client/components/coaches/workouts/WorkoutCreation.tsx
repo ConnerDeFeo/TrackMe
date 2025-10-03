@@ -3,8 +3,8 @@ import { Text, TextInput, View, Pressable } from "react-native";
 import SectionCreation from "./SectionCreation";
 import TextButton from "../../display/TextButton";
 import Section from "../../../common/types/workouts/Section";
-import { Exercise } from "../../../workouts/Exercise";
 import { ExerciseType } from "../../../common/constants/Enums";
+import { Exercise } from "../../../common/types/workouts/Exercise";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({
@@ -49,7 +49,7 @@ const WorkoutCreation = ({
               break;
           }
         })
-        if ( section?.sets === 0) isValid = false;
+        if ( section?.minSets === 0) isValid = false;
       })
     }
 
@@ -92,7 +92,7 @@ const WorkoutCreation = ({
     return (
       <>
         <Text className="text-xl font-semibold my-2 ml-2">{label}</Text>
-        <View className="border-2 trackme-border-gray rounded-lg p-3 bg-white">
+        <View className={`border-2 rounded-lg p-3 bg-white ${isTitle && title==='' ? 'border-red-300' : 'trackme-border-gray'}`}>
           <TextInput
             value={isTitle ? title : description}
             onChangeText={isTitle ? handleTitleChange : setDescription}
@@ -126,7 +126,7 @@ const WorkoutCreation = ({
 
       <View className="flex flex-row justify-between items-center mt-2 mb-4">
         {/* Button to add a new section */}
-        <TextButton text="Add section" onPress={() => setSections([...sections, { name: "", sets:1}])} />
+        <TextButton text="Add section" onPress={() => setSections([...sections, { name: "", minSets:1}])} />
 
         {/* Button to submit the workout creation/edit */}
         <TextButton text={buttonText} onPress={handleCreation} />

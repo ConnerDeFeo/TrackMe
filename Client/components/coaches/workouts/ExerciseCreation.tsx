@@ -1,9 +1,9 @@
 import { Text, TextInput, Pressable, View } from "react-native";
-import { Exercise } from "../../../workouts/Exercise";
 import Section from "../../../common/types/workouts/Section";
 import { Rest } from "../../../common/types/workouts/Rest";
 import { ExerciseType } from "../../../common/constants/Enums";
 import TimeInput from "../../TimeInput";
+import { Exercise } from "../../../common/types/workouts/Exercise";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:
   {
@@ -116,7 +116,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                   className={`border rounded-md p-3 bg-white text-black ${!exercise.description ? 'border-red-500' : 'trackme-border-gray'}`}
                   value={exercise.description}
                   onChangeText={text => handleExerciseChange(partIdx, 'description', text)}
-                  placeholder="e.g., Bench Press, Squats"
+                  placeholder="e.g., Push-ups"
                 />
               </View>
               <View className="w-[47.5%]">

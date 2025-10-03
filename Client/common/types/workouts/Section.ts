@@ -2,7 +2,8 @@ import { Exercise } from "./Exercise";
 
 type Section = {
   name?: string;
-  sets?: number;
+  minSets: number;
+  maxSets?: number;
   exercises?: Exercise[];
 };
 

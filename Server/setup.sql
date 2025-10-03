@@ -107,6 +107,7 @@ SELECT
     groupId,
     distance,
     time,
+    date,
     NULL AS restTime,
     timeStamp,
     'run' AS type
@@ -118,6 +119,7 @@ SELECT
     groupId,
     NULL AS distance,
     NULL AS time,
+    date,
     restTime,
     timeStamp,
     'rest' AS type

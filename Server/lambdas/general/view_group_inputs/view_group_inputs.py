@@ -14,11 +14,12 @@ def view_group_inputs(event, context):
         #Grab data from rds
         athlete_time_inputs = fetch_all(
             """
-                SELECT athleteId, distance, time 
-                FROM athlete_time_inputs
-                WHERE groupId = %s AND date = %s
+                SELECT athleteId, distance, time, restTime
+                FROM athlete_inputs
+                WHERE date = %s AND groupId = %s
+                ORDER BY timeStamp ASC
             """,
-            (group_id, date)
+            (date, group_id)
         )
 
         #Convert data to json format
@@ -27,10 +28,15 @@ def view_group_inputs(event, context):
             for input in athlete_time_inputs:
                 if input[0] not in parsed_data:
                     parsed_data[input[0]] = []
-                parsed_data[input[0]].append({
-                    "distance": input[1],
-                    "time": input[2]
-                })
+                if input[3] is not None: # Running input
+                    parsed_data[input[0]].append({
+                        "restTime": input[3]
+                    })
+                else:
+                    parsed_data[input[0]].append({
+                        "distance": input[1],
+                        "time": input[2]
+                    })
 
             return {
                 "statusCode": 200,

@@ -165,7 +165,7 @@ def test_timestamps_unique_for_inputs_and_rest_inputs():
     assert inputs[0][1] == 'run'
     order = ['rest', 'run']
     for i, input in enumerate(inputs[1:]):
-        assert input[0] > prev, "Timestamps are not unique"
+        assert input[0] > prev, "Timestamps are not unique or are not in increasing order"
         prev = input[0]
         assert input[1] == order[i], "Timestamps are not in the correct order"
 

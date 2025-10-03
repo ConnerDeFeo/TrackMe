@@ -31,7 +31,7 @@ def input_times(event, context):
         for  athleteId in athleteIds:
             for j, input in enumerate(inputs):
                 timestamp = now + timedelta(milliseconds=j)
-                if 'restTime' in input:
+                if input['type'] == 'rest':
                     rest_time = input['restTime']
                     if rest_time == '':
                         continue

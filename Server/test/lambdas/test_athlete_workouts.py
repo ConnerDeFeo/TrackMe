@@ -60,8 +60,9 @@ def setup_view_workout_inputs():
     }
 
     expected_inputs = [
-        {"distance": 100, "time": 10.8, "inputId": 1},
-        {"distance": 200, "time": 30, "inputId": 2}
+        {"distance": 100, "time": 10.8, "type": "run", "inputId": 1},
+        {'restTime': 5, "type": "rest", "inputId": 1}, # Same Id sense from different table
+        {"distance": 200, "time": 30.0, "type": "run", "inputId": 2}
     ]
 
     return event, expected_inputs
@@ -96,7 +97,8 @@ def setup_remove_inputs_event():
             'inputs': [
                 {
                     'distance': 100,
-                    'time': 12.5
+                    'time': 12.5,
+                    'type': 'run'
                 }
             ]
         }),
@@ -106,7 +108,7 @@ def setup_remove_inputs_event():
     event = {
         'body': json.dumps({
             "athleteId": "1234",
-            "inputIds": [1,3]
+            "inputIds": [[1, 'run'], [3, 'run']]  # Remove first run event
         }),
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
@@ -192,8 +194,9 @@ def test_view_workout_inputs_returns_group_inputs():
 
     inputs = body['1']
     assert len(inputs) == len(expected_inputs)
-    for expected_input in expected_inputs:
-        assert expected_input in inputs
+    print(inputs)
+    print(expected_inputs)
+    assert inputs == expected_inputs
 
 def test_remove_inputs_returns_success():
     # Arrange
@@ -224,3 +227,8 @@ def test_remove_inputs_deletes_only_specified_inputs():
 
     for expected_input in expected_remaining_inputs:
         assert expected_input in remaining_inputs
+
+    rest_inputs = fetch_all("SELECT athleteId, groupId, restTime, id FROM athlete_rest_inputs")
+    assert rest_inputs is not None
+    assert len(rest_inputs) == 1
+    assert rest_inputs[0] == ('1234', 1, 5, 1)

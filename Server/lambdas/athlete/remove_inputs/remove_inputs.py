@@ -7,12 +7,25 @@ def remove_inputs(event, context):
     try:
         user_info = get_user_info(event)
         athlete_id = user_info["userId"]
-        input_ids = body['inputIds']  # Expecting a list of input IDs to remove
+        input_ids = body['inputIds']  # {inputId: int, type:string}[]
+
+        input_time_params = [input_id[0] for input_id in input_ids if input_id[1] == 'run']
+        input_rest_params = [input_id[0] for input_id in input_ids if input_id[1] == 'rest']
+        print(f"Removing inputs {input_ids} for athlete {athlete_id}")
+
         # remove all inputs from db
         execute_commit(
-            "DELETE FROM athlete_time_inputs WHERE id IN %s AND athleteId = %s",
-            (tuple(input_ids), athlete_id)
-        )
+            """
+                DELETE FROM athlete_time_inputs WHERE id IN %s AND athleteId = %s
+            """,
+        (tuple(input_time_params), athlete_id))
+
+        execute_commit(
+            """
+                DELETE FROM athlete_rest_inputs WHERE id IN %s AND athleteId = %s
+            """,
+        (tuple(input_rest_params), athlete_id))
+
 
         return {
             'statusCode': 200,

@@ -55,7 +55,7 @@ def setup_historical_inputs():
     input_times({
         "body": json.dumps({
             "athleteIds": ["1234"], 'groupId': 1, "date": yesterday,
-            'inputs': [{'distance': 1, 'time': 2}]
+            'inputs': [{'distance': 1, 'time': 2 ,'type': 'run'}]
         }),
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
@@ -64,7 +64,7 @@ def setup_historical_inputs():
     input_times({
         "body": json.dumps({
             "athleteIds": ["1234"], 'groupId': 2, "date": two_days_ago,
-            'inputs': [{'distance': 3, 'time': 4}, {'distance': 5, 'time': 6}]
+            'inputs': [{'distance': 3, 'time': 4, 'type': 'run'}, {'distance': 5, 'time': 6, 'type': 'run'}]
         }),
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
@@ -73,7 +73,7 @@ def setup_historical_inputs():
     input_times({
         "body": json.dumps({
             "athleteIds": ["1234"], 'groupId': 2, "date": three_days_ago,
-            'inputs': [{'distance': 7, 'time': 8}]
+            'inputs': [{'restTime': 5, 'type': 'rest'},{'distance': 7, 'time': 8, 'type': 'run'}]
         }),
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
@@ -122,13 +122,13 @@ def test_search_input_history_date_success():
     assert three_days_ago in body
 
     assert body[yesterday]['1']['name'] == 'Test Group'
-    assert body[yesterday]['1']['inputs'] == [{'distance': 1, 'time': 2.0}]
+    assert body[yesterday]['1']['inputs'] == [{'distance': 1, 'time': 2.0, 'type': 'run'}]
     
     assert body[two_days_ago]['2']['name'] == 'Test Group 2'
-    assert body[two_days_ago]['2']['inputs'] == [{'distance': 3, 'time': 4.0}, {'distance': 5, 'time': 6.0}]
+    assert body[two_days_ago]['2']['inputs'] == [{'distance': 3, 'time': 4.0, 'type': 'run'}, {'distance': 5, 'time': 6.0, 'type': 'run'}]
 
     assert body[three_days_ago]['2']['name'] == 'Test Group 2'
-    assert body[three_days_ago]['2']['inputs'] == [{'distance': 7, 'time': 8.0}]
+    assert body[three_days_ago]['2']['inputs'] == [{'restTime': 5, 'type': 'rest'}, {'distance': 7, 'time': 8.0, 'type': 'run'}]
 
 def test_search_input_history_no_results():
     # Arrange

@@ -19,20 +19,21 @@ def search_input_history_date(event, context):
         # Grab given data and 6 preceding dates' input history for the athlete
         input_history = fetch_all(
             """
-                SELECT g.id, g.name, ai.date, ai.distance, ai.time
-                FROM athlete_time_inputs ai
+                SELECT g.id, g.name, ai.date, ai.distance, ai.time, ai.restTime, ai.type
+                FROM athlete_inputs ai
                 JOIN groups g ON ai.groupId = g.id
                 WHERE athleteId = %s 
                 AND date IN (
                     SELECT DISTINCT date
-                    FROM athlete_time_inputs
+                    FROM athlete_inputs
                         WHERE athleteId = %s AND date <= %s
                         ORDER BY date DESC 
                         LIMIT 7
                 )
-                ORDER BY date DESC
+                ORDER BY date DESC,
+                ai.timeStamp ASC
             """,
-            (athlete_id,athlete_id, date)
+            (athlete_id, athlete_id, date)
         )
 
         # Convert inputs into a easy to read format for the frontend
@@ -41,19 +42,24 @@ def search_input_history_date(event, context):
             
         # sort input history by date and group id
         sorted = {}
-        for input in input_history:
-            group_id = input[0]
-            date = input[2]
-            if date not in sorted:
-                sorted[date] = {}
-            if group_id not in sorted[date]:
-                sorted[date][group_id] = {}
-                sorted[date][group_id]['name'] = input[1]
-                sorted[date][group_id]['inputs'] = []
-            sorted[date][group_id]['inputs'].append({
-                "distance": input[3],
-                "time": input[4]
-            })
+        for group_id, group_name, input_date, distance, time, rest_time, input_type in input_history:
+            if input_date not in sorted:
+                sorted[input_date] = {}
+            if group_id not in sorted[input_date]:
+                sorted[input_date][group_id] = {}
+                sorted[input_date][group_id]['name'] = group_name
+                sorted[input_date][group_id]['inputs'] = []
+            if rest_time:
+                sorted[input_date][group_id]['inputs'].append({
+                    "restTime": rest_time,
+                    "type": input_type
+                })
+            else:
+                sorted[input_date][group_id]['inputs'].append({
+                    "distance": distance,
+                    "time": time,
+                    "type": input_type
+                })
         return {
             "statusCode": 200,
             "body": json.dumps(sorted)

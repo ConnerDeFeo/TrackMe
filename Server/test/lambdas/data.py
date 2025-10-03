@@ -118,14 +118,17 @@ class TestData:
             'inputs': [
                 {
                     'distance': 100,
-                    'time': 10.8
+                    'time': 10.8,
+                    'type': 'run'
                 },
                 {
-                    'restTime': 5
+                    'restTime': 5,
+                    'type': 'rest'
                 },
                 {
                     'distance': 200,
-                    'time': 30
+                    'time': 30,
+                    'type': 'run'
                 },
             ]
         }),

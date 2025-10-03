@@ -3,7 +3,7 @@ import { Text, TextInput, View, Pressable } from "react-native";
 import SectionCreation from "./SectionCreation";
 import TextButton from "../../display/TextButton";
 import Section from "../../../types/workouts/Section";
-import { Exercise } from "../../../types/Exercise";
+import { Exercise } from "../../../types/workouts/Exercise";
 import { ExerciseType } from "../../../assets/constants/Enums";
 
 // Page for workout creation by coaches

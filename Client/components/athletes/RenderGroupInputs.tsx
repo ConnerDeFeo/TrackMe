@@ -10,6 +10,7 @@ import DateService from "../../services/DateService";
 import { Input } from "../../types/inputs/Input";
 import { InputType } from "../../assets/constants/Enums";
 import RestDisplay from "../display/RestDisplay";
+import InputDisplay from "../display/InputDisplay";
 
 //Component used to render input fields for a specific group
 /**
@@ -33,6 +34,7 @@ const RenderGroupInputs: React.FC<
         currentInputs: Record<string, Input[]>,
         handleTimeChange: (groupId: string, idx: number, text: string) => void,
         handleDistanceChange: (groupId: string, idx: number, text: string) => void,
+        handleRestChange: (groupId: string, idx: number, text: string) => void,
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, Input[]>>>,
         submitedInputs: Record<string, Input[]>,
         onSubmit: () => void
@@ -43,6 +45,7 @@ const RenderGroupInputs: React.FC<
     currentInputs,
     handleTimeChange,
     handleDistanceChange,
+    handleRestChange,
     setCurrentInputs,
     submitedInputs,
     onSubmit,
@@ -194,22 +197,7 @@ const RenderGroupInputs: React.FC<
                                             );
                                         }}
                                     >
-                                        {
-                                            input.type === InputType.Rest ? (
-                                                <RestDisplay
-                                                    restTime={input.restTime}
-                                                    selected={selectedSubmitedInputs.includes(input.inputId)}
-                                                />
-                                            )
-                                            :
-                                            (
-                                                <TimeDistanceDisplay
-                                                    time={input.time}
-                                                    distance={input.distance}
-                                                    selected={selectedSubmitedInputs.includes(input.inputId)}
-                                                />
-                                            )
-                                        }
+                                        <InputDisplay input={input} selected={selectedSubmitedInputs.includes(input.inputId)} />
                                     </Pressable>
                                 );
                             })}
@@ -224,6 +212,7 @@ const RenderGroupInputs: React.FC<
                     identifierId={groupId}
                     handleTimeChange={handleTimeChange}
                     handleDistanceChange={handleDistanceChange}
+                    handleRestChange={handleRestChange}
                 />
 
                 {/* Submit button to save new inputs */}

@@ -12,13 +12,14 @@ import { InputType } from "../assets/constants/Enums";
  * @param {(groupId: string, idx: number, text: string) => void} props.handleTimeChange - Callback to handle changes in the time input.
  * @param {(groupId: string, idx: number, text: string) => void} props.handleDistanceChange - Callback to handle changes in the distance input.
  */
-const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTimeChange, handleDistanceChange}:
+const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTimeChange, handleDistanceChange, handleRestChange}:
     {
         currentInputs: Record<string, Input[]>,
         setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, Input[]>>>,
         identifierId: string,
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
+        handleRestChange: (groupId:string, idx:number, text:string)=>void,
     }
 ) => {   
     return(
@@ -65,7 +66,21 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                                                 </View>
                                             </>
                                         );
-
+                                    case InputType.Rest:
+                                        return (
+                                            <View className="flex-1">
+                                                <Text className="text-xs font-medium text-gray-600 mb-1">
+                                                    Rest Time (seconds)
+                                                </Text>
+                                                <TextInput
+                                                    placeholder="0.00"
+                                                    keyboardType="numeric"
+                                                    value={input?.restTime.toString()}
+                                                    className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                                                    onChangeText={text => handleRestChange(identifierId, idx, text)}
+                                                />
+                                            </View>
+                                        );
                                     default:
                                         return <Text>Unsupported input type</Text>;
                                 }
@@ -91,7 +106,21 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                     </Pressable>
                 )}
 
-                {/* Add button */}
+                {/* Add rest time button */}
+                <Pressable 
+                    className="flex-1 trackme-bg-blue rounded-lg py-3"
+                    onPress={() => {
+                        const existingInputs = currentInputs[identifierId] || [];
+                        const updatedInputs = [...existingInputs, { restTime: '', type: InputType.Rest }];
+                        setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs } as Record<string, Input[]>));
+                    }}
+                >
+                    <Text className="text-white text-center font-medium">
+                        Add Rest
+                    </Text>
+                </Pressable>
+
+                {/* Add time button */}
                 <Pressable 
                     className="flex-1 trackme-bg-blue rounded-lg py-3"
                     onPress={() => {
@@ -101,7 +130,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                     }}
                 >
                     <Text className="text-white text-center font-medium">
-                        {currentInputs[identifierId]?.length > 0 ? 'Add Another' : 'Add Entry'}
+                        Add Run
                     </Text>
                 </Pressable>
             </View>

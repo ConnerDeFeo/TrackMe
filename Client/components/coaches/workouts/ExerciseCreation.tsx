@@ -1,8 +1,9 @@
 import { Text, TextInput, Pressable, View } from "react-native";
-import { Exercise } from "../../../types/Exercise";
+import { Exercise } from "../../../types/workouts/Exercise";
 import Section from "../../../types/workouts/Section";
 import { Rest } from "../../../types/workouts/Rest";
 import { ExerciseType } from "../../../assets/constants/Enums";
+import TimeInput from "../../TimeInput";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:
   {
@@ -146,51 +147,20 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
             <View className="gap-y-3 flex flex-row justify-between">
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Min Duration</Text>
-                <View className="flex-row items-center gap-x-2">
-                  {/* Minutes input */}
-                  <TextInput
-                    className={`border rounded-md p-3 bg-white text-black text-center w-20 ${(exercise.minReps || 0) === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
-                    placeholder="Mins"
-                    keyboardType="numeric"
-                    onChangeText={text => handleRestChange(partIdx, 'minReps', 'minutes', text)}
-                    maxLength={2}
-                    value={(exercise.minReps || 0) / 60 === 0 ? '' : Math.floor((exercise.minReps || 0) / 60).toString()}
-                  />
-                  <Text className="font-bold text-lg">:</Text>
-                  {/* Seconds input */}
-                  <TextInput
-                    className={`border rounded-md p-3 bg-white text-black text-center w-20 ${(exercise.minReps || 0) === 0 ? 'border-red-500' : 'trackme-border-gray'}`}
-                    placeholder="Secs"
-                    keyboardType="numeric"
-                    onChangeText={text => handleRestChange(partIdx, 'minReps', 'seconds', text)}
-                    maxLength={2}
-                    value={(exercise.minReps || 0) % 60 === 0 ? '' : ((exercise.minReps || 0) % 60).toString()}
-                  />
-                </View>
+                <TimeInput
+                  handleMinutesChange={text => handleRestChange(partIdx, 'minReps', 'minutes', text)}
+                  handleSecondsChange={text => handleRestChange(partIdx, 'minReps', 'seconds', text)}
+                  currSeconds={exercise.minReps || 0}
+                  required
+                />
               </View>
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Max Duration (Optional)</Text>
-                <View className="flex-row items-center gap-x-2">
-                  {/* Minutes input */}
-                  <TextInput
-                    className="border trackme-border-gray rounded-md p-3 bg-white text-black text-center w-20"
-                    placeholder="Mins"
-                    keyboardType="numeric"
-                    onChangeText={text => handleRestChange(partIdx, 'maxReps', 'minutes', text)}
-                    maxLength={2}
-                    value={(exercise.maxReps || 0) / 60 === 0 ? '' : Math.floor((exercise.maxReps || 0) / 60).toString()}
-                  />
-                  <Text className="font-bold text-lg">:</Text>
-                  {/* Seconds input */}
-                  <TextInput
-                    className="border trackme-border-gray rounded-md p-3 bg-white text-black text-center w-20"
-                    placeholder="Secs"
-                    keyboardType="numeric"
-                    onChangeText={text => handleRestChange(partIdx, 'maxReps', 'seconds', text)}
-                    maxLength={2}
-                    value={(exercise.maxReps || 0) % 60 === 0 ? '' : ((exercise.maxReps || 0) % 60).toString()}
-                  />
-                </View>
+                <TimeInput
+                  handleMinutesChange={text => handleRestChange(partIdx, 'maxReps', 'minutes', text)}
+                  handleSecondsChange={text => handleRestChange(partIdx, 'maxReps', 'seconds', text)}
+                  currSeconds={exercise.maxReps || 0}
+                />
               </View>
             </View>
           )}

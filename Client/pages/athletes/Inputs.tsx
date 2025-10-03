@@ -73,6 +73,17 @@ const Inputs = ()=>{
         });
       }
     }
+    
+    const handleRestChange = (athleteId:string, idx: number, value: string)=>{
+      // Only allow integer values or empty string
+      if (/^\d*$/.test(value)) {
+        // Update the specific input in the group while preserving other inputs
+        setCurrentInputs((prev: Record<string, Input[]>) => {
+          const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, restTime: value } : input) || [];
+          return { ...prev, [athleteId]: updatedAthlete } as Record<string, Input[]>;
+        });
+      }
+    }
     return (
         <>
             {/* Render input components for each group */}
@@ -87,6 +98,7 @@ const Inputs = ()=>{
                     handleTimeChange={handleTimeChange}
                     handleDistanceChange={handleDistanceChange}
                     setCurrentInputs={setCurrentInputs}
+                    handleRestChange={handleRestChange}
                 />
             ))}
         </>

@@ -8,6 +8,7 @@ import TimeDistanceDisplay from "../components/display/TimeDistanceDisplay";
 import DateService from "../services/DateService";
 import UserDisplay from "../components/display/UserDisplay";
 import { Input } from "../types/inputs/Input";
+import InputDisplay from "../components/display/InputDisplay";
 
 const MassInput = () => {
   const route = useRoute();
@@ -65,6 +66,17 @@ const MassInput = () => {
       }
     }
 
+    const handleRestTimeChange = (athleteId:string, idx: number, value: string)=>{
+      // Only allow integer values or empty string
+      if (/^\d*$/.test(value)) {
+        // Update the specific input in the group while preserving other inputs
+        setCurrentInputs(prev => {
+          const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, restTime: value } : input) || [];
+          return { ...prev, [athleteId]: updatedAthlete } as Record<string, Input[]>;
+        });
+      }
+    }
+
     const handleInputSubmission = async () => {
         const date = DateService.formatDate(new Date());
         const resp = await GeneralService.massInput(currentInputs, groupId, date);
@@ -82,7 +94,7 @@ const MassInput = () => {
         {workoutInputs[athlete[0]] && workoutInputs[athlete[0]].length > 0 && (
           <View className="mb-4 gap-y-2">
             {workoutInputs[athlete[0]].map((input, index) => (
-              <TimeDistanceDisplay key={index} time={input.time} distance={input.distance} />
+              <InputDisplay key={index} input={input} />
             ))}
           </View>
         )}
@@ -93,6 +105,7 @@ const MassInput = () => {
           identifierId={athlete[0]}
           handleTimeChange={handleTimeChange}
           handleDistanceChange={handleDistanceChange}
+          handleRestChange={handleRestTimeChange}
         />
       </View>
       ))}

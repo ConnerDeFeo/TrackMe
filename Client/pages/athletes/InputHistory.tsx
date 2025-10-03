@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import UserService from "../../services/UserService";
 import HistoryService from "../../services/HistoryService";
 import SearchDate from "../../components/SearchDate";
-import TimeDistanceDisplay from "../../components/display/TimeDistanceDisplay";
+import { Input } from "../../types/inputs/Input";
+import InputDisplay from "../../components/display/InputDisplay";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});
@@ -45,8 +45,8 @@ const InputHistory = () => {
             {Object.keys(InputHistory[date]).map((groupId) => (
               <View key={groupId} className="ml-4 mb-2">
                 <Text className="text-xl font-semibold text-gray-700">{InputHistory[date][groupId].name}</Text>
-                {InputHistory[date][groupId].inputs.map((inputItem: {time: number, distance: number}, index: number) => (
-                    <TimeDistanceDisplay key={index} time={inputItem.time} distance={inputItem.distance} />
+                {InputHistory[date][groupId].inputs.map((inputItem: Input, index: number) => (
+                    <InputDisplay key={index} input={inputItem}/>
                 ))}
               </View>
             ))}

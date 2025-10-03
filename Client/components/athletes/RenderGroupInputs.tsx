@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import DateService from "../../services/DateService";
 import { Input } from "../../common/types/inputs/Input";
 import InputDisplay from "../display/InputDisplay";
+import { InputType } from "../../common/constants/Enums";
 
 //Component used to render input fields for a specific group
 /**
@@ -51,7 +52,7 @@ const RenderGroupInputs: React.FC<
     const { workoutGroup } = useWorkoutGroup(groupId);
 
     // Track which previous entries (by inputId) are selected for removal
-    const [selectedSubmitedInputs, setSelectedSubmitedInputs] = useState<number[]>([]);
+    const [selectedSubmitedInputs, setSelectedSubmitedInputs] = useState<{inputId: number, type: InputType}[]>([]);
 
     // Navigation object to move between screens
     const navigation = useNavigation<any>();

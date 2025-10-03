@@ -108,7 +108,7 @@ def setup_remove_inputs_event():
     event = {
         'body': json.dumps({
             "athleteId": "1234",
-            "inputIds": [[1, 'run'], [3, 'run']]  # Remove first run event
+            "inputIds": [{'inputId': 1, 'type': 'run'}, {'inputId': 3, 'type': 'run'}]  # Remove first run event
         }),
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }

@@ -1,3 +1,8 @@
+# Retrieves the public IP address of the machine running Terraform to use in security group rules
+data "http" "myip" {
+  url = "https://ipv4.icanhazip.com"
+}
+
 # Default VPC and availability zones for the AWS account
 data "aws_vpc" "default" {
   default = true

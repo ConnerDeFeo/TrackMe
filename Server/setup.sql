@@ -86,6 +86,8 @@ CREATE TABLE IF NOT EXISTS athlete_inputs(
     date VARCHAR(10) DEFAULT CURRENT_DATE
 );
 
+
+-- Addition 10/02/2025, athlete rest inputs with timestamp tracking
 ALTER TABLE athlete_inputs ADD COLUMN IF NOT EXISTS timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 CREATE TABLE IF NOT EXISTS athlete_rest_inputs{
@@ -97,3 +99,25 @@ CREATE TABLE IF NOT EXISTS athlete_rest_inputs{
     timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 }
 
+CREATE OR REPLACE VIEW athlete_events AS
+SELECT 
+    id,
+    athleteId,
+    groupId,
+    distance,
+    time,
+    NULL AS restTime,
+    timeStamp,
+    'input' AS type
+FROM athlete_inputs
+UNION ALL
+SELECT 
+    id,
+    athleteId,
+    groupId,
+    NULL AS distance,
+    NULL AS time,
+    restTime,
+    timeStamp,
+    'rest' AS type
+FROM athlete_rest_inputs;

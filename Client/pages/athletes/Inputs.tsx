@@ -23,6 +23,9 @@ const Inputs = ()=>{
             const inputs = await resp.json();
             setSubmittedInputs(inputs);
         }
+        else{
+            setSubmittedInputs({});
+        }
     }, []);
 
     // Fetch submitted inputs on component mount

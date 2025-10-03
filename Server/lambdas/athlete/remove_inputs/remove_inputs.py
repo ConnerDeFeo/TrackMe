@@ -10,7 +10,7 @@ def remove_inputs(event, context):
         input_ids = body['inputIds']  # Expecting a list of input IDs to remove
         # remove all inputs from db
         execute_commit(
-            "DELETE FROM athlete_inputs WHERE id IN %s AND athleteId = %s",
+            "DELETE FROM athlete_time_inputs WHERE id IN %s AND athleteId = %s",
             (tuple(input_ids), athlete_id)
         )
 

@@ -20,12 +20,12 @@ def search_input_history_date(event, context):
         input_history = fetch_all(
             """
                 SELECT g.id, g.name, ai.date, ai.distance, ai.time
-                FROM athlete_inputs ai
+                FROM athlete_time_inputs ai
                 JOIN groups g ON ai.groupId = g.id
                 WHERE athleteId = %s 
                 AND date IN (
                     SELECT DISTINCT date
-                    FROM athlete_inputs
+                    FROM athlete_time_inputs
                         WHERE athleteId = %s AND date <= %s
                         ORDER BY date DESC 
                         LIMIT 7

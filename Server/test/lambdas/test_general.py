@@ -198,10 +198,10 @@ def test_view_group_inputs_success():
     data = json.loads(response['body'])
     assert '1234' in data
     
-    athlete_inputs = data['1234']
-    assert len(athlete_inputs) == 2
-    assert {'distance': 100, 'time': 10.8} in athlete_inputs
-    assert {'distance': 200, 'time': 30.0} in athlete_inputs
+    athlete_time_inputs = data['1234']
+    assert len(athlete_time_inputs) == 2
+    assert {'distance': 100, 'time': 10.8} in athlete_time_inputs
+    assert {'distance': 200, 'time': 30.0} in athlete_time_inputs
 
 def test_get_user_as_athlete():
     # Arrange
@@ -332,7 +332,7 @@ def test_mass_input_success():
 
     # Assert
     assert response['statusCode'] == 200
-    all_inputs = fetch_all("SELECT athleteId, distance, time FROM athlete_inputs WHERE groupId = %s ORDER BY athleteId, distance", (1,))
+    all_inputs = fetch_all("SELECT athleteId, distance, time FROM athlete_time_inputs WHERE groupId = %s ORDER BY athleteId, distance", (1,))
     assert all_inputs is not None
     assert len(all_inputs) == 6
     

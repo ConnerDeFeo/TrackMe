@@ -88,7 +88,8 @@ CREATE TABLE IF NOT EXISTS athlete_inputs(
 
 
 -- Addition 10/02/2025, athlete rest inputs with timestamp tracking
-ALTER TABLE athlete_inputs ADD COLUMN IF NOT EXISTS timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE athlete_inputs RENAME TO athlete_time_inputs;
+ALTER TABLE athlete_time_inputs ADD COLUMN IF NOT EXISTS timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 CREATE TABLE IF NOT EXISTS athlete_rest_inputs(
     id SERIAL PRIMARY KEY,
@@ -99,7 +100,7 @@ CREATE TABLE IF NOT EXISTS athlete_rest_inputs(
     timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE OR REPLACE VIEW athlete_events AS
+CREATE OR REPLACE VIEW athlete_inputs AS
 SELECT 
     id,
     athleteId,
@@ -109,7 +110,7 @@ SELECT
     NULL AS restTime,
     timeStamp,
     'input' AS type
-FROM athlete_inputs
+FROM athlete_time_inputs
 UNION ALL
 SELECT 
     id,

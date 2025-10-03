@@ -135,7 +135,7 @@ def test_input_times_persists_inputs_for_athlete():
     # Act
     input_times(event, {})
     # Assert
-    inputs = fetch_all("SELECT athleteId, groupId, distance, time FROM athlete_inputs")
+    inputs = fetch_all("SELECT athleteId, groupId, distance, time FROM athlete_time_inputs")
     assert inputs is not None
     assert len(inputs) == 2
 
@@ -150,6 +150,22 @@ def test_input_times_persists_inputs_for_athlete():
     assert second_input[2] == 200
     assert second_input[3] == 30
 
+def test_timestamps_unique_for_inputs_and_rest_inputs():
+    # Arrange
+    event = TestData.test_input_times
+
+    # Act
+    input_times(event, {})
+
+    # Assert
+    inputs = fetch_all("SELECT timeStamp FROM athlete_time_inputs")
+    rest_inputs = fetch_all("SELECT timeStamp FROM athlete_rest_inputs")
+
+    assert inputs is not None
+    assert rest_inputs is not None
+    all_timestamps = [row[0] for row in inputs] + [row[0] for row in rest_inputs]
+    assert len(all_timestamps) == len(set(all_timestamps)), "Timestamps are not unique"
+
 def test_view_workout_inputs_returns_success():
     # Arrange
     event, _ = setup_view_workout_inputs()
@@ -159,7 +175,6 @@ def test_view_workout_inputs_returns_success():
 
     # Assert
     assert response['statusCode'] == 200
-
 
 def test_view_workout_inputs_returns_group_inputs():
     # Arrange
@@ -187,7 +202,6 @@ def test_remove_inputs_returns_success():
     # Assert
     assert response['statusCode'] == 200
 
-
 def test_remove_inputs_deletes_only_specified_inputs():
     # Arrange
     event, expected_remaining_inputs = setup_remove_inputs_event()
@@ -196,7 +210,7 @@ def test_remove_inputs_deletes_only_specified_inputs():
     remove_inputs(event, {})
 
     # Assert
-    inputs = fetch_all("SELECT athleteId, groupId, distance, time, id FROM athlete_inputs")
+    inputs = fetch_all("SELECT athleteId, groupId, distance, time, id FROM athlete_time_inputs")
     assert inputs is not None
     assert len(inputs) == len(expected_remaining_inputs)
 

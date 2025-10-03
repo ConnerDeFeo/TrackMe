@@ -121,9 +121,12 @@ class TestData:
                     'time': 10.8
                 },
                 {
+                    'restTime': 5
+                },
+                {
                     'distance': 200,
                     'time': 30
-                }
+                },
             ]
         }),
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")

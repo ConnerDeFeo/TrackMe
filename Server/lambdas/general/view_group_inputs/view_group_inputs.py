@@ -12,19 +12,19 @@ def view_group_inputs(event, context):
         date = query_params.get('date',datetime.now(timezone.utc).strftime('%Y-%m-%d'))
 
         #Grab data from rds
-        athlete_inputs = fetch_all(
+        athlete_time_inputs = fetch_all(
             """
                 SELECT athleteId, distance, time 
-                FROM athlete_inputs
+                FROM athlete_time_inputs
                 WHERE groupId = %s AND date = %s
             """,
             (group_id, date)
         )
 
         #Convert data to json format
-        if athlete_inputs:
+        if athlete_time_inputs:
             parsed_data = {}
-            for input in athlete_inputs:
+            for input in athlete_time_inputs:
                 if input[0] not in parsed_data:
                     parsed_data[input[0]] = []
                 parsed_data[input[0]].append({

@@ -212,12 +212,12 @@ def test_fetch_historical_data_success():
     assert group_data['workouts'][0]['title'] == 'Test Workout'
     
     assert '1234' in group_data['athleteInputs'] # Athlete ID
-    athlete_inputs = group_data['athleteInputs']['1234']
+    athlete_time_inputs = group_data['athleteInputs']['1234']
     
-    assert athlete_inputs['username'] == 'test_athlete'
-    assert len(athlete_inputs['inputs']) == 2
-    assert {'distance': 100, 'time': 10.8} in athlete_inputs['inputs']
-    assert {'distance': 200, 'time': 30.0} in athlete_inputs['inputs']
+    assert athlete_time_inputs['username'] == 'test_athlete'
+    assert len(athlete_time_inputs['inputs']) == 2
+    assert {'distance': 100, 'time': 10.8} in athlete_time_inputs['inputs']
+    assert {'distance': 200, 'time': 30.0} in athlete_time_inputs['inputs']
 
 def test_fetch_historical_data_no_results():
     # Arrange

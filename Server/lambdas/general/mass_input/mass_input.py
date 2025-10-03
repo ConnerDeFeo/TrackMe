@@ -42,7 +42,7 @@ def mass_input(event, context):
         # Bulk insert into the database
         execute_commit_many(
             """
-                INSERT INTO athlete_inputs (athleteId, groupId, distance, time, date)
+                INSERT INTO athlete_time_inputs (athleteId, groupId, distance, time, date)
                 VALUES (%s, %s, %s, %s, %s)
             """, params)
         

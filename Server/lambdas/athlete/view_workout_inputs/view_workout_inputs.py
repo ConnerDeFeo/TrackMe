@@ -16,18 +16,18 @@ def view_workout_inputs(event, context):
         # Default to current UTC date if no date provided
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
         
-        athlete_inputs = fetch_all(
+        athlete_time_inputs = fetch_all(
         """
             SELECT g.id, ai.distance, ai.time, ai.id
             FROM groups g
-            JOIN athlete_inputs ai ON ai.groupId = g.id
+            JOIN athlete_time_inputs ai ON ai.groupId = g.id
             WHERE ai.athleteId = %s AND ai.date = %s
         """, (athlete_id, date))
 
         # Initialize data structure to hold workout inputs
         parsed_data = {}
-        if athlete_inputs:
-            for input in athlete_inputs:
+        if athlete_time_inputs:
+            for input in athlete_time_inputs:
                 id = input[0]
                 if id not in parsed_data:
                     parsed_data[id] = []

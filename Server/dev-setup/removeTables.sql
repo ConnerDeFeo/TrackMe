@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS athlete_inputs CASCADE;
+DROP TABLE IF EXISTS athlete_time_inputs CASCADE;
 DROP TABLE IF EXISTS group_workouts CASCADE;
 DROP TABLE IF EXISTS athlete_coach_invites CASCADE;
 DROP TABLE IF EXISTS athlete_coach_requests CASCADE;

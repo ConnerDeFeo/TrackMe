@@ -22,10 +22,10 @@ def fetch_historical_data(event, context):
         ) or []
         
         # Grab all athlete inputs for the given coach on the specified date
-        athlete_inputs = fetch_all(
+        athlete_time_inputs = fetch_all(
             """
                 SELECT g.id, g.name, a.userId, a.username, ai.time, ai.distance 
-                FROM athlete_inputs ai
+                FROM athlete_time_inputs ai
                 JOIN athletes a ON ai.athleteId = a.userId
                 JOIN groups g ON ai.groupId = g.id
                 WHERE ai.date = %s AND g.coachId = %s
@@ -47,7 +47,7 @@ def fetch_historical_data(event, context):
                 "description": workout[3],
                 "sections": workout[4]
             })
-        for input in athlete_inputs:
+        for input in athlete_time_inputs:
             group_id = input[0]
             if group_id not in filtered_data:
                 filtered_data[group_id] = {

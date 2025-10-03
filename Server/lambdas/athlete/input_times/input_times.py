@@ -28,9 +28,9 @@ def input_times(event, context):
         #Create all inputs
         input_params = []
         rest_input_params = []
-        for i, athleteId in enumerate(athleteIds):
-            for input in inputs:
-                timestamp = now + timedelta(milliseconds=i)
+        for  athleteId in athleteIds:
+            for j, input in enumerate(inputs):
+                timestamp = now + timedelta(milliseconds=j)
                 if 'restTime' in input:
                     rest_time = input['restTime']
                     if rest_time == '':
@@ -46,7 +46,7 @@ def input_times(event, context):
         #Insert time into rds
         execute_commit_many(
         """
-            INSERT INTO athlete_inputs (athleteId, groupId, distance, time, date, timeStamp)
+            INSERT INTO athlete_time_inputs (athleteId, groupId, distance, time, date, timeStamp)
             VALUES (%s, %s, %s, %s, %s, %s)
         """, input_params)
 

@@ -1,5 +1,5 @@
 import { Text, Pressable, View } from "react-native";
-import Section from "../../types/Section";
+import Section from "../../types/workouts/Section";
 import RenderExercise from "./RenderExercise";
 
 const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void}> = ({ workout, onPress }) => {

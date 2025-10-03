@@ -7,6 +7,7 @@ import InputTracking from "../components/InputTracking";
 import TimeDistanceDisplay from "../components/display/TimeDistanceDisplay";
 import DateService from "../services/DateService";
 import UserDisplay from "../components/display/UserDisplay";
+import { Input } from "../types/inputs/Input";
 
 const MassInput = () => {
   const route = useRoute();
@@ -15,7 +16,7 @@ const MassInput = () => {
   const [athletes, setAthletes] = useState<string[][]>([]);
   // Track current input values for each given group { groupId : [time/distance, time/distance] }
   const [currentInputs, setCurrentInputs] = 
-  usePersistentState<Record<string, { time: string | undefined; distance: string | undefined}[]>>('currentMassInputs', {});
+  usePersistentState<Record<string, Input[]>>('currentMassInputs', {});
 
   //fetch athletes and workout inputs
   const fetchData = async () => {
@@ -48,7 +49,7 @@ const MassInput = () => {
         // Update the specific input in the group while preserving other inputs
         setCurrentInputs(prev => {
             const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, time: updatedValue } : input) || [];
-            return { ...prev, [athleteId]: updatedAthlete };
+            return { ...prev, [athleteId]: updatedAthlete } as Record<string, Input[]>;
         });
     }
 
@@ -59,7 +60,7 @@ const MassInput = () => {
         // Update the specific input in the group while preserving other inputs
         setCurrentInputs(prev => {
           const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, distance: value } : input) || [];
-          return { ...prev, [athleteId]: updatedAthlete };
+          return { ...prev, [athleteId]: updatedAthlete } as Record<string, Input[]>;
         });
       }
     }

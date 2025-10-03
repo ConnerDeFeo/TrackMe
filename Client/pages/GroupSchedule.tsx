@@ -2,7 +2,7 @@ import { Pressable, Text, View } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import DateService from "../services/DateService";
 import ArrowButton from "../components/ArrowButton";
-import Workout from "../types/Workout";
+import Workout from "../types/workouts/Workout";
 import GeneralService from "../services/GeneralService";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import DisplayWorkout from "../components/display/DisplayWorkout";

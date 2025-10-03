@@ -1,4 +1,4 @@
-import { ExerciseType } from "../assets/constants/Enums";
+import { ExerciseType } from "../../assets/constants/Enums";
 import { ExerciseBase } from "./ExerciseBase";
 
 export interface Rest extends ExerciseBase {

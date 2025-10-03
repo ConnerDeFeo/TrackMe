@@ -7,6 +7,9 @@ import InputTracking from "../InputTracking";
 import TimeDistanceDisplay from "../display/TimeDistanceDisplay";
 import { useNavigation } from "@react-navigation/native";
 import DateService from "../../services/DateService";
+import { Input } from "../../types/inputs/Input";
+import { InputType } from "../../assets/constants/Enums";
+import RestDisplay from "../display/RestDisplay";
 
 //Component used to render input fields for a specific group
 /**
@@ -25,41 +28,57 @@ import DateService from "../../services/DateService";
  */
 const RenderGroupInputs: React.FC<
     {
-        groupId:string, 
-        groupName:string,
-        currentInputs:Record<string, { time: string | undefined; distance: string | undefined}[]>,
-        handleTimeChange: (groupId:string, idx:number, text:string)=>void,
-        handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time: string | undefined; distance: string | undefined}[]>>>,
-        submitedInputs: Record<string, { time: number; distance: number, inputId: number}[]>,
+        groupId: string,
+        groupName: string,
+        currentInputs: Record<string, Input[]>,
+        handleTimeChange: (groupId: string, idx: number, text: string) => void,
+        handleDistanceChange: (groupId: string, idx: number, text: string) => void,
+        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, Input[]>>>,
+        submitedInputs: Record<string, Input[]>,
         onSubmit: () => void
-    }> = (
-        {
-            groupId, 
-            groupName, 
-            currentInputs, 
-            handleTimeChange, 
-            handleDistanceChange, 
-            setCurrentInputs, 
-            submitedInputs, 
-            onSubmit,
-        })=>{
-
-    //Current workout group members
+    }
+> = ({
+    groupId,
+    groupName,
+    currentInputs,
+    handleTimeChange,
+    handleDistanceChange,
+    setCurrentInputs,
+    submitedInputs,
+    onSubmit,
+}) => {
+    // Retrieve the workout group members for this group ID
     const { workoutGroup } = useWorkoutGroup(groupId);
-    // List of input IDs that have been submitted and selected by user
+
+    // Track which previous entries (by inputId) are selected for removal
     const [selectedSubmitedInputs, setSelectedSubmitedInputs] = useState<number[]>([]);
+
+    // Navigation object to move between screens
     const navigation = useNavigation<any>();
 
+    /**
+     * Submits the current input entries for all athletes in the group,
+     * including the current user, for today's date.
+     * On success, clears the inputs for this group and invokes onSubmit callback.
+     */
     const handleInputSubmission = async () => {
         const date = DateService.formatDate(new Date());
         const userId = await UserService.getUserId();
-        if(userId){
-            //All athletes in workout group plus the logged in user
-            const athletes = [...workoutGroup.map(athlete => athlete.id), userId];
-            const resp = await AthleteWorkoutService.inputTimes(athletes, groupId, date, currentInputs[groupId]);
-            //If response ok, reset current inputs
-            if(resp.ok){
+
+        if (userId) {
+            // Combine group members and current user into one list of athlete IDs
+            const athletes = [...workoutGroup.map(member => member.id), userId];
+
+            // Send the inputs for this group and date
+            const resp = await AthleteWorkoutService.inputTimes(
+                athletes,
+                groupId,
+                date,
+                currentInputs[groupId]
+            );
+
+            // On success, reset only this group's inputs and refresh parent via onSubmit
+            if (resp.ok) {
                 setCurrentInputs(prev => ({
                     ...prev,
                     [groupId]: []
@@ -67,42 +86,65 @@ const RenderGroupInputs: React.FC<
                 onSubmit();
             }
         }
-    }
+    };
 
+    /**
+     * Removes the selected previous entries by their input IDs.
+     * Clears the selection on success and triggers onSubmit.
+     */
     const handleInputRemoval = async () => {
         const resp = await AthleteWorkoutService.removeInputs(selectedSubmitedInputs);
-        if(resp.ok){
+
+        if (resp.ok) {
+            // Reset selection and refresh parent
             setSelectedSubmitedInputs([]);
             onSubmit();
         }
-    }
-    return(
-        // Main container for the group with modern card styling
-        <View key={groupId} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            {/* Group header section */}
+    };
+
+    return (
+        <View
+            key={groupId}
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+            {/* Header section with group name and navigation buttons */}
             <View className="px-5 pt-4 pb-1 bg-gray-50 border-b border-gray-100">
                 <View className="flex flex-row justify-between items-start mb-3">
-                    <Text className="text-lg font-bold text-gray-900 max-w-[50%]">{groupName}</Text>
+                    <Text className="text-lg font-bold text-gray-900 max-w-[50%]">
+                        {groupName}
+                    </Text>
                     <View className="flex flex-row gap-3">
-                        <Pressable onPress={()=>navigation.navigate('MassInput', { groupId, groupName })}>
-                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-4 py-2 rounded-full">Mass Input</Text>
-                        </Pressable>
-                        <Pressable onPress={()=>navigation.navigate('CreateWorkoutGroup', { groupId })}>
+                        {/* Navigate to Mass Input screen */}
+                        <Pressable onPress={() => navigation.navigate('MassInput', { groupId, groupName })}>
                             <Text className="text-sm font-medium trackme-blue bg-blue-50 px-4 py-2 rounded-full">
-                                {workoutGroup.length>0 ? "Update Group" : "Create Group"}
+                                Mass Input
+                            </Text>
+                        </Pressable>
+
+                        {/* Create or Update group button */}
+                        <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup', { groupId })}>
+                            <Text className="text-sm font-medium trackme-blue bg-blue-50 px-4 py-2 rounded-full">
+                                {workoutGroup.length > 0 ? "Update Group" : "Create Group"}
                             </Text>
                         </Pressable>
                     </View>
                 </View>
 
-                {/* Current workout group members */}
+                {/* Display current workout partners if any */}
                 {workoutGroup.length > 0 && (
                     <View>
-                        <Text className="text-sm font-medium text-gray-600 mb-2">Workout Partners</Text>
+                        <Text className="text-sm font-medium text-gray-600 mb-2">
+                            Workout Partners
+                        </Text>
                         <View className="flex flex-row flex-wrap gap-2">
                             {workoutGroup.map((member, idx) => (
-                                <View key={idx} className="bg-white border border-gray-200 rounded-full px-3 py-1">
-                                    <Text className="text-sm font-medium text-gray-700">{member.username}</Text>
+                                <View
+                                    key={idx}
+                                    className="bg-white border border-gray-200 rounded-full px-3 py-1"
+                                >
+                                    <Text className="text-sm font-medium text-gray-700">
+                                        {member.username}
+                                    </Text>
                                 </View>
                             ))}
                         </View>
@@ -110,38 +152,72 @@ const RenderGroupInputs: React.FC<
                 )}
             </View>
 
-            {/* Content section */}
+            {/* Content section containing previous entries, new inputs, and submit */}
             <View className="p-5 gap-y-3">
-                {/* Previous entries section */}
+                {/* Section: Previous Entries */}
                 {submitedInputs[groupId] && (
                     <View>
                         <View className="flex flex-row items-center justify-between mb-3">
-                            <Text className="text-base font-semibold text-gray-800">Previous Entries</Text>
+                            <Text className="text-base font-semibold text-gray-800">
+                                Previous Entries
+                            </Text>
+                            {/* Show removal button only when items are selected */}
                             {selectedSubmitedInputs.length > 0 && (
-                                <Pressable onPress={handleInputRemoval} className="pl-4 py-2">
+                                <Pressable
+                                    onPress={handleInputRemoval}
+                                    className="pl-4 py-2"
+                                >
                                     <Text className="text-sm font-medium trackme-red">
                                         Remove ({selectedSubmitedInputs.length})
                                     </Text>
                                 </Pressable>
                             )}
                         </View>
+
+                        {/* List out each previous entry with selectable UI */}
                         <View className="gap-y-2">
-                            {submitedInputs[groupId].map((input, idx) => (
-                                <Pressable key={idx} onPress={()=>{
-                                    if(selectedSubmitedInputs.includes(input.inputId)){
-                                        setSelectedSubmitedInputs(prev => prev.filter(id => id !== input.inputId));
-                                    } else {
-                                        setSelectedSubmitedInputs(prev => [...prev, input.inputId]);
-                                    }
-                                }}>
-                                    <TimeDistanceDisplay time={input.time} distance={input.distance} selected={selectedSubmitedInputs.includes(input.inputId)} />
-                                </Pressable>
-                            ))}
+                            {submitedInputs[groupId].map((input, idx) => {
+                                if(!input.inputId){
+                                    return <Text className="trackme-red">Something went wrong!</Text>
+                                }
+                                return (
+                                    <Pressable
+                                        key={idx}
+                                        onPress={() => {
+                                            if(!input.inputId) return;
+                                            const alreadySelected = selectedSubmitedInputs.includes(input.inputId);
+                                            // Toggle selection state
+                                            setSelectedSubmitedInputs(prev =>
+                                                alreadySelected
+                                                    ? prev.filter(id => id !== input.inputId) as number[]
+                                                    : [...prev, input.inputId] as number[]
+                                            );
+                                        }}
+                                    >
+                                        {
+                                            input.type === InputType.Rest ? (
+                                                <RestDisplay
+                                                    restTime={input.restTime}
+                                                    selected={selectedSubmitedInputs.includes(input.inputId)}
+                                                />
+                                            )
+                                            :
+                                            (
+                                                <TimeDistanceDisplay
+                                                    time={input.time}
+                                                    distance={input.distance}
+                                                    selected={selectedSubmitedInputs.includes(input.inputId)}
+                                                />
+                                            )
+                                        }
+                                    </Pressable>
+                                );
+                            })}
                         </View>
                     </View>
                 )}
 
-                {/* New inputs section */}
+                {/* Section: New Inputs */}
                 <InputTracking
                     currentInputs={currentInputs}
                     setCurrentInputs={setCurrentInputs}
@@ -150,15 +226,18 @@ const RenderGroupInputs: React.FC<
                     handleDistanceChange={handleDistanceChange}
                 />
 
-                {/* Submit button */}
-                <Pressable 
-                    className="trackme-bg-blue rounded-xl py-3 shadow-sm" 
+                {/* Submit button to save new inputs */}
+                <Pressable
+                    className="trackme-bg-blue rounded-xl py-3 shadow-sm"
                     onPress={handleInputSubmission}
                 >
-                    <Text className="text-white text-center font-semibold text-base">Submit Entry</Text>
+                    <Text className="text-white text-center font-semibold text-base">
+                        Submit Entry
+                    </Text>
                 </Pressable>
             </View>
         </View>
     );
-}
+};
+
 export default RenderGroupInputs;

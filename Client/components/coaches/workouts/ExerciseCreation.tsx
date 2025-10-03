@@ -1,7 +1,7 @@
 import { Text, TextInput, Pressable, View } from "react-native";
 import { Exercise } from "../../../types/Exercise";
-import Section from "../../../types/Section";
-import { Rest } from "../../../types/Rest";
+import Section from "../../../types/workouts/Section";
+import { Rest } from "../../../types/workouts/Rest";
 import { ExerciseType } from "../../../assets/constants/Enums";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:

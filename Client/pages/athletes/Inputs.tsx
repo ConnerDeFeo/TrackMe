@@ -4,6 +4,7 @@ import usePersistentState from "../../hooks/usePersistentState";
 import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { useFocusEffect } from "@react-navigation/native";
+import { Input } from "../../types/inputs/Input";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -11,10 +12,10 @@ const Inputs = ()=>{
 
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [currentInputs, setCurrentInputs] = 
-    usePersistentState<Record<string, { time: string | undefined; distance: string | undefined}[]>>('current', {});
+    usePersistentState<Record<string, Input[]>>('current', {});
 
     // Store previously submitted workout inputs organized by date and group
-    const [submittedInputs, setSubmittedInputs] = useState<Record<number, { time: number; distance: number, inputId: number }[]>>({});
+    const [submittedInputs, setSubmittedInputs] = useState<Record<string, Input[]>>({});
 
     // Fetch previously submitted workout inputs from the server
     const fetchSubmittedInputs = useCallback(async () => {
@@ -55,9 +56,9 @@ const Inputs = ()=>{
             updatedValue = value
         }
         // Update the specific input in the group while preserving other inputs
-        setCurrentInputs(prev => {
+        setCurrentInputs((prev: Record<string, Input[]>) => {
             const updatedGroup = prev[groupId]?.map((input, i) => i === idx ? { ...input, time: updatedValue } : input) || [];
-            return { ...prev, [groupId]: updatedGroup };
+            return { ...prev, [groupId]: updatedGroup } as Record<string, Input[]>;
         });
     }
 
@@ -66,9 +67,9 @@ const Inputs = ()=>{
       // Only allow integer values or empty string
       if (/^\d*$/.test(value)) {
         // Update the specific input in the group while preserving other inputs
-        setCurrentInputs(prev => {
+        setCurrentInputs((prev: Record<string, Input[]>) => {
           const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, distance: value } : input) || [];
-          return { ...prev, [athleteId]: updatedAthlete };
+          return { ...prev, [athleteId]: updatedAthlete } as Record<string, Input[]>;
         });
       }
     }

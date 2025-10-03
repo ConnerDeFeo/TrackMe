@@ -9,3 +9,8 @@ export enum ExerciseType {
     Run = "run",
     Strength = "strength"
 }
+
+export enum InputType {
+    Run = "run",
+    Rest = "rest"
+}

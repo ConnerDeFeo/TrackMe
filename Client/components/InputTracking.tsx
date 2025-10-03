@@ -1,4 +1,6 @@
 import { Text, TextInput, Pressable, View } from "react-native";
+import { Input } from "../types/inputs/Input";
+import { InputType } from "../assets/constants/Enums";
 
 /**
  * A component for dynamically adding and removing time and distance input fields.
@@ -12,8 +14,8 @@ import { Text, TextInput, Pressable, View } from "react-native";
  */
 const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTimeChange, handleDistanceChange}:
     {
-        currentInputs: Record<string, { time: string | undefined; distance: string | undefined}[]>,
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, { time: string | undefined; distance: string | undefined}[]>>>,
+        currentInputs: Record<string, Input[]>,
+        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, Input[]>>>,
         identifierId: string,
         handleTimeChange: (groupId:string, idx:number, text:string)=>void,
         handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
@@ -26,32 +28,48 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                 {currentInputs[identifierId]?.map((input, idx) => (
                     <View key={idx} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
                         <View className="flex flex-row items-center gap-x-3">
-                            {/* Time input field */}
-                            <View className="flex-1">
-                                <Text className="text-xs font-medium text-gray-600 mb-1">Time (seconds)</Text>
-                                <TextInput
-                                    placeholder="0.00"
-                                    keyboardType="numeric"
-                                    value={input?.time}
-                                    className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                                    onChangeText={text => handleTimeChange(identifierId, idx, text)}
-                                />
-                            </View>
-                            
-                            {/* Distance input field */}
-                            <View className="flex-1">
-                                <Text className="text-xs font-medium text-gray-600 mb-1">Distance</Text>
-                                <View className="flex flex-row items-center">
-                                    <TextInput
-                                        placeholder="0"
-                                        keyboardType="numeric"
-                                        className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
-                                        value={input?.distance}
-                                        onChangeText={text => handleDistanceChange(identifierId, idx, text)}
-                                    />
-                                    <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
-                                </View>
-                            </View>
+                            {(() => {
+                                switch (input.type) {
+                                    case InputType.Run:
+                                        return (
+                                            <>
+                                                {/* Time input field */}
+                                                <View className="flex-1">
+                                                    <Text className="text-xs font-medium text-gray-600 mb-1">
+                                                        Time (seconds)
+                                                    </Text>
+                                                    <TextInput
+                                                        placeholder="0.00"
+                                                        keyboardType="numeric"
+                                                        value={input?.time.toString()}
+                                                        className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                                                        onChangeText={text => handleTimeChange(identifierId, idx, text)}
+                                                    />
+                                                </View>
+
+                                                {/* Distance input field */}
+                                                <View className="flex-1">
+                                                    <Text className="text-xs font-medium text-gray-600 mb-1">
+                                                        Distance
+                                                    </Text>
+                                                    <View className="flex flex-row items-center">
+                                                        <TextInput
+                                                            placeholder="0"
+                                                            keyboardType="numeric"
+                                                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
+                                                            value={input?.distance.toString()}
+                                                            onChangeText={text => handleDistanceChange(identifierId, idx, text)}
+                                                        />
+                                                        <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
+                                                    </View>
+                                                </View>
+                                            </>
+                                        );
+
+                                    default:
+                                        return <Text>Unsupported input type</Text>;
+                                }
+                            })()}
                         </View>
                     </View>
                 ))}
@@ -78,8 +96,8 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                     className="flex-1 trackme-bg-blue rounded-lg py-3"
                     onPress={() => {
                         const existingInputs = currentInputs[identifierId] || [];
-                        const updatedInputs = [...existingInputs, { time: '', distance: '' }];
-                        setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs }));
+                        const updatedInputs = [...existingInputs, { time: '', distance: '', type: InputType.Run }];
+                        setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs } as Record<string, Input[]>));
                     }}
                 >
                     <Text className="text-white text-center font-medium">

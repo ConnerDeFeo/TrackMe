@@ -1,4 +1,5 @@
 import { AccountType } from "../assets/constants/Enums";
+import { Input } from "../types/inputs/Input";
 import API from "./API";
 import DateService from "./DateService";
 import UserService from "./UserService";
@@ -45,7 +46,7 @@ const GeneralService = {
   getPendingProposals: async () => {
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_pending_proposals`);
   },
-  massInput: async (athleteData: Record<string, { time?: string | undefined; distance?: string | undefined}[]>, groupId:string, date?: string) => {
+  massInput: async (athleteData: Record<string, Input[]>, groupId:string, date?: string) => {
     return await API.post(`${EXPO_PUBLIC_API_URL}/general/mass_input`, {
       athleteData,
       groupId,

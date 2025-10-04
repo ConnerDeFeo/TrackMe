@@ -21,7 +21,7 @@ import ViewGroupCoach from './pages/coaches/groups/ViewGroupCoach';
 import ViewGroupAthlete from './pages/athletes/ViewGroupAthlete';
 import Inputs from './pages/athletes/Inputs';
 import CreateWorkoutGroup from './pages/athletes/CreateWorkoutGroup';
-import Profile from './components/Profile';
+import Profile from './pages/Profile';
 import InputHistory from './pages/athletes/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
 import HistoricalData from './pages/coaches/HistoricalData';

@@ -161,20 +161,6 @@ const Profile = () => {
                                 />
                             </View>
                         </View>
-
-                        {/* Additional fields for athletes */}
-                        {accountType === AccountType.Athlete && (
-                            <View>
-                                <Text className="text-gray-700 font-semibold mb-2">Body Weight</Text>
-                                <TextInput
-                                    className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
-                                    placeholder="Enter weight in lbs"
-                                    keyboardType="numeric"
-                                    value={userData.bodyWeight?.toString() || ''}
-                                    onChangeText={(text) => handleFieldChange('bodyWeight', text)}
-                                />
-                            </View>
-                        )}
                     </View>
 
                     {/* Save Changes Button */}

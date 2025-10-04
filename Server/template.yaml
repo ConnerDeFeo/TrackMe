@@ -80,22 +80,6 @@ Resources:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
 
-  DeclineCoachInviteFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/decline_coach_invite/
-      Handler: decline_coach_invite.decline_coach_invite
-      Events:
-        DeclineCoachInviteApi:
-          Type: Api
-          Properties:
-            Path: /athletes/decline_coach_invite/
-            Method: delete
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
   SearchInputHistoryDateFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -107,118 +91,6 @@ Resources:
           Properties:
             Path: /athletes/search_input_history_date/
             Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  SearchCoachesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/athlete/search_coaches/
-      Handler: search_coaches.search_coaches
-      Events:
-        SearchCoachesApi:
-          Type: Api
-          Properties:
-            Path: /athletes/search_coaches/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  RequestCoachFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/athlete/request_coach/
-      Handler: request_coach.request_coach
-      Events:
-        RequestCoachApi:
-          Type: Api
-          Properties:
-            Path: /athletes/request_coach/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  UpdateAthleteProfileFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/update_athlete_profile/
-      Handler: update_athlete_profile.update_athlete_profile
-      Events:
-        UpdateAthleteProfileApi:
-          Type: Api
-          Properties:
-            Path: /athletes/update_athlete_profile/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  GetCoachesFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/get_coaches/
-      Handler: get_coaches.get_coaches
-      Events:
-        GetCoachesApi:
-          Type: Api
-          Properties:
-            Path: /athletes/get_coaches/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  GetCoachInvitesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/athlete/get_coach_invites/
-      Handler: get_coach_invites.get_coach_invites
-      Events:
-        GetCoachInvitesApi:
-          Type: Api
-          Properties:
-            Path: /athletes/get_coach_invites/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  CreateAthleteFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/create_athlete/
-      Handler: create_athlete.create_athlete
-      Events:
-        CreateAthleteApi:
-          Type: Api
-          Properties:
-            Path: /athletes/create_athlete/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  AcceptCoachInviteFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/athlete/accept_coach_invite/
-      Handler: accept_coach_invite.accept_coach_invite
-      Events:
-        AcceptGroupInviteApi:
-          Type: Api
-          Properties:
-            Path: /athletes/accept_coach_invite/
-            Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
@@ -263,21 +135,6 @@ Resources:
   #
   #
   #
-  DeclineAthleteRequestFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/decline_athlete_request/
-      Handler: decline_athlete_request.decline_athlete_request
-      Events:
-        DeclineAthleteRequestApi:
-          Type: Api
-          Properties:
-            Path: /coaches/decline_athlete_request/
-            Method: delete
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
 
   DeleteGroupWorkoutFunction:
     Type: AWS::Serverless::Function
@@ -338,54 +195,6 @@ Resources:
           Properties:
             Path: /coaches/get_available_history_dates/
             Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  ViewAthleteRequestsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/coach/view_athlete_requests/
-      Handler: view_athlete_requests.view_athlete_requests
-      Events:
-        ViewAthleteRequestsApi:
-          Type: Api
-          Properties:
-            Path: /coaches/view_athlete_requests/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  AcceptAthleteRequestFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/accept_athlete_request/
-      Handler: accept_athlete_request.accept_athlete_request
-      Events:
-        AcceptAthleteRequestApi:
-          Type: Api
-          Properties:
-            Path: /coaches/accept_athlete_request/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  UpdateCoachProfileFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/update_coach_profile/
-      Handler: update_coach_profile.update_coach_profile
-      Events:
-        UpdateCoachApi:
-          Type: Api
-          Properties:
-            Path: /coaches/update_coach_profile/
-            Method: post
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
@@ -471,38 +280,6 @@ Resources:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
 
-  GetAthletesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/coach/get_athletes/
-      Handler: get_athletes.get_athletes
-      Events:
-        GetAthletesApi:
-          Type: Api
-          Properties:
-            Path: /coaches/get_athletes/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  CreateCoachFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/create_coach/
-      Handler: create_coach.create_coach
-      Events:
-        CreateCoachApi:
-          Type: Api
-          Properties:
-            Path: /coaches/create_coach/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
   CreateGroupFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -551,38 +328,6 @@ Resources:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
 
-  InviteAthleteFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/coach/invite_athlete/
-      Handler: invite_athlete.invite_athlete
-      Events:
-        InviteAthleteApi:
-          Type: Api
-          Properties:
-            Path: /coaches/invite_athlete/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  SearchAthletesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/coach/search_athletes/
-      Handler: search_athletes.search_athletes
-      Events:
-        SearchAthletesApi:
-          Type: Api
-          Properties:
-            Path: /coaches/search_athletes/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
   AssignGroupWorkout:
     Type: AWS::Serverless::Function
     Properties:
@@ -605,6 +350,22 @@ Resources:
   #
   #
   #
+  CreateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/create_user/
+      Handler: create_user.create_user
+      Events:
+        CreateUserApi:
+          Type: Api
+          Properties:
+            Path: /general/create_user/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   GetWeeklyScheduleFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -648,22 +409,6 @@ Resources:
           Properties:
             Path: /general/get_pending_proposals/
             Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  RemoveCoachAthlete:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/remove_coach_athlete/
-      Handler: remove_coach_athlete.remove_coach_athlete
-      Events:
-        RemoveCoachAthleteApi:
-          Type: Api
-          Properties:
-            Path: /general/remove_coach_athlete/
-            Method: delete
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
@@ -745,6 +490,22 @@ Resources:
             Path: /general/get_group_workout/
             Method: get
             RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+    AddRelationFunction:
+      Type: AWS::Serverless::Function
+      Properties:
+        CodeUri: lambdas/general/add_relation/
+        Handler: add_relation.add_relation
+        Events:
+          AddRelationApi:
+            Type: Api
+            Properties:
+              Path: /general/add_relation/
+              Method: post
+              RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
         - Ref: UserAuthLayer

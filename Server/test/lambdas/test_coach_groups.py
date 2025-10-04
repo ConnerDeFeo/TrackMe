@@ -2,13 +2,12 @@ import pytest
 
 from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
-from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.create_group.create_group import create_group
-from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.get_absent_group_athletes.get_absent_group_athletes import get_absent_group_athletes
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.general.add_relation.add_relation import add_relation
+from lambdas.general.create_user.create_user import create_user
 import json
 from data import TestData
 from lambdas.coach.remove_group_athlete.remove_group_athlete import remove_group_athlete
@@ -20,11 +19,11 @@ def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
     execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
-    create_coach(TestData.test_coach, {})
+    create_user(TestData.test_coach, {})
     yield
 
 def generate_athlete(username, userId):
-    create_athlete( {
+    create_user( {
         "body": json.dumps({
             "userId": userId,
             "username": username
@@ -34,7 +33,7 @@ def generate_athlete(username, userId):
 def setup_athlete_with_group():
     """Set up a coach, athlete, group, and link them."""
     create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
+    create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
     add_athlete_to_group(TestData.test_add_athlete_to_group, {})
@@ -42,7 +41,7 @@ def setup_athlete_with_group():
 def setup_absent_athletes_scenario():
     """Set up a scenario with one athlete in a group and one not."""
     setup_athlete_with_group()
-    create_athlete({
+    create_user({
         "headers": generate_auth_header("1235", "Athlete", "testathlete2"),
     }, {})
     add_relation({
@@ -79,7 +78,7 @@ def test_create_group_returns_correct_group_id():
 def test_add_athlete_to_group_returns_success():
     # Arrange
     create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
+    create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
     event = {
@@ -96,7 +95,7 @@ def test_add_athlete_to_group_returns_success():
 def test_add_athlete_to_group_persists_relationship():
     # Arrange
     create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
+    create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
     event = {

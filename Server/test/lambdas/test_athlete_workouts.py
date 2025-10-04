@@ -5,8 +5,7 @@ from lambdas.athlete.remove_inputs.remove_inputs import remove_inputs
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
-from lambdas.athlete.create_athlete.create_athlete import create_athlete
-from lambdas.coach.create_coach.create_coach import create_coach
+from lambdas.general.create_user.create_user import create_user
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from data import TestData
@@ -22,8 +21,8 @@ def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
     execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
-    create_athlete(TestData.test_athlete, {})
-    create_coach(TestData.test_coach, {})
+    create_user(TestData.test_athlete, {})
+    create_user(TestData.test_coach, {})
     create_group(TestData.test_group, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
@@ -44,7 +43,7 @@ def create_extra_athlete(username,id):
     extra_athlete = {
         "headers":generate_auth_header(id, "Athlete", username)
     }
-    create_athlete(extra_athlete, {})
+    create_user(extra_athlete, {})
 
 def setup_view_workout_inputs():
     create_extra_athlete("test2", "1235")

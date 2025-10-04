@@ -18,35 +18,21 @@ locals {
   # Used for lambda for each creation
   lambda_names = [
     # Athlete Lambdas
-    "create_athlete",
-    "accept_coach_invite",
-    "get_coaches",
-    "get_coach_invites",
     "input_times",
-    "request_coach",
-    "search_coaches",
-    "update_athlete_profile",
     "view_coach_invites",
     "view_workout_inputs",
     "search_input_history_date",
-    "decline_coach_invite",
     "remove_inputs",
 
     # Coach Lambdas
-    "create_coach",
     "create_group",
-    "accept_athlete_request",
     "add_athlete_to_group",
     "assign_group_workout_template",
     "create_workout_template",
     "delete_workout_template",
     "get_absent_group_athletes",
-    "get_athletes",
     "get_workout_templates",
-    "invite_athlete",
     "remove_group_athlete",
-    "search_athletes",
-    "update_coach_profile",
     "view_athlete_requests",
     "get_available_history_dates",
     "fetch_historical_data",
@@ -59,12 +45,15 @@ locals {
     "get_athletes_for_group",
     "get_groups",
     "get_user",
-    "remove_coach_athlete",
     "view_group_inputs",
     "get_group_workout",
     "get_pending_proposals",
     "mass_input",
-    "get_weekly_schedule"
+    "get_weekly_schedule",
+    "create_user",
+    "add_relation",
+    "remove_user_relation",
+    "get_mutual_user_relations",
   ]
 }
 

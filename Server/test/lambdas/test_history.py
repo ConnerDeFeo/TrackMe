@@ -8,9 +8,8 @@ from lambdas.coach.create_workout_template.create_workout_template import create
 from lambdas.coach.get_available_history_dates.get_available_history_dates import get_available_history_dates
 from rds import execute_file
 from data import TestData
-from lambdas.athlete.create_athlete.create_athlete import create_athlete
+from lambdas.general.create_user.create_user import create_user
 from lambdas.coach.create_group.create_group import create_group
-from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
 from lambdas.general.add_relation.add_relation import add_relation  
 from datetime import datetime, timedelta, timezone
@@ -23,8 +22,8 @@ yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d"
 
 def setup_base_scenario():
     """Sets up a coach, athlete, two groups, and adds the athlete to both groups."""
-    create_coach(TestData.test_coach, {})
-    create_athlete(TestData.test_athlete, {})
+    create_user(TestData.test_coach, {})
+    create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
     

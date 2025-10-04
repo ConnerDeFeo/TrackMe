@@ -131,16 +131,16 @@ FROM athlete_rest_inputs;
 CREATE TABLE IF NOT EXISTS users (
     userId VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    accountType VARCHAR(10) CHECK (accountType IN ('coach', 'athlete')),
+    accountType VARCHAR(10) CHECK (accountType IN ('Coach', 'Athlete')),
     bio TEXT,
     firstName VARCHAR(255),
     lastName VARCHAR(255)
 );
 
 INSERT INTO users (userId, username, bio, firstName, lastName, accountType)
-SELECT userId, username, bio, firstName, lastName, 'coach' FROM coaches
+SELECT userId, username, bio, firstName, lastName, 'Coach' FROM coaches
 UNION ALL
-SELECT userId, username, bio, firstName, lastName, 'athlete' FROM athletes;
+SELECT userId, username, bio, firstName, lastName, 'Athlete' FROM athletes;
 
 ALTER TABLE groups
     DROP CONSTRAINT groups_coachid_fkey,

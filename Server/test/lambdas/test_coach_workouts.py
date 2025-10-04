@@ -5,8 +5,7 @@ from lambdas.coach.create_workout_template.create_workout_template import create
 from lambdas.coach.delete_workout_template.delete_workout_template import delete_workout_template
 from lambdas.coach.get_workout_templates.get_workout_templates import get_workout_templates
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
-from lambdas.coach.create_coach.create_coach import create_coach
-from lambdas.coach.delete_group_workout.delete_group_workout import delete_group_workout
+from lambdas.general.create_user.create_user import create_user
 from data import TestData
 from rds import execute_file, fetch_one, fetch_all
 from datetime import datetime, timezone 
@@ -19,7 +18,7 @@ def setup_before_each_test(): #This will run before each test
     print("Setting up before test...")
     execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
-    create_coach(TestData.test_coach, {})
+    create_user(TestData.test_coach, {})
     create_group(TestData.test_group, {})
     yield
 

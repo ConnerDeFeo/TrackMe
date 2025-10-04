@@ -3,21 +3,18 @@ import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
-from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.general.add_relation.add_relation import add_relation
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.general.get_group_workout.get_group_workout import get_group_workout
 from lambdas.general.get_groups.get_groups import get_groups
 from lambdas.coach.create_group.create_group import create_group
-from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
-from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.general.get_pending_proposals.get_pending_proposals import get_pending_proposals
-from lambdas.general.get_user.get_user import get_user
+from lambdas.general.create_user.create_user import create_user
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
-from rds import execute_file, fetch_one, fetch_all
+from rds import execute_file, fetch_all
 from data import TestData
 from lambdas.general.get_weekly_schedule.get_weekly_schedule import get_weekly_schedule
 from lambdas.general.mass_input.mass_input import mass_input
@@ -30,8 +27,8 @@ date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 def setup_base_scenario():
     """Sets up a standard coach, athlete, and their relationship."""
-    create_coach(TestData.test_coach, {})
-    create_athlete(TestData.test_athlete, {})
+    create_user(TestData.test_coach, {})
+    create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
 
@@ -97,7 +94,7 @@ def setup_get_weekly_schedule_scenario():
 
 def generate_athlete(username, userId):
     """Generates a new athlete."""
-    create_athlete({"headers": generate_auth_header(userId, "Athlete", username)}, {})
+    create_user({"headers": generate_auth_header(userId, "Athlete", username)}, {})
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test():
@@ -106,23 +103,6 @@ def setup_before_each_test():
     execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
     yield
-
-# --- Test Cases ---
-def test_add_relation_returns_success():
-    # Arrange
-    event = TestData.test_add_relation_athlete
-    create_coach(TestData.test_coach, {})
-    create_athlete(TestData.test_athlete, {})
-
-    # Act
-    response = add_relation(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    relation = fetch_one("SELECT * FROM user_relations WHERE userId = %s AND relationId = %s", ("1234", "123"))
-    assert relation is not None
-    assert relation[0] == "1234"
-    assert relation[1] == "123"
 
 def test_get_groups_as_athlete():
     # Arrange
@@ -247,7 +227,7 @@ def test_get_group_workout_success():
 
 def test_get_pending_proposals_for_athlete():
     # Arrange
-    create_coach(TestData.test_coach, {})
+    create_user(TestData.test_coach, {})
     generate_athlete("testathlete2", "1235")
     # Coach invites athlete
     add_relation({

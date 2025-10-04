@@ -58,33 +58,9 @@ locals {
     }
     
     # Athlete Lambdas
-    "accept_coach_invite" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/accept_coach_invite"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/accept_coach_invite.zip"
-    }
-    "get_coaches" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/get_coaches"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/get_coaches.zip"
-    }
-    "get_coach_invites" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/get_coach_invites"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/get_coach_invites.zip"
-    }
     "input_times" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/input_times"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/input_times.zip"
-    }
-    "request_coach" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/request_coach"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/request_coach.zip"
-    }
-    "search_coaches" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/search_coaches"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/search_coaches.zip"
-    }
-    "update_athlete_profile" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/update_athlete_profile"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/update_athlete_profile.zip"
     }
     "view_coach_invites" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/view_coach_invites"
@@ -98,20 +74,12 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/search_input_history_date"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/search_input_history_date.zip"
     }
-    "decline_coach_invite" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/decline_coach_invite"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/decline_coach_invite.zip"
-    }
     "remove_inputs" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/remove_inputs"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/remove_inputs.zip"
     }
     
     # Coach Lambdas
-    "accept_athlete_request" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/accept_athlete_request"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/accept_athlete_request.zip"
-    }
     "add_athlete_to_group" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/add_athlete_to_group"
       output_path = "${path.module}/../Server/lambdas/coach/zips/add_athlete_to_group.zip"
@@ -132,33 +100,13 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/get_absent_group_athletes"
       output_path = "${path.module}/../Server/lambdas/coach/zips/get_absent_group_athletes.zip"
     }
-    "get_athletes" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/get_athletes"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/get_athletes.zip"
-    }
     "get_workout_templates" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/get_workout_templates"
       output_path = "${path.module}/../Server/lambdas/coach/zips/get_workout_templates.zip"
     }
-    "invite_athlete" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/invite_athlete"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/invite_athlete.zip"
-    }
     "remove_group_athlete" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/remove_group_athlete"
       output_path = "${path.module}/../Server/lambdas/coach/zips/remove_group_athlete.zip"
-    }
-    "search_athletes" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/search_athletes"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/search_athletes.zip"
-    }
-    "update_coach_profile" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/update_coach_profile"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/update_coach_profile.zip"
-    }
-    "view_athlete_requests" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/view_athlete_requests"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/view_athlete_requests.zip"
     }
     "get_available_history_dates" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/get_available_history_dates"
@@ -180,11 +128,7 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/assign_group_workout"
       output_path = "${path.module}/../Server/lambdas/coach/zips/assign_group_workout.zip"
     }
-    "decline_athlete_request" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/decline_athlete_request"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/decline_athlete_request.zip"
-    }
-    
+
     # General Lambdas
     "get_athletes_for_group" = {
       source_dir  = "${path.module}/../Server/lambdas/general/get_athletes_for_group"
@@ -197,10 +141,6 @@ locals {
     "get_user" = {
       source_dir  = "${path.module}/../Server/lambdas/general/get_user"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_user.zip"
-    }
-    "remove_coach_athlete" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/remove_coach_athlete"
-      output_path = "${path.module}/../Server/lambdas/general/zips/remove_coach_athlete.zip"
     }
     "view_group_inputs" = {
       source_dir  = "${path.module}/../Server/lambdas/general/view_group_inputs"
@@ -222,7 +162,22 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/get_weekly_schedule"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_weekly_schedule.zip"
     }
-  }
+    "add_relation" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/add_relation"
+      output_path = "${path.module}/../Server/lambdas/general/zips/add_relation.zip"
+    }
+    "remove_user_relation" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/remove_user_relation"
+      output_path = "${path.module}/../Server/lambdas/general/zips/remove_user_relation.zip"
+    },
+    "create_user" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/create_user"
+      output_path = "${path.module}/../Server/lambdas/general/zips/create_user.zip"
+    }
+    "get_mutual_user_relations" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_mutual_user_relations"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_mutual_user_relations.zip"
+    }
 }
 
 # Archive files using for_each

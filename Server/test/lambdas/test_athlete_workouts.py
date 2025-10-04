@@ -9,7 +9,7 @@ from lambdas.general.create_user.create_user import create_user
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from data import TestData
-from lambdas.general.add_relation.add_relation import add_relation
+from lambdas.relations.add_relation.add_relation import add_relation
 from rds import execute_file, fetch_all
 from datetime import datetime, timezone
 from testing_utils import * 

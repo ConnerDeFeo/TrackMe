@@ -4,16 +4,19 @@ locals {
     # GET Lambdas
     "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"], method = "GET" }
     "athletes/search_input_history_date" = { lambda = aws_lambda_function.lambdas["search_input_history_date"], method = "GET" }
+
     "coaches/get_workout_templates" = { lambda = aws_lambda_function.lambdas["get_workout_templates"], method = "GET" }
     "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"], method = "GET" }
     "coaches/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "coaches/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
+
     "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"], method = "GET" }
     "general/view_group_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }
     "general/get_athletes_for_group" = { lambda = aws_lambda_function.lambdas["get_athletes_for_group"], method = "GET" }
     "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"], method = "GET" }
     "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
     "general/get_weekly_schedule" = { lambda = aws_lambda_function.lambdas["get_weekly_schedule"], method = "GET" }
+
     "relations/get_mutual_user_relations" = { lambda = aws_lambda_function.lambdas["get_mutual_user_relations"], method = "GET" }
     "relations/get_relation_invites_count" = { lambda = aws_lambda_function.lambdas["get_relation_invites_count"], method = "GET" }
     "relations/get_relation_invites" = { lambda = aws_lambda_function.lambdas["get_relation_invites"], method = "GET" }
@@ -21,22 +24,25 @@ locals {
 
     # POST Lambdas
     "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }
+    "athletes/remove_inputs" = { lambda = aws_lambda_function.lambdas["remove_inputs"], method = "POST" }
+
     "coaches/add_athlete_to_group" = { lambda = aws_lambda_function.lambdas["add_athlete_to_group"], method = "POST" }
     "coaches/create_group" = { lambda = aws_lambda_function.lambdas["create_group"], method = "POST" }
     "coaches/create_workout_template" = { lambda = aws_lambda_function.lambdas["create_workout_template"], method = "POST" }
     "coaches/assign_group_workout_template" = { lambda = aws_lambda_function.lambdas["assign_group_workout_template"], method = "POST" }
     "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
+
     "general/mass_input" = { lambda = aws_lambda_function.lambdas["mass_input"], method = "POST" }
-    "athletes/remove_inputs" = { lambda = aws_lambda_function.lambdas["remove_inputs"], method = "POST" }
-    "relations/add_relation" = { lambda = aws_lambda_function.lambdas["add_relation"], method = "POST" }
     "general/create_user" = { lambda = aws_lambda_function.lambdas["create_user"], method = "POST" }
     "general/update_user_profile" = { lambda = aws_lambda_function.lambdas["update_user_profile"], method = "POST" }
+    "relations/add_relation" = { lambda = aws_lambda_function.lambdas["add_relation"], method = "POST" }
 
     # DELETE Lambdas
     "coaches/remove_group_athlete" = { lambda = aws_lambda_function.lambdas["remove_group_athlete"], method = "DELETE" }
     "coaches/delete_workout_template" = { lambda = aws_lambda_function.lambdas["delete_workout_template"], method = "DELETE" }
     "coaches/delete_group" = { lambda = aws_lambda_function.lambdas["delete_group"], method = "DELETE" }
     "coaches/delete_group_workout" = { lambda = aws_lambda_function.lambdas["delete_group_workout"], method = "DELETE" }
+
     "relations/remove_user_relation" = { lambda = aws_lambda_function.lambdas["remove_user_relation"], method = "DELETE" }
   }
 }
@@ -81,6 +87,7 @@ resource "aws_api_gateway_resource" "subresources" {
       athletes = aws_api_gateway_resource.athletes.id
       coaches  = aws_api_gateway_resource.coaches.id
       general  = aws_api_gateway_resource.general.id
+      relations = aws_api_gateway_resource.relations.id
     },
     split("/", each.key)[0], # first segment
     aws_api_gateway_rest_api.main.root_resource_id

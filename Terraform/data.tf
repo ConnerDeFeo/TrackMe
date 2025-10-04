@@ -1,8 +1,3 @@
-# Retrieves the public IP address of the machine running Terraform to use in security group rules
-data "http" "myip" {
-  url = "https://ipv4.icanhazip.com"
-}
-
 # Default VPC and availability zones for the AWS account
 data "aws_vpc" "default" {
   default = true
@@ -43,28 +38,11 @@ data "archive_file" "user_auth_layer" {
 # Mapping lambda function names to their locations for archive creation
 locals {
   lambda_function_locations = {
-    # Core functions
-    "create_athlete" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/create_athlete"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/create_athlete.zip"
-    }
-    "create_coach" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/create_coach"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/create_coach.zip"
-    }
-    "create_group" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/create_group"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/create_group.zip"
-    }
     
     # Athlete Lambdas
     "input_times" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/input_times"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/input_times.zip"
-    }
-    "view_coach_invites" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/view_coach_invites"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/view_coach_invites.zip"
     }
     "view_workout_inputs" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/view_workout_inputs"
@@ -80,6 +58,10 @@ locals {
     }
     
     # Coach Lambdas
+    "create_group" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/create_group"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/create_group.zip"
+    }
     "add_athlete_to_group" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/add_athlete_to_group"
       output_path = "${path.module}/../Server/lambdas/coach/zips/add_athlete_to_group.zip"
@@ -158,10 +140,6 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/get_weekly_schedule"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_weekly_schedule.zip"
     }
-    "add_relation" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/add_relation"
-      output_path = "${path.module}/../Server/lambdas/general/zips/add_relation.zip"
-    }
     "create_user" = {
       source_dir  = "${path.module}/../Server/lambdas/general/create_user"
       output_path = "${path.module}/../Server/lambdas/general/zips/create_user.zip"
@@ -172,13 +150,17 @@ locals {
     }
 
     # Relations Lambdas
+    "add_relation" = {
+      source_dir  = "${path.module}/../Server/lambdas/relations/add_relation"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/add_relation.zip"
+    }
     "get_relation_invites" = {
       source_dir  = "${path.module}/../Server/lambdas/relations/get_relation_invites"
       output_path = "${path.module}/../Server/lambdas/relations/zips/get_relation_invites.zip"
     }
     "search_user_relation" = {
       source_dir  = "${path.module}/../Server/lambdas/relations/search_user_relation"
-      output_path = "${path.module}/../Server/lambdas/relations/zips/search_user_relation.zip"
+      output_path = "${path.module}/../Server/lambda s/relations/zips/search_user_relation.zip"
     }
     "get_mutual_user_relations" = {
       source_dir  = "${path.module}/../Server/lambdas/relations/get_mutual_user_relations"
@@ -191,10 +173,6 @@ locals {
     "get_relation_invites_count" = {
       source_dir  = "${path.module}/../Server/lambdas/relations/get_relation_invites_count"
       output_path = "${path.module}/../Server/lambdas/relations/zips/get_relation_invites_count.zip"
-    }
-    "get_mutual_user_relations" = {
-      source_dir  = "${path.module}/../Server/lambdas/relations/get_mutual_user_relations"
-      output_path = "${path.module}/../Server/lambdas/relations/zips/get_mutual_user_relations.zip"
     }
   }
 }

@@ -11,7 +11,7 @@ from data import TestData
 from lambdas.general.create_user.create_user import create_user
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
-from lambdas.general.add_relation.add_relation import add_relation  
+from lambdas.relations.add_relation.add_relation import add_relation  
 from datetime import datetime, timedelta, timezone
 from testing_utils import *
     

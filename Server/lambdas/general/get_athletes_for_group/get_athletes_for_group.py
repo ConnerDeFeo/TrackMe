@@ -11,9 +11,9 @@ def get_athletes_for_group(event, context):
         #Get athletes
         athletes = fetch_all(
         """
-            SELECT a.userId, a.username, a.firstName, a.lastName
-            FROM athletes a
-            JOIN athlete_groups ag ON a.userId = ag.athleteId
+            SELECT u.userId, u.username, u.firstName, u.lastName
+            FROM users u
+            JOIN athlete_groups ag ON u.userId = ag.athleteId
             JOIN groups g ON ag.groupId = g.id
             WHERE ag.groupId = %s
             AND ag.removed = FALSE

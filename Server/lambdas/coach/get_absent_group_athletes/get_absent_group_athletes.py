@@ -14,13 +14,16 @@ def get_absent_group_athletes(event, context):
         # Get absent athletes
         absent_athletes = fetch_all(
         """
-            SELECT a.userId, a.username
-            FROM athletes a
-            JOIN athlete_coaches ac 
-                ON a.userId = ac.athleteId
-                AND ac.coachId = %s
+            SELECT u.userId, u.username
+            FROM users u
+            JOIN user_relations ur
+                ON u.userId = ur.userId
+                AND ur.relationId = %s
+            JOIN user_relations ur2
+                ON ur2.userId = ur.relationId
+                AND ur2.relationId = ur.userId
             LEFT JOIN athlete_groups ag 
-                ON a.userId = ag.athleteId
+                ON u.userId = ag.athleteId
                 AND ag.groupId = %s
             WHERE ag.athleteId IS NULL
             OR ag.removed = TRUE

@@ -8,7 +8,7 @@ def create_athlete(event, context):
     try:
         #Insert athlete into the database
         user_info = get_user_info(event)
-        execute_commit('INSERT INTO athletes (userId, username) VALUES (%s, %s)', (user_info["userId"], user_info['username']))
+        execute_commit('INSERT INTO users (userId, username, accountType) VALUES (%s, %s, %s)', (user_info["userId"], user_info['username'], 'athlete'))
         return {
             "statusCode": 200,
             "headers": {

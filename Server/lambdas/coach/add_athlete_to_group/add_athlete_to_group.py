@@ -1,5 +1,5 @@
 import json
-from rds import execute_commit, fetch_one
+from rds import execute_commit, fetch_all, fetch_one
 from user_auth import get_user_info
 #Adds an athlete to a group
 def add_athlete_to_group(event, context):
@@ -12,12 +12,15 @@ def add_athlete_to_group(event, context):
         group_id = body['groupId']
 
         #Check to see if coach has athlete added
-        connection_active = fetch_one(
+        connection_active = fetch_all(
         """
-            SELECT * FROM athlete_coaches
-            WHERE athleteId = %s AND coachId = %s
-        """, (athlete_id, coach_id))
-        if connection_active:
+            SELECT * FROM user_relations
+            WHERE userId = %s AND relationId = %s
+            OR userId = %s AND relationId = %s
+        """, (athlete_id, coach_id, coach_id, athlete_id))
+
+        # If they are connected, add athlete to group
+        if connection_active and len(connection_active) == 2:
             # Check if they were previously a part of the group
             previous_group = fetch_one(
             """

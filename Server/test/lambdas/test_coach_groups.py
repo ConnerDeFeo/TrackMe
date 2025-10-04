@@ -1,6 +1,5 @@
 import pytest
 
-from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.coach.create_coach.create_coach import create_coach
@@ -8,8 +7,8 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.get_absent_group_athletes.get_absent_group_athletes import get_absent_group_athletes
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
-from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
+from lambdas.general.add_relation.add_relation import add_relation
 import json
 from data import TestData
 from lambdas.coach.remove_group_athlete.remove_group_athlete import remove_group_athlete
@@ -36,8 +35,8 @@ def setup_athlete_with_group():
     """Set up a coach, athlete, group, and link them."""
     create_group(TestData.test_group, {})
     create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
     add_athlete_to_group(TestData.test_add_athlete_to_group, {})
 
 def setup_absent_athletes_scenario():
@@ -46,12 +45,12 @@ def setup_absent_athletes_scenario():
     create_athlete({
         "headers": generate_auth_header("1235", "Athlete", "testathlete2"),
     }, {})
-    invite_athlete({
-        "body": json.dumps({"athleteId": "1235"}),
+    add_relation({
+        "body": json.dumps({"relationId": "1235"}),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
-    accept_coach_invite({
-        "body": json.dumps({"coachId": "123"}),
+    add_relation({
+        "body": json.dumps({"relationId": "123"}),
         "headers": generate_auth_header("1235", "Athlete", "testathlete2")
     }, {})
 
@@ -76,39 +75,13 @@ def test_create_group_returns_correct_group_id():
     group_id = json.loads(response['body'])
     assert group_id['groupId'] == 1
 
-def test_invite_athlete_returns_success():
-    # Arrange
-    create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
-    event = TestData.test_invite
-
-    # Act
-    response = invite_athlete(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-
-def test_invite_athlete_creates_invite_in_db():
-    # Arrange
-    create_group(TestData.test_group, {})
-    create_athlete(TestData.test_athlete, {})
-    event = TestData.test_invite
-
-    # Act
-    invite_athlete(event, {})
-
-    # Assert
-    response = fetch_one("SELECT * FROM athlete_coach_invites WHERE athleteId = %s AND coachId = %s", ("1234", "123"))
-    assert response is not None
-    assert response[1] == "1234"
-    assert response[2] == '123'
 
 def test_add_athlete_to_group_returns_success():
     # Arrange
     create_group(TestData.test_group, {})
     create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
     event = {
         "body": json.dumps({"athleteId": "1234", "groupId": "1"}),
         "headers": generate_auth_header("123", "Coach", "testcoach")
@@ -116,7 +89,7 @@ def test_add_athlete_to_group_returns_success():
 
     # Act
     response = add_athlete_to_group(event, {})
-
+    debug_table()
     # Assert
     assert response['statusCode'] == 200
 
@@ -124,8 +97,8 @@ def test_add_athlete_to_group_persists_relationship():
     # Arrange
     create_group(TestData.test_group, {})
     create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
     event = {
         "body": json.dumps({"athleteId": "1234", "groupId": "1"}),
         "headers": generate_auth_header("123", "Coach", "testcoach")

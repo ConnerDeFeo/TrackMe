@@ -16,7 +16,6 @@ def get_groups(event, context):
                 """
                     SELECT g.name, g.id FROM athlete_groups ag
                     JOIN groups g ON ag.groupId = g.id
-                    JOIN coaches c ON g.coachId = c.userId
                     WHERE ag.athleteId = %s
                     AND ag.removed = FALSE
                     AND g.deleted = FALSE
@@ -29,8 +28,8 @@ def get_groups(event, context):
             group_data = fetch_all(
                 """
                     SELECT g.name, g.id FROM groups g
-                    JOIN coaches c ON g.coachId = c.userId
-                    WHERE c.userId = %s
+                    JOIN users u ON g.coachId = u.userId
+                    WHERE u.userId = %s
                     AND g.deleted = FALSE
                 """,
                 (userId,)

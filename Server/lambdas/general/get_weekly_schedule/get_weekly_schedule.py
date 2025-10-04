@@ -19,10 +19,10 @@ def get_weekly_schedule(event, context):
             FROM workouts w
             JOIN group_workouts gw ON w.id = gw.workoutId
             JOIN groups g ON gw.groupId = g.id
-            JOIN coaches c ON g.coachId = c.userId
+            JOIN users u ON g.coachId = u.userId
             LEFT JOIN athlete_groups ag ON g.id = ag.groupId AND ag.athleteId = %s
             WHERE g.id = %s
-                AND (c.userId = %s OR (ag.athleteId = %s AND ag.removed = FALSE))
+                AND (u.userId = %s OR (ag.athleteId = %s AND ag.removed = FALSE))
                 AND gw.date >= %s
                 AND gw.date < %s
         """, (user_id, group_id, user_id, user_id, start_date, end_date))

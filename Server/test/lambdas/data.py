@@ -19,19 +19,18 @@ class TestData:
             "headers":generate_auth_header("1234", "Athlete", "test_athlete")
         }
     
-    test_invite = {
-        "body": json.dumps({
-            "athleteId": "1234",
-        }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
-    }
-
-    test_request_coach = {
-        "body": json.dumps({
-            "coachId": "123"
-        }),
-        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
-    }
+    test_add_relation_athlete = {
+            "body": json.dumps({
+                "relationId": "123"
+            }),
+            "headers":generate_auth_header("1234", "Athlete", "test_athlete")
+        }
+    test_add_relation_coach = {
+            "body": json.dumps({
+                "relationId": "1234"
+            }),
+            "headers":generate_auth_header("123", "Coach", "testcoach")
+        }
 
     test_accept_coach_invite = {
             "body": json.dumps({

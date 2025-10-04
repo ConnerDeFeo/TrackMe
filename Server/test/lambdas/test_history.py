@@ -1,19 +1,18 @@
 import json
 import pytest
-from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.fetch_historical_data.fetch_historical_data import fetch_historical_data
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from lambdas.coach.get_available_history_dates.get_available_history_dates import get_available_history_dates
-from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from rds import execute_file
 from data import TestData
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.search_input_history_date.search_input_history_date import search_input_history_date
+from lambdas.general.add_relation.add_relation import add_relation  
 from datetime import datetime, timedelta, timezone
 from testing_utils import *
     
@@ -26,8 +25,8 @@ def setup_base_scenario():
     """Sets up a coach, athlete, two groups, and adds the athlete to both groups."""
     create_coach(TestData.test_coach, {})
     create_athlete(TestData.test_athlete, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
     
     create_group(TestData.test_group, {}) # Group ID 1
     create_group({

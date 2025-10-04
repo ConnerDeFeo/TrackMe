@@ -28,9 +28,9 @@ def fetch_historical_data(event, context):
         # Fetch all athlete input entries for this coach on the same date
         athlete_inputs = fetch_all(
             """
-                SELECT g.id, g.name, a.userId, a.username, ai.time, ai.distance, ai.restTime, ai.type
+                SELECT g.id, g.name, u.userId, u.username, ai.time, ai.distance, ai.restTime, ai.type
                 FROM athlete_inputs ai
-                JOIN athletes a ON ai.athleteId = a.userId
+                JOIN users u ON ai.athleteId = u.userId
                 JOIN groups g ON ai.groupId = g.id
                 WHERE ai.date = %s AND g.coachId = %s
                 ORDER BY ai.timeStamp ASC

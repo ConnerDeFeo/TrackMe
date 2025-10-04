@@ -11,7 +11,7 @@ def create_coach(event, context):
         user_id = user_info["userId"]
         username = user_info['username']
         #Insert coach into the database
-        execute_commit("INSERT INTO coaches (userId, username) VALUES (%s, %s)", (user_id, username))
+        execute_commit("INSERT INTO users (userId, username, accountType) VALUES (%s, %s, %s)", (user_id, username, 'coach'))
         return {
             "statusCode": 200,
             "headers": {

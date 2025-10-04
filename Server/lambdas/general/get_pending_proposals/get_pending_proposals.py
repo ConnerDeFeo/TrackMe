@@ -4,15 +4,18 @@ from user_auth import get_user_info
 
 # Gets all current proposals (requests or invites) for a user
 def get_pending_proposals(event, context):
-    accountMappings = {
-        'athlete': 'invites',
-        'coach': 'requests'
-    }
     try:
         user_info = get_user_info(event)
         userId = user_info['userId']
         accountType = user_info['accountType'].lower()
-        count = fetch_one(f"SELECT COUNT(*) FROM athlete_coach_{accountMappings[accountType]} WHERE {accountType}Id = %s", (userId,))
+        count = fetch_one(
+        """
+            SELECT COUNT(*) FROM user_relations ur1 
+            LEFT JOIN user_relations ur2
+            ON ur1.relationId = ur2.userId
+            WHERE ur1.relationId = %s
+            AND ur2.userId IS NULL
+        """, (userId,))
         if not count:
             count = [0]
         return {

@@ -1,17 +1,16 @@
 import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
-from lambdas.athlete.accept_coach_invite.accept_coach_invite import accept_coach_invite
 from lambdas.athlete.remove_inputs.remove_inputs import remove_inputs
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
-from lambdas.coach.invite_athlete.invite_athlete import invite_athlete
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.athlete.create_athlete.create_athlete import create_athlete
 from lambdas.coach.create_coach.create_coach import create_coach
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from data import TestData
+from lambdas.general.add_relation.add_relation import add_relation
 from rds import execute_file, fetch_all
 from datetime import datetime, timezone
 from testing_utils import * 
@@ -26,8 +25,8 @@ def setup_before_each_test(): #This will run before each test
     create_athlete(TestData.test_athlete, {})
     create_coach(TestData.test_coach, {})
     create_group(TestData.test_group, {})
-    invite_athlete(TestData.test_invite, {})
-    accept_coach_invite(TestData.test_accept_coach_invite, {})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
     add_athlete_to_group(TestData.test_add_athlete_to_group, {})
     create_workout_template(TestData.test_workout, {})
     test_assign_workout = {
@@ -69,15 +68,15 @@ def setup_view_workout_inputs():
 
 def setup_remove_inputs_event():
     create_extra_athlete("test3", "1236")
-    invite_athlete({
+    add_relation({
         "body": json.dumps({
-            "athleteId": "1236"
+            "relationId": "1236"
         }),
         "headers":generate_auth_header("123", "Coach", "testcoach")
     }, {})
-    accept_coach_invite({
+    add_relation({
         "body": json.dumps({
-            "coachId": "123"
+            "relationId": "123"
         }),
         "headers":generate_auth_header("1236", "Athlete", "test3")
     }, {})

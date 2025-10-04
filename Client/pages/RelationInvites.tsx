@@ -34,7 +34,6 @@ const RelationInvites = () => {
         }
     };
 
-    console.log("Invites:", invites);
     return(
         <View className="mt-2 mx-4">
             {invites.map((user) => (

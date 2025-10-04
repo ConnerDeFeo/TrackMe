@@ -19,6 +19,9 @@ const RelationService = {
             query += `?searchTerm=${search_term}`;
         }
         return await API.get(query);
+    },
+    getPendingProposals: async () => {
+        return await API.get(`${process.env.EXPO_PUBLIC_API_URL}/general/get_pending_proposals`);
     }
 };
 

@@ -25,8 +25,8 @@ def get_absent_group_athletes(event, context):
             LEFT JOIN athlete_groups ag 
                 ON u.userId = ag.athleteId
                 AND ag.groupId = %s
-            WHERE ag.athleteId IS NULL
-            OR ag.removed = TRUE
+            WHERE (ag.athleteId IS NULL OR ag.removed = TRUE) 
+            AND u.accountType = 'Athlete'
         """, (coach_id, group_id))
 
         if absent_athletes:

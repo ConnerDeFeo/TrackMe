@@ -28,9 +28,6 @@ const GeneralService = {
     }
     return await API.get(request);
   },
-  getPendingProposals: async () => {
-    return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_pending_proposals`);
-  },
   massInput: async (athleteData: Record<string, Input[]>, groupId:string, date?: string) => {
     return await API.post(`${EXPO_PUBLIC_API_URL}/general/mass_input`, {
       athleteData,

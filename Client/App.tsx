@@ -41,6 +41,7 @@ import HeaderRightButton from './components/HeaderRightButton';
 import GroupSettings from './pages/coaches/groups/GroupSettings';
 import Relations from './pages/Relations';
 import RelationInvites from './pages/RelationInvites';
+import Friends from './pages/Friends';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -113,6 +114,7 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />
         <AthleteStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <AthleteStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />
+        <AthleteStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
       </AthleteStack.Navigator>
       <AthleteFooter />
     </>
@@ -149,6 +151,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="GroupSettings" options={{ title: "Settings" }} component={ScrollViewWrapper(<GroupSettings />)} />
         <CoachStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <CoachStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />
+        <CoachStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
       </CoachStack.Navigator>
       <CoachFooter />
     </>

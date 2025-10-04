@@ -17,6 +17,7 @@ const Relations = () => {
     const [currentUsers, setCurrentUsers] = useState<string[][]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [pendingProposals, setPendingProposals] = useState<number>(0);
 
     const navigation = useNavigation<any>();
 
@@ -33,6 +34,16 @@ const Relations = () => {
             }
             setLoading(false);
         };
+        const fetchPendingProposals = async () => {
+            const resp = await RelationService.getPendingProposals();
+            if (resp.ok) {
+                const data = await resp.json();
+                setPendingProposals(data.count);
+            } else {
+                setPendingProposals(0);
+            }
+        };
+        fetchPendingProposals();
         fetchRelations();
     }, []));
 
@@ -69,8 +80,8 @@ const Relations = () => {
     return (
         <View className="mx-4">
             <View className="flex flex-row justify-between items-center mt-2">
-                <TextButton text="Invites" onPress={() => navigation.navigate("RelationInvites")}/>
-                <TextButton text="Friends" onPress={() => {}}/>
+                <TextButton text={`Invites (${pendingProposals})`} onPress={() => navigation.navigate("RelationInvites")}/>
+                <TextButton text="Friends" onPress={() => navigation.navigate("Friends")}/>
             </View>
             {/* Search input */}
             <View className="mt-4">

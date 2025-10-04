@@ -160,7 +160,7 @@ locals {
     }
     "search_user_relation" = {
       source_dir  = "${path.module}/../Server/lambdas/relations/search_user_relation"
-      output_path = "${path.module}/../Server/lambda s/relations/zips/search_user_relation.zip"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/search_user_relation.zip"
     }
     "get_mutual_user_relations" = {
       source_dir  = "${path.module}/../Server/lambdas/relations/get_mutual_user_relations"

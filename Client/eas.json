@@ -13,7 +13,7 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "production",
-        "EXPO_PUBLIC_API_URL": "https://fyc4wanzoa.execute-api.us-east-2.amazonaws.com/prod"
+        "EXPO_PUBLIC_API_URL": "https://buzzzp4ywk.execute-api.us-east-2.amazonaws.com/prod"
       },
       "channel": "preview"
     },
@@ -21,7 +21,7 @@
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "production",
-        "EXPO_PUBLIC_API_URL": "https://fyc4wanzoa.execute-api.us-east-2.amazonaws.com/prod"
+        "EXPO_PUBLIC_API_URL": "https://buzzzp4ywk.execute-api.us-east-2.amazonaws.com/prod"
       },
       "channel": "production"
     }

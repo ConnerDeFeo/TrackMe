@@ -35,8 +35,8 @@ const AssignWorkout = () => {
     };
 
     return (
-        <View className="mt-2">
-            <Text className="text-lg font-semibold mb-2 px-4">{groupName}, {date}</Text>
+        <View className="mt-2 gap-y-4">
+            <Text className="text-xl font-semibold my-4 px-4">{groupName}, {date}</Text>
             {/* List of fetched workout templates */}
             <View className="flex gap-y-2">
                 {workouts.map((workout, idx) => (
@@ -50,7 +50,7 @@ const AssignWorkout = () => {
             {/* Button to navigate to the screen for creating a new workout */}
             <Pressable
                 onPress={() => navigation.navigate('AssignNewWorkout', { groupId, groupName, date})}
-                className="trackme-bg-blue rounded-lg py-3 mx-4"
+                className="trackme-bg-blue rounded-lg py-3 mx-4 mt-4"
             >
                 <Text className="text-white font-semibold text-center">Assign New Workout</Text>
             </Pressable>

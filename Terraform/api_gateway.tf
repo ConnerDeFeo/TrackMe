@@ -1,5 +1,4 @@
 locals {
-
   lambdas = {
     # GET Lambdas
     "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"], method = "GET" }
@@ -46,14 +45,13 @@ locals {
     "relations/remove_user_relation" = { lambda = aws_lambda_function.lambdas["remove_user_relation"], method = "DELETE" }
   }
 }
-
 # Create the API Gateway REST API
 resource "aws_api_gateway_rest_api" "main" {
   name        = "trackme-api"
   description = "Trackme API Gateway" 
 }
 
-# Create the three different paths
+# Create the four different paths
 resource "aws_api_gateway_resource" "athletes" {
   rest_api_id = aws_api_gateway_rest_api.main.id
   parent_id   = aws_api_gateway_rest_api.main.root_resource_id
@@ -121,6 +119,8 @@ resource "aws_api_gateway_integration" "main" {
   uri = each.value.lambda.invoke_arn
 }
 
+data "aws_caller_identity" "current" {}
+
 # Create permissions for API Gateway to invoke the Lambda functions
 resource "aws_lambda_permission" "api_gateway" {
   for_each = local.lambdas
@@ -130,7 +130,7 @@ resource "aws_lambda_permission" "api_gateway" {
   function_name = each.value.lambda.function_name
   # Use the execution ARN of the API Gateway for the source ARN
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
+  source_arn    = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.main.id}/*/*"
 }
 
 resource "aws_api_gateway_deployment" "main" {
@@ -144,10 +144,6 @@ resource "aws_api_gateway_deployment" "main" {
   lifecycle {
     create_before_destroy = true
   }
-
-  triggers = {
-    redeployment = timestamp()
-  }
 }
 
 # Identify the stage for the API Gateway deployment
@@ -155,6 +151,10 @@ resource "aws_api_gateway_stage" "main" {
   stage_name    = "prod"
   deployment_id = aws_api_gateway_deployment.main.id
   rest_api_id   = aws_api_gateway_rest_api.main.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # Authorization for API Gateway to invoke the Lambda functions

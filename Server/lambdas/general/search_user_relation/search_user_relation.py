@@ -31,11 +31,27 @@ def search_user_relation(event, context):
                 AND ur2.relationId = %s
             WHERE u.userId != %s
         """
-        fetch_all(
-            search_query,
-            (user_id, user_id, user_id)
+        params = [user_id, user_id, user_id]
+        if search_term:
+            search_query = f"""
+                {search_query} 
+                AND to_tsvector(u.username || ' ' || COALESCE(u.firstName, '') || ' ' || COALESCE(u.lastName, '')) @@ plainto_tsquery(%s)
+            """
+            params.append(search_term)
+        else:
+            search_query = f"""
+                {search_query}
+                ORDER BY RANDOM()
+            """
+        results = fetch_all(
+            f"{search_query} LIMIT 20",
+            params
         )
 
+        return {
+            'statusCode': 200,
+            'body': json.dumps(results)
+        }
     except Exception as e:
         print(f"Error retrieving user info: {e}")
         return {

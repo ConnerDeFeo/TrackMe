@@ -23,6 +23,35 @@ def setup_before_each_test():
     execute_file('./setup.sql')
     yield
 
+def setup_search_scenario():
+    # Two way connection to athlete
+    create_user(TestData.test_coach, {})
+    create_user(TestData.test_athlete, {})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
+
+    # one way connection from athlete to coach
+    create_user({
+        "headers": generate_auth_header("9999", "Coach", "coachpending"),
+    },{})
+    add_relation({
+        "body": json.dumps({"relationId": "9999"}),
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete"),
+    },{})
+
+    # One way connection from coach to athlete
+    create_user({
+        "headers": generate_auth_header("9998", "Coach", "coachawaiting"),
+    },{})
+    add_relation({
+        "body": json.dumps({"relationId": "1234"}),
+        "headers": generate_auth_header("9998", "Coach", "coachawaiting"),
+    },{})
+
+    # No connection
+    create_user({
+        "headers": generate_auth_header("9997", "Coach", "coachnotadded"),
+    },{})
 
 # --- Test Cases ---
 def test_add_relation_returns_success():
@@ -163,5 +192,25 @@ def test_get_relation_invites_success():
     body = json.loads(response['body'])
     assert len(body) == 1
 
-def test_search_user_relation_success():
-    pass
+def test_search_user_relation_empty_string_success():
+    # Arrange
+    setup_search_scenario()
+    event = {
+        "queryStringParameters": {"searchTerm": ""},
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = search_user_relation(event, {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    })
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 4
+    status_map = {user[1]: user[5] for user in body}
+    assert status_map['testcoach'] == 'added'
+    assert status_map['coachpending'] == 'pending'
+    assert status_map['coachawaiting'] == 'awaiting response'
+    assert status_map['coachnotadded'] == 'not added'

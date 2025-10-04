@@ -35,9 +35,9 @@ def search_user_relation(event, context):
         if search_term:
             search_query = f"""
                 {search_query} 
-                AND to_tsvector(u.username || ' ' || COALESCE(u.firstName, '') || ' ' || COALESCE(u.lastName, '')) @@ plainto_tsquery(%s)
+                AND u.username ILIKE %s
             """
-            params.append(search_term)
+            params.append(f"%{search_term}%")
         else:
             search_query = f"""
                 {search_query}

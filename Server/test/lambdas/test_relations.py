@@ -32,7 +32,7 @@ def setup_search_scenario():
 
     # one way connection from athlete to coach
     create_user({
-        "headers": generate_auth_header("9999", "Coach", "coachpending"),
+        "headers": generate_auth_header("9999", "Coach", "23coachpending123"),
     },{})
     add_relation({
         "body": json.dumps({"relationId": "9999"}),
@@ -41,11 +41,11 @@ def setup_search_scenario():
 
     # One way connection from coach to athlete
     create_user({
-        "headers": generate_auth_header("9998", "Coach", "coachawaiting"),
+        "headers": generate_auth_header("9998", "Coach", "coachawaiting1234"),
     },{})
     add_relation({
         "body": json.dumps({"relationId": "1234"}),
-        "headers": generate_auth_header("9998", "Coach", "coachawaiting"),
+        "headers": generate_auth_header("9998", "Coach", "coachawaiting1234"),
     },{})
 
     # No connection
@@ -211,6 +211,49 @@ def test_search_user_relation_empty_string_success():
     assert len(body) == 4
     status_map = {user[1]: user[5] for user in body}
     assert status_map['testcoach'] == 'added'
-    assert status_map['coachpending'] == 'pending'
-    assert status_map['coachawaiting'] == 'awaiting response'
+    assert status_map['23coachpending123'] == 'pending'
+    assert status_map['coachawaiting1234'] == 'awaiting response'
+    assert status_map['coachnotadded'] == 'not added'
+
+def test_search_user_relation_specific_term_success():
+    # Arrange
+    setup_search_scenario()
+    event = {
+        "queryStringParameters": {"searchTerm": "coachpending"},
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = search_user_relation(event, {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    })
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 1
+    assert body[0][1] == '23coachpending123'
+    assert body[0][5] == 'pending'
+
+def test_search_user_relation_generic_success():
+    # Arrange
+    setup_search_scenario()
+    event = {
+        "queryStringParameters": {"searchTerm": "coach"},
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = search_user_relation(event, {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    })
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 4
+    status_map = {user[1]: user[5] for user in body}
+    assert status_map['testcoach'] == 'added'
+    assert status_map['23coachpending123'] == 'pending'
+    assert status_map['coachawaiting1234'] == 'awaiting response'
     assert status_map['coachnotadded'] == 'not added'

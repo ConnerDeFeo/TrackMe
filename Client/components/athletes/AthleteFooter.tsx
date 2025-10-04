@@ -5,7 +5,7 @@ const buttons = [
     ['Inputs', 'Inputs'], 
     ['History', 'InputHistory'], 
     ['Groups', 'AthleteGroups'], 
-    ['Coaches', 'Coaches'], 
+    ['Relations', 'Relations'], 
     ['Profile', 'AthleteProfile']
   ]
 

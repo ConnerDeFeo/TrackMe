@@ -12,9 +12,6 @@ import SignIn from './pages/authentication/SignIn';
 import CoachGroups from './pages/coaches/groups/CoachGroups';
 import AthleteGroups from './pages/athletes/AthleteGroups';
 import CreateGroup from './pages/coaches/groups/CreateGroup';
-import AddAthlete from './pages/coaches/AddAthlete';
-import Athletes from './pages/coaches/Athletes';
-import Coaches from './pages/athletes/Coaches';
 import AssignAthletes from './pages/coaches/groups/AssignAthletes';
 import CreateWorkoutTemplate from './pages/coaches/workout/CreateWorkoutTemplate';
 import WorkoutTemplates from './pages/coaches/workout/WorkoutTemplates';
@@ -25,9 +22,6 @@ import ViewGroupAthlete from './pages/athletes/ViewGroupAthlete';
 import Inputs from './pages/athletes/Inputs';
 import CreateWorkoutGroup from './pages/athletes/CreateWorkoutGroup';
 import Profile from './components/Profile';
-import CoachInvites from './pages/athletes/CoachInvites';
-import AthleteRequests from './pages/coaches/AthleteRequests';
-import RequestCoaches from './pages/athletes/RequestCoaches';
 import InputHistory from './pages/athletes/InputHistory';
 import CoachHistory from './pages/coaches/CoachHistory';
 import HistoricalData from './pages/coaches/HistoricalData';
@@ -45,6 +39,7 @@ import GroupSchedule from './pages/GroupSchedule';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import HeaderRightButton from './components/HeaderRightButton';
 import GroupSettings from './pages/coaches/groups/GroupSettings';
+import Relations from './pages/Relations';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -109,15 +104,13 @@ const AthleteLayoutWrapper = () => {
       }}>
         <AthleteStack.Screen name="AthleteGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<AthleteGroups />)} />
         <AthleteStack.Screen name="AthleteProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
-        <AthleteStack.Screen name="Coaches" options={{ title: "Coaches" }} component={ScrollViewWrapper(<Coaches />)} />
-        <AthleteStack.Screen name="CoachInvites" options={{ title: "Coach Invites" }} component={ScrollViewWrapper(<CoachInvites />)} />
         <AthleteStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
         <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
         <AthleteStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
-        <AthleteStack.Screen name="RequestCoaches" options={{ title: "Request Coaches" }} component={ScrollViewWrapper(<RequestCoaches />)} />
         <AthleteStack.Screen name="InputHistory" options={{ title: "Input History" }} component={ScrollViewWrapper(<InputHistory />)} />
         <AthleteStack.Screen name="MassInput" component={ScrollViewWrapper(<MassInput />)} />
         <AthleteStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />
+        <AthleteStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
       </AthleteStack.Navigator>
       <AthleteFooter />
     </>
@@ -142,19 +135,17 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="CoachProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <CoachStack.Screen name="CreateGroup" options={{ title: "Create Group" }} component={ScrollViewWrapper(<CreateGroup />)} />
         <CoachStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />
-        <CoachStack.Screen name="AddAthlete" options={{ title: "Add Athlete" }} component={ScrollViewWrapper(<AddAthlete />)} />
-        <CoachStack.Screen name="Athletes" options={{ title: "Athletes" }} component={ScrollViewWrapper(<Athletes />)} />
         <CoachStack.Screen name="AssignAthletes" options={{ title: "Assign Athletes" }} component={ScrollViewWrapper(<AssignAthletes />)} />
         <CoachStack.Screen name="CreateWorkoutTemplate" options={{ title: "Create Workout Template" }} component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
         <CoachStack.Screen name="WorkoutTemplates" options={{ title: "Workout Templates" }} component={ScrollViewWrapper(<WorkoutTemplates />)} />
         <CoachStack.Screen name="AssignWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignWorkout />)} />
         <CoachStack.Screen name="ViewGroupInputsCoach" component={ScrollViewWrapper(<ViewGroupInputsCoach />)} />
-        <CoachStack.Screen name="AthleteRequests" options={{ title: "Athlete Requests" }} component={ScrollViewWrapper(<AthleteRequests />)} />
         <CoachStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
         <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <CoachStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
         <CoachStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />
         <CoachStack.Screen name="GroupSettings" options={{ title: "Settings" }} component={ScrollViewWrapper(<GroupSettings />)} />
+        <CoachStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
       </CoachStack.Navigator>
       <CoachFooter />
     </>

@@ -14,3 +14,10 @@ export enum InputType {
     Run = "run",
     Rest = "rest"
 }
+
+export enum RelationStatus {
+    Pending = "pending",
+    AwaitingResponse = "awaiting response",
+    Added = "added",
+    NotAdded = "not added"
+}

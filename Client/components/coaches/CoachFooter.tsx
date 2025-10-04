@@ -5,7 +5,7 @@ const buttons = [
     ['Template', 'WorkoutTemplates'], 
     ['History', 'CoachHistory'], 
     ['Groups', 'CoachGroups'], 
-    ['Athletes', 'Athletes'], 
+    ['Relations', 'Relations'], 
     ['Profile', 'CoachProfile']
   ]
 

@@ -5,9 +5,8 @@ import { View, Pressable, Image } from 'react-native';
 const images = {
     'Groups': require('../assets/images/Groups.png'),
     'Inputs': require('../assets/images/Input.png'),
-    'Coaches': require('../assets/images/Friends.png'),
+    'Relations': require('../assets/images/Friends.png'),
     'Template': require('../assets/images/Template.png'),
-    'Athletes': require('../assets/images/Friends.png'),
     'Profile': require('../assets/images/Profile.png'),
     'History': require('../assets/images/History.png'),
 };

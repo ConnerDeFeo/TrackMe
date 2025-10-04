@@ -573,3 +573,19 @@ Resources:
     Layers:
       - Ref: RDSLayer
       - Ref: UserAuthLayer
+
+  SearchUserRelationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/search_user_relation/
+      Handler: search_user_relation.search_user_relation
+      Events:
+        SearchUserRelationApi:
+          Type: Api
+          Properties:
+            Path: /general/search_user_relation/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+    Layers:
+      - Ref: RDSLayer
+      - Ref: UserAuthLayer

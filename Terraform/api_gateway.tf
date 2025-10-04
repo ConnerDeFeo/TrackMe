@@ -17,6 +17,7 @@ locals {
     "general/get_weekly_schedule" = { lambda = aws_lambda_function.lambdas["get_weekly_schedule"], method = "GET" }
     "general/get_mutual_user_relationships" = { lambda = aws_lambda_function.lambdas["get_mutual_user_relationships"], method = "GET" }
     "general/get_relation_invites" = { lambda = aws_lambda_function.lambdas["get_relation_invites"], method = "GET" }
+    "general/search_user_relation" = { lambda = aws_lambda_function.lambdas["search_user_relation"], method = "GET" }
 
     # POST Lambdas
     "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }

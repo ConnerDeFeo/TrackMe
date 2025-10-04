@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
 import { Text, Pressable, View } from "react-native";
-import AthleteService from "../../services/AthleteService";
-import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
+import CoachAthleteRelationship from "../../components/UserRelationship";
 import GeneralService from "../../services/GeneralService";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import TextButton from "../../components/display/TextButton";
+import RelationService from "../../services/RelationService";
 
 //Shows current coaches and current coach requests to athletes
 const Coaches = ()=>{
@@ -22,7 +22,7 @@ const Coaches = ()=>{
 
     //Fetches all current coaches for a given user
     const fetchCoaches = useCallback(async () => {
-        const requestsResponse = await AthleteService.getCoaches();
+        const requestsResponse = await RelationService.getMutualUserRelationships();
         if (requestsResponse.ok) {
             const data = await requestsResponse.json();
             setCoaches(data);

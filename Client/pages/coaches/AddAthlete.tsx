@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable} from 'react-native';
-import CoachService from '../../services/CoachService';
 import SearchBar from '../../components/display/SearchBar';
+import GeneralService from '../../services/GeneralService';
+import RelationService from '../../services/RelationService';
 
 //Page for adding athletes to a coaches group
 const AddAthlete= () => {
@@ -13,7 +14,7 @@ const AddAthlete= () => {
     const handleSearch = async (term: string) => {
         setSearchTerm(term);
         setLoading(true);
-        const res = await CoachService.searchAthletes(searchTerm);
+        const res = await RelationService.searchUserRelation(searchTerm);
         if(res.ok){
             const athletes:string[][] = await res.json();
             setAthletes(athletes);
@@ -23,7 +24,7 @@ const AddAthlete= () => {
 
     //Invite athlete to group
     const handleInvite = async (athleteId: string) => {
-        const resp = await CoachService.inviteAthlete(athleteId);
+        const resp = await RelationService.addRelation(athleteId);
         if(resp.ok){
             handleSearch(searchTerm); // Re-fetch athletes to update the list
         }
@@ -34,7 +35,7 @@ const AddAthlete= () => {
         // Initial fetch to load all athletes when the component mounts
         const fetchAllAthletes = async () => {
             setLoading(true);
-            const res = await CoachService.searchAthletes('');
+            const res = await RelationService.searchUserRelation('');
             if(res.ok){
                 const athletes:string[][] = await res.json();
                 setAthletes(athletes);
@@ -46,21 +47,21 @@ const AddAthlete= () => {
 
     //Renders each athlete in the list
     const renderAthlete = ({ item }: { item: string[] }) => {
-        const username = item[0];
-        const userId = item[1];
-        const status = item[2];
+        const userId = item[0];
+        const username = item[1];
+        const status = item[5];
         
         let joinedStatus = <></>;
 
         //Determine what to display
         switch (status) {
-            case 'Added':
+            case 'added':
                 joinedStatus = <Text className='text-green-600 font-semibold'>Added</Text>;
                 break;
-            case 'Pending':
+            case 'pending':
                 joinedStatus = <Text className='text-gray-500'>Pending</Text>;
                 break;
-            case 'Requested':
+            case 'awaiting response':
                 joinedStatus = <Text className='text-blue-500'>Awating Response</Text>;
                 break;
             default:

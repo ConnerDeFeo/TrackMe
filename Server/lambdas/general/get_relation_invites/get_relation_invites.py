@@ -11,7 +11,7 @@ def get_relation_invites(event, context):
         # Fetch relation invites from db   
         invites = fetch_all(
         """
-            SELECT ur.relationId, u.username, u.firstName, u.lastName, u.accountType
+            SELECT ur.userId, u.username, u.firstName, u.lastName, u.accountType
             FROM user_relations ur
             JOIN users u ON ur.userId = u.userId
             LEFT JOIN user_relations ur2 

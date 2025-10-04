@@ -1,8 +1,6 @@
-import { AccountType } from "../common/constants/Enums";
 import { Input } from "../common/types/inputs/Input";
 import API from "./API";
 import DateService from "./DateService";
-import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const GeneralService = {
@@ -20,21 +18,8 @@ const GeneralService = {
   getUser: async () => {
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_user`);
   },
-  updateUserProfile: async (userData: Record<string, any>, accountType: string) => {
-    accountType = accountType.toLowerCase();
-    const routeMapping:Record<string,string> = {
-      'athlete': 'athletes',
-      'coach': 'coaches'
-    };
-    return await API.post(`${EXPO_PUBLIC_API_URL}/${routeMapping[accountType]}/update_${accountType}_profile`, userData);
-  },
-  removeCoachAthlete: async (targetId:string) => {
-    const userId = await UserService.getUserId();
-    const accountType = await UserService.getAccountType();
-    if(accountType===AccountType.Athlete){
-      return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${userId}&coachId=${targetId}`);
-    }
-    return await API.delete(`${EXPO_PUBLIC_API_URL}/general/remove_coach_athlete?athleteId=${targetId}&coachId=${userId}`);
+  updateUserProfile: async (userData: Record<string, any>) => {
+    return await API.post(`${EXPO_PUBLIC_API_URL}/general/update_user_profile`, userData);
   },
   getGroupWorkout: async (groupId:string, date?:string) => {
     let request = `${EXPO_PUBLIC_API_URL}/general/get_group_workout?&groupId=${groupId}`;
@@ -55,6 +40,9 @@ const GeneralService = {
   },
   getWeeklyGroupSchedule: async (groupId:string, startDate:string) => {
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_weekly_schedule?groupId=${groupId}&startDate=${startDate}`);
+  },
+  createUser: async () => {
+    return await API.post(`${EXPO_PUBLIC_API_URL}/general/create_user`);
   }
 };
 

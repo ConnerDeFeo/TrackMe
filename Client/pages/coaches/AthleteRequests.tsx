@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import UserService from "../../services/UserService";
 import { useRoute } from "@react-navigation/native";
-import CoachService from "../../services/CoachService";
 import RequestsInvites from "../../components/display/RequestsInvites";
+import RelationService from "../../services/RelationService";
 
 const AthleteRequests = () =>{
     // State to store the list of coach requests
@@ -13,8 +13,7 @@ const AthleteRequests = () =>{
 
     // Fetches all coach requests for the current user
     const fetchAthleteRequests = async () => {
-        const userId = await UserService.getUserId();
-        const requestsResponse = await CoachService.getAthleteRequests();
+        const requestsResponse = await RelationService.getRelationInvites();
         if (requestsResponse.ok) {
             const data = await requestsResponse.json();
             setRequests(data);
@@ -32,8 +31,7 @@ const AthleteRequests = () =>{
 
     // Handle accepting a coach invitation
     async function handleAthleteAcceptance(athleteId: string){
-        const userId = await UserService.getUserId();
-        const response = await CoachService.acceptAthleteRequest(athleteId);
+        const response = await RelationService.addRelation(athleteId);
         // If acceptance is successful, refresh the coach list in parent component
         if(response.ok){
             fetchAthleteRequests();
@@ -42,7 +40,7 @@ const AthleteRequests = () =>{
     }
     
     const handleDeclineAthleteRequest = async (athleteId: string) => {
-        const resp = await CoachService.declineAthleteRequest(athleteId);
+        const resp = await RelationService.removeRelation(athleteId);
         if(resp.ok){
             fetchAthleteRequests();
         }

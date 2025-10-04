@@ -82,7 +82,7 @@ const Profile = () => {
             const accountType = await UserService.getAccountType();
             if (!accountType) return;
             
-            const resp = await GeneralService.updateUserProfile(userData, accountType);
+            const resp = await GeneralService.updateUserProfile(userData);
             
             if (resp) {
                 setOriginalUserData({ ...userData });

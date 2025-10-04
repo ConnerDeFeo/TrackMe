@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { View, Text, Pressable } from "react-native"
 import { useEffect } from "react";
-import CoachService from "../../services/CoachService";
-import CoachAthleteRelationship from "../../components/CoachAthleteRelationship";
+import CoachAthleteRelationship from "../../components/UserRelationship";
 import GeneralService from "../../services/GeneralService";
 import { useNavigation } from "@react-navigation/native";
+import RelationService from "../../services/RelationService";
 
 //All of a given coach's athletes
 const Athletes = () => {
@@ -22,7 +22,7 @@ const Athletes = () => {
 
     const fetchAthletes = async () => {
         try {
-            const resp = await CoachService.getAthletes();
+            const resp = await RelationService.getMutualUserRelationships();
             if(resp.ok){
                 const athletes: string[][] = await resp.json()
                 setAthletes(athletes);
@@ -37,7 +37,6 @@ const Athletes = () => {
     useEffect(() => {
         fetchAthletes();
     }, []);
-
     return (
         <View className="flex-1 px-4 mt-4">
             <View className="mb-6 flex flex-row justify-between items-center">

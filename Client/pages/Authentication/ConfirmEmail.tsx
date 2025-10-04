@@ -3,10 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import { Text, TextInput, Pressable, View } from "react-native";
 import UserService from "../../services/UserService";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import AthleteService from "../../services/AthleteService";
-import CoachService from "../../services/CoachService";
 import { AuthContext } from "../../common/context/AuthContext";
 import { AccountType } from "../../common/constants/Enums";
+import GeneralService from "../../services/GeneralService";
 
 
 //Confirm Email page
@@ -41,12 +40,7 @@ const ConfirmEmail = () => {
             const accountType = attribute['custom:accountType'];
             //Create the account in the database
             let rdsResp;
-            if(accountType === AccountType.Athlete){
-                rdsResp = await AthleteService.createAthlete();
-            }
-            else{
-                rdsResp = await CoachService.createCoach();
-            }
+            rdsResp = await GeneralService.createUser();
             if(!rdsResp) {
                 setMessage("Failed to create account. Please try again.");
                 return;

@@ -3,7 +3,7 @@ from user_auth import get_user_info
 from rds import fetch_all
 
 def search_user_relation(event, context):
-    query_params = event.get('queryStringParameters', {})
+    query_params = event.get('queryStringParameters') or {}
 
     try:
         user_info = get_user_info(event)

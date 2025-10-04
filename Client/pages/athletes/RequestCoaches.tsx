@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable} from 'react-native';
-import AthleteService from '../../services/AthleteService';
 import SearchBar from '../../components/display/SearchBar';
-import UserService from '../../services/UserService';
+import RelationService from '../../services/RelationService';
 
 
 //Page for requesting coaches
@@ -15,7 +14,7 @@ const RequestCoaches = () => {
     const handleSearch = async (term: string) => {
         setSearchTerm(term);
         setLoading(true);
-        const res = await AthleteService.searchCoaches(searchTerm);
+        const res = await RelationService.searchUserRelation(searchTerm);
         if(res.ok){
             const coaches:string[][] = await res.json();
             setCoaches(coaches);
@@ -25,7 +24,7 @@ const RequestCoaches = () => {
 
     //Request coach
     const handleRequest = async (coachId: string) => {
-        const resp = await AthleteService.requestCoach(coachId);
+        const resp = await RelationService.addRelation(coachId);
         if(resp.ok){
             handleSearch(searchTerm); // Re-fetch coaches to update the list
         }

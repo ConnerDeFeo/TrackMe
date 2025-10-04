@@ -47,16 +47,18 @@ locals {
     "get_user",
     "view_group_inputs",
     "get_group_workout",
-    "get_pending_proposals",
     "mass_input",
     "get_weekly_schedule",
     "create_user",
+    "update_user_profile",
+
+    # Relation lambdas,
+    "get_relation_invites",
+    "search_user_relation",
     "add_relation",
     "remove_user_relation",
     "get_mutual_user_relations",
-    "update_user_profile",
-    "get_relation_invites",
-    "search_user_relation",
+    "get_relation_invites_count",
   ]
 }
 

@@ -1,11 +1,11 @@
 import json
 import pytest
 from lambdas.general.create_user.create_user import create_user
-from lambdas.general.add_relation.add_relation import add_relation
-from lambdas.general.get_relation_invites.get_relation_invites import get_relation_invites
-from lambdas.general.remove_user_relation.remove_user_relation import remove_user_relation
-from lambdas.general.get_mutual_user_relations.get_mutual_user_relations import get_mutual_user_relations
-from lambdas.general.search_user_relation.search_user_relation import search_user_relation
+from lambdas.relations.add_relation.add_relation import add_relation
+from lambdas.relations.get_relation_invites.get_relation_invites import get_relation_invites
+from lambdas.relations.remove_user_relation.remove_user_relation import remove_user_relation
+from lambdas.relations.get_mutual_user_relations.get_mutual_user_relations import get_mutual_user_relations
+from lambdas.relations.search_user_relation.search_user_relation import search_user_relation
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from rds import execute_file, fetch_one, fetch_all

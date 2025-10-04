@@ -3,11 +3,10 @@ import json
 from user_auth import get_user_info
 
 # Gets all current proposals (requests or invites) for a user
-def get_pending_proposals(event, context):
+def get_relation_invites_count(event, context):
     try:
         user_info = get_user_info(event)
         userId = user_info['userId']
-        accountType = user_info['accountType'].lower()
         count = fetch_one(
         """
             SELECT COUNT(*) FROM user_relations ur1 

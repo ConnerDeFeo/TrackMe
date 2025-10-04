@@ -4,13 +4,13 @@ from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.coach.delete_group.delete_group import delete_group
-from lambdas.general.add_relation.add_relation import add_relation
+from lambdas.relations.add_relation.add_relation import add_relation
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
 from lambdas.general.get_group_workout.get_group_workout import get_group_workout
 from lambdas.general.get_groups.get_groups import get_groups
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
-from lambdas.general.get_pending_proposals.get_pending_proposals import get_pending_proposals
+from lambdas.relations.get_relation_invites_count.get_relation_invites_count import get_pending_proposals
 from lambdas.general.create_user.create_user import create_user
 from lambdas.general.update_user_profile.update_user_profile import update_user_profile
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs

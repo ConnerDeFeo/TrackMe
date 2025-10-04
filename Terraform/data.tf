@@ -150,10 +150,6 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/get_group_workout"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_group_workout.zip"
     }
-    "get_pending_proposals" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_pending_proposals"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_pending_proposals.zip"
-    }
     "mass_input" = {
       source_dir  = "${path.module}/../Server/lambdas/general/mass_input"
       output_path = "${path.module}/../Server/lambdas/general/zips/mass_input.zip"
@@ -166,29 +162,39 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/add_relation"
       output_path = "${path.module}/../Server/lambdas/general/zips/add_relation.zip"
     }
-    "remove_user_relation" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/remove_user_relation"
-      output_path = "${path.module}/../Server/lambdas/general/zips/remove_user_relation.zip"
-    },
     "create_user" = {
       source_dir  = "${path.module}/../Server/lambdas/general/create_user"
       output_path = "${path.module}/../Server/lambdas/general/zips/create_user.zip"
-    }
-    "get_mutual_user_relations" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_mutual_user_relations"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_mutual_user_relations.zip"
     }
     "update_user_profile" = {
       source_dir  = "${path.module}/../Server/lambdas/general/update_user_profile"
       output_path = "${path.module}/../Server/lambdas/general/zips/update_user_profile.zip"
     }
+
+    # Relations Lambdas
     "get_relation_invites" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_relation_invites"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_relation_invites.zip"
+      source_dir  = "${path.module}/../Server/lambdas/relations/get_relation_invites"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/get_relation_invites.zip"
     }
     "search_user_relation" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/search_user_relation"
-      output_path = "${path.module}/../Server/lambdas/general/zips/search_user_relation.zip"
+      source_dir  = "${path.module}/../Server/lambdas/relations/search_user_relation"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/search_user_relation.zip"
+    }
+    "get_mutual_user_relations" = {
+      source_dir  = "${path.module}/../Server/lambdas/relations/get_mutual_user_relations"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/get_mutual_user_relations.zip"
+    }
+    "remove_user_relation" = {
+      source_dir  = "${path.module}/../Server/lambdas/relations/remove_user_relation"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/remove_user_relation.zip"
+    }
+    "get_relation_invites_count" = {
+      source_dir  = "${path.module}/../Server/lambdas/relations/get_relation_invites_count"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/get_relation_invites_count.zip"
+    }
+    "get_mutual_user_relations" = {
+      source_dir  = "${path.module}/../Server/lambdas/relations/get_mutual_user_relations"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/get_mutual_user_relations.zip"
     }
   }
 }

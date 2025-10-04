@@ -350,85 +350,6 @@ Resources:
   #
   #
   #
-  AddRelationFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/add_relation/
-      Handler: add_relation.add_relation
-      Events:
-        AddRelationApi:
-          Type: Api
-          Properties:
-            Path: /general/add_relation/
-            Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-    
-  SearchUserRelationFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/search_user_relation/
-      Handler: search_user_relation.search_user_relation
-      Events:
-        SearchUserRelationApi:
-          Type: Api
-          Properties:
-            Path: /general/search_user_relation/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  GetRelationInvitesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/get_relation_invites/
-      Handler: get_relation_invites.get_relation_invites
-      Events:
-        GetRelationInvitesApi:
-          Type: Api
-          Properties:
-            Path: /general/get_relation_invites/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  GetMutualUserRelationsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/get_mutual_user_relations/
-      Handler: get_mutual_user_relations.get_mutual_user_relations
-      Events:
-        GetMutualUserRelationsApi:
-          Type: Api
-          Properties:
-            Path: /general/get_mutual_user_relations/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  RemoveUserRelationFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/remove_user_relation/
-      Handler: remove_user_relation.remove_user_relation
-      Events:
-        RemoveUserRelationApi:
-          Type: Api
-          Properties:
-            Path: /general/remove_user_relation/
-            Method: delete
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
 
   UpdateUserProfileFunction:
     Type: AWS::Serverless::Function
@@ -489,22 +410,6 @@ Resources:
           Properties:
             Path: /general/mass_input/
             Method: post
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  GetPendingProposals:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/get_pending_proposals/
-      Handler: get_pending_proposals.get_pending_proposals
-      Events:
-        GetPendingProposalsApi:
-          Type: Api
-          Properties:
-            Path: /general/get_pending_proposals/
-            Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:
         - Ref: RDSLayer
@@ -584,6 +489,110 @@ Resources:
           Type: Api
           Properties:
             Path: /general/get_group_workout/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  #
+  #
+  #
+  # RELATIONS FUNCTIONS
+  #
+  #
+  #
+
+  AddRelationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/relations/add_relation/
+      Handler: add_relation.add_relation
+      Events:
+        AddRelationApi:
+          Type: Api
+          Properties:
+            Path: /relations/add_relation/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+    
+  SearchUserRelationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/relations/search_user_relation/
+      Handler: search_user_relation.search_user_relation
+      Events:
+        SearchUserRelationApi:
+          Type: Api
+          Properties:
+            Path: /relations/search_user_relation/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  GetRelationInvitesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/relations/get_relation_invites/
+      Handler: get_relation_invites.get_relation_invites
+      Events:
+        GetRelationInvitesApi:
+          Type: Api
+          Properties:
+            Path: /relations/get_relation_invites/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  GetMutualUserRelationsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/relations/get_mutual_user_relations/
+      Handler: get_mutual_user_relations.get_mutual_user_relations
+      Events:
+        GetMutualUserRelationsApi:
+          Type: Api
+          Properties:
+            Path: /relations/get_mutual_user_relations/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  RemoveUserRelationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/relations/remove_user_relation/
+      Handler: remove_user_relation.remove_user_relation
+      Events:
+        RemoveUserRelationApi:
+          Type: Api
+          Properties:
+            Path: /relations/remove_user_relation/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  GetRelationInvitesCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/relations/get_relation_invites_count/
+      Handler: get_relation_invites_count.get_relation_invites_count
+      Events:
+        GetRelationInvitesCountApi:
+          Type: Api
+          Properties:
+            Path: /relations/get_relation_invites_count/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:

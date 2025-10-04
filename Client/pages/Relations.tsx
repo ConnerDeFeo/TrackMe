@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import SearchBar from "../components/display/SearchBar";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import RelationService from "../services/RelationService";
 import { RelationStatus } from "../common/constants/Enums";
+import TextButton from "../components/display/TextButton";
+import RelationActionButton from "../components/display/RelationActionButton";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 // Relations.tsx
 
@@ -15,8 +18,10 @@ const Relations = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
+    const navigation = useNavigation<any>();
+
     // Fetch initial relations once on mount
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         const fetchRelations = async () => {
             setLoading(true);
             const resp = await RelationService.searchUserRelation();
@@ -29,7 +34,7 @@ const Relations = () => {
             setLoading(false);
         };
         fetchRelations();
-    }, []);
+    }, []));
 
     // Search by term, update list & loading state
     const handleSearch = async (term: string) => {
@@ -60,67 +65,15 @@ const Relations = () => {
         }
     };
 
-    // Render action button based on the user's relation status
-    const renderActionButton = (relationId: string, relationStatus: RelationStatus) => {
-        switch (relationStatus) {
-            case RelationStatus.NotAdded:
-                // Show "Add" button
-                return (
-                    <Pressable
-                        className="px-6 py-2.5 rounded-full trackme-bg-blue"
-                        onPress={() => handleAddRelation(relationId)}
-                    >
-                        <Text className="text-white font-bold text-sm">Add</Text>
-                    </Pressable>
-                );
-            case RelationStatus.Pending:
-                // Show "Pending…" button (disabled-looking)
-                return (
-                    <Pressable
-                        className="px-6 py-2.5 rounded-full shadow-sm"
-                        onPress={() => handleRelationRemoval(relationId)}
-                    >
-                        <Text className="text-gray-500 font-bold text-sm">Pending...</Text>
-                    </Pressable>
-                );
-            case RelationStatus.AwaitingResponse:
-                // Show "Accept" and "Decline" side by side
-                return (
-                    <View className="flex flex-row justify-between items-center gap-2">
-                        <Pressable
-                            className="px-6 py-2.5 rounded-full trackme-bg-blue"
-                            onPress={() => handleAddRelation(relationId)}
-                        >
-                            <Text className="text-white font-bold text-sm text-center">Accept</Text>
-                        </Pressable>
-                        <Pressable
-                            className="px-6 py-2.5 rounded-full trackme-bg-red"
-                            onPress={() => handleRelationRemoval(relationId)}
-                        >
-                            <Text className="text-white font-semibold text-sm text-center">Decline</Text>
-                        </Pressable>
-                    </View>
-                );
-            case RelationStatus.Added:
-                // Show "Remove" button
-                return (
-                    <Pressable
-                        className="px-6 py-2.5 rounded-full trackme-bg-red shadow-sm"
-                        onPress={() => handleRelationRemoval(relationId)}
-                    >
-                        <Text className="text-white font-bold text-sm">Remove</Text>
-                    </Pressable>
-                );
-            default:
-                return null;
-        }
-    };
-
     // Main render: SearchBar, loading state, empty state, or list of users
     return (
-        <View className="flex-1">
+        <View className="mx-4">
+            <View className="flex flex-row justify-between items-center mt-2">
+                <TextButton text="Invites" onPress={() => navigation.navigate("RelationInvites")}/>
+                <TextButton text="Friends" onPress={() => {}}/>
+            </View>
             {/* Search input */}
-            <View className="mx-4 mt-4">
+            <View className="mt-4">
                 <SearchBar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
@@ -145,7 +98,7 @@ const Relations = () => {
 
             // List of users with action buttons
             ) : (
-                <View className="mx-4 mt-4">
+                <View className="mt-2">
                     {currentUsers.map((user) => (
                         <View
                             key={user[0]}
@@ -154,7 +107,12 @@ const Relations = () => {
                             {/* User name */}
                             <Text className="font-semibold">{user[1]}</Text>
                             {/* Action button */}
-                            {renderActionButton(user[0], user[5] as RelationStatus)}
+                            <RelationActionButton
+                                relationId={user[0]}
+                                relationStatus={user[5] as RelationStatus}
+                                handleAddRelation={handleAddRelation}
+                                handleRelationRemoval={handleRelationRemoval}
+                            />
                         </View>
                     ))}
                 </View>

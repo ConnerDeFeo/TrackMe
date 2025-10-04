@@ -350,6 +350,54 @@ Resources:
   #
   #
   #
+  GetRelationInvitesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/get_relation_invites/
+      Handler: get_relation_invites.get_relation_invites
+      Events:
+        GetRelationInvitesApi:
+          Type: Api
+          Properties:
+            Path: /general/get_relation_invites/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  GetMutualUserRelationsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/get_mutual_user_relations/
+      Handler: get_mutual_user_relations.get_mutual_user_relations
+      Events:
+        GetMutualUserRelationsApi:
+          Type: Api
+          Properties:
+            Path: /general/get_mutual_user_relations/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  RemoveUserRelationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/remove_user_relation/
+      Handler: remove_user_relation.remove_user_relation
+      Events:
+        RemoveUserRelationApi:
+          Type: Api
+          Properties:
+            Path: /general/remove_user_relation/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   UpdateUserProfileFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -510,18 +558,18 @@ Resources:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
 
-    AddRelationFunction:
-      Type: AWS::Serverless::Function
-      Properties:
-        CodeUri: lambdas/general/add_relation/
-        Handler: add_relation.add_relation
-        Events:
-          AddRelationApi:
-            Type: Api
-            Properties:
-              Path: /general/add_relation/
-              Method: post
-              RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
+  AddRelationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/add_relation/
+      Handler: add_relation.add_relation
+      Events:
+        AddRelationApi:
+          Type: Api
+          Properties:
+            Path: /general/add_relation/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+    Layers:
+      - Ref: RDSLayer
+      - Ref: UserAuthLayer

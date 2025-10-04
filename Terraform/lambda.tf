@@ -54,7 +54,8 @@ locals {
     "add_relation",
     "remove_user_relation",
     "get_mutual_user_relations",
-    "update_user_profile"
+    "update_user_profile",
+    "get_relation_invites",
   ]
 }
 

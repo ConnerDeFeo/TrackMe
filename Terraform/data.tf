@@ -182,6 +182,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/update_user_profile"
       output_path = "${path.module}/../Server/lambdas/general/zips/update_user_profile.zip"
     }
+    "get_relation_invites" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_relation_invites"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_relation_invites.zip"
+    }
   }
 }
 

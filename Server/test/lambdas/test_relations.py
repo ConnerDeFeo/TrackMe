@@ -2,6 +2,7 @@ import json
 import pytest
 from lambdas.general.create_user.create_user import create_user
 from lambdas.general.add_relation.add_relation import add_relation
+from lambdas.general.get_relation_invites.get_relation_invites import get_relation_invites
 from lambdas.general.remove_user_relation.remove_user_relation import remove_user_relation
 from lambdas.general.get_mutual_user_relations.get_mutual_user_relations import get_mutual_user_relations
 from rds import execute_file, fetch_one, fetch_all
@@ -134,3 +135,29 @@ def test_get_mutual_user_relations_success():
     assert body[0]['firstName'] == None
     assert body[0]['lastName'] == None
     assert body[0]['accountType'] == 'Coach'
+
+def test_get_relation_invites_success():
+    # Arrange
+    create_user(TestData.test_coach, {})
+    create_user(TestData.test_athlete, {})
+    create_user({
+        "headers": generate_auth_header("9999", "Coach", "othercoach"),
+    },{})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
+    add_relation({
+        "body": json.dumps({"relationId": "1234"}),
+        "headers": generate_auth_header("9999", "Coach", "testcoach"),
+    },{})
+    
+    event = {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = get_relation_invites(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 1

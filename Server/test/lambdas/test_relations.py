@@ -5,6 +5,7 @@ from lambdas.general.add_relation.add_relation import add_relation
 from lambdas.general.get_relation_invites.get_relation_invites import get_relation_invites
 from lambdas.general.remove_user_relation.remove_user_relation import remove_user_relation
 from lambdas.general.get_mutual_user_relations.get_mutual_user_relations import get_mutual_user_relations
+from lambdas.general.search_user_relation.search_user_relation import search_user_relation
 from rds import execute_file, fetch_one, fetch_all
 from data import TestData
 from datetime import datetime, timezone
@@ -161,3 +162,6 @@ def test_get_relation_invites_success():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert len(body) == 1
+
+def test_search_user_relation_success():
+    pass

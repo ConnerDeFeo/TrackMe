@@ -3,12 +3,12 @@ from user_auth import get_user_info
 from rds import execute_commit
 
 def remove_user_relation(event, context):
-    body = json.loads(event['body'])
+    query_params = event.get('queryStringParameters', {})
 
     try:
         user_info = get_user_info(event)
         user_id = user_info['userId']
-        targetId = body['targetId']
+        targetId = query_params['targetId']
 
         # Remove relation from db   
         execute_commit(

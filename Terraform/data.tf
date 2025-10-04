@@ -178,6 +178,11 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/get_mutual_user_relations"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_mutual_user_relations.zip"
     }
+    "update_user_profile" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/update_user_profile"
+      output_path = "${path.module}/../Server/lambdas/general/zips/update_user_profile.zip"
+    }
+  }
 }
 
 # Archive files using for_each

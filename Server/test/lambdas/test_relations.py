@@ -45,7 +45,7 @@ def test_remove_user_relation_remove_request_success():
     create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     event = {
-        "body": json.dumps({"targetId": "123"}),
+        "queryStringParameters": {"targetId": "123"},
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
@@ -63,7 +63,7 @@ def test_remove_user_relation_decline_request_success():
     create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     event = {
-        "body": json.dumps({"targetId": "1234"}),
+        "queryStringParameters": {"targetId": "1234"},
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
@@ -80,7 +80,7 @@ def test_remove_user_relation_nonexistent_relation():
     create_user(TestData.test_coach, {})
     create_user(TestData.test_athlete, {})
     event = {
-        "body": json.dumps({"targetId": "999"}),
+        "queryStringParameters": {"targetId": "999"},
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
@@ -99,7 +99,7 @@ def test_remove_user_relation_mutual_sucess():
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
     event = {
-        "body": json.dumps({"targetId": "123"}),
+        "queryStringParameters": {"targetId": "123"},
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }
 

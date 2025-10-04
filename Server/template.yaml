@@ -350,6 +350,22 @@ Resources:
   #
   #
   #
+  UpdateUserProfileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/update_user_profile/
+      Handler: update_user_profile.update_user_profile
+      Events:
+        UpdateUserProfileApi:
+          Type: Api
+          Properties:
+            Path: /general/update_user_profile/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   CreateUserFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -15,6 +15,7 @@ locals {
     "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
     "general/get_pending_proposals" = { lambda = aws_lambda_function.lambdas["get_pending_proposals"], method = "GET" }
     "general/get_weekly_schedule" = { lambda = aws_lambda_function.lambdas["get_weekly_schedule"], method = "GET" }
+    "general/get_mutual_user_relationships" = { lambda = aws_lambda_function.lambdas["get_mutual_user_relationships"], method = "GET" }
 
     # POST Lambdas
     "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }
@@ -25,12 +26,16 @@ locals {
     "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
     "general/mass_input" = { lambda = aws_lambda_function.lambdas["mass_input"], method = "POST" }
     "athletes/remove_inputs" = { lambda = aws_lambda_function.lambdas["remove_inputs"], method = "POST" }
+    "general/add_relation" = { lambda = aws_lambda_function.lambdas["add_relation"], method = "POST" }
+    "general/create_user" = { lambda = aws_lambda_function.lambdas["create_user"], method = "POST" }
+    "general/update_user_profile" = { lambda = aws_lambda_function.lambdas["update_user_profile"], method = "POST" }
 
     # DELETE Lambdas
     "coaches/remove_group_athlete" = { lambda = aws_lambda_function.lambdas["remove_group_athlete"], method = "DELETE" }
     "coaches/delete_workout_template" = { lambda = aws_lambda_function.lambdas["delete_workout_template"], method = "DELETE" }
     "coaches/delete_group" = { lambda = aws_lambda_function.lambdas["delete_group"], method = "DELETE" }
     "coaches/delete_group_workout" = { lambda = aws_lambda_function.lambdas["delete_group_workout"], method = "DELETE" }
+    "general/remove_user_relation" = { lambda = aws_lambda_function.lambdas["remove_user_relation"], method = "DELETE" }
   }
 }
 

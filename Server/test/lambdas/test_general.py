@@ -12,6 +12,7 @@ from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.general.get_pending_proposals.get_pending_proposals import get_pending_proposals
 from lambdas.general.create_user.create_user import create_user
+from lambdas.general.update_user_profile.update_user_profile import update_user_profile
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
 from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
 from rds import execute_file, fetch_all
@@ -103,6 +104,14 @@ def setup_before_each_test():
     execute_file('dev-setup/removeTables.sql')
     execute_file('./setup.sql')
     yield
+
+def test_create_user_athlete_success():
+    response = create_user(TestData.test_athlete, {})
+    assert response['statusCode'] == 201
+
+def test_create_user_coach_success():   
+    response = create_user(TestData.test_coach, {})
+    assert response['statusCode'] == 201
 
 def test_get_groups_as_athlete():
     # Arrange
@@ -329,3 +338,25 @@ def test_get_weekly_schedule_athlete_success():
     assert five_days_ago in body
     assert six_days_ago in body
     assert len(body[six_days_ago])==2
+
+
+def test_update_user_profile():
+    # Arrange
+    create_user(TestData.test_coach, {})
+    event = {
+        "body": json.dumps({
+            "bio": "Updated bio",
+            "firstName": "John",
+            "lastName": "Doe"
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = update_user_profile(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    user = fetch_all("SELECT bio, firstName, lastName FROM users WHERE userId = %s", ("123",))
+    assert user == [("Updated bio", "John", "Doe")]

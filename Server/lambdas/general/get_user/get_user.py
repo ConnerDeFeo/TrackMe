@@ -7,15 +7,15 @@ def get_user(event, context):
     try:
         user_info = get_user_info(event)
         user_id = user_info['userId']
-        data = fetch_one("SELECT * FROM users WHERE userId = %s", (user_id,))
+        data = fetch_one("SELECT username, bio, firstName, lastName FROM users WHERE userId = %s", (user_id,))
         if data:
             return {
                 "statusCode": 200,
                 "body": json.dumps({
-                    "username": data[1],
-                    "bio": data[2],
-                    "firstName": data[3],
-                    "lastName": data[4],
+                    "username": data[0],
+                    "bio": data[1],
+                    "firstName": data[2],
+                    "lastName": data[3],
                 })
             }
         return {

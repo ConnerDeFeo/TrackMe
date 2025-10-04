@@ -15,14 +15,12 @@ const Profile = () => {
     // State to track original data for comparison to detect changes
     const [originalUserData, setOriginalUserData] = useState<Record<string, any>>({});
     // Loading and feedback states
-    const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
     // Fetch user data when component mounts
     useEffect(() => {
         const fetchUserData = async () => {
-            setIsLoading(true);
             try {
                 const userId = await UserService.getUserId();
                 if (userId) {
@@ -36,8 +34,6 @@ const Profile = () => {
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 Alert.alert('Error', 'Failed to load profile data');
-            } finally {
-                setIsLoading(false);
             }
         };
         fetchUserData();

@@ -31,7 +31,7 @@ const HistoricalData = ()=>{
                     <View key={groupId} className="bg-white border-2 border-gray-200 shadow-md p-5 mb-6">
                         <Text className="text-3xl font-bold text-gray-900 mb-4">{historicalData[groupId].name}</Text>
                         
-                        <View className="mb-4">
+                        <View className="mb-4 gap-y-4">
                             <Text className="text-lg font-semibold mb-3">Workouts</Text>
                             {historicalData[groupId].workouts.map((workout: Record<string, any>, idx: number) =>
                             <DisplayWorkout

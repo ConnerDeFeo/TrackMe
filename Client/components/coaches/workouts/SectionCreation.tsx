@@ -15,13 +15,6 @@ import { Exercise } from "../../../common/types/workouts/Exercise";
  */
 const SectionCreation = ({ section, setSections, idx }: 
   { section: Section; setSections: React.Dispatch<React.SetStateAction<Section[]>>; idx: number; }) => {
-    // Available numbers for sets
-    const setOptions = Array.from({ length: 20 }, (_, i) => ({
-      label: `${i + 1}`,
-      value: i + 1,
-    }));
-    const pickerStyle = {width: 100};
-
   /**
    * Handles adding a new exercise of a specific type to the current section.
    */

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Text, Pressable, View } from "react-native";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import UserService from "../../services/UserService";
@@ -9,6 +9,7 @@ import DateService from "../../services/DateService";
 import { Input } from "../../common/types/inputs/Input";
 import InputDisplay from "../display/InputDisplay";
 import { InputType } from "../../common/constants/Enums";
+import { LoadingContext } from "../../common/context/LoadingContext";
 
 //Component used to render input fields for a specific group
 /**
@@ -56,6 +57,7 @@ const RenderGroupInputs: React.FC<
 
     // Navigation object to move between screens
     const navigation = useNavigation<any>();
+    const [loading, setLoading] = useContext(LoadingContext);
 
     /**
      * Submits the current input entries for all athletes in the group,
@@ -70,6 +72,7 @@ const RenderGroupInputs: React.FC<
             // Combine group members and current user into one list of athlete IDs
             const athletes = [...workoutGroup.map(member => member.id), userId];
 
+            setLoading(true);
             // Send the inputs for this group and date
             const resp = await AthleteWorkoutService.inputTimes(
                 athletes,
@@ -86,6 +89,7 @@ const RenderGroupInputs: React.FC<
                 }));
                 onSubmit();
             }
+            setLoading(false);
         }
     };
 

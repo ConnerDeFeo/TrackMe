@@ -42,6 +42,8 @@ import GroupSettings from './pages/coaches/groups/GroupSettings';
 import Relations from './pages/Relations';
 import RelationInvites from './pages/RelationInvites';
 import Friends from './pages/Friends';
+import LoadingScreen from './components/LoadingScreen';
+import { LoadingContext } from './common/context/LoadingContext';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -172,10 +174,13 @@ const AuthLayoutWrapper = () =>{
     </View>
   );
 }
+
+const Stack = createNativeStackNavigator();
 //Return the navigation stack as the app
 export default function App() {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [awaitingAuthentication, setAwaitingAuthentication] = useState<boolean>(true);
   const [accountType, setAccountType] = useState<AccountType>(AccountType.SignedOut);
+  const [loading, setLoading] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -184,12 +189,12 @@ export default function App() {
       if (accountType !== AccountType.SignedOut) {
         setAccountType(accountType);
       }
-      setLoading(false);
+      setAwaitingAuthentication(false);
     }
     checkAuth();
   }, []);
 
-  if (loading) {
+  if (awaitingAuthentication) {
     return (
       <View className='flex-1 justify-center items-center'>
         <ActivityIndicator size="large" />
@@ -198,18 +203,24 @@ export default function App() {
   }
 
   return (
-    <AuthContext.Provider value={[accountType, setAccountType]}>
-      <NavigationContainer>
-          {accountType === AccountType.SignedOut ? (
-            <AuthLayoutWrapper/>
-          ) : (
-            accountType === AccountType.Athlete ? (
-              <AthleteLayoutWrapper/>
+    <LoadingContext.Provider value={[loading, setLoading]}>
+      <AuthContext.Provider value={[accountType, setAccountType]}>
+        {/* Keep NavigationContainer stable and isolated */}
+        <View className="flex-1">
+          <NavigationContainer>
+            {accountType === AccountType.SignedOut ? (
+              <AuthLayoutWrapper />
+            ) : accountType === AccountType.Athlete ? (
+              <AthleteLayoutWrapper />
             ) : (
-              <CoachLayoutWrapper/>
-            )
-          )}
-      </NavigationContainer>
-    </AuthContext.Provider>
+              <CoachLayoutWrapper />
+            )}
+          </NavigationContainer>
+        </View>
+
+        {/* Render LoadingScreen OUTSIDE the navigation hierarchy */}
+        <LoadingScreen visible={loading} />
+      </AuthContext.Provider>
+    </LoadingContext.Provider>
   );
 }

@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../common/context/AuthContext";
-import { useNavigation } from "react-router-dom";
 import GeneralService from "../services/GeneralService";
 import { AccountType } from "../common/constants/Enums";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const [groups, setGroups] = useState<string[][]>([]);
-    const navigation = useNavigation();
+    const navigate = useNavigate();
     const context = useContext(AuthContext);
     const accountType = context[0];
 

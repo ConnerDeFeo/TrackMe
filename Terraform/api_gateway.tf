@@ -107,6 +107,16 @@ resource "aws_api_gateway_method" "main" {
   authorizer_id = aws_api_gateway_authorizer.cognito_authorizer.id
 }
 
+# OPTIONS method for CORS preflight
+resource "aws_api_gateway_method" "options" {
+  for_each = local.lambdas
+
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.subresources[each.key].id
+  http_method   = "OPTIONS"
+  authorization = "NONE"  # no auth for preflight
+}
+
 # Integrations for each lambda function based on the defined local variables
 resource "aws_api_gateway_integration" "main" {
   for_each = local.lambdas
@@ -117,6 +127,63 @@ resource "aws_api_gateway_integration" "main" {
   type        = "AWS_PROXY"
   integration_http_method = "POST" # Lambda functions always use POST for integration
   uri = each.value.lambda.invoke_arn
+}
+
+# CORS preflight integration
+resource "aws_api_gateway_integration" "options" {
+  for_each = local.lambdas
+
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.subresources[each.key].id
+  http_method = "OPTIONS"
+  type        = "MOCK"
+
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+
+  depends_on = [aws_api_gateway_method.options]
+}
+
+# Method response for CORS preflight
+resource "aws_api_gateway_method_response" "options" {
+  for_each = local.lambdas
+
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.subresources[each.key].id
+  http_method = "OPTIONS"
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+
+  depends_on = [
+    aws_api_gateway_method.options
+  ]
+}
+
+# Integration response for CORS preflight
+resource "aws_api_gateway_integration_response" "options" {
+  for_each = local.lambdas
+
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.subresources[each.key].id
+  http_method = "OPTIONS"
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  depends_on = [
+    aws_api_gateway_integration.options,
+    aws_api_gateway_method_response.options
+  ]
 }
 
 data "aws_caller_identity" "current" {}
@@ -138,8 +205,24 @@ resource "aws_api_gateway_deployment" "main" {
   depends_on = [
     aws_api_gateway_integration.main,
     aws_api_gateway_method.main,
+    aws_api_gateway_integration.options,
+    aws_api_gateway_method.options,
+    aws_api_gateway_method_response.options,
+    aws_api_gateway_integration_response.options
   ]
   rest_api_id = aws_api_gateway_rest_api.main.id
+
+  # Force new deployment when configuration changes
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.subresources,
+      aws_api_gateway_method.main,
+      aws_api_gateway_method.options,
+      aws_api_gateway_integration.main,
+      aws_api_gateway_integration.options,
+      aws_api_gateway_integration_response.options,
+    ]))
+  }
 
   lifecycle {
     create_before_destroy = true

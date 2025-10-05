@@ -11,7 +11,6 @@ const API = {
             API.handleMissingIdToken();
         }
         return await fetch(path, {
-            credentials: 'include',
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${idToken}`
@@ -25,7 +24,6 @@ const API = {
             API.handleMissingIdToken();
         }
         return await fetch(path, {
-            credentials: 'include', 
             method: 'POST',  
             headers: {
                 'Content-Type': 'application/json',  
@@ -41,7 +39,6 @@ const API = {
             API.handleMissingIdToken();
         }
         return await fetch(path, {
-            credentials: 'include', 
             method: 'PUT',  
             headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +54,6 @@ const API = {
             API.handleMissingIdToken();
         }
         return await fetch(path, {
-            credentials: 'include',
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${idToken}`
@@ -73,7 +69,6 @@ const API = {
         const formData = new FormData();
         formData.append("file", file);
         return await fetch(path, {
-            credentials: 'include',
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${idToken}`

@@ -15,7 +15,7 @@ const SignIn = ()=>{
     const { resetPasswordMessage } = route.params as { resetPasswordMessage?: string } || {};
     const [showResetPasswordMessage, setShowResetPasswordMessage] = useState<boolean>(!!resetPasswordMessage);
     const authContext = useContext(AuthContext);
-    const [accountType, setAccountType] = authContext;
+    const setAccountType = authContext[1];
 
     const [username,setUsername] = useState<string>("");
     const [password,setPassword] = useState<string>("");

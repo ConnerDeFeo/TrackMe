@@ -1,6 +1,7 @@
 import json
 from user_auth import get_user_info
-from rds import execute_commit, post_auth_header
+from rds import execute_commit
+from user_auth import post_auth_header
 
 def update_user_profile(event, context):
     body = json.loads(event['body'])

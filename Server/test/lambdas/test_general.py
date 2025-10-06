@@ -10,7 +10,7 @@ from lambdas.general.get_group_workout.get_group_workout import get_group_workou
 from lambdas.general.get_groups.get_groups import get_groups
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
-from lambdas.relations.get_relation_invites_count.get_relation_invites_count import get_pending_proposals
+from lambdas.relations.get_relation_invites_count.get_relation_invites_count import get_relation_invites_count
 from lambdas.general.create_user.create_user import create_user
 from lambdas.general.update_user_profile.update_user_profile import update_user_profile
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
@@ -234,7 +234,7 @@ def test_get_group_workout_success():
     assert workout['description'] == 'This is a test workout'
     assert len(workout['sections']) == 3
 
-def test_get_pending_proposals_for_athlete():
+def test_get_relation_invites_count_for_athlete():
     # Arrange
     create_user(TestData.test_coach, {})
     generate_athlete("testathlete2", "1235")
@@ -247,7 +247,7 @@ def test_get_pending_proposals_for_athlete():
     event = {"headers": generate_auth_header("1235", "Athlete", "testathlete2")}
 
     # Act
-    response = get_pending_proposals(event, {})
+    response = get_relation_invites_count(event, {})
 
     # Assert
     assert response['statusCode'] == 200

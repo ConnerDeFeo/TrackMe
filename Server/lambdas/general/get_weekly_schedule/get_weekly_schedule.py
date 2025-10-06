@@ -1,10 +1,11 @@
 import json
 from rds import fetch_all
-from user_auth import get_user_info
-from datetime import datetime, timedelta, timezone
+from user_auth import get_user_info, get_auth_header
+from datetime import datetime, timedelta
 
 def get_weekly_schedule(event, context):
     query_params = event.get('queryStringParameters', {})
+    auth_header = get_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -40,11 +41,13 @@ def get_weekly_schedule(event, context):
             print(f"Retrieved workouts: {parsed_workouts}")
             return {
                 "statusCode": 200,
-                "body": json.dumps(parsed_workouts)
+                "body": json.dumps(parsed_workouts),
+                "headers": auth_header
             }
         return {
             "statusCode": 200,
-            "body": json.dumps({})
+            "body": json.dumps({}),
+            "headers": auth_header
         }
 
     except Exception as e:

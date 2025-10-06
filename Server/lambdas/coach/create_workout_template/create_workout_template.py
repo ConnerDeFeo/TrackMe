@@ -1,6 +1,6 @@
 from rds import execute_commit_fetch_one, execute_commit
 import json
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
 
 def create_workout_template(event, context):
     body = json.loads(event['body'])
@@ -35,18 +35,21 @@ def create_workout_template(event, context):
         if not workout_id:
             return {
                 'statusCode': 409,
-                'body': json.dumps({'error': 'Conflict creating workout'})
+                'body': json.dumps({'error': 'Conflict creating workout'}),
+                'headers': post_auth_header()
             }
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': 'Workout created successfully', 'workout_id': workout_id[0]})
+            'body': json.dumps({'message': 'Workout created successfully', 'workout_id': workout_id[0]}),
+            'headers': post_auth_header()
         }
 
     except Exception as e:
         print(f"Error parsing input: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': 'Invalid input', 'message': str(e)})
+            'body': json.dumps({'error': 'Invalid input', 'message': str(e)}),
+            'headers': post_auth_header()
         }
     
     

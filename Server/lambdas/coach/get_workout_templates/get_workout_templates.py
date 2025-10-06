@@ -1,8 +1,9 @@
 import json
 from rds import fetch_all
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 #Fetches all of a given coaches workouts
 def get_workout_templates(event, context):
+    auth_header = get_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -30,16 +31,19 @@ def get_workout_templates(event, context):
                 converted_workouts.append(converted_workout)
             return {
                 "statusCode": 200,
-                "body": json.dumps(converted_workouts)
+                "body": json.dumps(converted_workouts),
+                "headers": auth_header
             }
         return {
             "statusCode": 404,
-            "body": "No workouts found"
+            "body": "No workouts found",
+            "headers": auth_header
         }
 
     except Exception as e:
         print(f"Error parsing input: {e}")
         return {
             "statusCode": 500,
-            "body": f"Error fetching workouts: {str(e)}"
+            "body": f"Error fetching workouts: {str(e)}",
+            "headers": auth_header
         }

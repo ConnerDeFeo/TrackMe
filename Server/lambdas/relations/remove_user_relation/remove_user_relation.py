@@ -1,14 +1,14 @@
 import json
-from user_auth import get_user_info
+from user_auth import get_user_info, delete_auth_header
 from rds import execute_commit
 
 def remove_user_relation(event, context):
     query_params = event.get('queryStringParameters', {})
+    auth_header = delete_auth_header()
 
     try:
         user_info = get_user_info(event)
         user_id = user_info['userId']
-        account_type = user_info['accountType']
         targetId = query_params['targetId']
 
         # Remove relation from db   
@@ -34,11 +34,13 @@ def remove_user_relation(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': 'Relation removed successfully'})
+            'body': json.dumps({'message': 'Relation removed successfully'}),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error removing user relation: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'error': str(e)}),
+            'headers': auth_header
         }

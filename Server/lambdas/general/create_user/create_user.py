@@ -1,8 +1,10 @@
 import json
 from rds import execute_commit
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
 
 def create_user(event, context):
+    auth_header = post_auth_header()
+
     try:
         user_info = get_user_info(event)
         user_id = user_info['userId']
@@ -17,11 +19,13 @@ def create_user(event, context):
 
         return {
             'statusCode': 201,
-            'body': json.dumps({'message': 'User created successfully'})
+            'body': json.dumps({'message': 'User created successfully'}),
+            'headers': auth_header
         }
 
     except Exception as e:
         return {
             'statusCode': 401,
-            'body': json.dumps({'message': str(e)})
+            'body': json.dumps({'message': str(e)}),
+            'headers': auth_header
         }

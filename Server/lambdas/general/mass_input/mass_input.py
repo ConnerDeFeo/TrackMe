@@ -1,11 +1,12 @@
 import json
 from rds import execute_commit_many, fetch_one
 from datetime import datetime, timezone
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
 
 # Insert multiple athlete inputs into the database
 def mass_input(event, context):
     body = json.loads(event['body'])
+    auth_header = post_auth_header()
 
     try:
         user_info = get_user_info(event)

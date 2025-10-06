@@ -1,10 +1,11 @@
 import json
 from rds import fetch_all
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 # Grabs all workouts and workout inputs for a given coach on a given date
 def fetch_historical_data(event, context):
     # Extract query parameters from the incoming event
     query_params = event.get('queryStringParameters', {})
+    auth_header = get_auth_header()
 
     try:
         # Get authenticated user info and determine coach ID
@@ -87,12 +88,14 @@ def fetch_historical_data(event, context):
         # Return the assembled data as a JSON response
         return {
             "statusCode": 200,
-            "body": json.dumps(filtered_data)
+            "body": json.dumps(filtered_data),
+            "headers": auth_header
         }
 
     except Exception as e:
         print(f"Error occurred while fetching historical data: {str(e)}")
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": "Internal Server Error"})
+            "body": json.dumps({"error": "Internal Server Error"}),
+            "headers": auth_header
         }

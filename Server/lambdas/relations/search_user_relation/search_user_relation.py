@@ -1,9 +1,10 @@
 import json
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 from rds import fetch_all
 
 def search_user_relation(event, context):
     query_params = event.get('queryStringParameters') or {}
+    auth_header = get_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -50,11 +51,13 @@ def search_user_relation(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps(results)
+            'body': json.dumps(results),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error retrieving user info: {e}")
         return {
             'statusCode': 401,
-            'body': json.dumps({'error': 'Unauthorized', 'message': str(e)})
+            'body': json.dumps({'error': 'Unauthorized', 'message': str(e)}),
+            'headers': auth_header
         }

@@ -1,11 +1,13 @@
 import json
 from rds import fetch_all
 from datetime import datetime, timezone
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 
 # Fetches dates for a given coach where there is a workout
 def get_available_history_dates(event, context):
     query_params = event.get('queryStringParameters')
+    auth_header = get_auth_header()
+
     if not query_params:
         query_params = {}
 
@@ -27,12 +29,14 @@ def get_available_history_dates(event, context):
 
         return {
             "statusCode": 200,
-            "body": json.dumps([str(d[0]) for d in dates])
+            "body": json.dumps([str(d[0]) for d in dates]),
+            "headers": auth_header
         }
 
     except Exception as e:
         print(f"Error occurred while getting available history dates: {str(e)}")
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": "Internal Server Error"})
+            "body": json.dumps({"error": "Internal Server Error"}),
+            "headers": auth_header
         }

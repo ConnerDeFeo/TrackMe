@@ -1,8 +1,9 @@
 import json
 from rds import fetch_one
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 
 def get_user(event, context):
+    auth_header = get_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -20,11 +21,13 @@ def get_user(event, context):
             }
         return {
             "statusCode": 404,
-            "body": json.dumps({"message": "User not found"})
+            "body": json.dumps({"message": "User not found"}),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error fetching user: {e}")
         return {
             "statusCode": 500,
-            "body": json.dumps({"message": "Error fetching user"})
+            "body": json.dumps({"message": "Error fetching user"}),
+            'headers': auth_header
         }

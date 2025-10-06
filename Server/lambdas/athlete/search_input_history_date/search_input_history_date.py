@@ -1,13 +1,14 @@
 import json
 from rds import fetch_all
 from datetime import datetime, timezone
-
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 
 # Grabs the given date's input history for the given athlete from the database
 # Also grabs the 6 preceding inputs 
 def search_input_history_date(event, context):
     query_params = event.get('queryStringParameters')
+    auth_header = get_auth_header()
+
     if not query_params:
         query_params = {}
 
@@ -62,7 +63,8 @@ def search_input_history_date(event, context):
                 })
         return {
             "statusCode": 200,
-            "body": json.dumps(sorted)
+            "body": json.dumps(sorted),
+            "headers": auth_header
         }
     except Exception as e:
         print(f"Error occurred while searching input history by date: {str(e)}")
@@ -70,5 +72,6 @@ def search_input_history_date(event, context):
             "statusCode": 500,
             "body": json.dumps({
                 "message": "Internal server error"
-            })
+            }),
+            "headers": auth_header
         }

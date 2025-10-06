@@ -1,10 +1,11 @@
 from rds import fetch_all
 import json
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 
 #Get all athletes not already part of a given group
 def get_absent_group_athletes(event, context):
     query_params = event['queryStringParameters']
+    auth_header = get_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -32,14 +33,17 @@ def get_absent_group_athletes(event, context):
         if absent_athletes:
             return {
                 "statusCode": 200,
-                "body": json.dumps(absent_athletes)
+                "body": json.dumps(absent_athletes),
+                "headers": auth_header
             }
         return {
             "statusCode": 404,
-            "body": json.dumps({"error": "No absent athletes found"})
+            "body": json.dumps({"error": "No absent athletes found"}),
+            "headers": auth_header
         }
     except Exception as e:
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": str(e)})
+            "body": json.dumps({"error": str(e)}),
+            "headers": auth_header
         }

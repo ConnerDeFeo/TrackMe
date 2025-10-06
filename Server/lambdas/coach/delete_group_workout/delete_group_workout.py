@@ -1,8 +1,9 @@
 from rds import execute_commit
-from user_auth import get_user_info
+from user_auth import get_user_info, delete_auth_header
 
 def delete_group_workout(event, context):
     query_params = event.get('queryStringParameters', {})
+    auth_header = delete_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -24,12 +25,14 @@ def delete_group_workout(event, context):
         
         return {
             "statusCode": 200,
-            "body": "Workout deleted successfully"
+            "body": "Workout deleted successfully",
+            "headers": auth_header
         }
 
     except Exception as e:
         print(f"Error parsing input: {e}")
         return {
             "statusCode": 500,
-            "body": f"Error deleting workout: {str(e)}"
+            "body": f"Error deleting workout: {str(e)}",
+            "headers": auth_header
         }

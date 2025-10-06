@@ -1,10 +1,12 @@
 from datetime import datetime, timezone
 from rds import fetch_all
+from user_auth import get_auth_header
 import json
 
 #Gets all workouts for a given group for a given date
 def get_group_workout(event,context):
     query_params = event.get('queryStringParameters', {})
+    auth_header = get_auth_header()
 
     try:
         group_id = query_params['groupId']
@@ -33,16 +35,19 @@ def get_group_workout(event,context):
                 })
             return {
                 'statusCode': 200,
-                'body': json.dumps(converted_workouts)
+                'body': json.dumps(converted_workouts),
+                'headers': auth_header
             }
         return {
             'statusCode': 404,
-            'body': json.dumps({'error': 'No workouts found'})
+            'body': json.dumps({'error': 'No workouts found'}),
+            'headers': auth_header
         }
 
     except Exception as e:
         print(f"Error fetching workout: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'error': str(e)}),
+            'headers': auth_header
         }

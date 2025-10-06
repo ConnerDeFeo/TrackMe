@@ -1,7 +1,7 @@
 import json
 from rds import execute_commit_fetch_one
 from datetime import datetime, timezone
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
 
 #Create group for a coach
 def create_group(event, context):
@@ -38,7 +38,8 @@ def create_group(event, context):
                     "Access-Control-Allow-Credentials": True,
                     "Content-Type": "application/json"
                 },
-                "body": json.dumps({"message":"Group created successfully", "groupId": group_id[0]})
+                "body": json.dumps({"message":"Group created successfully", "groupId": group_id[0]}),
+                "headers": post_auth_header()
             }
         return {
             "statusCode": 404,
@@ -47,7 +48,8 @@ def create_group(event, context):
                 "Access-Control-Allow-Credentials": True,
                 "Content-Type": "application/json"
             },
-            "body": json.dumps({"message": "Group already exists or could not be created"})
+            "body": json.dumps({"message": "Group already exists or could not be created"}),
+            "headers": post_auth_header()
         }
 
     except Exception as e:
@@ -59,5 +61,6 @@ def create_group(event, context):
                 "Access-Control-Allow-Credentials": True,
                 "Content-Type": "application/json"
             },
-            "body": json.dumps({"message": "Internal server error", "error": str(e)})
+            "body": json.dumps({"message": "Internal server error", "error": str(e)}),
+            "headers": post_auth_header()
         }

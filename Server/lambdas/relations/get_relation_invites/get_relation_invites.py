@@ -1,8 +1,9 @@
 import json
 from rds import fetch_all
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 
 def get_relation_invites(event, context):
+    auth_header = get_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -23,11 +24,13 @@ def get_relation_invites(event, context):
         ) or []
         return {
             'statusCode': 200,
-            'body': json.dumps(invites)
+            'body': json.dumps(invites),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error fetching relation invites: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'error': str(e)}),
+            'headers': auth_header
         }

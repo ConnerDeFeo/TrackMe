@@ -1,9 +1,11 @@
 from rds import fetch_one
 import json
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 
 # Gets all current proposals (requests or invites) for a user
 def get_relation_invites_count(event, context):
+    auth_header = get_auth_header()
+
     try:
         user_info = get_user_info(event)
         userId = user_info['userId']
@@ -19,11 +21,13 @@ def get_relation_invites_count(event, context):
             count = [0]
         return {
             'statusCode': 200,
-            'body': json.dumps({"count": count[0]})
+            'body': json.dumps({"count": count[0]}),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error fetching pending proposals: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps(str(e))
+            'body': json.dumps(str(e)),
+            'headers': auth_header
         }

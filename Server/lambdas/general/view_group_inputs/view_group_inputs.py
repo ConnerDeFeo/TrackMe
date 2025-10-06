@@ -1,11 +1,12 @@
 from datetime import datetime,timezone
 import json
 from rds import fetch_all
-from user_auth import get_user_info
+from user_auth import get_auth_header
 
 #Grabs all user inputs for a given date and groupId
 def view_group_inputs(event, context):
     query_params = event.get("queryStringParameters", {})
+    auth_header = get_auth_header()
 
     try:
         group_id = query_params['groupId']
@@ -42,13 +43,15 @@ def view_group_inputs(event, context):
 
             return {
                 "statusCode": 200,
-                "body": json.dumps(parsed_data)
+                "body": json.dumps(parsed_data),
+                "headers": auth_header
             }
         return {
             "statusCode": 404,
             "body": {
                 "error": "No inputs found"
-            }
+            },
+            "headers": auth_header
         }
 
     except Exception as e:
@@ -57,5 +60,6 @@ def view_group_inputs(event, context):
             "statusCode": 500,
             "body": {
                 "error": str(e)
-            }
+            },
+            "headers": auth_header
         }

@@ -1,9 +1,11 @@
 import json
 from rds import execute_commit, fetch_all, fetch_one
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
+
 #Adds an athlete to a group
 def add_athlete_to_group(event, context):
     body = json.loads(event.get('body', '{}'))
+    auth_header = post_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -47,12 +49,14 @@ def add_athlete_to_group(event, context):
 
         return {
             'statusCode': 400,
-            'body': json.dumps({'message': 'Athlete is not associated with this coach'})
+            'body': json.dumps({'message': 'Athlete is not associated with this coach'}),
+            'headers': auth_header
         }
 
     except Exception as e:
         print(f"Error parsing request body: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': 'Internal server error'})
+            'body': json.dumps({'error': 'Internal server error'}),
+            'headers': auth_header
         }

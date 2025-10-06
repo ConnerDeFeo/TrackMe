@@ -1,6 +1,6 @@
 from rds import execute_commit
 import json
-from user_auth import get_user_info
+from user_auth import get_user_info, delete_auth_header
 
 #Removes a coaches workout
 def delete_workout_template(event, context):
@@ -23,12 +23,14 @@ def delete_workout_template(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': 'Workout deleted successfully'})
+            'body': json.dumps({'message': 'Workout deleted successfully'}),
+            'headers': delete_auth_header()
         }
     except Exception as e:
         print(f"Error deleting workout: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': 'Failed to delete workout', 'message': str(e)})
+            'body': json.dumps({'error': 'Failed to delete workout', 'message': str(e)}),
+            'headers': delete_auth_header()
         }
     

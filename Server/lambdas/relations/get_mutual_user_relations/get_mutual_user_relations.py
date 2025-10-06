@@ -1,8 +1,9 @@
 import json
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 from rds import fetch_all
 
 def get_mutual_user_relations(event, context):
+    auth_header = get_auth_header()
     
     try:
         user_info = get_user_info(event)
@@ -23,15 +24,18 @@ def get_mutual_user_relations(event, context):
             mutual_relations = [{'relationId': r[0], 'username': r[1], 'firstName': r[2], 'lastName': r[3], 'accountType': r[4]} for r in relations]
             return {
                 'statusCode': 200,
-                'body': json.dumps(mutual_relations)
+                'body': json.dumps(mutual_relations),
+                'headers': auth_header
             }
         return {
             'statusCode': 200,
-            'body': json.dumps([])
+            'body': json.dumps([]),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error fetching mutual user relations: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'error': str(e)}),
+            'headers': auth_header
         }

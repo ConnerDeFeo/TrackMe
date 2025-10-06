@@ -1,10 +1,11 @@
 from datetime import datetime, timezone
 import json
 from rds import execute_commit
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
 
 def assign_group_workout_template(event, context):
     body = json.loads(event['body'])
+    auth_header = post_auth_header()
     try:
         user_info = get_user_info(event)
         coach_id = user_info["userId"]
@@ -28,7 +29,8 @@ def assign_group_workout_template(event, context):
             },
             "body": json.dumps({
                 "message": "Group workout assigned successfully"
-            })
+            }),
+            "headers": auth_header
         }
     except Exception as e:
         print(f"Error assigning group workout: {str(e)}")
@@ -36,5 +38,6 @@ def assign_group_workout_template(event, context):
             "statusCode": 500,
             "body": json.dumps({
                 "error": str(e)
-            })
+            }),
+            "headers": auth_header
         }

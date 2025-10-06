@@ -1,11 +1,12 @@
 import json
 from rds import execute_commit_many, fetch_one
 from datetime import datetime, timezone, timedelta
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
 
 #Inserts all of an athletes input times for a given group into db
 def input_times(event, context):
     body = json.loads(event['body'])
+    auth_header = post_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -61,7 +62,8 @@ def input_times(event, context):
             'statusCode': 200,
             'body': json.dumps({
                 'message': 'Time input recorded successfully'
-            })
+            }),
+            'headers':auth_header
         }
     except Exception as e:
         print(f"Error recording time input: {str(e)}")
@@ -69,6 +71,7 @@ def input_times(event, context):
             'statusCode': 500,
             'body': json.dumps({
                 'message': 'Error recording time input: {}'.format(str(e))
-            })
+            }),
+            'headers':auth_header
         }
 

@@ -4,12 +4,13 @@ from user_auth import get_user_info, get_auth_header
 
 #Gets all related groups for an athlete or coach
 def get_groups(event, context):
+    auth_header = get_auth_header()
+    
     try:
         # Query string parameters
         user_info = get_user_info(event)
         userId = user_info["userId"]
         accountType = user_info['accountType']
-        auth_header = get_auth_header()
 
         #Athletes
         if accountType == 'Athlete':

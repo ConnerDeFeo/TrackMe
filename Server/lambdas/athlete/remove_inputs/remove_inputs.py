@@ -1,9 +1,11 @@
 import json
 from rds import execute_commit
-from user_auth import get_user_info
+from user_auth import get_user_info, post_auth_header
 
 def remove_inputs(event, context):
     body = json.loads(event['body'])
+    auth_header = post_auth_header()
+
     try:
         user_info = get_user_info(event)
         athlete_id = user_info["userId"]
@@ -29,11 +31,13 @@ def remove_inputs(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': 'Inputs removed successfully'})
+            'body': json.dumps({'message': 'Inputs removed successfully'}),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'message': f'Error: {str(e)}'})
+            'body': json.dumps({'message': f'Error: {str(e)}'}),
+            'headers': auth_header
         }

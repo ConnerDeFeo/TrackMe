@@ -1,9 +1,10 @@
 import json
 from rds import execute_commit
-from user_auth import get_user_info
+from user_auth import get_user_info, delete_auth_header
 
 def remove_group_athlete(event, context):
     query_params = event.get("queryStringParameters", {})
+    auth_header = delete_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -27,11 +28,13 @@ def remove_group_athlete(event, context):
 
         return {
             "statusCode": 200,
-            "body": json.dumps({"message": "Athlete removed from group successfully"})
+            "body": json.dumps({"message": "Athlete removed from group successfully"}),
+            "headers": auth_header
         }
     except Exception as e:
         print(f"Error removing athlete from group: {e}")
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": "Failed to remove athlete from group"})
+            "body": json.dumps({"error": "Failed to remove athlete from group"}),
+            "headers": auth_header
         }

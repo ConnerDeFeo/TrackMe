@@ -1,13 +1,14 @@
 import json
 from datetime import datetime, timezone
 from rds import fetch_all
-from user_auth import get_user_info
+from user_auth import get_user_info, get_auth_header
 
 
 # Gets all athlete inputs for a given day
 def view_workout_inputs(event, context):
     # Extract query parameters from the event
     query_params = event.get('queryStringParameters', {})
+    auth_header = get_auth_header()
 
     try:
         # Get required parameters
@@ -38,16 +39,19 @@ def view_workout_inputs(event, context):
         if len(parsed_data) > 0:
             return {
                 'statusCode': 200,
-                'body': json.dumps(parsed_data)
+                'body': json.dumps(parsed_data),
+                'headers': auth_header
             }
         return {
             'statusCode': 404,
-            'body': json.dumps({"message": "No workout inputs found"})
+            'body': json.dumps({"message": "No workout inputs found"}),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error viewing inputs: {str(e)}")
         return {
             'statusCode': 500,
             'body': json.dumps({"message": "Internal server error", "error": str(e)}),
+            'headers': auth_header
         }
     

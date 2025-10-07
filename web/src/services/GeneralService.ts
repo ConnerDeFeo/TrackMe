@@ -2,7 +2,6 @@ import type { Input } from "../common/types/inputs/Input";
 import API from "./API";
 import DateService from "./DateService";
 const VITE_API_URL = import.meta.env.VITE_API_URL;
-console.log("API URL:", VITE_API_URL);
 
 const GeneralService = {
   getGroups: async () => {

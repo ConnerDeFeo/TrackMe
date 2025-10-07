@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CoachWorkoutService from "../services/CoachWorkoutService";
 import DisplayWorkout from "../common/components/display/DisplayWorkout";
+import TrackmeButton from "../common/components/TrackmeButton";
 
 const WorkoutTemplates = () => {
   // Local state
@@ -106,6 +107,9 @@ const WorkoutTemplates = () => {
       <div className="flex-1 overflow-y-auto">
         <div className="p-6 max-w-4xl mx-auto">
           <DisplayWorkout workout={selectedWorkout} />
+          <TrackmeButton onClick={() => alert('Create New Template clicked!')} className="mt-4 ml-auto block">
+            Edit Workout
+          </TrackmeButton>
         </div>
       </div>
     </div>

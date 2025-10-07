@@ -3,6 +3,7 @@ import CoachWorkoutService from "../services/CoachWorkoutService";
 import DisplayWorkout from "../common/components/display/DisplayWorkout";
 import TrackmeButton from "../common/components/TrackmeButton";
 import WorkoutTemplatesSideBar from "../common/components/display/WorkoutTemplatesSideBar";
+import WorkoutCreation from "../common/components/workout/WorkoutCreation";
 
 const WorkoutTemplates = () => {
   // Local state
@@ -33,6 +34,11 @@ const WorkoutTemplates = () => {
     fetchWorkouts();
   }, []);
 
+  const handleSelectWorkout = (workout: any) => {
+    setSelectedWorkout(workout);
+    setInCreationMode(false);
+  }
+
   // Main render
   return (
     <div className="flex h-screen bg-gray-50 border-t trackme-border-gray">
@@ -40,17 +46,25 @@ const WorkoutTemplates = () => {
       <WorkoutTemplatesSideBar
         workouts={workouts}
         selectedWorkout={selectedWorkout}
-        setSelectedWorkout={setSelectedWorkout}
+        setSelectedWorkout={handleSelectWorkout}
         loading={loading}
       />
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-6 max-w-4xl mx-auto">
-          <DisplayWorkout workout={selectedWorkout} />
-          <TrackmeButton onClick={() => alert('Create New Template clicked!')} className="w-full mt-6">
-            Edit Workout
-          </TrackmeButton>
-        </div>
+      <div className="flex-1 p-6 max-w-4xl mx-auto">
+        {inCreationMode ? 
+          (
+            <WorkoutCreation workout={selectedWorkout} />
+          )
+          :
+          (
+            <>
+              <DisplayWorkout workout={selectedWorkout} />
+              <TrackmeButton onClick={() => setInCreationMode(true)} className="w-full mt-6">
+                Edit Workout
+              </TrackmeButton>
+            </>
+          )
+        }
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ const TrackmeButton = ({ children, onClick, className }: { children: React.React
     return (
         <button
             onClick={onClick}
-            className={`trackme-bg-blue text-white px-5 py-2 rounded-lg ${className || ""}`}
+            className={`trackme-bg-blue text-white px-5 py-2 rounded-lg cursor-pointer ${className || ""}`}
         >
             {children}
         </button>

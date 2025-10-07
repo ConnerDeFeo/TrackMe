@@ -46,7 +46,6 @@ export default function App() {
           <Route path="/workout-templates" element={<WorkoutTemplates />} />
         </Routes>
       </div>
-      <Footer />
     </Router>
   );
 }

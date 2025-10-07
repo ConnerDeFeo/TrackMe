@@ -6,8 +6,8 @@ import { AccountType } from './common/constants/Enums';
 import { useEffect, useState } from 'react';
 import UserService from './services/UserService';
 import Home from './pages/Home';
-import NavBar from './common/common/components/NavBar';
-import Footer from './common/common/components/Footer';
+import NavBar from './common/components/NavBar';
+import Footer from './common/components/Footer';
 import ViewGroup from './pages/ViewGroup';
 
 Amplify.configure(awsconfig);

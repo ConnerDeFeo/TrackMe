@@ -30,7 +30,7 @@ const Home = () => {
         navigate(`view-group/${groupName}/${groupId}`); // Navigate to ViewGroup with query parameters
     };
     return (
-        <>
+        <div className="max-w-7xl mx-auto">
             {groups.map((group) => (
                 <div 
                     key={group[1]}
@@ -40,7 +40,7 @@ const Home = () => {
                     {group[0]}
                 </div>
             ))}
-        </>
+        </div>
     );
 };
 

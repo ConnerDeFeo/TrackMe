@@ -29,25 +29,25 @@ def bedrock_workout_generation(event, context):
 
             The JSON should follow this structure:
             {{
-            "title": "string",
-            "description": "string",
-            "sections": [
-                {{
-                "name": "string",
-                "minSets": int,
-                "maxSets": int,  (optional)
-                "exercises": [
+                "title": "string",
+                "description": "string",
+                "sections": [
                     {{
-                    "type": "run" | "rest" | "strength",
-                    "measurement": "meters" (only if type == "run"),
-                    "distance": int (only if type == "run"),
-                    "description": "string" (only if type == "strength"),
-                    "minReps": int,
-                    "maxReps": int
+                        "name": "string",
+                        "minSets": int,
+                        "maxSets": int,  (optional)
+                        "exercises": [
+                            {{
+                                "type": "run" | "rest" | "strength",
+                                "measurement": "meters" (only if type == "run"),
+                                "distance": int (only if type == "run"),
+                                "description": "string" (only if type == "strength"),
+                                "minReps": int,
+                                "maxReps": int
+                            }}
+                        ]
                     }}
                 ]
-                }}
-            ]
             }}
 
             Rules:

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, TextInput, View, Pressable } from "react-native";
+import { Text, TextInput, View, Pressable, Image } from "react-native";
 import SectionCreation from "./SectionCreation";
 import TextButton from "../../display/TextButton";
 import Section from "../../../types/workouts/Section";
@@ -108,6 +108,21 @@ const WorkoutCreation = ({
 
   return (
     <View className="mb-8 mx-2">
+      <View className="my-3 gap-y-2">
+        <View className="flex flex-row justify-between items-center">
+          <View className="flex flex-row items-center gap-x-2">
+            <Text className="pl-4 font-bold text-xl text-center">AI Generation</Text>
+            <Image source={require('../../../../assets/images/Sparkle.png')} className="w-6 h-6" />
+          </View>
+          <TextButton text="Generate workout" onPress={() => alert("Feature coming soon!")} />
+        </View>
+        <TextInput 
+          className="h-24 border rounded-md p-3 bg-white text-black trackme-border-gray"
+          multiline
+          textAlignVertical="top"
+          placeholder="2 x 400m sprints with 2min rest"
+        />
+      </View>
       {/* Workout title input */}
       {titleDescriptionLayout("Title")}
 

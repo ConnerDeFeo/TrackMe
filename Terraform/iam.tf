@@ -16,6 +16,26 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
+# Policy to allow lambda to access bedrock
+resource "aws_iam_role_policy" "lambda_bedrock_access" {
+  name = "lambda-bedrock-access"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 //Allow the creation and deleteion of network interfaces
 resource "aws_iam_role_policy" "lambda_vpc" {
   name   = "lambda_vpc_policy"

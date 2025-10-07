@@ -33,12 +33,13 @@ const WorkoutTemplates = () => {
     fetchWorkouts();
   }, []);
 
+  console.log(selectedWorkout);
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 border-t trackme-border-gray">
       {/* Sidebar */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+      <div className="w-80 bg-white border-r trackme-border-gray flex flex-col">
         {/* Sidebar Header */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b trackme-border-gray">
           <h1 className="text-2xl font-bold text-gray-900">Workout Templates</h1>
           <p className="text-sm text-gray-600 mt-1">
             {workouts.length} {workouts.length === 1 ? 'template' : 'templates'}

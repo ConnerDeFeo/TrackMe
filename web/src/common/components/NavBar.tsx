@@ -38,9 +38,9 @@ const NavBar = () => {
                             <Link
                                 key={item.path}
                                 to={item.path}
-                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2 ${
+                                className={`px-4 py-2 text-sm font-medium transition-colors duration-200 flex items-center gap-2 ${
                                     isActive(item.path)
-                                        ? 'trackme-bg-blue text-white'
+                                        ? 'border-b trackme-border-blue'
                                         : 'text-gray-700 hover:bg-gray-100'
                                 }`}
                             >

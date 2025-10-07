@@ -1,24 +1,7 @@
-interface Exercise {
-  type: 'run' | 'rest' | 'strength';
-  measurement?: 'meters';
-  distance?: number;
-  description?: string;
-  minReps: number;
-  maxReps?: number;
-}
-
-interface Section {
-  name: string;
-  minSets: number;
-  maxSets?: number;
-  exercises: Exercise[];
-}
-
-interface Workout {
-  title: string;
-  description: string;
-  sections: Section[];
-}
+import { ExerciseType } from "../constants/Enums";
+import type { Exercise } from "../types/workouts/Exercise";
+import type { Section } from "../types/workouts/Section";
+import type { Workout } from "../types/workouts/Workout";
 
 interface DisplayWorkoutProps {
   workout: Workout;
@@ -40,11 +23,11 @@ const DisplayWorkout: React.FC<DisplayWorkoutProps> = ({ workout, onPress }) => 
       }
     };
 
-    const formatReps = (minReps: number, maxReps?: number) => {
+    const formatReps = (minReps?: number, maxReps?: number) => {
       if (maxReps && maxReps !== minReps) {
         return `${minReps}-${maxReps}`;
       }
-      return minReps;
+      return minReps ? `${minReps}` : '';
     };
 
     return (
@@ -57,7 +40,7 @@ const DisplayWorkout: React.FC<DisplayWorkoutProps> = ({ workout, onPress }) => 
             </span>
           </div>
           
-          {exercise.type === 'run' && (
+          {exercise.type === ExerciseType.Run && (
             <div className="mt-1">
               <p className="text-sm font-medium text-gray-900">
                 {exercise.distance} {exercise.measurement}
@@ -68,7 +51,7 @@ const DisplayWorkout: React.FC<DisplayWorkoutProps> = ({ workout, onPress }) => 
             </div>
           )}
 
-          {exercise.type === 'rest' && (
+          {exercise.type === ExerciseType.Rest && (
             <div className="mt-1">
               <p className="text-sm font-medium text-gray-900">
                 Rest Period
@@ -79,7 +62,7 @@ const DisplayWorkout: React.FC<DisplayWorkoutProps> = ({ workout, onPress }) => 
             </div>
           )}
 
-          {exercise.type === 'strength' && (
+          {exercise.type === ExerciseType.Strength && (
             <div className="mt-1">
               <p className="text-sm font-medium text-gray-900">
                 {exercise.description}

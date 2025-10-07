@@ -1,5 +1,8 @@
-const Variables = {
+export const Variables = {
     meters: "meters",
+    Icons: {
+        run: '🏃',
+        rest: '⏱️',
+        strength: '💪'
+    }
 }
-
-export default Variables;

@@ -41,7 +41,7 @@ const WorkoutTemplates = () => {
 
   // Main render
   return (
-    <div className="flex h-screen bg-gray-50 border-t trackme-border-gray">
+    <div className="flex border-t trackme-border-gray">
       {/* Sidebar */}
       <WorkoutTemplatesSideBar
         workouts={workouts}

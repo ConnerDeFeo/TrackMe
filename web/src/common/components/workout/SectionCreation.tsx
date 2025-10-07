@@ -1,7 +1,8 @@
 import { ExerciseType } from "../../constants/Enums";
-import Variables from "../../constants/Variables";
+import { Variables } from "../../constants/Variables";
 import type { Exercise } from "../../types/workouts/Exercise";
 import type { Section } from "../../types/workouts/Section";
+import TrackmeButton from "../TrackmeButton";
 import ExerciseCreation from "./ExerciseCreation";
 
 const SectionCreation = ({section, setSections, idx}: {section: Section, setSections: React.Dispatch<React.SetStateAction<Section[]>>, idx: number}) => {
@@ -84,6 +85,12 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
   };
     return (
         <div>
+          <input type="text" value={section.name} onChange={(e) => handleNameChange(e.target.value)} />
+          <div>
+            <input type="number" value={section.minSets} onChange={(e) => handleMinSetsChange(e.target.value)} className="w-16 mr-2" />
+            <input type="number" value={section.maxSets || ''} onChange={(e) => handleMaxSetsChange(e.target.value)} className="w-16 mr-2" placeholder="Max Sets" />
+            <TrackmeButton onClick={handleSectionDeletion} className="bg-red-500 hover:bg-red-600" red>Delete Section</TrackmeButton>
+          </div>
           {section.exercises && section.exercises.length > 0 && (
             <ExerciseCreation
               exercises={section.exercises}
@@ -92,6 +99,11 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
               idx={idx}
             />
           )}
+          <div>
+            <TrackmeButton onClick={() => handleExerciseAddition(ExerciseType.Run)}>Add Run</TrackmeButton>
+            <TrackmeButton onClick={() => handleExerciseAddition(ExerciseType.Strength)}>Add Strength</TrackmeButton>
+            <TrackmeButton onClick={() => handleExerciseAddition(ExerciseType.Rest)}>Add Rest</TrackmeButton>
+          </div>
         </div>
     );
 }

@@ -39,7 +39,7 @@ export default function App() {
   return (
     <Router>
       <NavBar />
-      <div className='min-h-[calc(100vh-4rem)]'>
+      <div className='min-h-[calc(100vh-4rem)] bg-gray-50'>
         <Routes>
           <Route path="/" element={accountType === AccountType.SignedOut ? <Login /> : <Home />} />
           <Route path="/view-group/:groupName/:groupId" element={<ViewGroup />} />

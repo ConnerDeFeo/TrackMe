@@ -1,8 +1,8 @@
 import { ExerciseType } from "../../constants/Enums";
+import { Variables } from "../../constants/Variables";
 import type { Exercise } from "../../types/workouts/Exercise";
 
 const DisplayExercise = ({ exercise, index }: { exercise: Exercise; index: number }) => {
-    const icons = { run: '🏃', rest: '⏱️', strength: '💪' };
     const formatReps = (min?: number, max?: number) => {
         if(min === 1 && (!max || max === 1)){
             return "";
@@ -24,7 +24,7 @@ const DisplayExercise = ({ exercise, index }: { exercise: Exercise; index: numbe
 
     return (
         <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-            <span className="text-xl">{icons[exercise.type as keyof typeof icons] || '•'}</span>
+            <span className="text-xl">{Variables.Icons[exercise.type as keyof typeof Variables.Icons] || '•'}</span>
             <span className="text-sm text-gray-700">{getContent()}</span>
         </div>
     );

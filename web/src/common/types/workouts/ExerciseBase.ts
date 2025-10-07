@@ -1,4 +1,4 @@
-import { ExerciseType } from "../assets/constants/Enums";
+import type { ExerciseType } from "../../constants/Enums";
 
 export interface ExerciseBase {
     minReps?: number;

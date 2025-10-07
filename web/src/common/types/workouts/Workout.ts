@@ -1,11 +1,9 @@
-import { Exercise } from "./Exercise";
+import type { Exercise } from "./Exercise";
 
-type Workout = {
+export type Workout = {
     workoutId?: string;
     groupWorkoutId?: string;
     title: string;
     description?: string;
     sections: Array<Exercise>;
 }
-
-export default Workout;

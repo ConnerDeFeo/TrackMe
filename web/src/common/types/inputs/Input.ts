@@ -1,4 +1,4 @@
-import { RestInput } from "./RestInput";
-import { TimeInput } from "./TimeInput";
+import type { RestInput } from "./RestInput";
+import type { TimeInput } from "./TimeInput";
 
 export type Input = TimeInput | RestInput;

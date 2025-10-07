@@ -27,15 +27,20 @@ const Home = () => {
     }, []);
 
     const handleNavigation = async (groupName: string, groupId: string) => {
-        if(accountType===AccountType.Athlete){
-        
-        }
-        else{
-            
-        }
+        navigate(`view-group/${groupName}/${groupId}`); // Navigate to ViewGroup with query parameters
     };
     return (
-        <div>Home</div>
+        <>
+            {groups.map((group) => (
+                <div 
+                    key={group[1]}
+                    onClick={() => handleNavigation(group[0], group[1])}
+                    className="cursor-pointer p-4 m-4 bg-white rounded-lg shadow-md border border-gray-200 hover:bg-gray-50"
+                >
+                    {group[0]}
+                </div>
+            ))}
+        </>
     );
 };
 

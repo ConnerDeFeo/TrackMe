@@ -1,10 +1,9 @@
-import { Exercise } from "./Exercise";
+import { type Exercise } from "./Exercise";
 
-type Section = {
+export type Section = {
   name?: string;
   minSets: number;
   maxSets?: number;
   exercises?: Exercise[];
 };
 
-export default Section;

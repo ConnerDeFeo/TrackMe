@@ -6,6 +6,9 @@ import { AccountType } from './common/constants/Enums';
 import { useEffect, useState } from 'react';
 import UserService from './services/UserService';
 import Home from './pages/Home';
+import NavBar from './common/components/NavBar';
+import Footer from './common/components/Footer';
+import ViewGroup from './pages/ViewGroup';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -34,9 +37,12 @@ export default function App() {
 
   return (
     <Router>
+      <NavBar />
       <Routes>
         <Route path="/" element={accountType === AccountType.SignedOut ? <Login /> : <Home />} />
+        <Route path="/view-group/:groupName/:groupId" element={<ViewGroup />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }

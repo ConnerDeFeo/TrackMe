@@ -1,5 +1,5 @@
 import { ExerciseType } from "../../constants/Enums";
-import { ExerciseBase } from "./ExerciseBase";
+import type { ExerciseBase } from "./ExerciseBase";
 
 export interface StrengthExercise extends ExerciseBase{
   type: ExerciseType.Strength;

@@ -1,5 +1,5 @@
 import { InputType } from "../../constants/Enums";
-import { InputBase } from "./InputBase";
+import type { InputBase } from "./InputBase";
 
 export interface TimeInput extends InputBase {
     type: InputType.Run;

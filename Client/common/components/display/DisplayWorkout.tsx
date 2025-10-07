@@ -7,7 +7,6 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void}> = ({ workout,
     
     if (!workout['title'])
         return null;
-
     return (
         <Pressable 
             onPress={onPress}
@@ -26,9 +25,9 @@ const DisplayWorkout: React.FC<{ workout: any, onPress?:()=>void}> = ({ workout,
                             {/* Section Header */}
                             <View className="flex-row items-center mb-3">
                                 {section.name && <Text className="text-md font-semibold uppercase tracking-wider">{section.name}</Text>}
-                                {section.minSets > 1 || section.maxSets && (
+                                {(section.minSets > 1 || section.maxSets) && (
                                     <Text className="text-md font-semibold text-gray-500 ml-2">
-                                        ({section.minSets} {section.maxSets ? `- ${section.maxSets}` : ''} Sets)
+                                        ({section.minSets}{section.maxSets && section.minSets !== section.maxSets ? ` - ${section.maxSets}` : ''} Sets)
                                     </Text>
                                 )}
                             </View>

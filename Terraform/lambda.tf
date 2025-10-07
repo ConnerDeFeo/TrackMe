@@ -48,6 +48,7 @@ locals {
     "get_weekly_schedule",
     "create_user",
     "update_user_profile",
+    "bedrock_workout_generation",
 
     # Relation lambdas,
     "get_relation_invites",

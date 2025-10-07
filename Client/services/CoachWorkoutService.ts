@@ -36,6 +36,9 @@ const CoachWorkoutService = {
             payload['groupWorkoutId'] = workoutData.groupWorkoutId;
         }
         return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/assign_group_workout`, payload);
+    },
+    bedrockWorkoutGeneration: async (userPrompt:string) => {
+        return await API.post(`${EXPO_PUBLIC_API_URL}/coaches/bedrock_workout_generation`, { userPrompt });
     }
 }
 

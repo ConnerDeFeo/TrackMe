@@ -110,6 +110,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/assign_group_workout"
       output_path = "${path.module}/../Server/lambdas/coach/zips/assign_group_workout.zip"
     }
+    "bedrock_workout_generation" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/bedrock_workout_generation"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/bedrock_workout_generation.zip"
+    }
 
     # General Lambdas
     "get_athletes_for_group" = {

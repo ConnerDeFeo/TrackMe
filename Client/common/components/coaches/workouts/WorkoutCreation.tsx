@@ -5,6 +5,7 @@ import TextButton from "../../display/TextButton";
 import Section from "../../../types/workouts/Section";
 import { ExerciseType } from "../../../constants/Enums";
 import { Exercise } from "../../../types/workouts/Exercise";
+import CoachWorkoutService from "../../../../services/CoachWorkoutService";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({
@@ -23,6 +24,7 @@ const WorkoutCreation = ({
   const [title, setTitle] = useState<string>(workout?.title || "")
   const [description, setDescription] = useState<string>(workout?.description || "")
   const [sections, setSections] = useState<Array<Section>>(workout?.sections || [])
+  const [aiPrompt, setAIPrompt] = useState<string>("")
 
   // Validate inputs and call parent handler
   const handleCreation = async () => {
@@ -106,6 +108,21 @@ const WorkoutCreation = ({
     )
   }
 
+  const handleAIGeneration = async () => {
+    const resp = await CoachWorkoutService.bedrockWorkoutGeneration(aiPrompt);
+    if(resp.ok){
+      try{
+        const data = await resp.json();
+        setTitle(data.title);
+        setDescription(data.description);
+        setSections(data.sections);
+      }catch(e){
+        alert("Error parsing AI response");
+        return;
+      }
+    }
+  }
+
   return (
     <View className="mb-8 mx-2">
       <View className="my-3 gap-y-2">
@@ -114,13 +131,15 @@ const WorkoutCreation = ({
             <Text className="pl-4 font-bold text-xl text-center">AI Generation</Text>
             <Image source={require('../../../../assets/images/Sparkle.png')} className="w-6 h-6" />
           </View>
-          <TextButton text="Generate workout" onPress={() => alert("Feature coming soon!")} />
+          <TextButton text="Generate workout" onPress={handleAIGeneration} />
         </View>
         <TextInput 
           className="h-24 border rounded-md p-3 bg-white text-black trackme-border-gray"
           multiline
           textAlignVertical="top"
           placeholder="2 x 400m sprints with 2min rest"
+          value={aiPrompt}
+          onChangeText={setAIPrompt}
         />
       </View>
       {/* Workout title input */}

@@ -56,12 +56,10 @@ class TestData:
                         },
                         {
                             'type': 'rest',
-                            'minDuration': 60,
-                            'maxDuration': 90,
-                            'description': 'Walk back'
+                            'minReps': 60,
+                            'maxReps': 90
                         },
                         {
-                            'distance': 50,
                             'measurement': 'meters',
                             'type': 'run',
                             'minReps': 2,

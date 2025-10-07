@@ -11,6 +11,7 @@ resource "aws_security_group" "lambda_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
 }
 
 # Allow Lambda functions to access the RDS instance in the default security group
@@ -32,3 +33,31 @@ resource "aws_security_group_rule" "allow_bastion_to_rds" {
   source_security_group_id = aws_security_group.bastion_sg.id
   security_group_id        = data.aws_security_group.default.id
 }
+
+# Security group for Bedrock VPC Endpoint
+resource "aws_security_group" "bedrock_vpc_endpoint" {
+  name        = "bedrock-vpc-endpoint-sg"
+  description = "Security group for Bedrock VPC endpoint"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    description     = "HTTPS from Lambda"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lambda_sg.id]  # Your Lambda's security group
+  }
+
+  egress {
+    description = "Allow all outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "bedrock-vpc-endpoint-sg"
+  }
+}
+

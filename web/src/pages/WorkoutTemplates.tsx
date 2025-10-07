@@ -8,7 +8,7 @@ const WorkoutTemplates = () => {
   // selectedWorkout: currently highlighted template
   // loading: spinner flag
   const [workouts, setWorkouts] = useState<Array<any>>([]);
-  const [selectedWorkout, setSelectedWorkout] = useState<any>(null);
+  const [selectedWorkout, setSelectedWorkout] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   // Load templates on mount
@@ -30,7 +30,6 @@ const WorkoutTemplates = () => {
     fetchWorkouts();
   }, []);
 
-  console.log(selectedWorkout)
   // Main render
   return (
     <div className="flex h-screen bg-gray-50 border-t trackme-border-gray">
@@ -95,28 +94,6 @@ const WorkoutTemplates = () => {
                     >
                       {workout.description}
                     </p>
-                  )}
-
-                  {/* Quick stats: sections and exercises */}
-                  {workout.sections && (
-                    <div
-                      className={`flex items-center space-x-3 mt-2 text-xs ${
-                        selectedWorkout?.workoutId === workout.workoutId
-                          ? "text-blue-100"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      <span>{workout.sections.length} sections</span>
-                      <span>•</span>
-                      <span>
-                        {workout.sections.reduce(
-                          (total: number, section: any) =>
-                            total + (section.exercises?.length || 0),
-                          0
-                        )}{" "}
-                        exercises
-                      </span>
-                    </div>
                   )}
                 </button>
               ))}

@@ -84,7 +84,7 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
     setSections((prev) => prev.filter((_, index) => index !== idx));
   };
     return (
-        <div>
+        <>
           <input type="text" value={section.name} onChange={(e) => handleNameChange(e.target.value)} />
           <div>
             <input type="number" value={section.minSets} onChange={(e) => handleMinSetsChange(e.target.value)} className="w-16 mr-2" />
@@ -104,7 +104,7 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
             <TrackmeButton onClick={() => handleExerciseAddition(ExerciseType.Strength)}>Add Strength</TrackmeButton>
             <TrackmeButton onClick={() => handleExerciseAddition(ExerciseType.Rest)}>Add Rest</TrackmeButton>
           </div>
-        </div>
+        </>
     );
 }
 

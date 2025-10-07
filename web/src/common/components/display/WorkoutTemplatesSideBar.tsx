@@ -2,9 +2,9 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
     {workouts: Array<any>, selectedWorkout: any, setSelectedWorkout: (workout: any) => void, loading: boolean}
 ) => {
   return (
-    <div className="w-80 bg-white border-r trackme-border-gray flex flex-col">
+    <div className="w-80 bg-white border-r trackme-border-gray flex flex-col h-full">
         {/* Header */}
-        <div className="p-6 border-b trackme-border-gray">
+        <div className="p-6 border-b trackme-border-gray flex-shrink-0">
           <h1 className="text-2xl font-bold text-gray-900">
             Workout Templates
           </h1>

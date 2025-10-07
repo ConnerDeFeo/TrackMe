@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
-import SearchBar from "../components/display/SearchBar";
+import SearchBar from "../common/components/display/SearchBar";
 import { Text, View } from "react-native";
 import RelationService from "../services/RelationService";
 import { RelationStatus } from "../common/constants/Enums";
-import TextButton from "../components/display/TextButton";
-import RelationActionButton from "../components/display/RelationActionButton";
+import TextButton from "../common/components/display/TextButton";
+import RelationActionButton from "../common/components/display/RelationActionButton";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 // Relations.tsx

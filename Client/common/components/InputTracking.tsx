@@ -1,6 +1,6 @@
 import { Text, TextInput, Pressable, View } from "react-native";
-import { Input } from "../common/types/inputs/Input";
-import { InputType } from "../common/constants/Enums";
+import { Input } from "../types/inputs/Input";
+import { InputType } from "../constants/Enums";
 import TimeInput from "./TimeInput";
 
 /**

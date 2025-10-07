@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import HistoryService from "../../services/HistoryService";
-import SearchDate from "../../components/SearchDate";
+import SearchDate from "../../common/components/SearchDate";
 import { Input } from "../../common/types/inputs/Input";
-import InputDisplay from "../../components/display/InputDisplay";
+import InputDisplay from "../../common/components/display/InputDisplay";
 
 const InputHistory = () => {
   const [InputHistory, setInputHistory] = useState<Record<string,any>>({});

@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { Text, TextInput, Pressable, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../common/hooks/usePersistentState";
-import InputTracking from "../components/InputTracking";
-import TimeDistanceDisplay from "../components/display/TimeDistanceDisplay";
+import InputTracking from "../common/components/InputTracking";
+import TimeDistanceDisplay from "../common/components/display/TimeDistanceDisplay";
 import DateService from "../services/DateService";
-import UserDisplay from "../components/display/UserDisplay";
+import UserDisplay from "../common/components/display/UserDisplay";
 import { Input } from "../common/types/inputs/Input";
-import InputDisplay from "../components/display/InputDisplay";
+import InputDisplay from "../common/components/display/InputDisplay";
 
 const MassInput = () => {
   const route = useRoute();

@@ -1,6 +1,6 @@
 import { Text, Pressable, View } from "react-native";
 import UserDisplay from "./display/UserDisplay";
-import RelationService from "../services/RelationService";
+import RelationService from "../../services/RelationService";
 
 // Component that renders individual coach-athlete relationships on display pages
 // Shows user name and provides removal functionality

@@ -1,9 +1,9 @@
 import { Text, TextInput, Pressable, View } from "react-native";
-import Section from "../../../common/types/workouts/Section";
-import { Rest } from "../../../common/types/workouts/Rest";
-import { ExerciseType } from "../../../common/constants/Enums";
+import Section from "../../../types/workouts/Section";
+import { Rest } from "../../../types/workouts/Rest";
+import { ExerciseType } from "../../../constants/Enums";
 import TimeInput from "../../TimeInput";
-import { Exercise } from "../../../common/types/workouts/Exercise";
+import { Exercise } from "../../../types/workouts/Exercise";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:
   {

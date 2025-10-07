@@ -1,10 +1,10 @@
 import { Text, TextInput, Pressable, View } from "react-native";
-import Variables from "../../../common/constants/Variables";
+import Variables from "../../../constants/Variables";
 import ExerciseCreation from "./ExerciseCreation";
-import Section from "../../../common/types/workouts/Section";
-import { ExerciseType } from "../../../common/constants/Enums";
+import Section from "../../../types/workouts/Section";
+import { ExerciseType } from "../../../constants/Enums";
 import TextButton from "../../display/TextButton";
-import { Exercise } from "../../../common/types/workouts/Exercise";
+import { Exercise } from "../../../types/workouts/Exercise";
 
 /**
  * Component for creating and editing a single exercise section within a workout.

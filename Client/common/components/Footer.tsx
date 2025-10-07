@@ -3,12 +3,12 @@ import { View, Pressable, Image } from 'react-native';
 
 // Import all images statically
 const images = {
-    'Groups': require('../assets/images/Groups.png'),
-    'Inputs': require('../assets/images/Input.png'),
-    'Relations': require('../assets/images/Friends.png'),
-    'Template': require('../assets/images/Template.png'),
-    'Profile': require('../assets/images/Profile.png'),
-    'History': require('../assets/images/History.png'),
+    'Groups': require('../../assets/images/Groups.png'),
+    'Inputs': require('../../assets/images/Input.png'),
+    'Relations': require('../../assets/images/Friends.png'),
+    'Template': require('../../assets/images/Template.png'),
+    'Profile': require('../../assets/images/Profile.png'),
+    'History': require('../../assets/images/History.png'),
 };
 
 //Footer at bottom of the screen with navigation buttons

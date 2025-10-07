@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import RelationService from "../services/RelationService";
 import { Text, View } from "react-native";
-import RelationActionButton from "../components/display/RelationActionButton";
+import RelationActionButton from "../common/components/display/RelationActionButton";
 import { RelationStatus } from "../common/constants/Enums";
-import UserDisplay from "../components/display/UserDisplay";
+import UserDisplay from "../common/components/display/UserDisplay";
 
 const Friends = ()=>{
     const [friends, setFriends] = useState<Record<string,string>[]>([]);

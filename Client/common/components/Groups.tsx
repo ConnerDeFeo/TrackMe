@@ -1,8 +1,8 @@
-import GeneralService from "../services/GeneralService";
+import GeneralService from "../../services/GeneralService";
 import { useContext, useEffect, useState } from "react";
-import { AccountType } from "../common/constants/Enums";
+import { AccountType } from "../constants/Enums";
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../common/context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import NavigationContainer from "./display/NavigationContainer";
 
 //View of all groups displayed in a list

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import GeneralService from "../../services/GeneralService";
 import usePersistentState from "../../common/hooks/usePersistentState";
-import RenderGroupInputs from "../../components/athletes/RenderGroupInputs";
+import RenderGroupInputs from "../../common/components/athletes/RenderGroupInputs";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { useFocusEffect } from "@react-navigation/native";
 import { Input } from "../../common/types/inputs/Input";

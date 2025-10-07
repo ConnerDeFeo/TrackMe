@@ -1,8 +1,8 @@
-import AuthInput from "../../components/authentication/AuthInput";
+import AuthInput from "../../common/components/authentication/AuthInput";
 import { Text, Pressable, View } from "react-native";
 import { useState } from "react";
 import { resetPassword } from "aws-amplify/auth";
-import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
+import AuthenticationHeader from "../../common/components/authentication/AuthenticationHeader";
 import { useNavigation } from "@react-navigation/native";
 
 //Forgot password page

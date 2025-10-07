@@ -1,5 +1,5 @@
-import { Pressable, Text, View } from "react-native";
-import { RelationStatus } from "../../common/constants/Enums";
+import { View } from "react-native";
+import { RelationStatus } from "../../constants/Enums";
 import TextButton from "./TextButton";
 
 const RelationActionButton = ({ relationStatus, relationId, handleAddRelation, handleRelationRemoval }:

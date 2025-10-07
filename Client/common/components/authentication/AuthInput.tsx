@@ -25,7 +25,7 @@ const AuthInput = ( {value, setValue, placeholder, sensitive}:
             {sensitive &&
                 <Pressable className="absolute right-3 top-2" onPress={() => setHidePassword(!hidePassword)}>
                     {/* Eye icon to toggle password visibility */}
-                    <Image source={require('../../assets/images/Eye.png')} className="w-8 h-8" />
+                    <Image source={require('../../../assets/images/Eye.png')} className="w-8 h-8" />
                     {/* Strike-through line when password is hidden */}
                     {hidePassword && <View className="absolute w-6 h-[0.15rem] bg-black rotate-45 top-[0.9rem] right-1"/>}
                 </Pressable>

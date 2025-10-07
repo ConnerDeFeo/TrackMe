@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Text, Pressable, View } from "react-native";
-import SearchDate from "../../components/SearchDate";
+import SearchDate from "../../common/components/SearchDate";
 import HistoryService from "../../services/HistoryService";
 import { useNavigation } from "@react-navigation/native";
-import NavigationContainer from "../../components/display/NavigationContainer";
+import NavigationContainer from "../../common/components/display/NavigationContainer";
 
 const CoachHistory = () => {
     // Local state to hold the list of dates for which history exists

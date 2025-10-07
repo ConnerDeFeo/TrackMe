@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
-import { ExerciseType } from "../../common/constants/Enums";
+import { ExerciseType } from "../../constants/Enums";
 import { FontAwesome5 } from '@expo/vector-icons';
-import { Exercise } from "../../common/types/workouts/Exercise";
+import { Exercise } from "../../types/workouts/Exercise";
 
 const RenderExercise = ({ exercise }: { exercise: Exercise }) => {
 

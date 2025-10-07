@@ -13,7 +13,7 @@ const SearchBar: React.FC<{ searchTerm: string, setSearchTerm: (term: string) =>
                 onChangeText={setSearchTerm}
             />
             <Pressable className="flex justify-center items-center w-5 h-5 absolute right-3 top-[0.4rem] opacity-50 p-5" onPress={() => handleSearch(searchTerm)}>
-                <Image source={require('../../assets/images/Search.png')} className="h-5 w-5"/>
+                <Image source={require('../../../assets/images/Search.png')} className="h-5 w-5"/>
             </Pressable>
         </View>
     );

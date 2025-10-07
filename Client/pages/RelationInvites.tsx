@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import RelationService from "../services/RelationService";
-import RelationActionButton from "../components/display/RelationActionButton";
+import RelationActionButton from "../common/components/display/RelationActionButton";
 import { RelationStatus } from "../common/constants/Enums";
 import { Text, View } from "react-native";
 

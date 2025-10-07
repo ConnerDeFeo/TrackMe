@@ -1,9 +1,9 @@
-import AuthInput from "../../components/authentication/AuthInput";
+import AuthInput from "../../common/components/authentication/AuthInput";
 import { Text, Pressable, View } from "react-native";
 import { useContext, useState } from "react";
 import UserService from "../../services/UserService";
 import { fetchUserAttributes  } from "aws-amplify/auth";
-import AuthenticationHeader from "../../components/authentication/AuthenticationHeader";
+import AuthenticationHeader from "../../common/components/authentication/AuthenticationHeader";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AuthContext } from "../../common/context/AuthContext";
 import { AccountType } from "../../common/constants/Enums";

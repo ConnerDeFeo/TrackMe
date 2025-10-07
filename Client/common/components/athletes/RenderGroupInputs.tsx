@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Text, Pressable, View } from "react-native";
-import AthleteWorkoutService from "../../services/AthleteWorkoutService";
-import UserService from "../../services/UserService";
-import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
+import AthleteWorkoutService from "../../../services/AthleteWorkoutService";
+import UserService from "../../../services/UserService";
+import { useWorkoutGroup } from "../../hooks/useWorkoutGroup";
 import InputTracking from "../InputTracking";
 import { useNavigation } from "@react-navigation/native";
-import DateService from "../../services/DateService";
-import { Input } from "../../common/types/inputs/Input";
+import DateService from "../../../services/DateService";
+import { Input } from "../../types/inputs/Input";
 import InputDisplay from "../display/InputDisplay";
-import { InputType } from "../../common/constants/Enums";
-import { LoadingContext } from "../../common/context/LoadingContext";
+import { InputType } from "../../constants/Enums";
+import { LoadingContext } from "../../context/LoadingContext";
 
 //Component used to render input fields for a specific group
 /**

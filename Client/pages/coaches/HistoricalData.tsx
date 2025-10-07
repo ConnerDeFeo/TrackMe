@@ -2,7 +2,7 @@ import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import HistoryService from "../../services/HistoryService";
-import DisplayWorkout from "../../components/display/DisplayWorkout";
+import DisplayWorkout from "../../common/components/display/DisplayWorkout";
 
 const HistoricalData = ()=>{
     const route = useRoute();

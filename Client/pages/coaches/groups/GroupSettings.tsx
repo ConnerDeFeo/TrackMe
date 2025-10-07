@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Pressable, Text, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
 import { useState } from "react";
-import Modal from "../../../components/Modal";
+import Modal from "../../../common/components/Modal";
 
 const GroupSettings = () => {
     const route = useRoute();

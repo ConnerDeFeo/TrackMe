@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Text, Pressable, View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import DisplayWorkout from "../../../components/display/DisplayWorkout";
+import DisplayWorkout from "../../../common/components/display/DisplayWorkout";
 
 // AssignWorkout component for assigning workouts to a group
 const AssignWorkout = () => {

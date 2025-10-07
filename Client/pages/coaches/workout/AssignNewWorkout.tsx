@@ -1,4 +1,4 @@
-import WorkoutCreation from "../../../components/coaches/workouts/WorkoutCreation";
+import WorkoutCreation from "../../../common/components/coaches/workouts/WorkoutCreation";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 

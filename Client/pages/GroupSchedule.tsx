@@ -32,7 +32,7 @@ const GroupSchedule = () => {
     const fetchWorkouts = async () => {
         const resp = await GeneralService.getWeeklyGroupSchedule(
             groupId,
-            DateService.formatDate(currentWeek)
+            DateService.formatDate(sunday)
         );
         if (resp.ok) {
             const data = await resp.json();

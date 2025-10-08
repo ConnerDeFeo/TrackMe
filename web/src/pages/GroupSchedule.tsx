@@ -22,7 +22,7 @@ const GroupSchedule = () => {
         setLoading(true);
         const resp = await GeneralService.getWeeklyGroupSchedule(
             groupId!,
-            DateService.formatDate(currentWeek)
+            DateService.formatDate(sunday)
         );
         if (resp.ok) {
             const data = await resp.json();
@@ -58,7 +58,7 @@ const GroupSchedule = () => {
     };
 
     const handleWorkoutClick = (workout: Workout, dateKey: string) => {
-        navigate(`assign-workout/${dateKey}`, { state: { workout } });
+        navigate(`assign-workout/${dateKey}`, { state: { workout,  } });
     }
 
     return (

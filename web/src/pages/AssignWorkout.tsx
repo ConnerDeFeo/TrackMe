@@ -4,9 +4,11 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import WorkoutCreation from "../common/components/workout/WorkoutCreation";
 import type { Workout } from "../common/types/workouts/Workout";
 import TrackmeButton from "../common/components/TrackmeButton";
+import DateService from "../services/DateService";
 
 const AssignWorkout = () => {
     const { groupId, groupName, date } = useParams<{ groupId: string; groupName: string, date: string }>();
+    const sunday = DateService.getSunday(new Date(date!));
     // Retrieve route params and navigation object
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,7 +36,7 @@ const AssignWorkout = () => {
         const response = await CoachWorkoutService.assignGroupWorkout(
             groupId!,
             workoutData,
-            date!
+            DateService.formatDate(sunday)
         );
         if (response.ok) {
             navigate(-1);

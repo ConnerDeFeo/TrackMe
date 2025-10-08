@@ -43,6 +43,13 @@ const AssignWorkout = () => {
         }
     };
 
+    const handleDeleteGroupWorkout = async () => {
+        const resp = await CoachWorkoutService.deleteGroupWorkout(workout!.groupWorkoutId!);
+        if (resp.ok) {
+            navigate(-1);
+        }
+    };
+
     return (
         <div className="max-w-7xl mx-auto p-4 bg-gray-50 min-h-screen">
             { importTemplateOpen &&
@@ -76,7 +83,15 @@ const AssignWorkout = () => {
             <WorkoutCreation
                 workout={currentWorkout}
                 handleWorkoutCreation={handleWorkoutCreation}
+                handleCancel={() => navigate(-1)}
             />
+            {
+                workout && workout.groupWorkoutId && (
+                    <TrackmeButton red className="mt-4 w-full" onClick={handleDeleteGroupWorkout}>
+                        Remove
+                    </TrackmeButton>
+                )
+            }
         </div>
     );
 }

@@ -62,7 +62,7 @@ const GroupSchedule = () => {
     }
 
     return (
-        <div className="h-screen bg-gray-50">
+        <>
             {/* Header */}
             <GroupHeader groupName={groupName || ''} />
             
@@ -142,7 +142,7 @@ const GroupSchedule = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 };
 

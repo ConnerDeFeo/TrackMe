@@ -57,8 +57,12 @@ const GroupSchedule = () => {
         navigate(`assign-workout/${dateKey}`);
     };
 
+    const handleWorkoutClick = (workout: Workout, dateKey: string) => {
+        navigate(`assign-workout/${dateKey}`, { state: { workout } });
+    }
+
     return (
-        <div className="h-screen bg-gray-50 overflow-y-auto">
+        <div className="h-screen bg-gray-50">
             {/* Header */}
             <GroupHeader groupName={groupName || ''} />
             
@@ -124,7 +128,7 @@ const GroupSchedule = () => {
                                     {dayWorkouts.length > 0 ? (
                                         <div className="space-y-3">
                                             {dayWorkouts.map((workout, idx) => (
-                                                <DisplayWorkout key={idx} workout={workout} />
+                                                <DisplayWorkout key={idx} workout={workout} onClick={() => handleWorkoutClick(workout, dateKey)} />
                                             ))}
                                         </div>
                                     ) : (

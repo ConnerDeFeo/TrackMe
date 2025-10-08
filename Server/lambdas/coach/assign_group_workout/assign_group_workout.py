@@ -34,7 +34,8 @@ def assign_group_workout(event, context):
             if updated:
                 return {
                     'statusCode': 200,
-                    'body': json.dumps({'message': 'Workout updated successfully', 'groupWorkoutId': group_workout_id})
+                    'body': json.dumps({'message': 'Workout updated successfully', 'groupWorkoutId': group_workout_id}),
+                    'headers': auth_header
                 }
         # Create a new workout and fetch the id
         workout_id = execute_commit_fetch_one(

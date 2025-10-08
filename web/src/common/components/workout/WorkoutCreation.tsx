@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Workout } from "../../types/workouts/Workout";
 import SectionCreation from "./SectionCreation";
 import type { Section } from "../../types/workouts/Section";
 import TrackmeButton from "../TrackmeButton";
 
 const WorkoutCreation = ({ workout, handleWorkoutCreation, handleCancel }:{ workout?: Workout, handleWorkoutCreation: (workout: Workout) => void, handleCancel?: () => void }) => {
-    const [title, setTitle] = useState<string>(workout ? workout.title : '');
-    const [description, setDescription] = useState<string>(workout ? workout.description || '' : '');
-    const [sections, setSections] = useState<Section[]>(workout?.sections || []);
+    const [title, setTitle] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [sections, setSections] = useState<Section[]>([]);
+
+    useEffect(() => {
+        if (workout) {
+            setTitle(workout.title);
+            setDescription(workout.description || '');
+            setSections(workout.sections || []);
+        }
+    }, [workout]);
 
     return(
         <>
@@ -50,7 +58,7 @@ const WorkoutCreation = ({ workout, handleWorkoutCreation, handleCancel }:{ work
                 <TrackmeButton onClick={handleCancel} className="w-full" gray>
                     Cancel
                 </TrackmeButton>
-                <TrackmeButton onClick={() => handleWorkoutCreation({ title, description, sections, workoutId: workout?.workoutId })} className="w-full">
+                <TrackmeButton onClick={() => handleWorkoutCreation({ title, description, sections, workoutId: workout?.workoutId, groupWorkoutId: workout?.groupWorkoutId })} className="w-full">
                     Save Workout
                 </TrackmeButton>
             </div>

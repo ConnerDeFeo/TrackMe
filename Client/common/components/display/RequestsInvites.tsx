@@ -11,7 +11,6 @@ import { Text, Pressable, View } from "react-native";
  * @param {(id: string) => void} props.handleDecline - Callback function to execute when a proposal is declined.
  */
 const RequestsInvites = ({ proposals, handleAcceptance, handleDecline}: { proposals: string[], handleAcceptance: (id: string) => void, handleDecline: (id: string) => void}) => {
-    console.log(proposals); 
     return (
         <>
             {/* Container for the list of proposals or the empty state message. */}

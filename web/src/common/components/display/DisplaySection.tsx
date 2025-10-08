@@ -27,7 +27,7 @@ const DisplaySection = ({ section, index }: { section: any; index: number})=>{
             <div className="space-y-2">
                 {section.exercises &&
                     section.exercises.map((exercise: Exercise, idx: number) =>
-                        <DisplayExercise exercise={exercise} index={idx} />
+                        <DisplayExercise exercise={exercise} index={idx} key={idx}/>
                     )}
             </div>
         </div>

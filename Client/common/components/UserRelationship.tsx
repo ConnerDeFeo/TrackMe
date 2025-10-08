@@ -5,7 +5,6 @@ import RelationService from "../../services/RelationService";
 // Component that renders individual coach-athlete relationships on display pages
 // Shows user name and provides removal functionality
 const UserRelationship:React.FC<{ user: Record<string, any>; fetchUsers: () => void; }> = ({ user, fetchUsers }) => {
-    console.log(user)
     // Handles removing the coach-athlete relationship
     const handleRemoval = async (targetId: string) => {
         // Call API to remove the relationship

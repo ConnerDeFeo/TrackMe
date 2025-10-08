@@ -13,7 +13,6 @@ const Friends = ()=>{
             const resp = await RelationService.getMutualUserRelationships();
             if(resp.ok){
                 const data = await resp.json();
-                console.log(data);
                 setFriends(data);
             } else {
                 setFriends([]);

@@ -2,4 +2,3 @@ boto3
 botocore
 -e ../layers/rds/python
 -e ../layers/user_auth/python
--e ../layers/bedrock/python

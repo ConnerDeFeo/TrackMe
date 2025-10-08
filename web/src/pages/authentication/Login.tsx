@@ -6,8 +6,7 @@ const Login = () => {
     const [password, setPassword] = useState('')
 
     const handleSubmit = async () => {
-        const resp = await UserService.signIn(email, password);
-        console.log(resp);
+        await UserService.signIn(email, password);
     }
 
     return (

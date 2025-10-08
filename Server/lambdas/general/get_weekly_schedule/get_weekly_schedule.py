@@ -16,7 +16,7 @@ def get_weekly_schedule(event, context):
 
         # Fetch workouts within the 7-day window for the group
         workouts = fetch_all("""
-            SELECT w.title, w.description, w.sections, gw.date
+            SELECT w.title, w.description, w.sections, gw.date, gw.id
             FROM workouts w
             JOIN group_workouts gw ON w.id = gw.workoutId
             JOIN groups g ON gw.groupId = g.id
@@ -30,15 +30,15 @@ def get_weekly_schedule(event, context):
         # Organize workouts by date
         if workouts:
             parsed_workouts = {}
-            for title, description, sections, date in workouts:
+            for title, description, sections, date, id in workouts:
                 if date not in parsed_workouts:
                     parsed_workouts[date] = []
                 parsed_workouts[date].append({
                     "title": title,
                     "description": description,
-                    "sections": sections
+                    "sections": sections,
+                    'groupWorkoutId': id
                 })
-            print(f"Retrieved workouts: {parsed_workouts}")
             return {
                 "statusCode": 200,
                 "body": json.dumps(parsed_workouts),

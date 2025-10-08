@@ -3,17 +3,17 @@ import DisplaySection from "./DisplaySection";
 
 interface DisplayWorkoutProps {
   workout: Workout;
-  onPress?: () => void;
+  onClick?: () => void;
 }
 
-const DisplayWorkout: React.FC<DisplayWorkoutProps> = ({ workout, onPress }) => {
+const DisplayWorkout: React.FC<DisplayWorkoutProps> = ({ workout, onClick }) => {
     
     return (
         <div
             className={`bg-white rounded-xl shadow-md border-2 border-gray-200 overflow-hidden ${
-                onPress ? 'cursor-pointer hover:shadow-lg transition-all' : ''
+                onClick ? 'cursor-pointer hover:shadow-lg transition-all' : ''
             }`}
-            onClick={onPress}
+            onClick={onClick}
         >
             {/* Workout header with title and optional description */}
             <div className="trackme-bg-blue text-white p-6">

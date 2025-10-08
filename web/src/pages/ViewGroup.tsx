@@ -83,7 +83,7 @@ const ViewGroup = () => {
 
     return (
         // Main container for group page
-        <div className="h-screen bg-gray-50 overflow-y-auto max-w-6xl mx-auto">
+        <div className="h-screen bg-gray-50 max-w-6xl mx-auto">
             {/* Header: group name and counts */}
             <GroupHeader groupName={groupName || ''} />
             

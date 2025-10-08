@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import UserService from './services/UserService';
 import Home from './pages/Home';
 import NavBar from './common/components/NavBar';
-import Footer from './common/components/Footer';
 import ViewGroup from './pages/ViewGroup';
 import WorkoutTemplates from './pages/WorkoutTemplates';
 import Groups from './pages/Groups';

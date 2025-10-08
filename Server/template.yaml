@@ -136,6 +136,22 @@ Resources:
   #
   #
 
+  UpdateGroupAthletesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/update_group_athletes/
+      Handler: update_group_athletes.update_group_athletes
+      Events:
+        UpdateGroupAthletesApi:
+          Type: Api
+          Properties:
+            Path: /coaches/update_group_athletes/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   DeleteGroupWorkoutFunction:
     Type: AWS::Serverless::Function
     Properties:

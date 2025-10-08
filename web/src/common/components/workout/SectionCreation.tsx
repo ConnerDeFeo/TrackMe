@@ -82,84 +82,81 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
   const handleSectionDeletion = () => {
     setSections((prev) => prev.filter((_, index) => index !== idx));
   };
+
+  const renderExerciseButton = (exerciseType: ExerciseType) =>{
     return (
-        <div className="bg-white border-2 border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
-          {/* Section Header */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1">
-              <input 
-                type="text" 
-                value={section.name} 
-                onChange={(e) => handleNameChange(e.target.value)} 
-                placeholder="Section name..."
-                className="w-full px-3 py-2 text-base font-semibold border-2 border-gray-200 rounded-lg focus:outline-none focus:border-trackme-blue focus:ring-2 focus:ring-blue-100 transition-all"
-              />
-            </div>
-            
-            {/* Sets Input - Inline */}
-            <div className="flex items-center gap-2">
-              <label className="text-xs font-semibold text-gray-600 uppercase">Sets:</label>
-              <input 
-                type="number" 
-                value={section.minSets} 
-                onChange={(e) => handleMinSetsChange(e.target.value)} 
-                placeholder="Min"
-                className="w-16 px-2 py-2 text-center border-2 border-gray-200 rounded-lg focus:outline-none focus:border-trackme-blue transition-all"
-              />
-              <span className="text-gray-400">-</span>
-              <input 
-                type="number" 
-                value={section.maxSets || ''} 
-                onChange={(e) => handleMaxSetsChange(e.target.value)} 
-                placeholder="Max"
-                className="w-16 px-2 py-2 text-center border-2 border-gray-200 rounded-lg focus:outline-none focus:border-trackme-blue transition-all"
-              />
-            </div>
+      <button
+        onClick={() => handleExerciseAddition(exerciseType)}
+        className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all cursor-pointer"
+      >
+        {Variables.Icons[exerciseType]} {exerciseType}
+      </button>
+    );
+  }
 
-            {/* Delete Button */}
-            <button
-              onClick={handleSectionDeletion}
-              className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all cursor-pointer"
-              title="Delete Section"
-            >
-              {Variables.Icons.trash}
-            </button>
+  return (
+      <div className="bg-white border-2 border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
+        {/* Section Header */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex-1">
+            <input 
+              type="text" 
+              value={section.name} 
+              onChange={(e) => handleNameChange(e.target.value)} 
+              placeholder="Section name..."
+              className="w-full px-3 py-2 text-base font-semibold border-2 border-gray-200 rounded-lg focus:outline-none focus:border-trackme-blue focus:ring-2 focus:ring-blue-100 transition-all"
+            />
+          </div>
+          
+          {/* Sets Input - Inline */}
+          <div className="flex items-center gap-2">
+            <label className="text-xs font-semibold text-gray-600 uppercase">Sets:</label>
+            <input 
+              type="number" 
+              value={section.minSets} 
+              onChange={(e) => handleMinSetsChange(e.target.value)} 
+              placeholder="Min"
+              className="w-16 px-2 py-2 text-center border-2 border-gray-200 rounded-lg focus:outline-none focus:border-trackme-blue transition-all"
+            />
+            <span className="text-gray-400">-</span>
+            <input 
+              type="number" 
+              value={section.maxSets || ''} 
+              onChange={(e) => handleMaxSetsChange(e.target.value)} 
+              placeholder="Max"
+              className="w-16 px-2 py-2 text-center border-2 border-gray-200 rounded-lg focus:outline-none focus:border-trackme-blue transition-all"
+            />
           </div>
 
-          {/* Exercises */}
-          {section.exercises && section.exercises.length > 0 && (
-            <div className="mb-4">
-              <ExerciseCreation
-                exercises={section.exercises}
-                handleExerciseRemoval={handleExerciseRemoval}
-                setSections={setSections}
-                idx={idx}
-              />
-            </div>
-          )}
-
-          {/* Add Exercise Buttons */}
-          <div className="flex gap-2 pt-3 border-t border-gray-200">
-            <button
-              onClick={() => handleExerciseAddition(ExerciseType.Run)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all"
-            >
-              {Variables.Icons.run} Run
-            </button>
-            <button
-              onClick={() => handleExerciseAddition(ExerciseType.Strength)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all"
-            >
-              {Variables.Icons.strength} Strength
-            </button>
-            <button
-              onClick={() => handleExerciseAddition(ExerciseType.Rest)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all"
-            >
-              {Variables.Icons.rest} Rest
-            </button>
-          </div>
+          {/* Delete Button */}
+          <button
+            onClick={handleSectionDeletion}
+            className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all cursor-pointer"
+            title="Delete Section"
+          >
+            {Variables.Icons.trash}
+          </button>
         </div>
+
+        {/* Exercises */}
+        {section.exercises && section.exercises.length > 0 && (
+          <div className="mb-4">
+            <ExerciseCreation
+              exercises={section.exercises}
+              handleExerciseRemoval={handleExerciseRemoval}
+              setSections={setSections}
+              idx={idx}
+            />
+          </div>
+        )}
+
+        {/* Add Exercise Buttons */}
+        <div className="flex gap-2 pt-3 border-t border-gray-200">
+          {renderExerciseButton(ExerciseType.Run)}
+          {renderExerciseButton(ExerciseType.Strength)}
+          {renderExerciseButton(ExerciseType.Rest)}
+        </div>
+      </div>
     );
 }
 

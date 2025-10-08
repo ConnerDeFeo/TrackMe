@@ -1,9 +1,13 @@
+import { ExerciseType } from "./Enums";
+
 export const Variables = {
     meters: "meters",
     Icons: {
-        run: '🏃',
-        rest: '⏱️',
-        strength: '💪',
+        [ExerciseType.Run]: '🏃',
+        [ExerciseType.Rest]: '⏱️',
+        [ExerciseType.Strength]: '💪',
         trash: '🗑️',
+        friends: '👥',
+        workout: '🏋️',
     }
 }

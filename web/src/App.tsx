@@ -10,6 +10,7 @@ import NavBar from './common/components/NavBar';
 import Footer from './common/components/Footer';
 import ViewGroup from './pages/ViewGroup';
 import WorkoutTemplates from './pages/WorkoutTemplates';
+import Groups from './pages/Groups';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
       <div className='min-h-[calc(100vh-4rem)] bg-gray-50'>
         <Routes>
           <Route path="/" element={accountType === AccountType.SignedOut ? <Login /> : <Home />} />
+          <Route path="/groups" element={<Groups />} />
           <Route path="/view-group/:groupName/:groupId" element={<ViewGroup />} />
           <Route path="/workout-templates" element={<WorkoutTemplates />} />
         </Routes>

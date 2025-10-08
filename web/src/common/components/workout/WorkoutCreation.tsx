@@ -43,6 +43,9 @@ const WorkoutCreation = ({ workout, handleWorkoutCreation, handleCancel }:{ work
             {sections.map((section, index) => (
                 <SectionCreation key={index} section={section} setSections={setSections} idx={index} />
             ))}
+            <TrackmeButton className="mt-3 w-full" onClick={() => setSections((prev) => [...prev, { name: '', minSets: 1 }])}>
+                Add Section
+            </TrackmeButton>
             <div className="flex gap-x-3 mt-6">
                 <TrackmeButton onClick={handleCancel} className="w-full" gray>
                     Cancel

@@ -119,10 +119,10 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
             {/* Delete Button */}
             <button
               onClick={handleSectionDeletion}
-              className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all"
+              className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all cursor-pointer"
               title="Delete Section"
             >
-              🗑️
+              {Variables.Icons.trash}
             </button>
           </div>
 
@@ -144,19 +144,19 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
               onClick={() => handleExerciseAddition(ExerciseType.Run)}
               className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all"
             >
-              🏃 Run
+              {Variables.Icons.run} Run
             </button>
             <button
               onClick={() => handleExerciseAddition(ExerciseType.Strength)}
               className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all"
             >
-              💪 Strength
+              {Variables.Icons.strength} Strength
             </button>
             <button
               onClick={() => handleExerciseAddition(ExerciseType.Rest)}
               className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all"
             >
-              ⏱️ Rest
+              {Variables.Icons.rest} Rest
             </button>
           </div>
         </div>

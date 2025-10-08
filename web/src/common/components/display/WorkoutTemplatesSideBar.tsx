@@ -1,5 +1,7 @@
-const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout, loading }:
-    {workouts: Array<any>, selectedWorkout: any, setSelectedWorkout: (workout: any) => void, loading: boolean}
+import TrackmeButton from "../TrackmeButton";
+
+const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout, loading, handleCreateNewWorkout }:
+    {workouts: Array<any>, selectedWorkout: any, setSelectedWorkout: (workout: any) => void, loading: boolean, handleCreateNewWorkout: () => void}
 ) => {
   return (
     <div className="w-80 bg-white border-r trackme-border-gray flex flex-col h-full">
@@ -30,9 +32,9 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
           ) : (
             // Map over templates
             <div className="p-3 space-y-2">
-              {workouts.map((workout) => (
+              {workouts.map((workout, idx) => (
                 <button
-                  key={workout.workoutId}
+                  key={idx}
                   onClick={() => setSelectedWorkout(workout)}
                   className={`w-full text-left p-4 rounded-lg transition-all cursor-pointer ${
                     selectedWorkout?.workoutId === workout.workoutId
@@ -68,6 +70,9 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
             </div>
           )}
         </div>
+        <TrackmeButton className="m-6" onClick={handleCreateNewWorkout}>
+          Create New Template
+        </TrackmeButton>
       </div>
   );
 }

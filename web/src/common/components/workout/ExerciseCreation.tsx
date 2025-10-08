@@ -3,7 +3,6 @@ import { Variables } from "../../constants/Variables";
 import type { Exercise } from "../../types/workouts/Exercise";
 import type { Rest } from "../../types/workouts/Rest";
 import type { Section } from "../../types/workouts/Section";
-import TextButton from "../TextButton";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:
   {
@@ -56,42 +55,105 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
   }
 
   return(
-    <>
+    <div className="space-y-2">
       {exercises.map((exercise, partIdx) => (
-        <div key={partIdx} className="mb-4 p-4 bg-white rounded-lg shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-2">
-            {/* Add your exercise input fields and controls here */}
-            {exercise.type === ExerciseType.Run ? (
-                <div>
-                  <span>{Variables.Icons.run}</span>
-                  <input type="number" className="border" placeholder="Distance" value={exercise.distance} onChange={(e) => handleExerciseChange(partIdx, 'distance', e.target.value)} />
-                  <input type="number" className="border" placeholder="Min Reps" value={exercise.minReps} onChange={(e) => handleRepsChange(partIdx, 'minReps', e.target.value)} />
-                  <input type="number" className="border" placeholder="Max Reps" value={exercise.maxReps} onChange={(e) => handleRepsChange(partIdx, 'maxReps', e.target.value)} />
-                </div>
-              )
-              :
-              exercise.type === ExerciseType.Strength ? (
-                <div>
-                  <span>{Variables.Icons.strength}</span>
-                  <input type="text" className="border" placeholder="Description" value={exercise.description} onChange={(e) => handleExerciseChange(partIdx, 'description', e.target.value)} />
-                  <input type="number" className="border" placeholder="Min Reps" value={exercise.minReps} onChange={(e) => handleRepsChange(partIdx, 'minReps', e.target.value)} />
-                  <input type="number" className="border" placeholder="Max Reps" value={exercise.maxReps} onChange={(e) => handleRepsChange(partIdx, 'maxReps', e.target.value)} />
-                </div>
-              )
-              :
-              (
-                <div>
-                  <span>{Variables.Icons.rest}</span>
-                  <input type="number" className="border" placeholder="Min Rest" value={exercise.minReps} onChange={(e) => handleRestChange(partIdx, 'minReps', 'seconds', e.target.value)} />
-                  <input type="number" className="border" placeholder="Max Rest" value={exercise.maxReps} onChange={(e) => handleRestChange(partIdx, 'maxReps', 'seconds', e.target.value)} />
-                </div>
-              )
-            }
-          </div>
-          <TextButton text="Remove Exercise" onClick={() => handleExerciseRemoval(partIdx)}/>
+        <div key={partIdx} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg border border-gray-200">
+          {/* Icon */}
+          <span className="text-lg flex-shrink-0">
+            {exercise.type === ExerciseType.Run ? Variables.Icons.run : 
+             exercise.type === ExerciseType.Strength ? Variables.Icons.strength : 
+             Variables.Icons.rest}
+          </span>
+
+          {/* Inputs - All on one line with better spacing */}
+          {exercise.type === ExerciseType.Run ? (
+            <>
+              <input 
+                type="number" 
+                value={exercise.distance || ''} 
+                onChange={(e) => handleExerciseChange(partIdx, 'distance', e.target.value)} 
+                placeholder="Distance"
+                className="w-28 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+              <span className="text-xs text-gray-500 flex-shrink-0">meters</span>
+              <span className="text-gray-300 flex-shrink-0">|</span>
+              <span className="text-xs text-gray-600 font-medium flex-shrink-0">Reps:</span>
+              <input 
+                type="number" 
+                value={exercise.minReps || ''} 
+                onChange={(e) => handleRepsChange(partIdx, 'minReps', e.target.value)} 
+                placeholder="Min"
+                className="w-20 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+              <span className="text-gray-400 flex-shrink-0">-</span>
+              <input 
+                type="number" 
+                value={exercise.maxReps || ''} 
+                onChange={(e) => handleRepsChange(partIdx, 'maxReps', e.target.value)} 
+                placeholder="Max"
+                className="w-20 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+            </>
+          ) : exercise.type === ExerciseType.Strength ? (
+            <>
+              <input 
+                type="text" 
+                value={exercise.description || ''} 
+                onChange={(e) => handleExerciseChange(partIdx, 'description', e.target.value)} 
+                placeholder="Exercise description..."
+                className="flex-1 min-w-0 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+              <span className="text-gray-300 flex-shrink-0">|</span>
+              <span className="text-xs text-gray-600 font-medium flex-shrink-0">Reps:</span>
+              <input 
+                type="number" 
+                value={exercise.minReps || ''} 
+                onChange={(e) => handleRepsChange(partIdx, 'minReps', e.target.value)} 
+                placeholder="Min"
+                className="w-20 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+              <span className="text-gray-400 flex-shrink-0">-</span>
+              <input 
+                type="number" 
+                value={exercise.maxReps || ''} 
+                onChange={(e) => handleRepsChange(partIdx, 'maxReps', e.target.value)} 
+                placeholder="Max"
+                className="w-20 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+            </>
+          ) : (
+            <>
+              <span className="text-xs text-gray-600 font-medium flex-shrink-0">Rest:</span>
+              <input 
+                type="number" 
+                value={exercise.minReps || ''} 
+                onChange={(e) => handleRestChange(partIdx, 'minReps', 'seconds', e.target.value)} 
+                placeholder="Min"
+                className="w-20 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+              <span className="text-gray-400 flex-shrink-0">-</span>
+              <input 
+                type="number" 
+                value={exercise.maxReps || ''} 
+                onChange={(e) => handleRestChange(partIdx, 'maxReps', 'seconds', e.target.value)} 
+                placeholder="Max"
+                className="w-20 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-trackme-blue"
+              />
+              <span className="text-xs text-gray-500 flex-shrink-0">seconds</span>
+            </>
+          )}
+
+          {/* Remove Button */}
+          <button
+            onClick={() => handleExerciseRemoval(partIdx)}
+            className="ml-auto flex-shrink-0 px-2 py-1 text-xs text-red-600 hover:bg-red-50 rounded transition-all"
+            title="Remove"
+          >
+            ✕
+          </button>
         </div>
       ))}
-    </>
+    </div>
   );
 
 }

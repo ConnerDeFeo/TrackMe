@@ -3,6 +3,7 @@ export const Variables = {
     Icons: {
         run: '🏃',
         rest: '⏱️',
-        strength: '💪'
+        strength: '💪',
+        trash: '🗑️',
     }
 }

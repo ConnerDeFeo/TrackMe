@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Workout } from "../common/types/workouts/Workout";
 import GeneralService from "../services/GeneralService";
 import DisplayWorkout from "../common/components/display/DisplayWorkout";
@@ -7,6 +7,7 @@ import { Variables } from "../common/constants/Variables";
 import TrackmeButton from "../common/components/TrackmeButton";
 import CoachGroupService from "../services/CoachGroupService";
 import EditParticipants from "../common/components/groups/EditParticipants";
+import GroupHeader from "../common/components/groups/GroupHeader";
 
 // Component to view details for a specific group (participants and workouts)
 const ViewGroup = () => {
@@ -21,6 +22,8 @@ const ViewGroup = () => {
     const [loading, setLoading] = useState(true);
     // State: toggle between view and edit mode for athletes
     const [editAthletesMode, setEditAthletesMode] = useState(false);
+
+    const navigate = useNavigate();
 
     // Fetch participants for the group from the API
     const fetchGroupAtheltes = async () => {
@@ -82,13 +85,9 @@ const ViewGroup = () => {
         // Main container for group page
         <div className="h-screen bg-gray-50 overflow-y-auto max-w-6xl mx-auto">
             {/* Header: group name and counts */}
-            <div className="py-4 mx-auto text-center border-b trackme-border-gray">
-                <h1 className="text-2xl font-bold text-gray-900">{groupName}</h1>
-                <p className="text-sm text-gray-500 mt-1">
-                    {participants.length} participant{participants.length !== 1 ? 's' : ''} • {workouts.length} workout{workouts.length !== 1 ? 's' : ''}
-                </p>
-            </div>
-
+            <GroupHeader groupName={groupName || ''} />
+            
+            {/* Summary: number of athletes and workouts */}
             <div className="p-6">
                 {/* Section header: Athletes with edit button */}
                 <div className="flex items-center justify-between mb-3">
@@ -110,9 +109,14 @@ const ViewGroup = () => {
 
                 {/* Workouts section */}
                 <div>
-                    <h2 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                        {Variables.Icons.workout} Workouts
-                    </h2>
+                    <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                            {Variables.Icons.workout} Workouts
+                        </h2>
+                        <TrackmeButton onClick={() => navigate(`schedule`)} className="w-45">
+                            Schedule
+                        </TrackmeButton>
+                    </div>
                     {workouts.length > 0 ? (
                         // Render each workout using DisplayWorkout component
                         <div className="gap-y-4">

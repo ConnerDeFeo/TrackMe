@@ -11,6 +11,7 @@ const ViewGroup = () => {
     const [participants, setParticipants] = useState<string[][]>([]);
     const [workouts, setWorkouts] = useState<Array<Workout>>([]);
     const [loading, setLoading] = useState(true);
+    const [editAthletesMode, setEditAthletesMode] = useState(false);
 
     const fetchGroupAtheltes = async () => {
         const resp = await GeneralService.getAthletesForGroup(groupId!);
@@ -41,6 +42,10 @@ const ViewGroup = () => {
         fetchData();
     }, [groupId]);
 
+    const handleEditAthlete = () => {
+        setEditAthletesMode(!editAthletesMode);
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -60,36 +65,43 @@ const ViewGroup = () => {
             </div>
 
             <div className="p-6">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                        {Variables.Icons.friends} Athletes
+                    </h2>
+                    <TrackmeButton onClick={handleEditAthlete} className="w-40">
+                        {editAthletesMode ? `Save` : `Edit Athletes`}
+                    </TrackmeButton>
+                </div>
                 {/* Participants Section */}
                 <div className="mb-8">
-                    <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                            {Variables.Icons.friends} Athletes
-                        </h2>
-                        <TrackmeButton>
-                            Add Athletes
-                        </TrackmeButton>
-                    </div>
-                    {participants.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {participants.map((participant) => (
-                                <div
-                                    key={participant[0]}
-                                    className="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-3 hover:border-trackme-blue transition-colors"
-                                >
-                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-trackme-blue font-semibold">
-                                        {participant[1].charAt(0).toUpperCase()}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-medium text-gray-900 truncate">{participant[1]}</p>
-                                    </div>
+                    { editAthletesMode ?
+                    <></> 
+                    :
+                    (
+                        <>
+                            {participants.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {participants.map((participant) => (
+                                        <div
+                                            key={participant[0]}
+                                            className="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-3 hover:border-trackme-blue transition-colors"
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-trackme-blue font-semibold">
+                                                {participant[1].charAt(0).toUpperCase()}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-medium text-gray-900 truncate">{participant[1]}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center text-gray-500">
-                            No participants in this group yet
-                        </div>
+                            ) : (
+                                <div className="bg-white border border-gray-200 rounded-lg p-6 text-center text-gray-500">
+                                    No participants in this group yet
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 

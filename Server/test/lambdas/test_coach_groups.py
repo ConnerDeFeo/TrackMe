@@ -8,6 +8,7 @@ from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_at
 from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.relations.add_relation.add_relation import add_relation
 from lambdas.general.create_user.create_user import create_user
+from lambdas.coach.update_group_athletes.update_group_athletes import update_group_athletes
 import json
 from data import TestData
 from lambdas.coach.remove_group_athlete.remove_group_athlete import remove_group_athlete
@@ -24,11 +25,19 @@ def setup_before_each_test(): #This will run before each test
 
 def generate_athlete(username, userId):
     create_user( {
-        "body": json.dumps({
-            "userId": userId,
-            "username": username
-        })
+        "headers":generate_auth_header(userId, "Athlete", username)
     },{})
+
+def generate_athlete_add_coach(username, userId, coachId):
+    generate_athlete(username, userId)
+    add_relation({
+        "body": json.dumps({"relationId": coachId}),
+        "headers": generate_auth_header(userId, "Athlete", username)
+    }, {})
+    add_relation({
+        "body": json.dumps({"relationId": userId}),
+        "headers": generate_auth_header(coachId, "Coach", "testcoach")
+    }, {})
 
 def setup_athlete_with_group():
     """Set up a coach, athlete, group, and link them."""
@@ -255,3 +264,40 @@ def test_assign_group_workout_creates_workout_and_assignment():
     assert workout is not None
     assert workout[0] is False
     assert workout[1] == [{"name": "Push Ups", "sets": 3, "reps": 10}]
+
+def test_update_group_athletes_returns_success():
+    # Arrange
+    setup_athlete_with_group()
+    generate_athlete_add_coach("testathlete2", "1235", "123")
+    generate_athlete_add_coach("testathlete3", "1236", "123")
+    add_athlete_to_group({
+        "body": json.dumps({
+            "groupId": 1,
+            "athleteId": "1236"
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    remove_group_athlete({
+        "queryStringParameters": {"groupId": "1", "athleteId": "1236"},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    event = {
+        "body": json.dumps({
+            "groupId": 1,
+            "athleteIds": ["1235","1236"]
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = update_group_athletes(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    athlete_groups = fetch_all("SELECT * FROM athlete_groups WHERE groupId = %s ORDER BY athleteId", (1,))
+    assert athlete_groups is not None
+    debug_table()
+    assert len(athlete_groups) == 3
+    assert athlete_groups[0] == ("1234", 1, True)
+    assert athlete_groups[1] == ("1235", 1, False)
+    assert athlete_groups[2] == ("1236", 1, False)

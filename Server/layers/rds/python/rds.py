@@ -114,8 +114,9 @@ def execute_commit_many(query, params):
                 cursor.executemany(query, params)
                 conn.commit()
                 return True
-            except:
+            except Exception as e:
                 conn.rollback()
+                print(f"Error executing many: {e}")
                 return False
 
     return execute_function(_execute_commit_many, query, params)

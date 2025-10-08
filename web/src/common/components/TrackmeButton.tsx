@@ -30,7 +30,7 @@ const TrackmeButton = ({
             onClick={handleClick}
             disabled={loadingState}
             className={`
-                ${red ? "trackme-bg-red" : gray ? "trackme-bg-gray" : "trackme-bg-blue"}
+                ${red ? "trackme-bg-red" : gray ? "bg-gray-300" : "trackme-bg-blue"}
                 text-white px-5 py-2 rounded-lg
                 ${loadingState ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
                 ${className || ""}

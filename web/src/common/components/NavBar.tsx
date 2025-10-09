@@ -12,14 +12,14 @@ const NavBar = () => {
     // Navigation items configuration
     const navItems: { path: string; label: string; image: string }[] = [
         { path: '/groups', label: 'Groups', image: '/assets/images/Groups.png' },
-        { path: '/friends', label: 'Friends', image: '/assets/images/Friends.png'},
+        { path: '/relations', label: 'Relations', image: '/assets/images/Friends.png'},
         { path: '/workout-templates', label: 'Workout Templates', image: '/assets/images/Template.png'},
         { path: '/history', label: 'History', image: '/assets/images/History.png' },
         { path: '/profile', label: 'Profile', image: '/assets/images/Profile.png' },
     ];
 
     // Check if current path matches nav item
-    const isActive = (path: string) => location.pathname === path;
+    const isActive = (path: string) => location.pathname.split('/')[1] === path.split('/')[1];
 
     return (
         <nav className={`bg-white shadow-md border-b trackme-border-gray`}>

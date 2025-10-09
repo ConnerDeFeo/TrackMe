@@ -12,6 +12,9 @@ import WorkoutTemplates from './pages/WorkoutTemplates';
 import Groups from './pages/Groups';
 import GroupSchedule from './pages/GroupSchedule';
 import AssignWorkout from './pages/AssignWorkout';
+import RelationInvites from './pages/RelationInvites';
+import Relations from './pages/Relations';
+import Friends from './pages/Friends';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -49,6 +52,10 @@ export default function App() {
           <Route path="/groups/view-group/:groupName/:groupId" element={<ViewGroup />} />
           <Route path="/groups/view-group/:groupName/:groupId/schedule" element={<GroupSchedule />} />
           <Route path="/groups/view-group/:groupName/:groupId/schedule/assign-workout/:date" element={<AssignWorkout />} />
+
+          <Route path="/relations" element={<Relations />} />
+          <Route path="/relations/relation-invites" element={<RelationInvites />} />
+          <Route path="/relations/friends" element={<Friends />} />
 
           <Route path="/workout-templates" element={<WorkoutTemplates />} />
         </Routes>

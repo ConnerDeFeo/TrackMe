@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Image, Pressable, TextInput, View } from "react-native";
 
 // Search bar component for any generic purpose search functionality

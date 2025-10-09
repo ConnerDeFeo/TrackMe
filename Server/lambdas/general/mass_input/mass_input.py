@@ -14,7 +14,8 @@ def mass_input(event, context):
         groupId = body['groupId']
 
         # Check to see if user is a coach or athlete that is actually part of group
-        exists = fetch_one("""
+        exists = fetch_one(
+        """
             SELECT id FROM groups g
             JOIN athlete_groups ag ON g.id = ag.groupId
             WHERE g.id = %s AND (g.coachId = %s OR ag.athleteId = %s)
@@ -24,7 +25,8 @@ def mass_input(event, context):
                 'statusCode': 403,
                 'body': json.dumps({
                     'message': 'User not authorized for this group'
-                })
+                }),
+                'headers': auth_header
             }
 
         athlete_data = body['athleteData'] # map {athleteId: [{time: float, distance: int}]}
@@ -51,7 +53,8 @@ def mass_input(event, context):
             'statusCode': 200,
             'body': json.dumps({
                 'message': 'Mass input successful'
-            })
+            }),
+            'headers': auth_header
         }
     except Exception as e:
         print(f"Error in mass input: {str(e)}")
@@ -59,5 +62,6 @@ def mass_input(event, context):
             'statusCode': 500,
             'body': json.dumps({
                 'message': 'Error in mass input: {}'.format(str(e))
-            })
+            }),
+            'headers': auth_header
         }

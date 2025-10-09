@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CoachGroupService from "../../../services/CoachGroupService";
+import UserDisplay from "../display/UserDisplay";
 
 const EditParticipants = ({editAthletesMode, participants, setParticipants, groupId}:
     {
@@ -39,21 +40,16 @@ const EditParticipants = ({editAthletesMode, participants, setParticipants, grou
                             In Group ({participants.length})
                         </h3>
                         <div className="space-y-2 max-h-96 overflow-y-auto">
-                            {participants.length > 0 ? participants.map(([id, name]) => (
+                            {participants.length > 0 ? participants.map(([id, username, firstName, lastName, accountType]) => (
                                 <div
                                     key={id}
                                     className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg"
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-semibold text-sm">
-                                            {name.charAt(0).toUpperCase()}
-                                        </div>
-                                        <span className="font-medium text-gray-900">{name}</span>
-                                    </div>
+                                    <UserDisplay username={username} firstName={firstName} lastName={lastName}/>
                                     <button
                                         onClick={() => {
                                             setParticipants(prev => prev.filter(p => p[0] !== id));
-                                            setAbsentParticipants(prev => [...prev, [id, name]]);
+                                            setAbsentParticipants(prev => [...prev, [id, username, firstName, lastName, accountType]]);
                                         }}
                                         className="cursor-pointer px-3 py-1 text-xs font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
                                     >
@@ -74,21 +70,16 @@ const EditParticipants = ({editAthletesMode, participants, setParticipants, grou
                             Available Athletes ({absentParticipants.length})
                         </h3>
                         <div className="space-y-2 max-h-96 overflow-y-auto">
-                            {absentParticipants.length > 0 ? absentParticipants.map(([id, name]) => (
+                            {absentParticipants.length > 0 ? absentParticipants.map(([id, username, firstName, lastName, accountType]) => (
                                 <div
                                     key={id}
                                     className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg"
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-sm">
-                                            {name.charAt(0).toUpperCase()}
-                                        </div>
-                                        <span className="font-medium text-gray-900">{name}</span>
-                                    </div>
+                                    <UserDisplay username={username} firstName={firstName} lastName={lastName}/>
                                     <button
                                         onClick={() => {
                                             setAbsentParticipants(prev => prev.filter(p => p[0] !== id));
-                                            setParticipants(prev => [...prev, [id, name]]);
+                                            setParticipants(prev => [...prev, [id, username, firstName, lastName, accountType]]);
                                         }}
                                         className="cursor-pointer px-3 py-1 text-xs font-medium text-trackme-blue bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
                                     >

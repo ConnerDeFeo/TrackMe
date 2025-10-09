@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HistoryService from "../../services/HistoryService";
 import NavigationContainer from "../../common/components/display/NavigationContainer";
+import SearchDate from "../../common/components/SearchDate";
 
 const History = () => {
     // Local state to hold the list of dates for which history exists
@@ -34,6 +35,10 @@ const History = () => {
     console.log(availableDates)
     return(
         <div className="grid max-w-3xl mx-auto">
+            <SearchDate
+                handleDateSearch={handleDateSearch}
+                handleClear={fetchAvailableHistoryDates}
+            />
             {availableDates.map((date) => (
                 <NavigationContainer
                     key={date}

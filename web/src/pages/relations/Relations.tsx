@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RelationService from "../services/RelationService";
-import UserDisplay from "../common/components/display/UserDisplay";
-import RelationActionButton from "../common/components/display/RelationActionButton";
-import type { RelationStatus } from "../common/constants/Enums";
-import SearchBar from "../common/components/SearchBar";
-import TrackmeButton from "../common/components/TrackmeButton";
+import RelationService from "../../services/RelationService";
+import UserDisplay from "../../common/components/display/UserDisplay";
+import RelationActionButton from "../../common/components/display/RelationActionButton";
+import type { RelationStatus } from "../../common/constants/Enums";
+import SearchBar from "../../common/components/SearchBar";
+import TrackmeButton from "../../common/components/TrackmeButton";
 
 const Relations = () => {
     // currentUsers: list of users as arrays [id, name, …, status]

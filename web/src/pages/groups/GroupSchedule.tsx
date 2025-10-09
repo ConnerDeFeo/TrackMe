@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
-import type { Workout } from "../common/types/workouts/Workout";
+import type { Workout } from "../../common/types/workouts/Workout";
 import { useEffect, useState } from "react";
-import DateService from "../services/DateService";
-import GeneralService from "../services/GeneralService";
-import DisplayWorkout from "../common/components/display/DisplayWorkout";
-import GroupHeader from "../common/components/groups/GroupHeader";
+import DateService from "../../services/DateService";
+import GeneralService from "../../services/GeneralService";
+import DisplayWorkout from "../../common/components/display/DisplayWorkout";
+import GroupHeader from "../../common/components/groups/GroupHeader";
 
 const GroupSchedule = () => {
     const { groupId, groupName } = useParams<{ groupId: string; groupName: string }>();
@@ -72,7 +72,7 @@ const GroupSchedule = () => {
                 <div className="flex justify-between items-center mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                     <button
                         onClick={navigateBack}
-                        className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                         Previous Week
                     </button>
@@ -81,7 +81,7 @@ const GroupSchedule = () => {
                     </p>
                     <button
                         onClick={navigateForward}
-                        className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                         Next Week
                     </button>
@@ -118,7 +118,7 @@ const GroupSchedule = () => {
                                         </h3>
                                         <button
                                             onClick={() => handleAddWorkout(dateKey)}
-                                            className="cursor-pointer px-4 py-2 text-sm font-medium text-trackme-blue border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+                                            className="px-4 py-2 text-sm font-medium text-trackme-blue border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
                                         >
                                             + Add Workout
                                         </button>

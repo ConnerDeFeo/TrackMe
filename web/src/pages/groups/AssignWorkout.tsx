@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import CoachWorkoutService from "../services/CoachWorkoutService";
+import CoachWorkoutService from "../../services/CoachWorkoutService";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import WorkoutCreation from "../common/components/workout/WorkoutCreation";
-import type { Workout } from "../common/types/workouts/Workout";
-import TrackmeButton from "../common/components/TrackmeButton";
-import DateService from "../services/DateService";
+import WorkoutCreation from "../../common/components/workout/WorkoutCreation";
+import type { Workout } from "../../common/types/workouts/Workout";
+import TrackmeButton from "../../common/components/TrackmeButton";
+import DateService from "../../services/DateService";
 
 const AssignWorkout = () => {
     const { groupId, groupName, date } = useParams<{ groupId: string; groupName: string, date: string }>();

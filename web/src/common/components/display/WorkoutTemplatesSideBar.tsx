@@ -36,7 +36,7 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
                 <button
                   key={idx}
                   onClick={() => setSelectedWorkout(workout)}
-                  className={`w-full text-left p-4 rounded-lg transition-all cursor-pointer ${
+                  className={`w-full text-left p-4 rounded-lg transition-all ${
                     selectedWorkout?.workoutId === workout.workoutId
                       ? "trackme-bg-blue text-white shadow-md"
                       : "bg-gray-50 text-gray-900 hover:bg-gray-100"

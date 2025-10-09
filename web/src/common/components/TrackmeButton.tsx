@@ -32,7 +32,7 @@ const TrackmeButton = ({
             className={`
                 ${red ? "trackme-bg-red" : gray ? "bg-gray-300" : "trackme-bg-blue"}
                 text-white px-5 py-2 rounded-lg
-                ${loadingState ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                ${loadingState ? "opacity-50 cursor-not-allowed" : ""}
                 ${className || ""}
             `}
         >

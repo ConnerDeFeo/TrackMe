@@ -87,7 +87,7 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
     return (
       <button
         onClick={() => handleExerciseAddition(exerciseType)}
-        className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all cursor-pointer"
+        className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all"
       >
         {Variables.Icons[exerciseType]} {exerciseType}
       </button>
@@ -131,7 +131,7 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
           {/* Delete Button */}
           <button
             onClick={handleSectionDeletion}
-            className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all cursor-pointer"
+            className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all"
             title="Delete Section"
           >
             {Variables.Icons.trash}

@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
-import SearchDate from "../../common/components/SearchDate";
+import { useNavigate } from "react-router-dom";
 import HistoryService from "../../services/HistoryService";
-import { useNavigation } from "@react-navigation/native";
 import NavigationContainer from "../../common/components/display/NavigationContainer";
 
-const CoachHistory = () => {
+const History = () => {
     // Local state to hold the list of dates for which history exists
     const [availableDates, setAvailableDates] = useState<string[]>([]);
-    const navigation = useNavigation<any>();  // Hook to navigate between screens
+    const navigate = useNavigate();
 
     // Fetch all dates that have workouts assigned when the component mounts
     const fetchAvailableHistoryDates = async () => {
@@ -33,19 +31,18 @@ const CoachHistory = () => {
         }
     };
 
-    return (
-        <View className="mt-2">
-            {/* Date search input and clear button */}
-            <SearchDate
-                handleDateSearch={handleDateSearch}
-                handleClear={fetchAvailableHistoryDates}
-            />
-            {/* Render a button for each available date */}
+    console.log(availableDates)
+    return(
+        <div className="grid max-w-3xl mx-auto">
             {availableDates.map((date) => (
-                <NavigationContainer key={date} navigateTo={() => navigation.navigate('HistoricalData', { date })} text={date} />
+                <NavigationContainer
+                    key={date}
+                    navigateTo={() => navigate(`view-history/${date}`)}
+                    text={date}
+                />
             ))}
-        </View>
+        </div>
     );
-};
+}
 
-export default CoachHistory;
+export default History;

@@ -10,7 +10,7 @@ const SearchBar: React.FC<{ searchTerm: string, setSearchTerm: (term: string) =>
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(searchTerm); }}
             />
-            <button className="cursor-pointer absolute right-3 top-[0.4rem] opacity-50 p-2.5" onClick={() => handleSearch(searchTerm)}>
+            <button className="absolute right-3 top-[0.4rem] opacity-50 p-2.5" onClick={() => handleSearch(searchTerm)}>
                 <img src='/assets/images/Search.png' className="h-5 w-5" alt="Search"/>
             </button>
         </div>

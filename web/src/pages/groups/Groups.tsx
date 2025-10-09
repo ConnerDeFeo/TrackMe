@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GeneralService from "../services/GeneralService";
+import GeneralService from "../../services/GeneralService";
 
 const Groups = () => {
     const [groups, setGroups] = useState<string[][]>([]);

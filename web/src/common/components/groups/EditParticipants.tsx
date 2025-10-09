@@ -51,7 +51,7 @@ const EditParticipants = ({editAthletesMode, participants, setParticipants, grou
                                             setParticipants(prev => prev.filter(p => p[0] !== id));
                                             setAbsentParticipants(prev => [...prev, [id, username, firstName, lastName, accountType]]);
                                         }}
-                                        className="cursor-pointer px-3 py-1 text-xs font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+                                        className="px-3 py-1 text-xs font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
                                     >
                                         Remove
                                     </button>
@@ -81,7 +81,7 @@ const EditParticipants = ({editAthletesMode, participants, setParticipants, grou
                                             setAbsentParticipants(prev => prev.filter(p => p[0] !== id));
                                             setParticipants(prev => [...prev, [id, username, firstName, lastName, accountType]]);
                                         }}
-                                        className="cursor-pointer px-3 py-1 text-xs font-medium text-trackme-blue bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+                                        className="px-3 py-1 text-xs font-medium text-trackme-blue bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
                                     >
                                         Add
                                     </button>

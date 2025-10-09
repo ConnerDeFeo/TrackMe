@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Workout } from "../common/types/workouts/Workout";
-import GeneralService from "../services/GeneralService";
-import DisplayWorkout from "../common/components/display/DisplayWorkout";
-import { Variables } from "../common/constants/Variables";
-import TrackmeButton from "../common/components/TrackmeButton";
-import CoachGroupService from "../services/CoachGroupService";
-import EditParticipants from "../common/components/groups/EditParticipants";
-import GroupHeader from "../common/components/groups/GroupHeader";
+import type { Workout } from "../../common/types/workouts/Workout";
+import GeneralService from "../../services/GeneralService";
+import DisplayWorkout from "../../common/components/display/DisplayWorkout";
+import { Variables } from "../../common/constants/Variables";
+import TrackmeButton from "../../common/components/TrackmeButton";
+import CoachGroupService from "../../services/CoachGroupService";
+import EditParticipants from "../../common/components/groups/EditParticipants";
+import GroupHeader from "../../common/components/groups/GroupHeader";
 
 // Component to view details for a specific group (participants and workouts)
 const ViewGroup = () => {

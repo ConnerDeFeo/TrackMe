@@ -7,16 +7,17 @@ import { useEffect, useState } from 'react';
 import UserService from './services/UserService';
 import Home from './pages/Home';
 import NavBar from './common/components/NavBar';
-import ViewGroup from './pages/ViewGroup';
+import ViewGroup from './pages/groups/ViewGroup';
 import WorkoutTemplates from './pages/WorkoutTemplates';
-import Groups from './pages/Groups';
-import GroupSchedule from './pages/GroupSchedule';
-import AssignWorkout from './pages/AssignWorkout';
-import RelationInvites from './pages/RelationInvites';
-import Relations from './pages/Relations';
-import Friends from './pages/Friends';
+import Groups from './pages/groups/Groups';
+import GroupSchedule from './pages/groups/GroupSchedule';
+import AssignWorkout from './pages/groups/AssignWorkout';
+import RelationInvites from './pages/relations/RelationInvites';
+import Relations from './pages/relations/Relations';
+import Friends from './pages/relations/Friends';
 import Profile from './pages/Profile';
 import { AuthContext } from './common/context/AuthContext';
+import History from './pages/history/History';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -27,7 +28,6 @@ export default function App() {
   useEffect(() => {
     async function checkAuth() {
       const accountType = await UserService.getAccountType();
-      console.log("Account type:", accountType);
       if (accountType !== AccountType.SignedOut) {
         setAccountType(accountType);
       }
@@ -60,6 +60,8 @@ export default function App() {
             <Route path="/relations" element={<Relations />} />
             <Route path="/relations/relation-invites" element={<RelationInvites />} />
             <Route path="/relations/friends" element={<Friends />} />
+
+            <Route path="/history" element={<History />} />
 
             <Route path="/workout-templates" element={<WorkoutTemplates />} />
 

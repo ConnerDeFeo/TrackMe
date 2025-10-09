@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+button{
+  cursor: pointer;
+}
 .trackme-blue{
   color: #007AFF;
 }

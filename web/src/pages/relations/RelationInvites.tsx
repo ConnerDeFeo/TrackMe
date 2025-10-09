@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import RelationService from "../services/RelationService";
-import RelationActionButton from "../common/components/display/RelationActionButton";
-import { RelationStatus } from "../common/constants/Enums";
-import UserDisplay from "../common/components/display/UserDisplay";
+import RelationService from "../../services/RelationService";
+import RelationActionButton from "../../common/components/display/RelationActionButton";
+import { RelationStatus } from "../../common/constants/Enums";
+import UserDisplay from "../../common/components/display/UserDisplay";
 
 const RelationInvites = () => {
     const [invites, setInvites] = useState<string[][]>([]);

@@ -31,28 +31,6 @@ resource "aws_db_subnet_group" "rds_private" {
   }
 }
 
-# VPC Endpoint for Bedrock Runtime
-resource "aws_vpc_endpoint" "bedrock_runtime" {
-  vpc_id              = data.aws_vpc.default.id 
-  service_name        = "com.amazonaws.us-east-2.bedrock-runtime"
-  vpc_endpoint_type   = "Interface"
-  
-  subnet_ids = [
-    aws_subnet.private_subnet1.id,
-    aws_subnet.private_subnet2.id,
-  ]
-
-  security_group_ids = [
-    aws_security_group.bedrock_vpc_endpoint.id
-  ]
-
-  private_dns_enabled = true
-
-  tags = {
-    Name = "bedrock-runtime-vpc-endpoint"
-  }
-}
-
 # RDS instance for TrackMe application
 resource "aws_db_instance" "default" {
   identifier           = "trackmedb"

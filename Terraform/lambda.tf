@@ -49,7 +49,6 @@ locals {
     "get_weekly_schedule",
     "create_user",
     "update_user_profile",
-    "bedrock_workout_generation",
 
     # Relation lambdas,
     "get_relation_invites",
@@ -58,6 +57,9 @@ locals {
     "remove_user_relation",
     "get_mutual_user_relations",
     "get_relation_invites_count",
+  ]
+  public_lambda_names = [
+    "bedrock_workout_generation",
   ]
 }
 
@@ -89,5 +91,25 @@ resource "aws_lambda_function" "lambdas" {
   vpc_config {
     subnet_ids         = [aws_subnet.private_subnet1.id, aws_subnet.private_subnet2.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+}
+
+resource "aws_lambda_function" "public_lambdas" {
+  for_each = toset(local.public_lambda_names)
+
+  function_name    = each.value
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "${each.value}.${each.value}"
+  runtime          = "python3.12"
+  filename         = data.archive_file.lambda_archives[each.value].output_path
+  source_code_hash = data.archive_file.lambda_archives[each.value].output_base64sha256
+  layers           = [aws_lambda_layer_version.user_auth.arn]
+  timeout          = 5
+
+  environment {
+    variables = {
+      RDS_REGION   = var.aws_region
+      ENVIRONMENT  = "production"
+    }
   }
 }

@@ -30,8 +30,8 @@ locals {
     "coaches/create_workout_template" = { lambda = aws_lambda_function.lambdas["create_workout_template"], method = "POST" }
     "coaches/assign_group_workout_template" = { lambda = aws_lambda_function.lambdas["assign_group_workout_template"], method = "POST" }
     "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
-    "coaches/bedrock_workout_generation" = { lambda = aws_lambda_function.lambdas["bedrock_workout_generation"], method = "POST" }
     "coaches/update_group_athletes" = { lambda = aws_lambda_function.lambdas["update_group_athletes"], method = "POST" }
+    "coaches/bedrock_workout_generation" = { lambda = aws_lambda_function.public_lambdas["bedrock_workout_generation"], method = "POST" }
 
     "general/mass_input" = { lambda = aws_lambda_function.lambdas["mass_input"], method = "POST" }
     "general/create_user" = { lambda = aws_lambda_function.lambdas["create_user"], method = "POST" }

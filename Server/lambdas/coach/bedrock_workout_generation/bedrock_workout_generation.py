@@ -1,7 +1,6 @@
 import json
 import boto3
-from user_auth import get_user_info, post_auth_header
-from rds import fetch_one
+from user_auth import post_auth_header
 
 
 def bedrock_workout_generation(event, context):
@@ -10,18 +9,7 @@ def bedrock_workout_generation(event, context):
 
     try:
         user_prompt = body.get('userPrompt', '')
-        user_info = get_user_info(event)
-        user_id = user_info['userId']
 
-        # Check to make sure user is valid
-        user = fetch_one("SELECT userId FROM users WHERE userId = %s", (user_id,))
-        if not user:
-            return {
-                'statusCode': 401,
-                'body': json.dumps({'error': 'Unauthorized'}),
-                'headers': auth_header
-            }
-        print("user valid!")
         prompt = f"""
             You are a workout generator. Create a running workout based on this request: {user_prompt}
 

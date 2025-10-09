@@ -110,6 +110,7 @@ const WorkoutCreation = ({
 
   const handleAIGeneration = async () => {
     const resp = await CoachWorkoutService.bedrockWorkoutGeneration(aiPrompt);
+    console.log(resp);
     if(resp.ok){
       try{
         const data = await resp.json();

@@ -12,7 +12,7 @@ const HistoryService = {
     getAvailableHistoryDates: async (date?: string) => {
         let url = `${VITE_API_URL}/coaches/get_available_history_dates`;
         if (date) {
-            url += `&date=${date}`;
+            url += `?date=${date}`;
         }
         return await API.get(url); 
     },

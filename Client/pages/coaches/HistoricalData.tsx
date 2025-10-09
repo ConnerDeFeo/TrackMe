@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import HistoryService from "../../services/HistoryService";
 import DisplayWorkout from "../../common/components/display/DisplayWorkout";
+import InputDisplay from "../../common/components/display/InputDisplay";
 
 const HistoricalData = ()=>{
     const route = useRoute();
@@ -50,10 +51,7 @@ const HistoricalData = ()=>{
                                     <Text className="text-md font-bold mb-2">{athleteData.username}</Text>
                                     <View className="gap-y-2">
                                         {athleteData.inputs.map((input: Record<string, any>, index: number) => (
-                                        <View key={index} className="bg-gray-100 rounded-lg p-3 flex-row justify-between items-center">
-                                            <Text className="text-gray-800 font-medium">Distance: {input.distance}m</Text>
-                                            <Text className="text-gray-600">Time: {input.time}s</Text>
-                                        </View>
+                                            <InputDisplay key={index} input={input} />
                                         ))}
                                     </View>
                                 </View>

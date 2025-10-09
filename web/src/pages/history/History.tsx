@@ -28,11 +28,11 @@ const History = () => {
         const resp = await HistoryService.getAvailableHistoryDates(dateInput);
         if (resp.ok) {
             const historyData = await resp.json();
+            console.log("Filtered dates:", historyData);    // Debug log
             setAvailableDates(historyData);              // Filter state by search result
         }
     };
 
-    console.log(availableDates)
     return(
         <div className="grid max-w-3xl mx-auto">
             <SearchDate
@@ -42,7 +42,7 @@ const History = () => {
             {availableDates.map((date) => (
                 <NavigationContainer
                     key={date}
-                    navigateTo={() => navigate(`view-history/${date}`)}
+                    navigateTo={() => navigate(`view/${date}`)}
                     text={date}
                 />
             ))}

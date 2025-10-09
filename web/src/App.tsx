@@ -18,6 +18,7 @@ import Friends from './pages/relations/Friends';
 import Profile from './pages/Profile';
 import { AuthContext } from './common/context/AuthContext';
 import History from './pages/history/History';
+import ViewHistory from './pages/history/ViewHistory';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -62,6 +63,7 @@ export default function App() {
             <Route path="/relations/friends" element={<Friends />} />
 
             <Route path="/history" element={<History />} />
+            <Route path="/history/view/:date" element={<ViewHistory />} />
 
             <Route path="/workout-templates" element={<WorkoutTemplates />} />
 

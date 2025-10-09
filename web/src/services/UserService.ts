@@ -23,6 +23,22 @@ const UserService = {
         } catch (error) {
         console.log("Error signing out:", error);
         }
+    },
+    getUserId: async () => {
+        try {
+        const user = await getCurrentUser();
+        return user.userId;
+        } catch (error) {
+        return null;
+        }
+    },
+    getUsername: async () => {
+        try {
+        const user = await getCurrentUser();
+        return user.username;
+        } catch (error) {
+        return null;
+        }
     }
 }
 

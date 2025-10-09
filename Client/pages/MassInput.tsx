@@ -13,7 +13,7 @@ import InputDisplay from "../common/components/display/InputDisplay";
 const MassInput = () => {
   const route = useRoute();
   const { groupId } = route.params as { groupId: string; };
-  const [workoutInputs, setWorkoutInputs] = useState<Record<string, {distance: number, time: number, inputId:number}[]>>({});
+  const [workoutInputs, setWorkoutInputs] = useState<Record<string, Input[]>>({});
   const [athletes, setAthletes] = useState<string[][]>([]);
   // Track current input values for each given group { groupId : [time/distance, time/distance] }
   const [currentInputs, setCurrentInputs] = 

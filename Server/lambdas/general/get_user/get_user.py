@@ -17,7 +17,8 @@ def get_user(event, context):
                     "bio": data[1],
                     "firstName": data[2],
                     "lastName": data[3],
-                })
+                }),
+                'headers': auth_header
             }
         return {
             "statusCode": 404,

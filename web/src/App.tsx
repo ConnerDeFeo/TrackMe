@@ -15,6 +15,8 @@ import AssignWorkout from './pages/AssignWorkout';
 import RelationInvites from './pages/RelationInvites';
 import Relations from './pages/Relations';
 import Friends from './pages/Friends';
+import Profile from './pages/Profile';
+import { AuthContext } from './common/context/AuthContext';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -25,6 +27,7 @@ export default function App() {
   useEffect(() => {
     async function checkAuth() {
       const accountType = await UserService.getAccountType();
+      console.log("Account type:", accountType);
       if (accountType !== AccountType.SignedOut) {
         setAccountType(accountType);
       }
@@ -42,24 +45,28 @@ export default function App() {
   }
 
   return (
-    <Router>
-      <NavBar />
-      <div className='min-h-[calc(100vh-4rem)] bg-gray-50'>
-        <Routes>
-          <Route path="/" element={accountType === AccountType.SignedOut ? <Login /> : <Home />} />
+    <AuthContext.Provider value={[accountType, setAccountType]}>
+      <Router>
+        <NavBar />
+        <div className='min-h-[calc(100vh-4rem)] bg-gray-50'>
+          <Routes>
+            <Route path="/" element={accountType === AccountType.SignedOut ? <Login /> : <Home />} />
 
-          <Route path="/groups" element={<Groups />} />
-          <Route path="/groups/view-group/:groupName/:groupId" element={<ViewGroup />} />
-          <Route path="/groups/view-group/:groupName/:groupId/schedule" element={<GroupSchedule />} />
-          <Route path="/groups/view-group/:groupName/:groupId/schedule/assign-workout/:date" element={<AssignWorkout />} />
+            <Route path="/groups" element={<Groups />} />
+            <Route path="/groups/view-group/:groupName/:groupId" element={<ViewGroup />} />
+            <Route path="/groups/view-group/:groupName/:groupId/schedule" element={<GroupSchedule />} />
+            <Route path="/groups/view-group/:groupName/:groupId/schedule/assign-workout/:date" element={<AssignWorkout />} />
 
-          <Route path="/relations" element={<Relations />} />
-          <Route path="/relations/relation-invites" element={<RelationInvites />} />
-          <Route path="/relations/friends" element={<Friends />} />
+            <Route path="/relations" element={<Relations />} />
+            <Route path="/relations/relation-invites" element={<RelationInvites />} />
+            <Route path="/relations/friends" element={<Friends />} />
 
-          <Route path="/workout-templates" element={<WorkoutTemplates />} />
-        </Routes>
-      </div>
-    </Router>
+            <Route path="/workout-templates" element={<WorkoutTemplates />} />
+
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthContext.Provider>
   );
 }

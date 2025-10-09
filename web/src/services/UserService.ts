@@ -11,11 +11,19 @@ const UserService = {
         if(user && (user['custom:accountType'] === AccountType.Athlete || user['custom:accountType'] === AccountType.Coach)){
             return user['custom:accountType'] as AccountType;
         }
-        return AccountType.SignedOut;
+            return AccountType.SignedOut;
         } catch (error) {
         return AccountType.SignedOut;
         }
     },
+    //signs user out and clears session data
+    signOut: async () => {
+        try {
+        await signOut();
+        } catch (error) {
+        console.log("Error signing out:", error);
+        }
+    }
 }
 
 export default UserService;

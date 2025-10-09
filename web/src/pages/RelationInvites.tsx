@@ -34,10 +34,9 @@ const RelationInvites = () => {
         }
     };
 
-    console.log(invites);
     return(
         <div className="mt-2 mx-4 max-w-5xl mx-auto">
-            {invites.map(([id, username, firstName, lastName, AccountType]) => (
+            {invites.map(([id, username, firstName, lastName, _]) => (
                 <div
                     key={id}
                     className="flex flex-row justify-between items-center border trackme-border-gray p-4 rounded-xl mb-3 bg-white shadow-sm"

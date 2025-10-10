@@ -216,6 +216,7 @@ const RenderGroupInputs: React.FC<
                 <TrackMeButton
                     onPress={handleInputSubmission}
                     text="Submit Entries"
+                    removeTextOnLoading
                 />
             </View>
         </View>

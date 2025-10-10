@@ -8,6 +8,9 @@ const CoachWorkoutService = {
     getWorkoutTemplates: async () => {
         return await API.get(`${VITE_API_URL}/coaches/get_workout_templates`);
     },
+    getWorkout: async (workoutId:string) => {
+        return await API.get(`${VITE_API_URL}/coaches/get_workout?workoutId=${workoutId}`);
+    },
     assignWorkoutTemplateToGroup: async (workoutId:string,groupId:string, date?: string) => {
         const payload: Record<string, any> = { workoutId, groupId };
         if(date){

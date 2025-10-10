@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import { useNavigation } from "@react-navigation/native";
-import NavigationContainer from "../../../common/components/display/NavigationContainer";
-import Workout from "../../../common/types/workouts/Workout";
 import ArrowButton from "../../../common/components/ArrowButton";
 const WorkoutTemplates = () => {
   const navigation = useNavigation<any>();
   // State to store fetched workout templates
-  const [workouts, setWorkouts] = useState<Array<Workout>>([]);
+  const [workouts, setWorkouts] = useState<{title:string, workoutId:string}[]>([]);
 
   // On mount, fetch all workout templates from the service
   useEffect(() => {

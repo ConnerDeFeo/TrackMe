@@ -5,5 +5,5 @@ export type Workout = {
     groupWorkoutId?: string;
     title: string;
     description?: string;
-    sections: Array<Section>;
+    sections?: Array<Section>;
 }

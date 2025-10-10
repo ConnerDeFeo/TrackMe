@@ -5,10 +5,11 @@ import TrackmeButton from "../common/components/TrackmeButton";
 import WorkoutTemplatesSideBar from "../common/components/display/WorkoutTemplatesSideBar";
 import WorkoutCreation from "../common/components/workout/WorkoutCreation";
 import type { Workout } from "../common/types/workouts/Workout";
+import type { WorkoutSummary } from "../common/types/workouts/WorkoutSummary";
 
 const WorkoutTemplates = () => {
   // State: list of workouts fetched from the server
-  const [workouts, setWorkouts] = useState<Array<Workout>>([]);
+  const [workoutSummaries, setWorkoutSummaries] = useState<WorkoutSummary[]>([]);
   // State: currently selected workout template
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
   // State: loading flag for spinners/UI feedback
@@ -16,26 +17,35 @@ const WorkoutTemplates = () => {
   // State: whether we're in "create or edit" mode
   const [inCreationMode, setInCreationMode] = useState(false);
 
+  const fetchWorkout = async (workoutId: string) => {
+    const resp = await CoachWorkoutService.getWorkout(workoutId);
+    if (resp.ok) {
+      const data = await resp.json();
+      setSelectedWorkout(data);
+    }else{
+      setSelectedWorkout(null);
+    }
+  };
+
   // Fetch workout templates from API and update state
   const fetchWorkouts = async () => {
     setLoading(true);
     const response = await CoachWorkoutService.getWorkoutTemplates();
     if (response.ok) {
       const data = await response.json();
-      setWorkouts(data || []);
+      setWorkoutSummaries(data || []);
       // Auto-select the first workout if available, otherwise clear selection
       if (data && data.length > 0) {
-        setSelectedWorkout(data[0]);
-      } else {
+        fetchWorkout(data[0].workoutId); 
+      } 
+      else {
+        // On error, clear list and selection
+        setWorkoutSummaries([]);
         setSelectedWorkout(null);
       }
-    } else {
-      // On error, clear list and selection
-      setWorkouts([]);
-      setSelectedWorkout(null);
-    }
-    setLoading(false);
-  };
+      setLoading(false);
+    };
+  }
 
   // Load templates on component mount
   useEffect(() => {
@@ -43,8 +53,8 @@ const WorkoutTemplates = () => {
   }, []);
 
   // Handler: select a workout from the sidebar
-  const handleSelectWorkout = (workout: Workout) => {
-    setSelectedWorkout(workout);
+  const handleSelectWorkout = async (workoutId: string) => {
+    await fetchWorkout(workoutId);
     setInCreationMode(false);
   };
 
@@ -69,8 +79,8 @@ const WorkoutTemplates = () => {
 
   // Handler: initialize creation of a new workout template
   const handleCreateNewWorkout = () => {
-    const newWorkout: Workout = { title: '', sections: [] };
-    setWorkouts(prev => [...prev, newWorkout]);
+    const newWorkout= { title: '' };
+    setWorkoutSummaries(prev => [...prev, newWorkout]);
     setSelectedWorkout(newWorkout);
     setInCreationMode(true);
   };
@@ -79,20 +89,20 @@ const WorkoutTemplates = () => {
   const handleWorkoutCreationCancel = () => {
     // If it's a new unsaved workout, remove it from the list
     if (!selectedWorkout?.workoutId) {
-      setWorkouts(prev => prev.filter(w => w !== selectedWorkout));
-      setSelectedWorkout(workouts.length > 0 ? workouts[0] : null);
+      setWorkoutSummaries(prev => prev.filter(w => w !== selectedWorkout));
+      setSelectedWorkout(workoutSummaries.length > 0 ? workoutSummaries[0] : null);
     }
     setInCreationMode(false);
   };
 
-  // Main render
+  console.log(selectedWorkout);
   return (
     <div className="flex border-t trackme-border-gray h-[calc(100vh-64px)]">
       {/* Sidebar with list of workout templates */}
       <WorkoutTemplatesSideBar
-        workouts={workouts}
+        workoutSummaries={workoutSummaries}
         selectedWorkout={selectedWorkout}
-        setSelectedWorkout={handleSelectWorkout}
+        handleWorkoutSelection={handleSelectWorkout}
         handleCreateNewWorkout={handleCreateNewWorkout}
         loading={loading}
       />
@@ -100,7 +110,7 @@ const WorkoutTemplates = () => {
       {/* Content area: either creation form or display + actions */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6 max-w-4xl mx-auto">
-          {workouts.length > 0 && selectedWorkout && (
+          {workoutSummaries.length > 0 && selectedWorkout && (
             inCreationMode ? (
               // Creation / edit form
               <WorkoutCreation

@@ -1,8 +1,10 @@
+import type { WorkoutSummary } from "../../types/workouts/WorkoutSummary";
 import TrackmeButton from "../TrackmeButton";
 
-const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout, loading, handleCreateNewWorkout }:
-    {workouts: Array<any>, selectedWorkout: any, setSelectedWorkout: (workout: any) => void, loading: boolean, handleCreateNewWorkout: () => void}
+const WorkoutTemplatesSideBar = ({ workoutSummaries, selectedWorkout, handleWorkoutSelection, loading, handleCreateNewWorkout }:
+    {workoutSummaries: WorkoutSummary[], selectedWorkout: any, handleWorkoutSelection: (workout: any) => void, loading: boolean, handleCreateNewWorkout: () => void}
 ) => {
+  
   return (
     <div className="w-80 bg-white border-r trackme-border-gray flex flex-col h-full">
         {/* Header */}
@@ -11,8 +13,8 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
             Workout Templates
           </h1>
           <p className="text-sm text-gray-600 mt-1">
-            {workouts.length}{" "}
-            {workouts.length === 1 ? "template" : "templates"}
+            {workoutSummaries.length}{" "}
+            {workoutSummaries.length === 1 ? "template" : "templates"}
           </p>
         </div>
 
@@ -24,7 +26,7 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 trackme-border-blue mx-auto" />
               <p className="mt-2 text-sm">Loading workouts...</p>
             </div>
-          ) : workouts.length === 0 ? (
+          ) : workoutSummaries.length === 0 ? (
             // No templates placeholder
             <div className="p-6 text-center text-gray-500">
               <p className="text-sm">No workout templates yet</p>
@@ -32,12 +34,12 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
           ) : (
             // Map over templates
             <div className="p-3 space-y-2">
-              {workouts.map((workout, idx) => (
+              {workoutSummaries.map((summary, idx) => (
                 <button
                   key={idx}
-                  onClick={() => setSelectedWorkout(workout)}
+                  onClick={() => handleWorkoutSelection(summary.workoutId)}
                   className={`w-full text-left p-4 rounded-lg transition-all ${
-                    selectedWorkout?.workoutId === workout.workoutId
+                    selectedWorkout?.workoutId === summary.workoutId
                       ? "trackme-bg-blue text-white shadow-md"
                       : "bg-gray-50 text-gray-900 hover:bg-gray-100"
                   }`}
@@ -45,24 +47,24 @@ const WorkoutTemplatesSideBar = ({ workouts, selectedWorkout, setSelectedWorkout
                   {/* Title */}
                   <h3
                     className={`font-semibold text-sm ${
-                      selectedWorkout?.workoutId === workout.workoutId
+                      selectedWorkout?.workoutId === summary.workoutId
                         ? "text-white"
                         : "text-gray-900"
                     }`}
                   >
-                    {workout.title}
+                    {summary.title}
                   </h3>
 
                   {/* Description */}
-                  {workout.description && (
+                  {summary.description && (
                     <p
                       className={`text-xs mt-1 line-clamp-2 ${
-                        selectedWorkout?.workoutId === workout.workoutId
+                        selectedWorkout?.workoutId === summary.workoutId
                           ? "text-blue-100"
                           : "text-gray-600"
                       }`}
                     >
-                      {workout.description}
+                      {summary.description}
                     </p>
                   )}
                 </button>

@@ -1,0 +1,1 @@
+export type WorkoutSummary = { title: string; description?: string; workoutId?: string };

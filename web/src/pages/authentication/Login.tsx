@@ -8,13 +8,13 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [_, setAccountType] = useContext(AuthContext);
-
     const handleSubmit = async () => {
         try {
             await UserService.signIn(email, password);
             const accountType: AccountType = await UserService.getAccountType();
             if (accountType !== AccountType.SignedOut) {
                 setAccountType(accountType);
+                window.location.replace('/'); // Redirect to home page after successful login
             } 
         } catch (error) {
             setError(error instanceof Error ? error.message : 'An unknown error occurred.');

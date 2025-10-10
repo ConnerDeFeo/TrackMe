@@ -269,9 +269,9 @@ def test_mass_input_success():
         "body": json.dumps({
             "groupId": 1,
             "athleteData": {
-                "1234": [{"time": 12.5, "distance": 100}, {"time": 25.0, "distance": 200}],
-                "5678": [{"time": 11.0, "distance": 100}, {"time": 22.0, "distance": 200}],
-                "91011": [{"time": 10.5, "distance": 100}, {"time": 21.0, "distance": 200}]
+                "1234": [{"time": 12.5, "distance": 100, "type": "run"}, {"time": 25.0, "distance": 200, "type": "run"}],
+                "5678": [{"time": 11.0, "distance": 100, "type": "run"},{"restTime": 5, "type": "rest"}, {"time": 22.0, "distance": 200, "type": "run"}],
+                "91011": [{"time": 10.5, "distance": 100, "type": "run"}, {"time": 21.0, "distance": 200, "type": "run"}]
             }
         }),
         "headers": generate_auth_header("123", "Coach", "testcoach")
@@ -282,14 +282,14 @@ def test_mass_input_success():
 
     # Assert
     assert response['statusCode'] == 200
-    all_inputs = fetch_all("SELECT athleteId, distance, time FROM athlete_time_inputs WHERE groupId = %s ORDER BY athleteId, distance", (1,))
+    all_inputs = fetch_all("SELECT athleteId, distance, time, restTime FROM athlete_inputs WHERE groupId = %s ORDER BY athleteId, timeStamp", (1,))
     assert all_inputs is not None
-    assert len(all_inputs) == 6
+    assert len(all_inputs) == 7
     
     expected_inputs = [
-        ('1234', 100, 12.5), ('1234', 200, 25.0),
-        ('5678', 100, 11.0), ('5678', 200, 22.0),
-        ('91011', 100, 10.5), ('91011', 200, 21.0)
+        ('1234', 100, 12.5, None), ('1234', 200, 25.0, None),
+        ('5678', 100, 11.0, None), ('5678', None, None, 5), ('5678', 200, 22.0, None),
+        ('91011', 100, 10.5, None), ('91011', 200, 21.0, None)
     ]
     assert all_inputs == expected_inputs
 

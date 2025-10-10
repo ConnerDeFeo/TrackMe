@@ -1,6 +1,6 @@
 import json
 from rds import execute_commit_many, fetch_one
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from user_auth import get_user_info, post_auth_header
 
 # Insert multiple athlete inputs into the database
@@ -33,21 +33,37 @@ def mass_input(event, context):
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))  # date in 'YYYY-MM-DD' format, optional
 
         # Prepare parameters for bulk insert
-        params = []
+        rest_params = []
+        time_params = []
+        now = datetime.now(timezone.utc)
         for athleteId, inputs in athlete_data.items():
-            for input in inputs:
-                time = input['time']
-                distance = input['distance']
-                if time == '' or distance == '':
-                    continue
-                params.append((athleteId, groupId, distance, time, date))
+            for j, input in enumerate(inputs):
+                timestamp = now + timedelta(milliseconds=j)
+                if input['type'] == 'rest':
+                    rest_time = input['restTime']
+                    if rest_time == '':
+                        continue
+                    rest_params.append((athleteId, groupId, rest_time, date, timestamp))
+                else:
+                    time = input['time']
+                    distance = input['distance']
+                    if time == '' or distance == '':
+                        continue
+                    time_params.append((athleteId, groupId, distance, time, date, timestamp))
 
-        # Bulk insert into the database
+        # Bulk insert into the database for time inputs
         execute_commit_many(
             """
-                INSERT INTO athlete_time_inputs (athleteId, groupId, distance, time, date)
+                INSERT INTO athlete_time_inputs (athleteId, groupId, distance, time, date, timeStamp)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, time_params)
+        
+        # Bulk insert into the database for rest inputs
+        execute_commit_many(
+            """
+                INSERT INTO athlete_rest_inputs (athleteId, groupId, restTime, date, timeStamp)
                 VALUES (%s, %s, %s, %s, %s)
-            """, params)
+            """, rest_params)
         
         return {
             'statusCode': 200,

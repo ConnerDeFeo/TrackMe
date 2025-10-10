@@ -1,10 +1,9 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, TextInput, Pressable, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../common/hooks/usePersistentState";
 import InputTracking from "../common/components/InputTracking";
-import TimeDistanceDisplay from "../common/components/display/TimeDistanceDisplay";
 import DateService from "../services/DateService";
 import UserDisplay from "../common/components/display/UserDisplay";
 import { Input } from "../common/types/inputs/Input";
@@ -85,6 +84,7 @@ const MassInput = () => {
           fetchData();
         }
     }
+  console.log("Current Inputs State:", currentInputs);
   return (
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(

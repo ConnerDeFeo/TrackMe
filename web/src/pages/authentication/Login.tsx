@@ -2,20 +2,25 @@ import { useState } from 'react'
 import UserService from '../../services/UserService'
 
 const Login = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async () => {
-        await UserService.signIn(email, password);
+        try {
+            await UserService.signIn(email, password);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'An unknown error occurred.');
+        }
     }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div
-                className="w-full max-w-md bg-white p-8 rounded-lg shadow-md space-y-6"
+                className="w-full max-w-md bg-white p-8 rounded-lg shadow-md space-y-6 relative"
             >
                 <h2 className="text-2xl font-bold text-center">Login</h2>
-
+                {error && <div className="text-red-500 text-sm text-center absolute top-16 left-0 right-0">{error}</div>}
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium mb-1">
                         Username or Email

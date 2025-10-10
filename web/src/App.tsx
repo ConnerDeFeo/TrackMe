@@ -46,6 +46,10 @@ export default function App() {
   }
 
   if (accountType === AccountType.SignedOut) {
+    const location = window.location;
+    if (location.pathname !== '/' && location.pathname !== '/login') {
+      window.history.replaceState({}, '', '/login');
+    }
     return (
       <AuthContext.Provider value={[accountType, setAccountType]}>
         <Login />

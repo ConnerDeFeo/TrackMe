@@ -13,7 +13,7 @@ const UserService = {
         }
             return AccountType.SignedOut;
         } catch (error) {
-        return AccountType.SignedOut;
+            return AccountType.SignedOut;
         }
     },
     //signs user out and clears session data

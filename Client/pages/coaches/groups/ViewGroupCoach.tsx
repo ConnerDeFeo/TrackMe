@@ -59,7 +59,6 @@ const ViewGroup = () => {
     }, [fetchParticipants, fetchWorkout])
   );
 
-  console.log("Workouts:", workouts);
   return (
     <View className="px-4 mb-8">
       {/* Action buttons: Send workout and view group inputs */}

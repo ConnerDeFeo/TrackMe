@@ -85,7 +85,6 @@ const MassInput = () => {
           fetchData();
         }
     }
-  console.log("Current Inputs State:", currentInputs);
   return (
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(

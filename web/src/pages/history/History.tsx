@@ -28,7 +28,6 @@ const History = () => {
         const resp = await HistoryService.getAvailableHistoryDates(dateInput);
         if (resp.ok) {
             const historyData = await resp.json();
-            console.log("Filtered dates:", historyData);    // Debug log
             setAvailableDates(historyData);              // Filter state by search result
         }
     };

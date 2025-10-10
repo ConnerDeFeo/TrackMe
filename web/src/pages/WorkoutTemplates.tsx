@@ -28,28 +28,25 @@ const WorkoutTemplates = () => {
   };
 
   // Fetch workout templates from API and update state
-  const fetchWorkouts = async () => {
+  const fetchWorkoutTemplates = async () => {
     setLoading(true);
     const response = await CoachWorkoutService.getWorkoutTemplates();
     if (response.ok) {
       const data = await response.json();
-      setWorkoutSummaries(data || []);
       // Auto-select the first workout if available, otherwise clear selection
-      if (data && data.length > 0) {
         fetchWorkout(data[0].workoutId); 
-      } 
-      else {
-        // On error, clear list and selection
-        setWorkoutSummaries([]);
-        setSelectedWorkout(null);
-      }
-      setLoading(false);
-    };
+        setWorkoutSummaries(data);
+    }else {
+      // On error, clear list and selection
+      setWorkoutSummaries([]);
+      setSelectedWorkout(null);
+    }
+    setLoading(false);
   }
 
   // Load templates on component mount
   useEffect(() => {
-    fetchWorkouts();
+    fetchWorkoutTemplates();
   }, []);
 
   // Handler: select a workout from the sidebar
@@ -62,17 +59,16 @@ const WorkoutTemplates = () => {
   const handleWorkoutSave = async (workout: Workout) => {
     const resp = await CoachWorkoutService.createWorkoutTemplate(workout);
     if (resp.ok) {
-      await fetchWorkouts();
+      await fetchWorkoutTemplates();
       setInCreationMode(false);
     }
   };
 
   // Handler: delete a workout template by ID
   const handleWorkoutDeletion = async (workoutId: string) => {
-    setLoading(true);
     const resp = await CoachWorkoutService.deleteWorkoutTemplate(workoutId);
     if (resp.ok) {
-      await fetchWorkouts();
+      await fetchWorkoutTemplates();
       setInCreationMode(false);
     }
   };
@@ -95,7 +91,6 @@ const WorkoutTemplates = () => {
     setInCreationMode(false);
   };
 
-  console.log(selectedWorkout);
   return (
     <div className="flex border-t trackme-border-gray h-[calc(100vh-64px)]">
       {/* Sidebar with list of workout templates */}

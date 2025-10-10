@@ -4,7 +4,6 @@ import TrackmeButton from "../TrackmeButton";
 const WorkoutTemplatesSideBar = ({ workoutSummaries, selectedWorkout, handleWorkoutSelection, loading, handleCreateNewWorkout }:
     {workoutSummaries: WorkoutSummary[], selectedWorkout: any, handleWorkoutSelection: (workout: any) => void, loading: boolean, handleCreateNewWorkout: () => void}
 ) => {
-  
   return (
     <div className="w-80 bg-white border-r trackme-border-gray flex flex-col h-full">
         {/* Header */}
@@ -34,12 +33,14 @@ const WorkoutTemplatesSideBar = ({ workoutSummaries, selectedWorkout, handleWork
           ) : (
             // Map over templates
             <div className="p-3 space-y-2">
-              {workoutSummaries.map((summary, idx) => (
+              {workoutSummaries.map((summary, idx) => {
+                const isSelected = selectedWorkout?.workoutId === `${summary.workoutId}`;
+                return (
                 <button
                   key={idx}
                   onClick={() => handleWorkoutSelection(summary.workoutId)}
                   className={`w-full text-left p-4 rounded-lg transition-all ${
-                    selectedWorkout?.workoutId === summary.workoutId
+                    isSelected
                       ? "trackme-bg-blue text-white shadow-md"
                       : "bg-gray-50 text-gray-900 hover:bg-gray-100"
                   }`}
@@ -47,7 +48,7 @@ const WorkoutTemplatesSideBar = ({ workoutSummaries, selectedWorkout, handleWork
                   {/* Title */}
                   <h3
                     className={`font-semibold text-sm ${
-                      selectedWorkout?.workoutId === summary.workoutId
+                      isSelected
                         ? "text-white"
                         : "text-gray-900"
                     }`}
@@ -59,7 +60,7 @@ const WorkoutTemplatesSideBar = ({ workoutSummaries, selectedWorkout, handleWork
                   {summary.description && (
                     <p
                       className={`text-xs mt-1 line-clamp-2 ${
-                        selectedWorkout?.workoutId === summary.workoutId
+                        isSelected
                           ? "text-blue-100"
                           : "text-gray-600"
                       }`}
@@ -68,7 +69,7 @@ const WorkoutTemplatesSideBar = ({ workoutSummaries, selectedWorkout, handleWork
                     </p>
                   )}
                 </button>
-              ))}
+)})}
             </div>
           )}
         </div>

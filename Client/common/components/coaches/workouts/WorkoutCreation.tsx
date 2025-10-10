@@ -37,7 +37,6 @@ const WorkoutCreation = ({
   useEffect(() => {
     const fetchWorkout = async () => {
       if (workoutId) {
-        console.log("Fetching workout with ID:", workoutId);
         const resp = await CoachWorkoutService.getWorkout(workoutId);
         if (resp.ok) {
           const data = await resp.json();
@@ -129,7 +128,6 @@ const WorkoutCreation = ({
 
   const handleAIGeneration = async () => {
     const resp = await CoachWorkoutService.bedrockWorkoutGeneration(aiPrompt);
-    console.log(resp);
     if(resp.ok){
       try{
         const data = await resp.json();

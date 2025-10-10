@@ -1,4 +1,5 @@
-import { Text, TextInput, Pressable, View } from "react-native";
+import { Text, TextInput, Pressable, View, Image } from "react-native";
+import { useState } from "react";
 import Section from "../../../types/workouts/Section";
 import { Rest } from "../../../types/workouts/Rest";
 import { ExerciseType } from "../../../constants/Enums";
@@ -55,6 +56,20 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
     handleExerciseChange(partIdx, field, numericValue);
   }
 
+  const [expandedNotes, setExpandedNotes] = useState<Set<number>>(new Set());
+
+  const toggleNotes = (partIdx: number) => {
+    setExpandedNotes(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(partIdx)) {
+        newSet.delete(partIdx);
+      } else {
+        newSet.add(partIdx);
+      }
+      return newSet;
+    });
+  };
+
   return (
     <View className="rounded-lg mb-4">
       <Text className="text-xl font-bold text-center mt-2 border-y py-3 trackme-border-gray">Exercises</Text>
@@ -66,10 +81,19 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
             <Text className="font-semibold">
               {exercise.type.charAt(0).toUpperCase() + exercise.type.slice(1)}
             </Text>
-            {/* Button to remove this exercise */}
-            <Pressable onPress={() => handleExerciseRemoval(partIdx)} className="py-3 pl-4">
-              <Text className="trackme-red">Remove</Text>
-            </Pressable>
+            <View className="flex-row items-center">
+              {/* Button to toggle notes */}
+              <Pressable 
+                onPress={() => toggleNotes(partIdx)} 
+                className={`py-3 px-4 ${expandedNotes.has(partIdx) || exercise.notes ? 'bg-blue-50' : ''} rounded`}
+              >
+                <Image source={require('../../../../assets/images/Notes.webp')} className="w-5 h-5" />
+              </Pressable>
+              {/* Button to remove this exercise */}
+              <Pressable onPress={() => handleExerciseRemoval(partIdx)} className="py-3 pl-4">
+                <Text className="trackme-red">Remove</Text>
+              </Pressable>
+            </View>
           </View>
 
           {/* Conditional rendering for 'Run' exercises */}
@@ -162,6 +186,22 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
                   currSeconds={exercise.maxReps || 0}
                 />
               </View>
+            </View>
+          )}
+
+          {/* Expandable Notes Section */}
+          {expandedNotes.has(partIdx) && (
+            <View className="mt-3 pt-3 border-t trackme-border-gray">
+              <Text className="text-sm font-medium text-gray-500 mb-1">Notes</Text>
+              <TextInput
+                className="border trackme-border-gray rounded-md p-3 bg-white text-black"
+                value={exercise.notes || ''}
+                onChangeText={text => handleExerciseChange(partIdx, 'notes', text)}
+                placeholder="Add notes for this exercise..."
+                multiline
+                numberOfLines={3}
+                textAlignVertical="top"
+              />
             </View>
           )}
         </View>

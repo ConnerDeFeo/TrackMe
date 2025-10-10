@@ -22,8 +22,7 @@ const DisplayExercise = ({
     }
 
     // Helper to format rest time from seconds to "Xm Ys"
-    const formatRest = (sec?: number) =>
-        `${sec ? sec / 60 : ""}m ${sec ? `${sec % 60}s` : ""}`
+    const formatRest = (sec?: number) => `${sec ? Math.floor(sec / 60) : ""}m ${sec ? `${sec % 60}s` : ""}`
 
     // Build the display content based on exercise type
     const getContent = () => {
@@ -62,7 +61,7 @@ const DisplayExercise = ({
                 )}
             </div>
             {exercise.notes && (
-                <div className="mt-2 pl-9 text-xs text-gray-600 italic border-l-2 border-blue-200">
+                <div className="mt-2 pl-9 text-xs text-gray-600 italic border-l-2 border-blue-200 break-words">
                     <span className="pl-2">{exercise.notes}</span>
                 </div>
             )}

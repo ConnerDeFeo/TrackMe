@@ -1,3 +1,4 @@
+import type { Workout } from "../common/types/workouts/Workout";
 import API from "./API";
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -40,8 +41,8 @@ const CoachWorkoutService = {
         }
         return await API.post(`${VITE_API_URL}/coaches/assign_group_workout`, payload);
     },
-    bedrockWorkoutGeneration: async (userPrompt:string) => {
-        return await API.post(`${VITE_API_URL}/coaches/bedrock_workout_generation`, { userPrompt });
+    bedrockWorkoutGeneration: async (userPrompt:string, currentWorkout?: Workout) => {
+        return await API.post(`${VITE_API_URL}/coaches/bedrock_workout_generation`, { userPrompt, currentWorkout });
     }
 }
 

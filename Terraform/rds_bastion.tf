@@ -24,7 +24,7 @@
 #   }
 # }
 
-# Allow batstion to connect to rds instance in the default security group
+# #Allow batstion to connect to rds instance in the default security group
 # resource "aws_security_group_rule" "allow_bastion_to_rds" {
 #   type                     = "ingress"
 #   from_port                = 5432
@@ -110,8 +110,10 @@
 #   # Install PostgreSQL client automatically
 #   user_data = <<-EOF
 #               #!/bin/bash
-#               yum update -y
-#               yum install -y postgresql
+#               sudo yum update -y
+#               sudo yum install -y postgresql
+#               sudo amazon-linux-extras enable postgresql14
+#               sudo yum install -y postgresql
 #               EOF
 
 #   tags = {

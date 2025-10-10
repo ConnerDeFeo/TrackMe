@@ -9,9 +9,11 @@ def bedrock_workout_generation(event, context):
 
     try:
         user_prompt = body.get('userPrompt', '')
+        current_workout = body.get('currentWorkout', "(The user has no current workout)")
 
         prompt = f"""
             You are a workout generator. Create a running workout based on this request: {user_prompt}
+            The users current workout is: {current_workout}
 
             Return ONLY a JSON object. Do NOT use markdown, code blocks, or any formatting.
 
@@ -31,7 +33,8 @@ def bedrock_workout_generation(event, context):
                                 "distance": int (only if type == "run"),
                                 "description": "string" (only if type == "strength"),
                                 "minReps": int,
-                                "maxReps": int
+                                "maxReps": int,
+                                "notes": "string" (optional)
                             }}
                         ]
                     }}
@@ -44,8 +47,8 @@ def bedrock_workout_generation(event, context):
             - type "strength": must have description (string) and minReps (int)
             - maxSets and maxReps are optional (only use for ranges like minReps: 3, maxReps: 5)
             - Start your response with {{ and end with }}. No other text.
+            - Notes are optional for any exercise, however should be added if needed for clarity. E.g 200 meters at 75% effort
         """
-        print("Attempting bedrock connection!")
         bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 
         print("Connected to bedrock, invoking model...")
@@ -61,9 +64,7 @@ def bedrock_workout_generation(event, context):
             inferenceConfig={"maxTokens": 1000, "temperature": 0.3, "topP": 0.9}
         )
 
-        print("Model invoked, processing response...")
         raw_text = response["output"]["message"]["content"][0]["text"]
-        print(f"Raw model output: {raw_text}")
         # Attempt to parse JSON safely
         try:
             workout_json = json.loads(raw_text)

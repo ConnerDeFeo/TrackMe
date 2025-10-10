@@ -113,7 +113,7 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
             <label className="text-xs font-semibold text-gray-600 uppercase">Sets:</label>
             <input 
               type="number" 
-              value={section.minSets} 
+              value={section.minSets === 0 ? '' : section.minSets} 
               onChange={(e) => handleMinSetsChange(e.target.value)} 
               placeholder="Min"
               className="w-16 px-2 py-2 text-center border-2 border-gray-200 rounded-lg focus:outline-none focus:border-trackme-blue transition-all"

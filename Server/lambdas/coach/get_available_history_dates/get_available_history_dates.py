@@ -17,15 +17,26 @@ def get_available_history_dates(event, context):
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
-        dates = fetch_all("""
-            SELECT DISTINCT gw.date
-            FROM group_workouts gw
-            JOIN groups g ON gw.groupId = g.id
-            WHERE g.coachId = %s
-            AND gw.date <= %s
-            ORDER BY gw.date DESC
-            LIMIT 7
-        """, (coach_id, date)) or []
+        dates = fetch_all(
+        """
+            SELECT DISTINCT date
+            FROM (
+                SELECT gw.date
+                FROM group_workouts gw
+                JOIN groups g ON gw.groupId = g.id
+                WHERE g.coachId = %s
+
+                UNION
+
+                SELECT ai.date
+                FROM athlete_inputs ai
+                JOIN groups g ON ai.groupId = g.id
+                WHERE g.coachId = %s
+            ) AS combined
+            WHERE date <= %s
+            ORDER BY date DESC
+            LIMIT 7;
+        """, (coach_id, coach_id, date)) or []
 
         return {
             "statusCode": 200,

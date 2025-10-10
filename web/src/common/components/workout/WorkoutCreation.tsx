@@ -3,11 +3,13 @@ import type { Workout } from "../../types/workouts/Workout";
 import SectionCreation from "./SectionCreation";
 import type { Section } from "../../types/workouts/Section";
 import TrackmeButton from "../TrackmeButton";
+import CoachWorkoutService from "../../../services/CoachWorkoutService";
 
 const WorkoutCreation = ({ workout, handleWorkoutCreation, handleCancel }:{ workout?: Workout, handleWorkoutCreation: (workout: Workout) => void, handleCancel?: () => void }) => {
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [sections, setSections] = useState<Section[]>([]);
+    const [aiWorkoutPrompt, setAiWorkoutPrompt] = useState<string>('');
 
     useEffect(() => {
         if (workout) {
@@ -16,6 +18,18 @@ const WorkoutCreation = ({ workout, handleWorkoutCreation, handleCancel }:{ work
             setSections(workout.sections || []);
         }
     }, [workout]);
+
+    const handleAiWorkoutGeneration = async () => {
+        const resp = await CoachWorkoutService.bedrockWorkoutGeneration(aiWorkoutPrompt, workout);
+        if (resp.ok) {
+            const data = await resp.json();
+            if(data){
+                setTitle(data.title || '');
+                setDescription(data.description || '');
+                setSections(data.sections || []);
+            }
+        }
+    }
 
     return(
         <>
@@ -54,7 +68,39 @@ const WorkoutCreation = ({ workout, handleWorkoutCreation, handleCancel }:{ work
             <TrackmeButton className="mt-3 w-full" onClick={() => setSections((prev) => [...prev, { name: '', minSets: 1 }])}>
                 Add Section
             </TrackmeButton>
-            <div className="flex gap-x-3 mt-6">
+            <div className="relative">
+                <textarea
+                    value={aiWorkoutPrompt}
+                    onChange={(e) => {
+                        setAiWorkoutPrompt(e.target.value);
+                        // reset height to auto to recalculate scrollHeight
+                        e.target.style.height = 'auto';
+                        // cap the height at 200px, after that it will scroll
+                        const newHeight = Math.min(e.target.scrollHeight, 200);
+                        e.target.style.height = `${newHeight}px`;
+                    }}
+                    className="border trackme-border-gray rounded w-full p-4 my-4 pr-12 resize-none overflow-y-auto max-h-[200px] break-words"
+                    placeholder="AI Workout Generation"
+                    onKeyDown={e => {if (e.key==="Enter"){handleAiWorkoutGeneration();}}}
+                />
+                <div className="absolute right-4 bottom-10">
+                    { aiWorkoutPrompt === "" ?
+                        <img
+                            alt="AI Workout Generation"
+                            src="/assets/images/Sparkle.png"
+                            className="h-10 w-10"
+                        />
+                        :
+                        <img
+                            alt="AI Workout Generation"
+                            src="/assets/images/ArrowUp.png"
+                            className="h-10 w-10 cursor-pointer"
+                            onClick={handleAiWorkoutGeneration}
+                        />
+                    }
+                </div>
+            </div>
+            <div className="flex gap-x-3">
                 <TrackmeButton onClick={handleCancel} className="w-full" gray>
                     Cancel
                 </TrackmeButton>

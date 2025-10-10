@@ -244,7 +244,7 @@ const ExerciseCreation = ({
               onClick={() => toggleNotes(partIdx)}
               className={`ml-auto flex-shrink-0 px-2 py-1 text-xs rounded transition-all ${
                 expandedNotes.has(partIdx) || exercise.notes
-                  ? 'text-trackme-blue bg-blue-50 hover:bg-blue-100'
+                  ? 'text-trackme-blue bg-blue-100 hover:bg-blue-300'
                   : 'text-gray-500 hover:bg-gray-100'
               }`}
               title="Add notes"

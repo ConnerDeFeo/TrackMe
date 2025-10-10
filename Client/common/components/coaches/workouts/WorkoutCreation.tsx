@@ -7,30 +7,37 @@ import { ExerciseType } from "../../../constants/Enums";
 import { Exercise } from "../../../types/workouts/Exercise";
 import CoachWorkoutService from "../../../../services/CoachWorkoutService";
 import TrackMeButton from "../../display/TrackMeButton";
+import Workout from "../../../types/workouts/Workout";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({
+  // EITHER WORKOUT ID OR WORKOUT OBJECT CAN BE PASSED IN
+  // If workoutId is provided, fetch workout details from server
+  // If workout object is provided, use it to prefill form
   workoutId,
   handleWorkoutCreation,
   buttonText,
-  onRemove
+  onRemove,
+  workout
 }: {
   workoutId?: string
   handleWorkoutCreation: (workoutData: any) => void
   buttonText: string
   onRemove?: () => void
+  workout?: Workout
 }) => {
 
   // Local state for title, description and sections list
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [sections, setSections] = useState<Array<Section>>([]);
-  const [groupWorkoutId, setGroupWorkoutId] = useState<string | undefined>(undefined);
+  const [title, setTitle] = useState<string>(workout?.title || "");
+  const [description, setDescription] = useState<string>(workout?.description || "");
+  const [sections, setSections] = useState<Array<Section>>(workout?.sections || []);
+  const [groupWorkoutId, setGroupWorkoutId] = useState<string | undefined>(workout?.groupWorkoutId);
   const [aiPrompt, setAIPrompt] = useState<string>("");
 
   useEffect(() => {
     const fetchWorkout = async () => {
       if (workoutId) {
+        console.log("Fetching workout with ID:", workoutId);
         const resp = await CoachWorkoutService.getWorkout(workoutId);
         if (resp.ok) {
           const data = await resp.json();

@@ -1,38 +1,44 @@
 import { useState } from "react";
 import { Pressable, Text, View, ActivityIndicator, LayoutChangeEvent } from "react-native";
 
+// Reusable button component with optional loading state and color variants
 const TrackMeButton = ({
-  text,
-  onPress,
-  red,
-  gray,
-  className,
-  removeTextOnLoading,
+  text,                 // Label text for the button
+  onPress,              // Callback when the button is pressed
+  red,                  // Optional flag to render red background
+  gray,                 // Optional flag to render gray background
+  className,            // Additional tailwind or custom classes
+  removeTextOnLoading,  // Hide text when showing loading indicator
 }: {
-  text: string
-  onPress: () => void | Promise<void>
-  red?: boolean
-  gray?: boolean
-  className?: string
-  removeTextOnLoading?: boolean
+  text: string;
+  onPress: () => void | Promise<void>;
+  red?: boolean;
+  gray?: boolean;
+  className?: string;
+  removeTextOnLoading?: boolean;
 }) => {
+  // Local loading state to prevent double taps and show spinner
   const [loading, setLoading] = useState(false);
+  // Store measured button width to keep a fixed size during loading
   const [buttonWidth, setButtonWidth] = useState<number>(0);
 
+  // Handle press logic, detect Promise to toggle loading state
   const handlePress = () => {
-    const res = onPress();
-    if (res instanceof Promise) {
+    const result = onPress();
+    if (result instanceof Promise) {
       setLoading(true);
-      res.finally(() => setLoading(false));
+      result.finally(() => setLoading(false));
     }
   };
 
+  // Measure the button width on first layout for consistent sizing
   const onLayout = (e: LayoutChangeEvent) => {
     if (!buttonWidth) {
       setButtonWidth(e.nativeEvent.layout.width);
     }
   };
 
+  // Determine background and text colors based on props
   const bgColor = red
     ? "trackme-bg-red"
     : gray
@@ -43,12 +49,15 @@ const TrackMeButton = ({
   return (
     <Pressable
       onLayout={onLayout}
+      // Disable tap when loading
       onPress={loading ? undefined : handlePress}
       disabled={loading}
       className={`rounded-lg py-2 px-4 ${bgColor} ${className}`}
+      // Apply measured width to avoid layout shifts when spinner appears
       style={buttonWidth ? { width: buttonWidth } : undefined}
     >
       {loading ? (
+        // Show spinner with optional text if removeTextOnLoading is false
         <View className="flex-row items-center justify-center">
           <ActivityIndicator
             size="small"
@@ -61,7 +70,10 @@ const TrackMeButton = ({
           )}
         </View>
       ) : (
-        <Text className={`text-center font-medium ${textColor}`}>{text}</Text>
+        // Default button label when not loading
+        <Text className={`text-center font-medium ${textColor}`}>
+          {text}
+        </Text>
       )}
     </Pressable>
   );

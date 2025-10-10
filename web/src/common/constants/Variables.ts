@@ -9,5 +9,6 @@ export const Variables = {
         trash: '🗑️',
         friends: '👥',
         workout: '🏋️',
+        notes: '📝',
     }
 }

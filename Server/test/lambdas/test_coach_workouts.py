@@ -5,9 +5,10 @@ from lambdas.coach.create_workout_template.create_workout_template import create
 from lambdas.coach.delete_workout_template.delete_workout_template import delete_workout_template
 from lambdas.coach.get_workout_templates.get_workout_templates import get_workout_templates
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
+from lambdas.coach.get_workout_template.get_workout_template import get_workout_template
 from lambdas.general.create_user.create_user import create_user
 from data import TestData
-from rds import execute_file, fetch_one, fetch_all
+from rds import execute_file, fetch_one
 from datetime import datetime, timezone 
 from testing_utils import *
 
@@ -142,3 +143,22 @@ def test_assign_group_workout_template_creates_assignment():
     # Assert
     response = fetch_one("SELECT * FROM group_workouts WHERE groupId = %s AND workoutId = %s", (1, 1))
     assert response is not None
+
+def test_get_workout_template_returns_success():
+    # Arrange
+    create_workout_template(TestData.test_workout, {})
+    event = {
+        "queryStringParameters": {"workoutId": 1},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = get_workout_template(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert body['workoutId'] == 1
+    assert body['title'] == "Test Workout"
+    assert body['description'] == "This is a test workout"
+    assert len(body['sections']) == 3

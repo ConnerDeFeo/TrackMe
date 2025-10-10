@@ -3,6 +3,7 @@ import { Text, Pressable, View } from "react-native";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DisplayWorkout from "../../../common/components/display/DisplayWorkout";
+import TrackMeButton from "../../../common/components/display/TrackMeButton";
 
 // AssignWorkout component for assigning workouts to a group
 const AssignWorkout = () => {
@@ -48,12 +49,11 @@ const AssignWorkout = () => {
                 ))}
             </View>
             {/* Button to navigate to the screen for creating a new workout */}
-            <Pressable
-                onPress={() => navigation.navigate('AssignNewWorkout', { groupId, groupName, date})}
-                className="trackme-bg-blue rounded-lg py-3 mx-4 mt-4"
-            >
-                <Text className="text-white font-semibold text-center">Assign New Workout</Text>
-            </Pressable>
+            <TrackMeButton 
+                text="Assign New Workout" 
+                onPress={() => navigation.navigate('AssignNewWorkout', { groupId, groupName, date})} 
+                className="mx-4"
+            />
         </View>
     );
 };

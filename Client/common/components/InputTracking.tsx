@@ -1,7 +1,8 @@
-import { Text, TextInput, Pressable, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
 import TimeInput from "./TimeInput";
+import TrackMeButton from "./display/TrackMeButton";
 
 /**
  * A component for dynamically adding and removing time and distance input fields.
@@ -98,46 +99,40 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
             <View className="flex flex-row justify-between mt-4 gap-x-3">
                 {/* Remove button - only show if there are inputs */}
                 {currentInputs[identifierId]?.length > 0 && (
-                    <Pressable
-                        className="flex-1 bg-gray-200 rounded-lg py-3"
+                    <TrackMeButton
+                        text="Remove Last"
+                        className="flex-1"
                         onPress={() => {
                             setCurrentInputs(prev => {
                                 const updatedGroup = prev[identifierId]?.slice(0, -1) || [];
                                 return { ...prev, [identifierId]: updatedGroup };
                             });
                         }}
-                    >
-                        <Text className="text-gray-600 text-center font-medium">Remove Last</Text>
-                    </Pressable>
+                        gray
+                    />
                 )}
 
                 {/* Add rest time button */}
-                <Pressable 
-                    className="flex-1 trackme-bg-blue rounded-lg py-3"
+                <TrackMeButton
+                    text="Add Rest"
+                    className="flex-1"
                     onPress={() => {
                         const existingInputs = currentInputs[identifierId] || [];
                         const updatedInputs = [...existingInputs, { restTime: '', type: InputType.Rest }];
                         setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs } as Record<string, Input[]>));
                     }}
-                >
-                    <Text className="text-white text-center font-medium">
-                        Add Rest
-                    </Text>
-                </Pressable>
+                />
 
                 {/* Add time button */}
-                <Pressable 
-                    className="flex-1 trackme-bg-blue rounded-lg py-3"
+                <TrackMeButton
+                    text="Add Run"
+                    className="flex-1"
                     onPress={() => {
                         const existingInputs = currentInputs[identifierId] || [];
                         const updatedInputs = [...existingInputs, { time: '', distance: '', type: InputType.Run }];
                         setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs } as Record<string, Input[]>));
                     }}
-                >
-                    <Text className="text-white text-center font-medium">
-                        Add Run
-                    </Text>
-                </Pressable>
+                />
             </View>
         </>
     );

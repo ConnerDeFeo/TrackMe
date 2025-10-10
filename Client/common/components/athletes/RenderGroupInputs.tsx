@@ -9,7 +9,8 @@ import DateService from "../../../services/DateService";
 import { Input } from "../../types/inputs/Input";
 import InputDisplay from "../display/InputDisplay";
 import { InputType } from "../../constants/Enums";
-import { LoadingContext } from "../../context/LoadingContext";
+import TrackMeButton from "../display/TrackMeButton";
+import TextButton from "../display/TextButton";
 
 //Component used to render input fields for a specific group
 /**
@@ -57,7 +58,6 @@ const RenderGroupInputs: React.FC<
 
     // Navigation object to move between screens
     const navigation = useNavigation<any>();
-    const [loading, setLoading] = useContext(LoadingContext);
 
     /**
      * Submits the current input entries for all athletes in the group,
@@ -72,7 +72,6 @@ const RenderGroupInputs: React.FC<
             // Combine group members and current user into one list of athlete IDs
             const athletes = [...workoutGroup.map(member => member.id), userId];
 
-            setLoading(true);
             // Send the inputs for this group and date
             const resp = await AthleteWorkoutService.inputTimes(
                 athletes,
@@ -89,7 +88,6 @@ const RenderGroupInputs: React.FC<
                 }));
                 onSubmit();
             }
-            setLoading(false);
         }
     };
 
@@ -168,14 +166,11 @@ const RenderGroupInputs: React.FC<
                             </Text>
                             {/* Show removal button only when items are selected */}
                             {selectedSubmitedInputs.length > 0 && (
-                                <Pressable
+                                <TextButton
                                     onPress={handleInputRemoval}
-                                    className="pl-4 py-2"
-                                >
-                                    <Text className="text-sm font-medium trackme-red">
-                                        Remove ({selectedSubmitedInputs.length})
-                                    </Text>
-                                </Pressable>
+                                    text={`Remove (${selectedSubmitedInputs.length})`}
+                                    red
+                                />
                             )}
                         </View>
 
@@ -218,14 +213,10 @@ const RenderGroupInputs: React.FC<
                 />
 
                 {/* Submit button to save new inputs */}
-                <Pressable
-                    className="trackme-bg-blue rounded-xl py-3 shadow-sm"
+                <TrackMeButton
                     onPress={handleInputSubmission}
-                >
-                    <Text className="text-white text-center font-semibold text-base">
-                        Submit Entry
-                    </Text>
-                </Pressable>
+                    text="Submit Entries"
+                />
             </View>
         </View>
     );

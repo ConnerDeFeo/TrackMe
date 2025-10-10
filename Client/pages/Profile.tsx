@@ -5,6 +5,7 @@ import GeneralService from "../services/GeneralService";
 import { useState } from "react";
 import { AuthContext } from "../common/context/AuthContext";
 import { AccountType } from "../common/constants/Enums";
+import TrackMeButton from "../common/components/display/TrackMeButton";
 
 //Profile page for both coaches and athletes
 const Profile = () => {
@@ -183,12 +184,7 @@ const Profile = () => {
 
                 {/* Logout Section */}
                 <View className="mt-6">
-                    <Pressable
-                        onPress={handleLogout}
-                        className="bg-red-500 p-4 rounded-xl items-center shadow-sm"
-                    >
-                        <Text className="text-white font-semibold text-base">Sign Out</Text>
-                    </Pressable>
+                    <TrackMeButton text="Sign Out" onPress={handleLogout} red />
                 </View>
             </View>
         </View>

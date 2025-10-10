@@ -4,6 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import DisplayWorkout from "../../common/components/display/DisplayWorkout";
 import GeneralService from "../../services/GeneralService";
 import UserDisplay from "../../common/components/display/UserDisplay";
+import TextButton from "../../common/components/display/TextButton";
 
 /**
  * Page: ViewGroupAthlete
@@ -49,17 +50,10 @@ const ViewGroupAthlete = () => {
     return (
         <View className="px-4">
             {/* Button to navigate to the group's schedule */}
-            <Pressable
-                onPress={() =>
-                    navigation.navigate('GroupSchedule', { groupId, groupName })
-                }
-                className="rounded-lg py-3 px-2 mt-2"
-            >
-                <Text className="trackme-blue font-semibold">
-                    Schedule
-                </Text>
-            </Pressable>
-            
+            <TextButton
+                text="Schedule"
+                onPress={() => navigation.navigate('GroupSchedule', { groupId, groupName })}
+            />
             <View className="my-2">
                 {/* Render each workout */}
                 {workouts.map((workout) => (

@@ -4,43 +4,9 @@ import { Text, Pressable, View } from "react-native";
 import GeneralService from "../../services/GeneralService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
+import TrackMeButton from "../../common/components/display/TrackMeButton";
 
-//Create workout group for a given group
-/**
- * CreateWorkoutGroup Component
- * 
- * A React Native component that allows users to create a workout group by selecting athletes
- * from an existing group and providing a workout group name.
- * 
- * @component
- * 
- * @description
- * This component provides functionality to:
- * - Fetch athletes from a specific group
- * - Allow selection/deselection of athletes for the workout group
- * - Create a new workout group with selected athletes
- * - Navigate back after successful creation
- * 
- * @navigation
- * Expects a `groupId` parameter from the route to identify which group's athletes to fetch
- * 
- * @state
- * - `workoutGroupName`: The name for the new workout group
- * - `groupMembers`: Array of athletes available in the source group
- * - `selectedAthletes`: Array of athlete IDs selected for the workout group
- * 
- * @apiCalls
- * - `GeneralService.getAthletesForGroup()`: Fetches athletes belonging to the specified group
- * - `UserService.getUserId()`: Gets current user ID to auto-select them
- * - `AthleteWorkoutService.createWorkoutGroup()`: Creates the workout group with selected athletes
- * 
- * @behavior
- * - Automatically includes the current user in the selected athletes list
- * - Uses current date (YYYY-MM-DD format) for workout group creation
- * - Navigates back to previous screen on successful group creation
- * 
- * @returns {JSX.Element} A form interface for creating workout groups with athlete selection
- */
+// Page for creating a workout group by selecting athletes from a source group
 const CreateWorkoutGroup = ()=>{
     // Navigation and routing setup
     const navigation = useNavigation<any>();
@@ -93,26 +59,22 @@ const CreateWorkoutGroup = ()=>{
                             {/* Athlete name display */}
                             <Text className="text-lg text-black font-medium">{athlete[1]}</Text>
                             {/* Selection toggle button */}
-                            <Pressable 
+                            <TrackMeButton
                                 onPress={() => handleWorkoutGroupChange({id: athlete[0], username: athlete[1]})}
-                                className={`px-6 py-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'trackme-bg-blue'}`}
-                            >
-                            <Text className={`font-semibold ${isSelected ? 'text-black' : 'text-white'}`}>
-                                {isSelected ? "Deselect" : "Select"}
-                            </Text>
-                            </Pressable>
+                                text={isSelected ? "Deselect" : "Select"}
+                                gray={isSelected}
+                                className="px-6"
+                            />
                         </View>
                     );
                 })}
             </View>
             
             {/* Create Group Action Button */}
-            <Pressable 
+            <TrackMeButton
                 onPress={() => navigation.goBack()}
-                className="p-4 rounded-xl shadow-lg trackme-bg-blue"
-            >
-                <Text className="text-white text-xl font-bold text-center">Finish</Text>
-            </Pressable>
+                text="Finish"
+            />
         </View>
     )
 };

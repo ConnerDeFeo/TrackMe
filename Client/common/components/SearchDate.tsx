@@ -1,5 +1,7 @@
-import { Text, TextInput, Pressable, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { useState } from "react";
+import TrackMeButton from "./display/TrackMeButton";
+import TextButton from "./display/TextButton";
 
 // SearchDate component props:
 // - handleDateSearch: callback when a valid date is submitted
@@ -53,12 +55,10 @@ const SearchDate: React.FC<{
                     placeholder="Enter date (YYYY-MM-DD)"
                     className="flex-1 border trackme-border-gray rounded-lg px-3 py-2 bg-white"
                 />
-                <Pressable
+                <TrackMeButton
                     onPress={handleSearch}
-                    className="trackme-bg-blue px-4 py-2 rounded-lg"
-                >
-                    <Text className="text-white font-medium">Search</Text>
-                </Pressable>
+                    text="Search"
+                />
             </View>
 
             {/* Display active filter and clear button if a date is selected */}
@@ -67,9 +67,7 @@ const SearchDate: React.FC<{
                     <Text className="text-gray-700">
                         Filtering by: {selectedDate}
                     </Text>
-                    <Pressable onPress={handleClearDateFilter}>
-                        <Text className="trackme-red font-medium">Clear</Text>
-                    </Pressable>
+                    <TextButton text="Clear" onPress={handleClearDateFilter} red />
                 </View>
             )}
         </View>

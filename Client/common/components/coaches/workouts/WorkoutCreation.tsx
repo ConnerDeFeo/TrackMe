@@ -6,6 +6,7 @@ import Section from "../../../types/workouts/Section";
 import { ExerciseType } from "../../../constants/Enums";
 import { Exercise } from "../../../types/workouts/Exercise";
 import CoachWorkoutService from "../../../../services/CoachWorkoutService";
+import TrackMeButton from "../../display/TrackMeButton";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({
@@ -167,9 +168,7 @@ const WorkoutCreation = ({
         <TextButton text={buttonText} onPress={handleCreation} />
       </View>
       {onRemove &&
-        <Pressable className="trackme-bg-red py-2 mx-4 rounded-lg mb-2">
-          <Text className="text-center font-bold text-white" onPress={onRemove}>Remove</Text>
-        </Pressable>
+        <TrackMeButton text="Remove" onPress={onRemove} red className="mx-4"/>
       }
     </View>
   )

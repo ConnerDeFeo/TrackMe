@@ -3,6 +3,7 @@ import {Text, Pressable, View } from "react-native";
 import CoachGroupService from "../../../services/CoachGroupService";
 import { useRoute } from "@react-navigation/native";
 import GeneralService from "../../../services/GeneralService";
+import TrackMeButton from "../../../common/components/display/TrackMeButton";
 
 //Page where coaches can add any current athletes to a given group
 const AssignAthletes = ()=>{
@@ -73,17 +74,13 @@ const AssignAthletes = ()=>{
             {athletes.map(athlete => (
                 <View key={athlete[0]} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center justify-between">
                     <Text className="text-lg font-medium text-gray-800 flex-1">{athlete[1]}</Text>
-                    <Pressable className="trackme-bg-red px-4 py-2 rounded-lg" onPress={() => removeAthleteFromGroup(athlete[0])}>
-                        <Text className="text-white font-semibold">Remove</Text>
-                    </Pressable>
+                    <TrackMeButton text="Remove" onPress={() => removeAthleteFromGroup(athlete[0])} red />
                 </View>
             ))}
             {absentAthletes.map(athlete => (
                 <View key={athlete[0]} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center justify-between">
                     <Text className="text-lg font-medium text-gray-800 flex-1">{athlete[1]}</Text>
-                    <Pressable className="trackme-bg-blue px-4 py-2 rounded-lg" onPress={() => handleAssignAthlete(athlete[0])}>
-                        <Text className="text-white font-semibold">Assign</Text>
-                    </Pressable>
+                    <TrackMeButton text="Assign" onPress={() => handleAssignAthlete(athlete[0])} />
                 </View>
             ))}
         </View>

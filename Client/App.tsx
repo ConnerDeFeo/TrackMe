@@ -42,8 +42,6 @@ import GroupSettings from './pages/coaches/groups/GroupSettings';
 import Relations from './pages/Relations';
 import RelationInvites from './pages/RelationInvites';
 import Friends from './pages/Friends';
-import LoadingScreen from './common/components/LoadingScreen';
-import { LoadingContext } from './common/context/LoadingContext';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -180,7 +178,6 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [awaitingAuthentication, setAwaitingAuthentication] = useState<boolean>(true);
   const [accountType, setAccountType] = useState<AccountType>(AccountType.SignedOut);
-  const [loading, setLoading] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -203,7 +200,6 @@ export default function App() {
   }
 
   return (
-    <LoadingContext.Provider value={[loading, setLoading]}>
       <AuthContext.Provider value={[accountType, setAccountType]}>
         {/* Keep NavigationContainer stable and isolated */}
         <View className="flex-1">
@@ -217,10 +213,6 @@ export default function App() {
             )}
           </NavigationContainer>
         </View>
-
-        {/* Render LoadingScreen OUTSIDE the navigation hierarchy */}
-        <LoadingScreen visible={loading} />
       </AuthContext.Provider>
-    </LoadingContext.Provider>
   );
 }

@@ -8,6 +8,7 @@ locals {
     "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"], method = "GET" }
     "coaches/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "coaches/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
+    "coaches/get_workout" = { lambda = aws_lambda_function.lambdas["get_workout"], method = "GET" }
 
     "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"], method = "GET" }
     "general/view_group_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }

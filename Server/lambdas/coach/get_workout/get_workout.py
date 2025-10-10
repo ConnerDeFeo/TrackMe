@@ -2,7 +2,7 @@ import json
 from rds import fetch_one
 from user_auth import get_auth_header, get_user_info
 
-def get_workout_template(event, context):
+def get_workout(event, context):
     query_params = event.get('queryStringParameters', {})
     auth_header = get_auth_header()
 
@@ -18,7 +18,6 @@ def get_workout_template(event, context):
                 'statusCode': 409,
                 'body': json.dumps({'error': 'Not Authorized to view this workout or workout does not exist'})
             }
-
 
         return {
             'statusCode': 200,

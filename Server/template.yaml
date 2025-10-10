@@ -136,6 +136,22 @@ Resources:
   #
   #
 
+  GetWorkoutFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/coach/get_workout/
+      Handler: get_workout.get_workout
+      Events:
+        GetWorkoutApi:
+          Type: Api
+          Properties:
+            Path: /coaches/get_workout/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   UpdateGroupAthletesFunction:
     Type: AWS::Serverless::Function 
     Properties:

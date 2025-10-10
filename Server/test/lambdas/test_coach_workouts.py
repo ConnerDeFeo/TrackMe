@@ -5,7 +5,7 @@ from lambdas.coach.create_workout_template.create_workout_template import create
 from lambdas.coach.delete_workout_template.delete_workout_template import delete_workout_template
 from lambdas.coach.get_workout_templates.get_workout_templates import get_workout_templates
 from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
-from lambdas.coach.get_workout_template.get_workout_template import get_workout_template
+from lambdas.coach.get_workout.get_workout import get_workout
 from lambdas.general.create_user.create_user import create_user
 from data import TestData
 from rds import execute_file, fetch_one
@@ -144,7 +144,7 @@ def test_assign_group_workout_template_creates_assignment():
     response = fetch_one("SELECT * FROM group_workouts WHERE groupId = %s AND workoutId = %s", (1, 1))
     assert response is not None
 
-def test_get_workout_template_returns_success():
+def test_get_workout_returns_success():
     # Arrange
     create_workout_template(TestData.test_workout, {})
     event = {
@@ -153,7 +153,7 @@ def test_get_workout_template_returns_success():
     }
 
     # Act
-    response = get_workout_template(event, {})
+    response = get_workout(event, {})
 
     # Assert
     assert response['statusCode'] == 200

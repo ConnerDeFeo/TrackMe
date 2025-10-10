@@ -118,6 +118,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/update_group_athletes"
       output_path = "${path.module}/../Server/lambdas/coach/zips/update_group_athletes.zip"
     }
+    "get_workout" = {
+      source_dir  = "${path.module}/../Server/lambdas/coach/get_workout"
+      output_path = "${path.module}/../Server/lambdas/coach/zips/get_workout.zip"
+    }
 
     # General Lambdas
     "get_athletes_for_group" = {

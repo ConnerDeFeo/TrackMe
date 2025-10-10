@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, TextInput, View, Pressable, Image } from "react-native";
 import SectionCreation from "./SectionCreation";
 import TextButton from "../../display/TextButton";
@@ -10,30 +10,48 @@ import TrackMeButton from "../../display/TrackMeButton";
 
 // Page for workout creation by coaches
 const WorkoutCreation = ({
-  workout,
+  workoutId,
   handleWorkoutCreation,
   buttonText,
   onRemove
 }: {
-  workout?: any
+  workoutId?: string
   handleWorkoutCreation: (workoutData: any) => void
   buttonText: string
   onRemove?: () => void
 }) => {
 
   // Local state for title, description and sections list
-  const [title, setTitle] = useState<string>(workout?.title || "")
-  const [description, setDescription] = useState<string>(workout?.description || "")
-  const [sections, setSections] = useState<Array<Section>>(workout?.sections || [])
-  const [aiPrompt, setAIPrompt] = useState<string>("")
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [sections, setSections] = useState<Array<Section>>([]);
+  const [groupWorkoutId, setGroupWorkoutId] = useState<string | undefined>(undefined);
+  const [aiPrompt, setAIPrompt] = useState<string>("");
+
+  useEffect(() => {
+    const fetchWorkout = async () => {
+      if (workoutId) {
+        const resp = await CoachWorkoutService.getWorkout(workoutId);
+        if (resp.ok) {
+          const data = await resp.json();
+          setTitle(data.title || ""); 
+          setDescription(data.description || "");
+          setSections(data.sections || []);
+          setGroupWorkoutId(data.groupWorkoutId);
+        }
+      }
+    };
+
+    fetchWorkout();
+  }, [workoutId]);
 
   // Validate inputs and call parent handler
   const handleCreation = async () => {
     let isValid = true;
     // Ensure title is not empty
     if (title.trim() === "") {
-      alert("Please fill in all required fields")
-      return
+      alert("Please fill in all required fields");
+      return;
     }
 
     // Ensure each section has a name and at least one set
@@ -69,15 +87,8 @@ const WorkoutCreation = ({
     }
 
     // Include IDs if editing existing workout
-    if (workout) {
-      if (workout.workoutId) {
-        workoutData.workoutId = workout.workoutId
-      }
-      if (workout.groupWorkoutId) {
-        workoutData.groupWorkoutId = workout.groupWorkoutId
-      }
-    }
-
+    workoutData.workoutId = workoutId
+    workoutData.groupWorkoutId = groupWorkoutId
     // Pass data to parent component
     handleWorkoutCreation(workoutData)
   }

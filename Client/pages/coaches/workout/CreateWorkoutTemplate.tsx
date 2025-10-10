@@ -6,7 +6,7 @@ import WorkoutCreation from "../../../common/components/coaches/workouts/Workout
 const CreateWorkout = () => {
   const navigation = useNavigation<any>();
   const route = useRoute();
-  const { workout } = (route.params as { workout?: any }) || {};
+  const { workoutId } = (route.params as { workoutId?: string }) || {};
 
   const handleWorkoutCreation = async (workoutData:any) => {
     const resp = await CoachWorkoutService.createWorkoutTemplate(workoutData);
@@ -19,8 +19,8 @@ const CreateWorkout = () => {
   };
 
   const handleWorkoutDeletion = async () => {
-    if (!workout?.workoutId) return;
-    const resp = await CoachWorkoutService.deleteWorkoutTemplate(workout.workoutId);
+    if (!workoutId) return;
+    const resp = await CoachWorkoutService.deleteWorkoutTemplate(workoutId);
     if (resp.ok) {
       navigation.reset({
         index: 0,
@@ -31,10 +31,10 @@ const CreateWorkout = () => {
 
   return (
     <WorkoutCreation
-      workout={workout}
+      workoutId={workoutId}
       handleWorkoutCreation={handleWorkoutCreation}
-      buttonText={workout ? "Save Changes" : "Create Workout"}
-      onRemove={workout ? handleWorkoutDeletion : undefined}
+      buttonText={workoutId ? "Save Changes" : "Create Workout"}
+      onRemove={workoutId ? handleWorkoutDeletion : undefined}
     />
   );
 };

@@ -38,6 +38,7 @@ locals {
     "delete_group_workout",
     "assign_group_workout",
     "update_group_athletes",
+    "get_workout",
 
     # General Lambdas
     "get_athletes_for_group",

@@ -67,7 +67,7 @@ const AssignWorkout = () => {
                                         setImportTemplateOpen(false);
                                     }}>
                                     <h3 className="text-lg font-semibold">{template.title}</h3>
-                                    <p className="text-sm text-gray-600">{template.sections.length} sections</p>
+                                    <p className="text-sm text-gray-600">{template.sections ? template.sections.length : 0} sections</p>
                                 </div>
                             ))}
                         </div>

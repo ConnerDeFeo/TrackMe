@@ -8,6 +8,7 @@ import DateService from "../services/DateService";
 import UserDisplay from "../common/components/display/UserDisplay";
 import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../common/components/display/InputDisplay";
+import TrackMeButton from "../common/components/display/TrackMeButton";
 
 const MassInput = () => {
   const route = useRoute();
@@ -109,9 +110,7 @@ const MassInput = () => {
         />
       </View>
       ))}
-      <Pressable className="trackme-bg-blue rounded-lg p-3 mt-2" onPress={handleInputSubmission}>
-        <Text className="text-white text-center">Submit</Text>
-      </Pressable>
+      <TrackMeButton text="Submit" onPress={handleInputSubmission} className="mt-2"/>
     </View>
   );
 }

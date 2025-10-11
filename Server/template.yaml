@@ -168,38 +168,6 @@ Resources:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
 
-  FetchHistoricalDataFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/coach/fetch_historical_data/
-      Handler: fetch_historical_data.fetch_historical_data
-      Events:
-        FetchHistoricalDataApi:
-          Type: Api
-          Properties:
-            Path: /coaches/fetch_historical_data/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
-  GetAvailableHistoryDatesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/coach/get_available_history_dates/
-      Handler: get_available_history_dates.get_available_history_dates
-      Events:
-        GetAvailableHistoryDatesApi:
-          Type: Api
-          Properties:
-            Path: /coaches/get_available_history_dates/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
   RemoveGroupAthleteFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -593,6 +561,45 @@ Resources:
           Type: Api
           Properties:
             Path: /general/get_group_workout/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  #
+  #
+  #
+  # HISTORY FUNCTIONS
+  #
+  #
+  #
+  FetchHistoricalDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/history/fetch_historical_data/
+      Handler: fetch_historical_data.fetch_historical_data
+      Events:
+        FetchHistoricalDataApi:
+          Type: Api
+          Properties:
+            Path: /history/fetch_historical_data/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  GetAvailableHistoryDatesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/history/get_available_history_dates/
+      Handler: get_available_history_dates.get_available_history_dates
+      Events:
+        GetAvailableHistoryDatesApi:
+          Type: Api
+          Properties:
+            Path: /history/get_available_history_dates/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:

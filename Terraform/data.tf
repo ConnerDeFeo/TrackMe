@@ -74,14 +74,6 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/coach/remove_group_athlete"
       output_path = "${path.module}/../Server/lambdas/coach/zips/remove_group_athlete.zip"
     }
-    "get_available_history_dates" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/get_available_history_dates"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/get_available_history_dates.zip"
-    }
-    "fetch_historical_data" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/fetch_historical_data"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/fetch_historical_data.zip"
-    }
     "delete_group" = {
       source_dir  = "${path.module}/../Server/lambdas/coach/delete_group"
       output_path = "${path.module}/../Server/lambdas/coach/zips/delete_group.zip"
@@ -178,6 +170,16 @@ locals {
     "update_user_profile" = {
       source_dir  = "${path.module}/../Server/lambdas/general/update_user_profile"
       output_path = "${path.module}/../Server/lambdas/general/zips/update_user_profile.zip"
+    }
+
+    # History Lambdas
+    "get_available_history_dates" = {
+      source_dir  = "${path.module}/../Server/lambdas/history/get_available_history_dates"
+      output_path = "${path.module}/../Server/lambdas/history/zips/get_available_history_dates.zip"
+    }
+    "fetch_historical_data" = {
+      source_dir  = "${path.module}/../Server/lambdas/history/fetch_historical_data"
+      output_path = "${path.module}/../Server/lambdas/history/zips/fetch_historical_data.zip"
     }
 
     # Relations Lambdas

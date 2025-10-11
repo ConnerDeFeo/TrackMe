@@ -19,8 +19,6 @@ locals {
   lambda_names = [
     # Athlete Lambdas
     "input_times",
-    "view_workout_inputs",
-    "search_input_history_date",
     "remove_inputs",
 
     # Coach Lambdas
@@ -28,8 +26,6 @@ locals {
     "add_athlete_to_group",
     "get_absent_group_athletes",
     "remove_group_athlete",
-    "get_available_history_dates",
-    "fetch_historical_data",
     "delete_group",
     "update_group_athletes",
 
@@ -56,6 +52,10 @@ locals {
     "get_weekly_schedule",
     "create_user",
     "update_user_profile",
+
+    # History Lambdas
+    "get_available_history_dates",
+    "fetch_historical_data",
 
     # Relation lambdas,
     "get_relation_invites",

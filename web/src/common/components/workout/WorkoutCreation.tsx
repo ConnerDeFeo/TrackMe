@@ -4,6 +4,7 @@ import SectionCreation from "./SectionCreation";
 import type { Section } from "../../types/workouts/Section";
 import TrackmeButton from "../TrackmeButton";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
+import { HandleMouseDownDragAndDrop } from "../../functions/handleMouseDownDragAndDrop";
 
 // Define props for clarity
 type WorkoutCreationProps = {
@@ -18,11 +19,13 @@ const WorkoutCreation = ({
     handleCancel
 }: WorkoutCreationProps) => {
     // Local state for workout fields
-    const [title, setTitle] = useState<string>("")
-    const [description, setDescription] = useState<string>("")
-    const [sections, setSections] = useState<Section[]>([])
-    const [aiWorkoutPrompt, setAiWorkoutPrompt] = useState<string>("")
+    const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [sections, setSections] = useState<Section[]>([]);
+    const [aiWorkoutPrompt, setAiWorkoutPrompt] = useState<string>("");
 
+    const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
+    const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
     // Populate fields if an existing workout is passed in
     useEffect(() => {
         if (!workout) return
@@ -46,6 +49,19 @@ const WorkoutCreation = ({
         setDescription(data.description || "")
         setSections(data.sections || [])
     }
+
+  // Mouse enter over an item during drag will reorder the exercises
+  const handleMouseEnter = (index: number) => {
+    if (draggedItemIndex !== null && draggedItemIndex !== index) {
+      const updatedSections = [...sections];
+      const [draggedItem] = updatedSections.splice(draggedItemIndex, 1);
+      updatedSections.splice(index, 0, draggedItem);
+
+      // Update the section order
+      setDraggedItemIndex(index);
+      setSections(updatedSections);
+    }
+  };
 
     return (
         <>
@@ -83,12 +99,28 @@ const WorkoutCreation = ({
 
             {/* Existing Sections */}
             {sections.map((section, idx) => (
-                <SectionCreation
-                    key={idx}
-                    section={section}
-                    setSections={setSections}
-                    idx={idx}
-                />
+                <>
+                    <SectionCreation
+                        key={idx}
+                        section={section}
+                        setSections={setSections}
+                        idx={idx}
+                        handleMouseDown={(e, index) => HandleMouseDownDragAndDrop(e, index, setDraggedItemIndex, setDragPosition)}
+                        handleMouseEnter={handleMouseEnter}
+                        className={`${draggedItemIndex === idx ? "opacity-50" : ""}`}
+                    />
+                    {/* Drag preview overlay */}
+                    {draggedItemIndex === idx && (
+                        <div
+                            className="fixed pointer-events-none z-50"
+                            style={{ top: dragPosition.y, left: dragPosition.x }}
+                        >
+                            <div className="bg-gray-100 border border-gray-300 rounded-lg p-2 shadow-lg">
+                                {section.name || "Section"}
+                            </div>
+                        </div>
+                    )}
+                </>
             ))}
 
             {/* Button to add a new empty section */}

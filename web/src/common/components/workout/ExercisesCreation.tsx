@@ -4,6 +4,7 @@ import { Variables } from "../../constants/Variables";
 import type { Exercise } from "../../types/workouts/Exercise";
 import type { Section } from "../../types/workouts/Section";
 import ExerciseInputs from "./ExerciseInputs";
+import { HandleMouseDownDragAndDrop } from "../../functions/handleMouseDownDragAndDrop";
 
 // Component for creating/editing a list of exercises within a section
 // Component for creating/editing a list of exercises within a section
@@ -26,32 +27,6 @@ const ExercisesCreation = ({
 
   // State: current mouse position for rendering the drag preview
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
-
-  // Mouse down begins drag operation (unless clicking on input/button)
-  const handleMouseDown = (e: React.MouseEvent, index: number) => {
-    const tag = (e.target as HTMLElement).tagName;
-    if (["INPUT", "TEXTAREA", "BUTTON"].includes(tag)) return; // ignore form elements
-    e.preventDefault();
-
-    // Initialize drag
-    setDraggedItemIndex(index);
-    setDragPosition({ x: e.clientX, y: e.clientY });
-
-    // Update drag position on move
-    const handleMouseMove = (moveEvent: MouseEvent) => {
-      setDragPosition({ x: moveEvent.clientX, y: moveEvent.clientY });
-    };
-
-    // End drag on mouse up and clean up listeners
-    const handleMouseUp = () => {
-      setDraggedItemIndex(null);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  };
 
   // Mouse enter over an item during drag will reorder the exercises
   const handleMouseEnter = (index: number) => {
@@ -113,7 +88,7 @@ const ExercisesCreation = ({
             className={`bg-gray-50 rounded-lg border border-gray-200 cursor-move ${
               draggedItemIndex === partIdx ? "opacity-50" : ""
             }`}
-            onMouseDown={e => handleMouseDown(e, partIdx)}
+            onMouseDown={e => HandleMouseDownDragAndDrop(e, partIdx, setDraggedItemIndex, setDragPosition)}
             onMouseEnter={() => handleMouseEnter(partIdx)}
           >
             {/* Header row: icon, inputs, notes toggle, remove button */}
@@ -185,20 +160,20 @@ const ExercisesCreation = ({
                 {exercise.type === ExerciseType.Run ? (
                   <div className="flex items-center gap-2">
                     {Variables.Icons.run}{" "}
-                    {exercise.minReps ?? 0}{" "}
+                    {exercise.minReps ?? 1}{" "}
                     {exercise.maxReps ? `- ${exercise.maxReps}` : ""} x{" "}
                     {exercise.distance}m
                   </div>
                 ) : exercise.type === ExerciseType.Strength ? (
                   <div className="flex items-center gap-2">
                     {Variables.Icons.strength}{" "}
-                    {exercise.minReps ?? 0}{" "}
+                    {exercise.minReps ?? 1}{" "}
                     {exercise.maxReps ? `- ${exercise.maxReps}` : ""} x{" "}
                     {exercise.description}
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    {Variables.Icons.strength}{" "}
+                    {Variables.Icons.rest}{" "}
                     {exercise.minReps ?? 0}s{" "}
                     {exercise.maxReps ? `- ${exercise.maxReps}s` : ""}
                   </div>

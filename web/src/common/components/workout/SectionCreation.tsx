@@ -4,7 +4,15 @@ import type { Exercise } from "../../types/workouts/Exercise";
 import type { Section } from "../../types/workouts/Section";
 import ExercisesCreation from "./ExercisesCreation";
 
-const SectionCreation = ({section, setSections, idx}: {section: Section, setSections: React.Dispatch<React.SetStateAction<Section[]>>, idx: number}) => {
+const SectionCreation = ({section, setSections, idx, handleMouseDown, handleMouseEnter, className}: 
+  {
+    section: Section, 
+    setSections: React.Dispatch<React.SetStateAction<Section[]>>, 
+    idx: number,
+    handleMouseDown? : (e: React.MouseEvent, index: number) => void
+    handleMouseEnter? : (index: number) => void
+    className?: string
+  }) => {
     /**
    * Handles adding a new exercise of a specific type to the current section.
    */
@@ -95,7 +103,11 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
   }
 
   return (
-      <div className="bg-white border-2 border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
+      <div 
+        className={`bg-white border-2 border-gray-200 rounded-xl p-5 mb-4 shadow-sm ${handleMouseDown ? "cursor-move" : ""} ${className || ""}`}
+        onMouseDown={(e) => handleMouseDown ? handleMouseDown(e, idx) : undefined}
+        onMouseEnter={() => handleMouseEnter ? handleMouseEnter(idx) : undefined}
+      >
         {/* Section Header */}
         <div className="flex items-center gap-3 mb-4">
           <div className="flex-1">

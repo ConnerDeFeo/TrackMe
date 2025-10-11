@@ -1,6 +1,6 @@
 import json
 from user_auth import post_auth_header, get_user_info
-from rds import execute_commit_fetch_one, execute_commit_many
+from rds import fetch_one, execute_commit_many, execute_commit
 
 def update_group_athletes(event, context):
     body = json.loads(event['body'])
@@ -12,8 +12,24 @@ def update_group_athletes(event, context):
         athlete_ids = body['athleteIds']
         group_id = body['groupId']
 
+        group = fetch_one(
+            """
+                SELECT id FROM groups 
+                WHERE id = %s AND coachId = %s
+            """,
+            (group_id, user_id)
+        )
+
+        if not group:
+            return {
+                'statusCode': 404,
+                'body': json.dumps({'error': 'Group not found or you do not have permission to modify it.'}),
+                'headers': auth_header
+            }
+
+
         # Remove all current athletes from the group
-        group = execute_commit_fetch_one(
+        execute_commit(
             """
                 UPDATE athlete_groups ag
                 SET removed = TRUE
@@ -21,15 +37,10 @@ def update_group_athletes(event, context):
                 WHERE ag.groupId = g.id 
                     AND g.id = %s 
                     AND g.coachId = %s
-                RETURNING g.id
+                RETURNING ag.groupId
             """
         ,(group_id, user_id))
 
-        if not group:
-            return {
-                'statusCode': 404,
-                'body': json.dumps({'error': 'Group not found or you do not have permission to modify it.'})
-            }
         # Add new athletes to the group
         params = [(athlete_id, group_id) for athlete_id in athlete_ids]
         execute_commit_many(

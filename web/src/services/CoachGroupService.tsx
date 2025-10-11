@@ -26,7 +26,7 @@ const CoachGroupService = {
     deleteGroup: async (groupId:string) => {
         return await API.delete(`${VITE_API_URL}/coaches/delete_group?groupId=${groupId}`);
     },
-    updateGroupAthletes: async (groupId: string, athleteIds: Array<string>) => {
+    updateGroupAthletes: async (groupId: string, athleteIds: string[]) => {
         return await API.post(`${VITE_API_URL}/coaches/update_group_athletes`, 
             { 
                 groupId,

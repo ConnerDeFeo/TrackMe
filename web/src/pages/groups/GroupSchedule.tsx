@@ -64,7 +64,7 @@ const GroupSchedule = () => {
     return (
         <>
             {/* Header */}
-            <GroupHeader groupName={groupName || ''} />
+            <GroupHeader groupName={groupName || ''} groupId={groupId || ''} settings/>
             
             {/* Main Content */}
             <div className="max-w-6xl mx-auto p-6">

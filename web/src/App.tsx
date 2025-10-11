@@ -19,6 +19,7 @@ import { AuthContext } from './common/context/AuthContext';
 import History from './pages/history/History';
 import ViewHistory from './pages/history/ViewHistory';
 import Templates from './pages/Templates';
+import GroupSettings from './pages/GroupSettings';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -67,6 +68,7 @@ export default function App() {
 
             <Route path="/groups" element={<Groups />} />
             <Route path="/groups/view-group/:groupName/:groupId" element={<ViewGroup />} />
+            <Route path="/groups/view-group/:groupName/:groupId/settings" element={<GroupSettings />} />
             <Route path="/groups/view-group/:groupName/:groupId/schedule" element={<GroupSchedule />} />
             <Route path="/groups/view-group/:groupName/:groupId/schedule/assign-workout/:date" element={<AssignWorkout />} />
 

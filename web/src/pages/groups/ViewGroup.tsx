@@ -85,7 +85,7 @@ const ViewGroup = () => {
         // Main container for group page
         <div className="bg-gray-50 max-w-6xl mx-auto">
             {/* Header: group name and counts */}
-            <GroupHeader groupName={groupName || ''} />
+            <GroupHeader groupName={groupName || ''} groupId={groupId || ''} settings/>
             
             {/* Summary: number of athletes and workouts */}
             <div className="p-6">

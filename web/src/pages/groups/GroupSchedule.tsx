@@ -5,6 +5,7 @@ import DateService from "../../services/DateService";
 import GeneralService from "../../services/GeneralService";
 import DisplayWorkout from "../../common/components/display/DisplayWorkout";
 import GroupHeader from "../../common/components/groups/GroupHeader";
+import CollapsibleWorkoutDisplay from "../../common/components/display/CollapsibleWorkoutDisplay";
 
 const GroupSchedule = () => {
     const { groupId, groupName } = useParams<{ groupId: string; groupName: string }>();
@@ -128,7 +129,13 @@ const GroupSchedule = () => {
                                     {dayWorkouts.length > 0 ? (
                                         <div className="space-y-3">
                                             {dayWorkouts.map((workout, idx) => (
-                                                <DisplayWorkout key={idx} workout={workout} onClick={() => handleWorkoutClick(workout, dateKey)} />
+                                                // <DisplayWorkout key={idx} workout={workout} onClick={() => handleWorkoutClick(workout, dateKey)} />
+                                                <CollapsibleWorkoutDisplay 
+                                                    key={idx} 
+                                                    workout={workout} 
+                                                    onClick={() => handleWorkoutClick(workout, dateKey)} 
+                                                    onClickText="Edit Workout"
+                                                />
                                             ))}
                                         </div>
                                     ) : (

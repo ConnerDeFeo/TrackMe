@@ -24,7 +24,7 @@ const WorkoutTemplates = () => {
 
   // Render a scrollable list of DisplayWorkout components
   return (
-    <View className="mb-2 gap-y-4">
+    <View className="mb-2 gap-y-1">
       {workouts.map((workout) => (
         <Pressable 
           key={workout.workoutId} 

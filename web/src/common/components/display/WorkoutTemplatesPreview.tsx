@@ -14,7 +14,7 @@ const WorkoutTemplatesPreview = ({ workoutSummaries, selectedWorkout, handleWork
             <button
                 key={idx}
                 onClick={() => handleWorkoutSelection(summary.workoutId)}
-                className={`w-full text-left p-4 rounded-lg transition-all ${
+                className={`w-full text-left p-4 rounded-lg transition-all border-b ${
                 isSelected
                     ? "trackme-bg-blue text-white shadow-md"
                     : "bg-gray-50 text-gray-900 hover:bg-gray-100"

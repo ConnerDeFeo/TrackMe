@@ -5,24 +5,30 @@ import type { Section } from "../../types/workouts/Section";
 import TrackmeButton from "../TrackmeButton";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import { HandleMouseDownDragAndDrop } from "../../functions/HandleMouseDownDragAndDrop";
+import AiGenerationTextBox from "../display/AiGenerationTextBox";
+import Modal from "../Modal";
+import SectionTemplatesPreview from "../display/SectionTemplatesPreview";
 
 // Define props for clarity
 type WorkoutCreationProps = {
-    workout?: Workout
-    handleWorkoutCreation: (workout: Workout) => void
+    workout?: Workout,
+    handleWorkoutCreation: (workout: Workout) => void,
     handleCancel?: () => void
+    sectionsPreview?: { id: string; name: string }[]
 }
 
 const WorkoutCreation = ({
     workout,
     handleWorkoutCreation,
-    handleCancel
+    handleCancel,
+    sectionsPreview
 }: WorkoutCreationProps) => {
     // Local state for workout fields
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [sections, setSections] = useState<Section[]>([]);
     const [aiWorkoutPrompt, setAiWorkoutPrompt] = useState<string>("");
+    const [importSectionTemplateMode, setImportSectionTemplateMode] = useState(false);
 
     const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
@@ -50,26 +56,36 @@ const WorkoutCreation = ({
         setSections(data.sections || [])
     }
 
-  // Mouse enter over an item during drag will reorder the exercises
-  const handleMouseEnter = (index: number) => {
-    if (draggedItemIndex !== null && draggedItemIndex !== index) {
-      const updatedSections = [...sections];
-      const [draggedItem] = updatedSections.splice(draggedItemIndex, 1);
-      updatedSections.splice(index, 0, draggedItem);
+    // Mouse enter over an item during drag will reorder the exercises
+    const handleMouseEnter = (index: number) => {
+        if (draggedItemIndex !== null && draggedItemIndex !== index) {
+        const updatedSections = [...sections];
+        const [draggedItem] = updatedSections.splice(draggedItemIndex, 1);
+        updatedSections.splice(index, 0, draggedItem);
 
-      // Update the section order
-      setDraggedItemIndex(index);
-      setSections(updatedSections);
-    }
-  };
+        // Update the section order
+        setDraggedItemIndex(index);
+        setSections(updatedSections);
+        }
+    };
 
-  const handleMouseDown = (e: React.MouseEvent, index: number) => {
-    const target = e.target as HTMLElement;
-    if (["INPUT", "TEXTAREA", "BUTTON"].includes(target.tagName) || target.closest('[data-nodrag]')) {
-        return;
+    const handleMouseDown = (e: React.MouseEvent, index: number) => {
+        const target = e.target as HTMLElement;
+        if (["INPUT", "TEXTAREA", "BUTTON"].includes(target.tagName) || target.closest('[data-nodrag]')) {
+            return;
+        }
+        HandleMouseDownDragAndDrop(e, index, setDraggedItemIndex, setDragPosition);
     }
-    HandleMouseDownDragAndDrop(e, index, setDraggedItemIndex, setDragPosition);
-  }
+
+    const handleImportTemplateSelection = async (sectionId: string) => {
+        const resp = await CoachWorkoutService.getSectionTemplate(sectionId);
+        if(resp.ok){
+            const data = await resp.json();
+            setSections(prev => [...prev, data]);
+            setImportSectionTemplateMode(false);
+        }
+    }
+
     return (
         <>
             {/* Workout Title Input */}
@@ -130,54 +146,37 @@ const WorkoutCreation = ({
             ))}
 
             {/* Button to add a new empty section */}
-            <TrackmeButton
-                className="mt-3 w-full"
-                onClick={() =>
-                    setSections(prev => [...prev, { name: "", minSets: 1 }])
-                }
-            >
-                Add Section
-            </TrackmeButton>
+            <div className="flex flex-row justify-between">
+                <TrackmeButton className="w-[48%]" onClick={() => setImportSectionTemplateMode(true)}>
+                    Import Section Template
+                </TrackmeButton>
+                <TrackmeButton
+                    onClick={() =>
+                        setSections(prev => [...prev, { name: "", minSets: 1 }])
+                    }
+                    className="w-[48%]"
+                >
+                    Add Section
+                </TrackmeButton>
+            </div>
+
+            {
+                importSectionTemplateMode &&
+                <Modal onClose={() => setImportSectionTemplateMode(false)}>
+                    <h2 className="text-lg font-semibold mb-4 border-b trackme-border-gray py-2">Select a Section Template</h2>
+                    <SectionTemplatesPreview
+                        sectionPreviews={sectionsPreview || []}
+                        handleSectionSelection={handleImportTemplateSelection}
+                    />
+                </Modal>
+            }
 
             {/* AI Workout Generation Prompt */}
-            <div className="relative my-4">
-                <textarea
-                    value={aiWorkoutPrompt}
-                    onChange={e => {
-                        setAiWorkoutPrompt(e.target.value)
-                        // Auto-resize but cap at 200px height
-                        e.target.style.height = "auto"
-                        e.target.style.height = `${Math.min(
-                            e.target.scrollHeight,
-                            200
-                        )}px`
-                    }}
-                    placeholder="AI Workout Generation prompt..."
-                    className="w-full p-4 pr-12 border trackme-border-gray rounded resize-none
-                                         overflow-y-auto max-h-[200px] break-words"
-                    onKeyDown={e => {
-                        if (e.key === "Enter") handleAiWorkoutGeneration()
-                    }}
-                />
-
-                {/* Trigger icon for AI request */}
-                <div className="absolute right-4 bottom-10">
-                    {aiWorkoutPrompt === "" ? (
-                        <img
-                            src="/assets/images/Sparkle.png"
-                            alt="Enter prompt to generate"
-                            className="h-10 w-10"
-                        />
-                    ) : (
-                        <img
-                            src="/assets/images/ArrowUp.png"
-                            alt="Generate AI workout"
-                            className="h-10 w-10 cursor-pointer"
-                            onClick={handleAiWorkoutGeneration}
-                        />
-                    )}
-                </div>
-            </div>
+            <AiGenerationTextBox
+                aiWorkoutPrompt={aiWorkoutPrompt}
+                setAiWorkoutPrompt={setAiWorkoutPrompt}
+                handleAiWorkoutGeneration={handleAiWorkoutGeneration}
+            />
 
             {/* Action Buttons */}
             <div className="flex gap-x-3">

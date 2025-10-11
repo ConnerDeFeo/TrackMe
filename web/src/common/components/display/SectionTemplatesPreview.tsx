@@ -1,21 +1,19 @@
-const SectionTemplatesPreview = ({ sectionPreviews, selectedSection, handleSectionSelection }:
+const SectionTemplatesPreview = ({ sectionPreviews, selectedSectionId, handleSectionSelection }:
     {
-      sectionPreviews: {id: string, name: string}[],
-        selectedSection: any;
+        sectionPreviews: {id: string, name: string}[],
+        selectedSectionId?: string;
         handleSectionSelection: (sectionId: string) => void;
     }
 ) => {
-    console.log("selectedSection", selectedSection);
-    console.log(sectionPreviews);
   return (
     <>
       {sectionPreviews.map((preview) => {
-        const isSelected = selectedSection?.id === preview.id;
+        const isSelected = selectedSectionId === preview.id;
         return (
           <button
             key={preview.id}
             onClick={() => handleSectionSelection(preview.id)}
-            className={`w-full text-left p-4 rounded-lg transition-all ${
+            className={`w-full text-left p-4 rounded-lg transition-all border-b ${
               isSelected
                 ? "trackme-bg-blue text-white shadow-md"
                 : "bg-gray-50 text-gray-900 hover:bg-gray-100"

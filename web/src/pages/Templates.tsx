@@ -10,24 +10,26 @@ import type { Section } from "../common/types/workouts/Section";
 import SectionTemplateCreation from "../common/components/workout/SectionTemplateCreation";
 import DisplaySection from "../common/components/display/workout/DisplaySection";
 
+// Templates page: manage workout and section templates
 const Templates = () => {
-  // State: list of workouts fetched from the server
+  // State: list of workout templates fetched from server
   const [workoutSummaries, setWorkoutSummaries] = useState<WorkoutSummary[]>([]);
-  // Section Previews
-  const [sectionPreviews, setSectionPreviews] = useState<{id: string, name: string}[]>([]);
-  // State: currently selected workout template
+  // State: preview data for section templates
+  const [sectionPreviews, setSectionPreviews] = useState<{ id: string; name: string }[]>([]);
+  // State: the currently selected workout template (detailed)
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | undefined>(undefined);
-  // State: currently selected workout template
+  // State: the currently selected section template (detailed)
   const [selectedSection, setSelectedSection] = useState<Section | undefined>(undefined);
-  // State: loading flag for spinners/UI feedback
+  // State: loading indicator for data fetches
   const [loading, setLoading] = useState(true);
-  // State: whether we're in "create workout template" mode
+  // State: toggles "create new workout template" mode
   const [inWorkoutTemplateCreationMode, setInWorkoutTemplateCreationMode] = useState(false);
-  // State: whether we're in "create section template" mode
+  // State: toggles "create new section template" mode
   const [inSectionTemplateCreationMode, setInSectionTemplateCreationMode] = useState(false);
-  // State: which tab is selected in the sidebar (workout vs section)
+  // State: which tab is active in the sidebar ("workout" or "section")
   const [selectedTab, setSelectedTab] = useState<'workout' | 'section'>('workout');
 
+  // Fetch full workout template by ID
   const fetchWorkout = useCallback(async (workoutId: string) => {
     const resp = await CoachWorkoutService.getWorkout(workoutId);
     if (resp.ok) {
@@ -38,6 +40,7 @@ const Templates = () => {
     }
   }, []);
 
+  // Fetch full section template by ID
   const fetchSection = useCallback(async (sectionId: string) => {
     const resp = await CoachWorkoutService.getSectionTemplate(sectionId);
     if (resp.ok) {
@@ -48,33 +51,30 @@ const Templates = () => {
     }
   }, []);
 
-  // Fetch workout templates from API and update state
+  // Load list of workout templates and auto-select the first one
   const fetchWorkoutTemplates = async () => {
     setLoading(true);
     const response = await CoachWorkoutService.getWorkoutTemplates();
     if (response.ok) {
       const data = await response.json();
       setWorkoutSummaries(data);
-      // Auto-select the first workout if available
       if (data.length > 0) {
         fetchWorkout(data[0].workoutId);
       }
     } else {
-      // On error, clear list and selection
       setWorkoutSummaries([]);
       setSelectedWorkout(undefined);
     }
     setLoading(false);
   };
 
-  // Fetches preview of section templates
+  // Load list of section template previews and auto-select first
   const fetchSectionTemplates = async () => {
     setLoading(true);
     const resp = await CoachWorkoutService.previewSectionTemplates();
     if (resp.ok) {
       const data = await resp.json();
       setSectionPreviews(data);
-      // Auto-select the first section if available
       if (data.length > 0) {
         fetchSection(data[0].id);
       }
@@ -85,32 +85,31 @@ const Templates = () => {
     setLoading(false);
   };
 
-  // Load templates on component mount
+  // Effect: re-fetch items when active tab changes
   useEffect(() => {
-    if (selectedTab === 'workout') {
-      setSelectedSection(undefined);
-      setInSectionTemplateCreationMode(false);
       fetchWorkoutTemplates();
-    } else {
-      setSelectedWorkout(undefined);
-      setInWorkoutTemplateCreationMode(false);
       fetchSectionTemplates();
-    }
-  }, [selectedTab]);
+  }, []);
 
-  // Handler: select a workout from the sidebar
-  const handleSelectWorkout = useCallback(async (workoutId: string) => {
-    await fetchWorkout(workoutId);
-    setInWorkoutTemplateCreationMode(false);
-  }, [fetchWorkout]);
+  // Handler: user selects a workout from sidebar
+  const handleSelectWorkout = useCallback(
+    async (workoutId: string) => {
+      await fetchWorkout(workoutId);
+      setInWorkoutTemplateCreationMode(false);
+    },
+    [fetchWorkout]
+  );
 
-  // Handler: select a section from the sidebar
-  const handleSelectSection = useCallback(async (sectionId: string) => {
-    await fetchSection(sectionId);
-    setInSectionTemplateCreationMode(false);
-  }, [fetchSection]);
+  // Handler: user selects a section from sidebar
+  const handleSelectSection = useCallback(
+    async (sectionId: string) => {
+      await fetchSection(sectionId);
+      setInSectionTemplateCreationMode(false);
+    },
+    [fetchSection]
+  );
 
-  // Handler: save (create or update) a workout template
+  // Handler: create or update a workout template
   const handleWorkoutSave = async (workout: Workout) => {
     const resp = await CoachWorkoutService.createWorkoutTemplate(workout);
     if (resp.ok) {
@@ -119,17 +118,16 @@ const Templates = () => {
     }
   };
 
-  // Handles section creation - currently a placeholder
+  // Handler: create or update a section template
   const handleSectionSave = async (section: Section) => {
-    console.log("Saving section", section); 
     const resp = await CoachWorkoutService.createSectionTemplate(section);
-    if( resp.ok ){
+    if (resp.ok) {
       await fetchSectionTemplates();
       setInSectionTemplateCreationMode(false);
     }
-  }
+  };
 
-  // Handler: delete a workout template by ID
+  // Handler: delete a workout template
   const handleWorkoutDeletion = async (workoutId: string) => {
     const resp = await CoachWorkoutService.deleteWorkoutTemplate(workoutId);
     if (resp.ok) {
@@ -138,7 +136,7 @@ const Templates = () => {
     }
   };
 
-  // Handler: delete a section template by ID
+  // Handler: delete a section template
   const handleSectionDeletion = async (sectionId: string) => {
     const resp = await CoachWorkoutService.deleteSectionTemplate(sectionId);
     if (resp.ok) {
@@ -147,7 +145,7 @@ const Templates = () => {
     }
   };
 
-  // Handler: initialize creation of a new template
+  // Handler: begin creation of new template based on active tab
   const handleCreation = (tab: 'workout' | 'section') => {
     if (tab === 'workout') {
       setSelectedWorkout(undefined);
@@ -158,12 +156,14 @@ const Templates = () => {
     }
   };
 
-  // Handler: tab change from sidebar
+  // Handler: switch between workout and section tabs
   const handleTabChange = (tab: 'workout' | 'section') => {
     setSelectedTab(tab);
   };
+
   return (
     <div className="flex border-t trackme-border-gray h-[calc(100vh-64px)]">
+      {/* Sidebar: list of templates and controls */}
       <TemplatesSideBar
         workoutSummaries={workoutSummaries}
         sectionPreviews={sectionPreviews}
@@ -176,17 +176,21 @@ const Templates = () => {
         loading={loading}
       />
 
+      {/* Main content area */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6 max-w-4xl mx-auto">
           {selectedTab === 'workout' ? (
-            // Workout Tab
+            // Workout Tab Content
             inWorkoutTemplateCreationMode ? (
+              // Show workout creation form
               <WorkoutCreation
                 workout={selectedWorkout}
                 handleWorkoutCreation={handleWorkoutSave}
                 handleCancel={() => setInWorkoutTemplateCreationMode(false)}
+                sectionsPreview={sectionPreviews}
               />
             ) : selectedWorkout && (
+              // Display selected workout details
               <>
                 <DisplayWorkout workout={selectedWorkout} />
                 <div className="flex space-x-4 mt-6">
@@ -194,9 +198,7 @@ const Templates = () => {
                     <TrackmeButton
                       red
                       className="w-full"
-                      onClick={() =>
-                        handleWorkoutDeletion(selectedWorkout.workoutId!)
-                      }
+                      onClick={() => handleWorkoutDeletion(selectedWorkout.workoutId!)}
                     >
                       Delete Workout
                     </TrackmeButton>
@@ -211,14 +213,16 @@ const Templates = () => {
               </>
             )
           ) : (
-            // Section Tab
+            // Section Tab Content
             inSectionTemplateCreationMode ? (
+              // Show section creation form
               <SectionTemplateCreation
                 sectionTemplate={selectedSection}
                 handleSectionCreation={handleSectionSave}
                 handleCancel={() => setInSectionTemplateCreationMode(false)}
               />
             ) : selectedSection && (
+              // Display selected section details
               <>
                 <DisplaySection section={selectedSection} />
                 <div className="flex space-x-4 mt-6">
@@ -226,9 +230,7 @@ const Templates = () => {
                     <TrackmeButton
                       red
                       className="w-full"
-                      onClick={() =>
-                        handleSectionDeletion(selectedSection.id!)
-                      }
+                      onClick={() => handleSectionDeletion(selectedSection.id!)}
                     >
                       Delete Section
                     </TrackmeButton>

@@ -1,7 +1,8 @@
 import type { Exercise } from "../../../types/workouts/Exercise";
+import type { Section } from "../../../types/workouts/Section";
 import DisplayExercise from "./DisplayExercise";
 
-const DisplaySection = ({ section, index }: { section: any; index: number})=>{
+const DisplaySection = ({ section, }: { section: Section})=>{
     // Format sets display (e.g., "3-5 sets" or "3 sets")
     const formatSets = (minSets: number, maxSets?: number) => {
         if (maxSets && maxSets !== minSets) {
@@ -12,7 +13,6 @@ const DisplaySection = ({ section, index }: { section: any; index: number})=>{
 
     return (
         <div
-            key={index}
             className="bg-white rounded-xl border-2 border-gray-200 p-4 space-y-3"
         >
             {/* Section header with name and sets */}

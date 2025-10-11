@@ -6,6 +6,10 @@ import WorkoutCreation from "../common/components/workout/WorkoutCreation";
 import type { Workout } from "../common/types/workouts/Workout";
 import type { WorkoutSummary } from "../common/types/workouts/WorkoutSummary";
 import TemplatesSideBar from "../common/components/display/TemplatesSideBar";
+import SectionCreation from "../common/components/workout/SectionCreation";
+import type { Section } from "../common/types/workouts/Section";
+import SectionTemplateCreation from "../common/components/workout/SectionTemplateCreation";
+import DisplaySection from "../common/components/display/workout/DisplaySection";
 
 const Templates = () => {
   // State: list of workouts fetched from the server
@@ -14,10 +18,14 @@ const Templates = () => {
   const [sectionPreviews, setSectionPreviews] = useState<{id: string, name: string}[]>([]);
   // State: currently selected workout template
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | undefined>(undefined);
+  // State: currently selected workout template
+  const [selectedSection, setSelectedSection] = useState<Section | undefined>(undefined);
   // State: loading flag for spinners/UI feedback
   const [loading, setLoading] = useState(true);
-  // State: whether we're in "create or edit" mode
-  const [inCreationMode, setInCreationMode] = useState(false);
+  // State: whether we're in "create workout template" mode
+  const [inWorkoutTemplateCreationMode, setInWorkoutTemplateCreationMode] = useState(false);
+  // State: whether we're in "create section template" mode
+  const [inSectionTemplateCreationMode, setInSectionTemplateCreationMode] = useState(false);
   // State: which tab is selected in the sidebar (workout vs section)
   const [selectedTab, setSelectedTab] = useState<'workout' | 'section'>('workout');
 
@@ -63,8 +71,12 @@ const Templates = () => {
   // Load templates on component mount
   useEffect(() => {
     if(selectedTab === 'workout'){
+      setSelectedSection(undefined);
+      setInSectionTemplateCreationMode(false);
       fetchWorkoutTemplates();
     }else{
+      setSelectedWorkout(undefined);
+      setInWorkoutTemplateCreationMode(false);
       fetchSectionTemplates();
     }
   }, [selectedTab]);
@@ -72,7 +84,7 @@ const Templates = () => {
   // Handler: select a workout from the sidebar
   const handleSelectWorkout = async (workoutId: string) => {
     await fetchWorkout(workoutId);
-    setInCreationMode(false);
+    setInWorkoutTemplateCreationMode(false);
   };
 
   // Handler: save (create or update) a workout template
@@ -80,23 +92,37 @@ const Templates = () => {
     const resp = await CoachWorkoutService.createWorkoutTemplate(workout);
     if (resp.ok) {
       await fetchWorkoutTemplates();
-      setInCreationMode(false);
+      setInWorkoutTemplateCreationMode(false);
     }
   };
+
+  // Handles section creation - currently a placeholder
+  const handleSectionSave = async (section: Section) => {
+    const resp = await CoachWorkoutService.createSectionTemplate(section);
+    if( resp.ok ){
+      await fetchSectionTemplates();
+      setInSectionTemplateCreationMode(false);
+    }
+  }
 
   // Handler: delete a workout template by ID
   const handleWorkoutDeletion = async (workoutId: string) => {
     const resp = await CoachWorkoutService.deleteWorkoutTemplate(workoutId);
     if (resp.ok) {
       await fetchWorkoutTemplates();
-      setInCreationMode(false);
+      setInWorkoutTemplateCreationMode(false);
     }
   };
 
-  // Handler: initialize creation of a new workout template
-  const handleCreateNewWorkout = () => {
-    setSelectedWorkout(undefined);
-    setInCreationMode(true);
+  // Handler: initialize creation of a new template
+  const handleCreation = () => {
+    if(selectedTab === 'workout'){
+      setSelectedWorkout(undefined);
+      setInWorkoutTemplateCreationMode(true);
+    } else {
+      setSelectedSection(undefined);
+      setInSectionTemplateCreationMode(true);
+    }
   };
 
   return (
@@ -107,7 +133,7 @@ const Templates = () => {
         sectionPreviews={sectionPreviews}
         selectedWorkout={selectedWorkout}
         handleWorkoutSelection={handleSelectWorkout}
-        handleCreateNewWorkout={handleCreateNewWorkout}
+        handleCreation={handleCreation}
         loading={loading}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
@@ -116,14 +142,21 @@ const Templates = () => {
       {/* Content area: either creation form or display + actions */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6 max-w-4xl mx-auto">
-          {inCreationMode ? (
+          {inWorkoutTemplateCreationMode ? (
               // Creation / edit form
               <WorkoutCreation
                 workout={selectedWorkout}
                 handleWorkoutCreation={handleWorkoutSave}
-                handleCancel={() => setInCreationMode(false)}
+                handleCancel={() => setInWorkoutTemplateCreationMode(false)}
               />
-            ) : selectedWorkout && (
+            ) : inSectionTemplateCreationMode ? (
+              <SectionTemplateCreation
+                sectionTemplate={selectedSection}
+                handleSectionCreation={handleSectionSave}
+                handleCancel={() => setInSectionTemplateCreationMode(false)}
+              />
+            )
+            :selectedTab === 'workout' && selectedWorkout ? (
               // Display existing workout and action buttons
               <>
                 <DisplayWorkout workout={selectedWorkout} />
@@ -138,13 +171,16 @@ const Templates = () => {
                     </TrackmeButton>
                   )}
                   <TrackmeButton
-                    onClick={() => setInCreationMode(true)}
+                    onClick={() => setInWorkoutTemplateCreationMode(true)}
                     className="w-full"
                   >
                     Edit Workout
                   </TrackmeButton>
                 </div>
               </>
+            )
+            : selectedSection && (
+              <DisplaySection section={selectedSection}/>
             )
           }
         </div>

@@ -4,14 +4,15 @@ import type { Exercise } from "../../types/workouts/Exercise";
 import type { Section } from "../../types/workouts/Section";
 import ExercisesCreation from "./ExercisesCreation";
 
-const SectionCreation = ({section, setSections, idx, handleMouseDown, handleMouseEnter, className}: 
+const SectionCreation = ({section, setSections, idx, handleMouseDown, handleMouseEnter, className, isTemplate}: 
   {
     section: Section, 
     setSections: React.Dispatch<React.SetStateAction<Section[]>>, 
     idx: number,
     handleMouseDown? : (e: React.MouseEvent, index: number) => void
     handleMouseEnter? : (index: number) => void
-    className?: string
+    className?: string,
+    isTemplate?: boolean
   }) => {
     /**
    * Handles adding a new exercise of a specific type to the current section.
@@ -141,13 +142,15 @@ const SectionCreation = ({section, setSections, idx, handleMouseDown, handleMous
           </div>
 
           {/* Delete Button */}
-          <button
-            onClick={handleSectionDeletion}
-            className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all"
-            title="Delete Section"
-          >
-            {Variables.Icons.trash}
-          </button>
+          {!isTemplate && (
+            <button
+              onClick={handleSectionDeletion}
+              className="px-3 py-2 text-sm font-medium text-red-600 border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all"
+              title="Delete Section"
+            >
+              {Variables.Icons.trash}
+            </button>
+          )}
         </div>
 
         {/* Exercises */}

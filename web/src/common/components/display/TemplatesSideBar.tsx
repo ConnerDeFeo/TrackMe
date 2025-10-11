@@ -2,14 +2,14 @@ import type { WorkoutSummary } from "../../types/workouts/WorkoutSummary";
 import TrackmeButton from "../TrackmeButton";
 import WorkoutTemplatesPreview from "./WorkoutTemplatesPreview";
 
-const TemplatesSideBar = ({ workoutSummaries, sectionPreviews, selectedWorkout, handleWorkoutSelection, loading, handleCreateNewWorkout, selectedTab, setSelectedTab}:
+const TemplatesSideBar = ({ workoutSummaries, sectionPreviews, selectedWorkout, handleWorkoutSelection, loading, handleCreation, selectedTab, setSelectedTab}:
     {
       workoutSummaries: WorkoutSummary[], 
       sectionPreviews: {id: string, name: string}[],
       selectedWorkout: any, 
       handleWorkoutSelection: (workoutId:string) => void, 
       loading: boolean, 
-      handleCreateNewWorkout: () => void,
+      handleCreation: () => void,
       selectedTab: 'workout' | 'section',
       setSelectedTab: (tab: 'workout' | 'section') => void
     }
@@ -37,7 +37,7 @@ const TemplatesSideBar = ({ workoutSummaries, sectionPreviews, selectedWorkout, 
               // Loading spinner in sidebar
               <div className="p-6 text-center text-gray-500">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 trackme-border-blue mx-auto" />
-                <p className="mt-2 text-sm">Loading workouts...</p>
+                <p className="mt-2 text-sm">Loading {selectedTab}s...</p>
               </div>
             ) : workoutSummaries.length === 0 ? (
               // No templates placeholder
@@ -46,6 +46,7 @@ const TemplatesSideBar = ({ workoutSummaries, sectionPreviews, selectedWorkout, 
               </div>
             ) : (
               // Map over templates
+              selectedTab === 'workout' ?
               <div className="p-3 space-y-2">
                 <WorkoutTemplatesPreview
                   workoutSummaries={workoutSummaries}
@@ -53,9 +54,12 @@ const TemplatesSideBar = ({ workoutSummaries, sectionPreviews, selectedWorkout, 
                   handleWorkoutSelection={handleWorkoutSelection}
                 />
               </div>
+              :
+              <></>
+            
           )}
         </div>
-        <TrackmeButton className="m-6" onClick={handleCreateNewWorkout}>
+        <TrackmeButton className="m-6" onClick={handleCreation}>
           Create New Template
         </TrackmeButton>
       </div>

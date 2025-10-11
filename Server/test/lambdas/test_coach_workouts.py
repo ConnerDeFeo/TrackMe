@@ -170,8 +170,7 @@ def test_create_section_template_returns_success():
     # Arrange
     event = {
         "body": json.dumps({
-            "section": TestData.test_section,
-            'name': 'Test Section'
+            "section": TestData.test_section
         }),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }

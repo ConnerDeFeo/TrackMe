@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CoachWorkoutService from "../services/CoachWorkoutService";
 import DisplayWorkout from "../common/components/display/workout/DisplayWorkout";
 import TrackmeButton from "../common/components/TrackmeButton";
@@ -6,7 +6,6 @@ import WorkoutCreation from "../common/components/workout/WorkoutCreation";
 import type { Workout } from "../common/types/workouts/Workout";
 import type { WorkoutSummary } from "../common/types/workouts/WorkoutSummary";
 import TemplatesSideBar from "../common/components/display/TemplatesSideBar";
-import SectionCreation from "../common/components/workout/SectionCreation";
 import type { Section } from "../common/types/workouts/Section";
 import SectionTemplateCreation from "../common/components/workout/SectionTemplateCreation";
 import DisplaySection from "../common/components/display/workout/DisplaySection";
@@ -29,15 +28,25 @@ const Templates = () => {
   // State: which tab is selected in the sidebar (workout vs section)
   const [selectedTab, setSelectedTab] = useState<'workout' | 'section'>('workout');
 
-  const fetchWorkout = async (workoutId: string) => {
+  const fetchWorkout = useCallback(async (workoutId: string) => {
     const resp = await CoachWorkoutService.getWorkout(workoutId);
     if (resp.ok) {
       const data = await resp.json();
       setSelectedWorkout(data);
-    }else{
+    } else {
       setSelectedWorkout(undefined);
     }
-  };
+  }, []);
+
+  const fetchSection = useCallback(async (sectionId: string) => {
+    const resp = await CoachWorkoutService.getSectionTemplate(sectionId);
+    if (resp.ok) {
+      const data = await resp.json();
+      setSelectedSection(data);
+    } else {
+      setSelectedSection(undefined);
+    }
+  }, []);
 
   // Fetch workout templates from API and update state
   const fetchWorkoutTemplates = async () => {
@@ -45,36 +54,44 @@ const Templates = () => {
     const response = await CoachWorkoutService.getWorkoutTemplates();
     if (response.ok) {
       const data = await response.json();
-      // Auto-select the first workout if available, otherwise clear selection
-        fetchWorkout(data[0].workoutId); 
-        setWorkoutSummaries(data);
-    }else {
+      setWorkoutSummaries(data);
+      // Auto-select the first workout if available
+      if (data.length > 0) {
+        fetchWorkout(data[0].workoutId);
+      }
+    } else {
       // On error, clear list and selection
       setWorkoutSummaries([]);
       setSelectedWorkout(undefined);
     }
     setLoading(false);
-  }
+  };
 
-  //Fetches preview of section templates
+  // Fetches preview of section templates
   const fetchSectionTemplates = async () => {
     setLoading(true);
     const resp = await CoachWorkoutService.previewSectionTemplates();
-    if( resp.ok ){
+    if (resp.ok) {
       const data = await resp.json();
-      console.log("Section Templates Preview:", data);
       setSectionPreviews(data);
+      // Auto-select the first section if available
+      if (data.length > 0) {
+        fetchSection(data[0].id);
+      }
+    } else {
+      setSectionPreviews([]);
+      setSelectedSection(undefined);
     }
     setLoading(false);
   };
 
   // Load templates on component mount
   useEffect(() => {
-    if(selectedTab === 'workout'){
+    if (selectedTab === 'workout') {
       setSelectedSection(undefined);
       setInSectionTemplateCreationMode(false);
       fetchWorkoutTemplates();
-    }else{
+    } else {
       setSelectedWorkout(undefined);
       setInWorkoutTemplateCreationMode(false);
       fetchSectionTemplates();
@@ -82,10 +99,16 @@ const Templates = () => {
   }, [selectedTab]);
 
   // Handler: select a workout from the sidebar
-  const handleSelectWorkout = async (workoutId: string) => {
+  const handleSelectWorkout = useCallback(async (workoutId: string) => {
     await fetchWorkout(workoutId);
     setInWorkoutTemplateCreationMode(false);
-  };
+  }, [fetchWorkout]);
+
+  // Handler: select a section from the sidebar
+  const handleSelectSection = useCallback(async (sectionId: string) => {
+    await fetchSection(sectionId);
+    setInSectionTemplateCreationMode(false);
+  }, [fetchSection]);
 
   // Handler: save (create or update) a workout template
   const handleWorkoutSave = async (workout: Workout) => {
@@ -98,6 +121,7 @@ const Templates = () => {
 
   // Handles section creation - currently a placeholder
   const handleSectionSave = async (section: Section) => {
+    console.log("Saving section", section); 
     const resp = await CoachWorkoutService.createSectionTemplate(section);
     if( resp.ok ){
       await fetchSectionTemplates();
@@ -114,9 +138,18 @@ const Templates = () => {
     }
   };
 
+  // Handler: delete a section template by ID
+  const handleSectionDeletion = async (sectionId: string) => {
+    const resp = await CoachWorkoutService.deleteSectionTemplate(sectionId);
+    if (resp.ok) {
+      await fetchSectionTemplates();
+      setInSectionTemplateCreationMode(false);
+    }
+  };
+
   // Handler: initialize creation of a new template
-  const handleCreation = () => {
-    if(selectedTab === 'workout'){
+  const handleCreation = (tab: 'workout' | 'section') => {
+    if (tab === 'workout') {
       setSelectedWorkout(undefined);
       setInWorkoutTemplateCreationMode(true);
     } else {
@@ -125,39 +158,35 @@ const Templates = () => {
     }
   };
 
+  // Handler: tab change from sidebar
+  const handleTabChange = (tab: 'workout' | 'section') => {
+    setSelectedTab(tab);
+  };
   return (
     <div className="flex border-t trackme-border-gray h-[calc(100vh-64px)]">
-      {/* Sidebar with list of workout templates */}
       <TemplatesSideBar
         workoutSummaries={workoutSummaries}
         sectionPreviews={sectionPreviews}
-        selectedWorkout={selectedWorkout}
-        handleWorkoutSelection={handleSelectWorkout}
-        handleCreation={handleCreation}
+        selectedWorkoutId={selectedWorkout?.workoutId}
+        selectedSectionId={selectedSection?.id}
+        onWorkoutSelect={handleSelectWorkout}
+        onSectionSelect={handleSelectSection}
+        onCreateNew={handleCreation}
+        onTabChange={handleTabChange}
         loading={loading}
-        selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
       />
 
-      {/* Content area: either creation form or display + actions */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6 max-w-4xl mx-auto">
-          {inWorkoutTemplateCreationMode ? (
-              // Creation / edit form
+          {selectedTab === 'workout' ? (
+            // Workout Tab
+            inWorkoutTemplateCreationMode ? (
               <WorkoutCreation
                 workout={selectedWorkout}
                 handleWorkoutCreation={handleWorkoutSave}
                 handleCancel={() => setInWorkoutTemplateCreationMode(false)}
               />
-            ) : inSectionTemplateCreationMode ? (
-              <SectionTemplateCreation
-                sectionTemplate={selectedSection}
-                handleSectionCreation={handleSectionSave}
-                handleCancel={() => setInSectionTemplateCreationMode(false)}
-              />
-            )
-            :selectedTab === 'workout' && selectedWorkout ? (
-              // Display existing workout and action buttons
+            ) : selectedWorkout && (
               <>
                 <DisplayWorkout workout={selectedWorkout} />
                 <div className="flex space-x-4 mt-6">
@@ -165,24 +194,55 @@ const Templates = () => {
                     <TrackmeButton
                       red
                       className="w-full"
-                      onClick={() => handleWorkoutDeletion(selectedWorkout.workoutId!)}
+                      onClick={() =>
+                        handleWorkoutDeletion(selectedWorkout.workoutId!)
+                      }
                     >
                       Delete Workout
                     </TrackmeButton>
                   )}
                   <TrackmeButton
-                    onClick={() => setInWorkoutTemplateCreationMode(true)}
                     className="w-full"
+                    onClick={() => setInWorkoutTemplateCreationMode(true)}
                   >
                     Edit Workout
                   </TrackmeButton>
                 </div>
               </>
             )
-            : selectedSection && (
-              <DisplaySection section={selectedSection}/>
+          ) : (
+            // Section Tab
+            inSectionTemplateCreationMode ? (
+              <SectionTemplateCreation
+                sectionTemplate={selectedSection}
+                handleSectionCreation={handleSectionSave}
+                handleCancel={() => setInSectionTemplateCreationMode(false)}
+              />
+            ) : selectedSection && (
+              <>
+                <DisplaySection section={selectedSection} />
+                <div className="flex space-x-4 mt-6">
+                  {selectedSection.id && (
+                    <TrackmeButton
+                      red
+                      className="w-full"
+                      onClick={() =>
+                        handleSectionDeletion(selectedSection.id!)
+                      }
+                    >
+                      Delete Section
+                    </TrackmeButton>
+                  )}
+                  <TrackmeButton
+                    className="w-full"
+                    onClick={() => setInSectionTemplateCreationMode(true)}
+                  >
+                    Edit Section
+                  </TrackmeButton>
+                </div>
+              </>
             )
-          }
+          )}
         </div>
       </div>
     </div>

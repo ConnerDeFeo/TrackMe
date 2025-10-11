@@ -11,12 +11,12 @@ def create_section_template(event, context):
         user_id = user_info['userId']
         accountType = user_info['accountType']
         section = body['section']
-        sectionId = body.get('sectionId', None)
 
         name = section['name']
         minSets = section['minSets']
         maxSets = section.get('maxSets', None)
         exercises = section.get('exercises', [])
+        sectionId = section.get('id', None)  # For updates
 
         if sectionId:
             # Update existing section template

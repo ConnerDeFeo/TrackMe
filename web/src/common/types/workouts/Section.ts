@@ -5,5 +5,6 @@ export type Section = {
   minSets: number;
   maxSets?: number;
   exercises?: Exercise[];
+  id?: string; // Optional ID for identifying the section
 };
 

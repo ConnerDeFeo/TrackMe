@@ -51,8 +51,11 @@ const CoachWorkoutService = {
     createSectionTemplate: async (section:Section) => {
         return await API.post(`${VITE_API_URL}/coaches/create_section_template`, {section});
     },
-    getSectionTemplate: async (sectionId:string) => {
-        return await API.get(`${VITE_API_URL}/coaches/get_section_template?sectionId=${sectionId}`);
+    getSectionTemplate: async (sectionTemplateId:string) => {
+        return await API.get(`${VITE_API_URL}/coaches/get_section_template?sectionTemplateId=${sectionTemplateId}`);
+    },
+    deleteSectionTemplate: async (sectionTemplateId:string) => {
+        return await API.delete(`${VITE_API_URL}/coaches/delete_section_template?sectionTemplateId=${sectionTemplateId}`);
     }
 }
 

@@ -199,8 +199,7 @@ def test_create_section_template_update_section_returns_success():
     create_section_template(event, {})
     event = {
         "body": json.dumps({
-            "section": {**TestData.test_section, 'name': 'Updated name'},
-            "sectionId": 1
+            "section": {**TestData.test_section, 'name': 'Updated name', 'id': 1},
         }),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }

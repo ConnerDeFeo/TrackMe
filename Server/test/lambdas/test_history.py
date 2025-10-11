@@ -256,6 +256,36 @@ def test_fetch_historical_data_coach_success():
     assert len(athlete_time_inputs['inputs']) == 3
     assert athlete_time_inputs['inputs'] == [{'distance': 100, 'time': 10.8, 'type': 'run'}, {'restTime': 5, 'type': 'rest'}, {'distance': 200, 'time': 30.0, 'type': 'run'}]
 
+def test_fetch_historical_data_athlete_success():
+    # Arrange
+    setup_workout_for_today()
+    setup_historical_inputs()
+
+    event = {
+        "queryStringParameters": {"date": date},
+        "headers": generate_auth_header("1235", "Athlete", "test_athlete_2")
+    }
+
+    # Act
+    response = fetch_historical_data(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert '1' in body # Group ID
+    group_data = body['1']
+
+    assert group_data['name'] == 'Test Group'
+    assert len(group_data['workouts']) == 1
+    assert group_data['workouts'][0]['title'] == 'Test Workout'
+
+    assert '1235' in group_data['athleteInputs'] # Athlete ID
+    athlete_time_inputs = group_data['athleteInputs']['1235']
+
+    assert athlete_time_inputs['username'] == 'test_athlete_2'
+    assert len(athlete_time_inputs['inputs']) == 3
+    assert athlete_time_inputs['inputs'] == [{'distance': 100, 'time': 10.8, 'type': 'run'}, {'restTime': 5, 'type': 'rest'}, {'distance': 200, 'time': 30.0, 'type': 'run'}]
+
 # def test_fetch_historical_data_no_results():
 #     # Arrange
 #     setup_base_scenario()

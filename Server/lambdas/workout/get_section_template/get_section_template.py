@@ -17,15 +17,9 @@ def get_section_template(event, context):
                 'body': json.dumps({'error': 'Section template not found'})
             }
 
-        section_template_data = {
-            'id': section_template[0],
-            'name': section_template[1],
-            'section': section_template[2]
-        }
-
         return {
             'statusCode': 200,
-            'body': json.dumps(section_template_data),
+            'body': json.dumps(section_template),
             'headers': auth_header
         }
     except Exception as e:

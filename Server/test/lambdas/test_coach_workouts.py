@@ -3,6 +3,7 @@ import pytest
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
 from lambdas.workout.delete_workout_template.delete_workout_template import delete_workout_template
+from lambdas.workout.get_section_template.get_section_template import get_section_template
 from lambdas.workout.get_workout_templates.get_workout_templates import get_workout_templates
 from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.workout.create_section_template.create_section_template import create_section_template
@@ -211,3 +212,29 @@ def test_preview_section_templates_returns_success():
     section = body[0]
     assert section['id'] == 1
     assert section['name'] == 'Test Section'
+
+def test_get_section_template_returns_success():
+    # Arrange
+    create_section_template({
+        "body": json.dumps({
+            "section": TestData.test_section,
+            'name': 'Test Section'
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    event = {
+        "queryStringParameters": {"sectionTemplateId": 1},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = get_section_template(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    section = body[0]
+    assert section['name'] == 'Test name'
+    assert section['minSets'] == 3
+    assert section['maxSets'] == 5
+    assert len(section['exercises']) == 4

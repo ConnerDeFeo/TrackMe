@@ -1,8 +1,8 @@
 import { Text, Pressable, View } from "react-native";
 import { useState } from "react";
 import RenderExercise from "./RenderExercise";
-import Section from "../../types/workouts/Section";
-import Workout from "../../types/workouts/Workout";
+import Section from "../../../types/workouts/Section";
+import Workout from "../../../types/workouts/Workout";
 
 const CollapsibleWorkoutDisplay = ({ workout }: { workout: Workout }) => {
     const [isExpanded, setIsExpanded] = useState(false);

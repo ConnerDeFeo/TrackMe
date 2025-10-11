@@ -3,7 +3,6 @@ import type { Workout } from "../../common/types/workouts/Workout";
 import { useEffect, useState } from "react";
 import DateService from "../../services/DateService";
 import GeneralService from "../../services/GeneralService";
-import DisplayWorkout from "../../common/components/display/DisplayWorkout";
 import GroupHeader from "../../common/components/groups/GroupHeader";
 import CollapsibleWorkoutDisplay from "../../common/components/display/CollapsibleWorkoutDisplay";
 

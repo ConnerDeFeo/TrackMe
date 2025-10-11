@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import GeneralService from "../../../services/GeneralService";
-import TimeDistanceDisplay from "../../../common/components/display/TimeDistanceDisplay";
+import TimeDistanceDisplay from "../../../common/components/display/input/TimeDistanceDisplay";
 
 /**
  * ViewGroupInputsCoach component displays workout inputs for all athletes in a specific group.

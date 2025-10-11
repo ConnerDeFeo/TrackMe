@@ -7,7 +7,7 @@ import InputTracking from "../InputTracking";
 import { useNavigation } from "@react-navigation/native";
 import DateService from "../../../services/DateService";
 import { Input } from "../../types/inputs/Input";
-import InputDisplay from "../display/InputDisplay";
+import InputDisplay from "../display/input/InputDisplay";
 import { InputType } from "../../constants/Enums";
 import TrackMeButton from "../display/TrackMeButton";
 import TextButton from "../display/TextButton";

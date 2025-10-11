@@ -7,7 +7,7 @@ import InputTracking from "../common/components/InputTracking";
 import DateService from "../services/DateService";
 import UserDisplay from "../common/components/display/UserDisplay";
 import { Input } from "../common/types/inputs/Input";
-import InputDisplay from "../common/components/display/InputDisplay";
+import InputDisplay from "../common/components/display/input/InputDisplay";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 
 const MassInput = () => {

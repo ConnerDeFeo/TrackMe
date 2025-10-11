@@ -5,9 +5,9 @@ import ArrowButton from "../common/components/ArrowButton";
 import Workout from "../common/types/workouts/Workout";
 import GeneralService from "../services/GeneralService";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
-import DisplayWorkout from "../common/components/display/DisplayWorkout";
 import { AccountType } from "../common/constants/Enums";
 import { AuthContext } from "../common/context/AuthContext";
+import CollapsibleWorkoutDisplay from "../common/components/display/workout/CollapsibleWorkoutDisplay";
 
 const GroupSchedule = () => {
     // Get groupId and groupName from route params
@@ -119,7 +119,7 @@ const GroupSchedule = () => {
                             {dayWorkouts.length > 0 ? (
                                 <View className="space-y-2">
                                     {dayWorkouts.map((workout, idx) => (
-                                        <DisplayWorkout key={idx} workout={workout} />
+                                        <CollapsibleWorkoutDisplay key={idx} workout={workout} />
                                     ))}
                                 </View>
                             ) : (

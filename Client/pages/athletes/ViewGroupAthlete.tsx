@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import DisplayWorkout from "../../common/components/display/DisplayWorkout";
+import DisplayWorkout from "../../common/components/display/workout/DisplayWorkout";
 import GeneralService from "../../services/GeneralService";
 import UserDisplay from "../../common/components/display/UserDisplay";
 import TextButton from "../../common/components/display/TextButton";

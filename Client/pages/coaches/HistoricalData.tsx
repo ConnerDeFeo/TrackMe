@@ -2,8 +2,9 @@ import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import HistoryService from "../../services/HistoryService";
-import DisplayWorkout from "../../common/components/display/DisplayWorkout";
-import InputDisplay from "../../common/components/display/InputDisplay";
+import DisplayWorkout from "../../common/components/display/workout/DisplayWorkout";
+import InputDisplay from "../../common/components/display/input/InputDisplay";
+import Workout from "../../common/types/workouts/Workout";
 
 const HistoricalData = ()=>{
     const route = useRoute();
@@ -34,7 +35,7 @@ const HistoricalData = ()=>{
                         
                         <View className="mb-4 gap-y-4">
                             <Text className="text-lg font-semibold mb-3">Workouts</Text>
-                            {historicalData[groupId].workouts.map((workout: Record<string, any>, idx: number) =>
+                            {historicalData[groupId].workouts.map((workout: Workout, idx: number) =>
                             <DisplayWorkout
                                 workout={workout}
                                 key={idx}

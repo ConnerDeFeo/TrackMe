@@ -185,76 +185,76 @@ def test_get_available_history_dates_athlete_returns_date_when_inputs_exists():
     assert len(body) == 1 # should only return the day the athlete input times
     assert two_days_ago in body
 
-# def test_get_available_history_dates_coach_returns_empty_when_no_workout():
-#     # Arrange
-#     setup_base_scenario()
-#     event = {
-#         "queryStringParameters": {"date": yesterday},
-#         "headers": generate_auth_header("123", "Coach", "testcoach")
-#     }
+def test_get_available_history_dates_coach_returns_empty_when_no_workout():
+    # Arrange
+    setup_base_scenario()
+    event = {
+        "queryStringParameters": {"date": yesterday},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
 
-#     # Act
-#     response = get_available_history_dates(event, {})
+    # Act
+    response = get_available_history_dates(event, {})
 
-#     # Assert
-#     assert response['statusCode'] == 200
-#     body = json.loads(response['body'])
-#     assert len(body) == 0
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 0
 
-# def test_get_available_history_dates_athlete_returns_empty_when_no_workout():
-#     # Arrange
-#     setup_base_scenario()
-#     event = {
-#         "queryStringParameters": {"date": yesterday},
-#         "headers": generate_auth_header("123", "Athlete", "test_athlete")
-#     }
+def test_get_available_history_dates_athlete_returns_empty_when_no_workout():
+    # Arrange
+    setup_base_scenario()
+    event = {
+        "queryStringParameters": {"date": yesterday},
+        "headers": generate_auth_header("1235", "Athlete", "test_athlete")
+    }
 
-#     # Act
-#     response = get_available_history_dates(event, {})
+    # Act
+    response = get_available_history_dates(event, {})
 
-#     # Assert
-#     assert response['statusCode'] == 200
-#     body = json.loads(response['body'])
-#     assert len(body) == 0    
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 0    
 
-# def test_fetch_historical_data_success():
-#     # Arrange
-#     setup_workout_for_today()
-#     input_times(TestData.test_input_times, {}) # Input for today
-#     # Input for yesterday to ensure it's filtered out
-#     input_times({
-#         "body": json.dumps({
-#             "athleteIds": ["1234"], 'groupId': 1, "date": yesterday,
-#             'inputs': [{'distance': 150, 'time': 15.0}]
-#         }),
-#         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
-#     }, {})
+def test_fetch_historical_data_coach_success():
+    # Arrange
+    setup_workout_for_today()
+    input_times(TestData.test_input_times, {}) # Input for today
+    # Input for yesterday to ensure it's filtered out
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1234"], 'groupId': 1, "date": yesterday,
+            'inputs': [{'distance': 150, 'time': 15.0}]
+        }),
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }, {})
 
-#     event = {
-#         "queryStringParameters": {"date": date},
-#         "headers": generate_auth_header("123", "Coach", "testcoach")
-#     }
+    event = {
+        "queryStringParameters": {"date": date},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
 
-#     # Act
-#     response = fetch_historical_data(event, {})
+    # Act
+    response = fetch_historical_data(event, {})
 
-#     # Assert
-#     assert response['statusCode'] == 200
-#     body = json.loads(response['body'])
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
     
-#     assert '1' in body # Group ID
-#     group_data = body['1']
+    assert '1' in body # Group ID
+    group_data = body['1']
     
-#     assert group_data['name'] == 'Test Group'
-#     assert len(group_data['workouts']) == 1
-#     assert group_data['workouts'][0]['title'] == 'Test Workout'
+    assert group_data['name'] == 'Test Group'
+    assert len(group_data['workouts']) == 1
+    assert group_data['workouts'][0]['title'] == 'Test Workout'
     
-#     assert '1234' in group_data['athleteInputs'] # Athlete ID
-#     athlete_time_inputs = group_data['athleteInputs']['1234']
+    assert '1234' in group_data['athleteInputs'] # Athlete ID
+    athlete_time_inputs = group_data['athleteInputs']['1234']
     
-#     assert athlete_time_inputs['username'] == 'test_athlete'
-#     assert len(athlete_time_inputs['inputs']) == 3
-#     assert athlete_time_inputs['inputs'] == [{'distance': 100, 'time': 10.8, 'type': 'run'}, {'restTime': 5, 'type': 'rest'}, {'distance': 200, 'time': 30.0, 'type': 'run'}]
+    assert athlete_time_inputs['username'] == 'test_athlete'
+    assert len(athlete_time_inputs['inputs']) == 3
+    assert athlete_time_inputs['inputs'] == [{'distance': 100, 'time': 10.8, 'type': 'run'}, {'restTime': 5, 'type': 'rest'}, {'distance': 200, 'time': 30.0, 'type': 'run'}]
 
 # def test_fetch_historical_data_no_results():
 #     # Arrange

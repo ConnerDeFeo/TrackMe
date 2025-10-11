@@ -4,7 +4,7 @@ import RunExerciseInputs from "./RunExerciseInputs";
 import type { Rest } from "../../types/workouts/Rest";
 import RestExerciseInputs from "./RestExerciseInputs";
 import type { Exercise } from "../../types/workouts/Exercise";
-import StrengthExerciseInputs from "./StrengthExerciseINputs";
+import StrengthExerciseInputs from "./StrengthExerciseInputs";
 
 /**
  * Renders the appropriate input component for a given exercise type.

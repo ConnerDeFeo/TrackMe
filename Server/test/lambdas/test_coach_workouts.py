@@ -5,6 +5,8 @@ from lambdas.workout.create_workout_template.create_workout_template import crea
 from lambdas.workout.delete_workout_template.delete_workout_template import delete_workout_template
 from lambdas.workout.get_workout_templates.get_workout_templates import get_workout_templates
 from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
+from lambdas.workout.create_section_template.create_section_template import create_section_template
+from lambdas.workout.preview_section_templates.preview_section_templates import preview_section_templates
 from lambdas.workout.get_workout.get_workout import get_workout
 from lambdas.general.create_user.create_user import create_user
 from data import TestData
@@ -162,3 +164,50 @@ def test_get_workout_returns_success():
     assert body['title'] == "Test Workout"
     assert body['description'] == "This is a test workout"
     assert len(body['sections']) == 3
+
+def test_create_section_template_returns_success():
+    # Arrange
+    event = {
+        "body": json.dumps({
+            "section": TestData.test_section,
+            'name': 'Test Section'
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = create_section_template(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    data = fetch_one("SELECT section FROM section_templates WHERE coachId = %s", ('123',))
+    assert data is not None
+    section = data[0]
+    assert section['name'] == 'Test name'
+    assert section['minSets'] == 3
+    assert section['maxSets'] == 5
+    assert len(section['exercises']) == 4
+
+def test_preview_section_templates_returns_success():
+    # Arrange
+    create_section_template({
+        "body": json.dumps({
+            "section": TestData.test_section,
+            'name': 'Test Section'
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    event = {
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = preview_section_templates(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 1
+    section = body[0]
+    assert section['id'] == 1
+    assert section['name'] == 'Test Section'

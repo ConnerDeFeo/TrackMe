@@ -38,42 +38,44 @@ class TestData:
             }),
             "headers":generate_auth_header("1234", "Athlete", "test_athlete")
         }
+    
+    test_section = {
+        'name': 'Test name',
+        'minSets': 3,
+        'maxSets': 5,
+        'exercises': [
+            {
+                'distance': 100,
+                'measurement': 'meters',
+                'type': 'run'
+            },
+            {
+                'type': 'rest',
+                'minReps': 60,
+                'maxReps': 90
+            },
+            {
+                'measurement': 'meters',
+                'type': 'run',
+                'minReps': 2,
+                'maxReps': 4
+            },
+            {
+                'type': 'strength',
+                'description': 'Push-ups',
+                'minReps': 10,
+                'maxReps': 20
+            }
+        ],
+        "inputs":True
+    }
 
     test_workout = {
         "body": json.dumps({
             'title': 'Test Workout', 
             'description': 'This is a test workout',
             'sections': [
-                {
-                    'name': 'Test name',
-                    'minSets': 3,
-                    'maxSets': 5,
-                    'exercises': [
-                        {
-                            'distance': 100,
-                            'measurement': 'meters',
-                            'type': 'run'
-                        },
-                        {
-                            'type': 'rest',
-                            'minReps': 60,
-                            'maxReps': 90
-                        },
-                        {
-                            'measurement': 'meters',
-                            'type': 'run',
-                            'minReps': 2,
-                            'maxReps': 4
-                        },
-                        {
-                            'type': 'strength',
-                            'description': 'Push-ups',
-                            'minReps': 10,
-                            'maxReps': 20
-                        }
-                    ],
-                    "inputs":True
-                },
+                test_section,
                 {
                     'name': 'Test name 2',
                     'minSets': 2,

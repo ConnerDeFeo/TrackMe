@@ -52,7 +52,7 @@ const CollapsibleWorkoutDisplay: React.FC<CollapsibleWorkoutDisplayProps> = ({ w
                     <div className="space-y-4">
                         {workout.sections && workout.sections.length > 0 ? (
                             workout.sections.map((section, idx) => (
-                                <DisplaySection section={section} index={idx} key={idx} />
+                                <DisplaySection section={section} key={idx} />
                             ))
                         ) : (
                             <div className="text-center py-8 text-gray-500">

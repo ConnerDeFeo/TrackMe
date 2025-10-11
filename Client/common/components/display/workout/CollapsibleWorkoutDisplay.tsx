@@ -1,6 +1,5 @@
 import { Text, Pressable, View } from "react-native";
 import { useState } from "react";
-import RenderExercise from "./RenderExercise";
 import Section from "../../../types/workouts/Section";
 import Workout from "../../../types/workouts/Workout";
 import DisplaySection from "./DisplaySection";
@@ -8,7 +7,7 @@ import TrackMeButton from "../TrackMeButton";
 
 const CollapsibleWorkoutDisplay = ({ workout, onPress, onPressText }: { workout: Workout, onPress?: () => void, onPressText?: string }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const sections: Array<Section> = workout.sections || [];
+    const sections: Section[] = workout.sections || [];
     
     if (!workout['title']) {
         return null;

@@ -1,8 +1,8 @@
 import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
-from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
-from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
+from lambdas.workout.assign_group_workout.assign_group_workout import assign_group_workout
+from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.coach.delete_group.delete_group import delete_group
 from lambdas.relations.add_relation.add_relation import add_relation
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
@@ -14,7 +14,7 @@ from lambdas.relations.get_relation_invites_count.get_relation_invites_count imp
 from lambdas.general.create_user.create_user import create_user
 from lambdas.general.update_user_profile.update_user_profile import update_user_profile
 from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
-from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
+from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
 from rds import execute_file, fetch_all
 from data import TestData
 from lambdas.general.get_weekly_schedule.get_weekly_schedule import get_weekly_schedule

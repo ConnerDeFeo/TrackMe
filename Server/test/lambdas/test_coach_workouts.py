@@ -1,11 +1,11 @@
 import json
 import pytest
 from lambdas.coach.create_group.create_group import create_group
-from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
-from lambdas.coach.delete_workout_template.delete_workout_template import delete_workout_template
-from lambdas.coach.get_workout_templates.get_workout_templates import get_workout_templates
-from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
-from lambdas.coach.get_workout.get_workout import get_workout
+from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
+from lambdas.workout.delete_workout_template.delete_workout_template import delete_workout_template
+from lambdas.workout.get_workout_templates.get_workout_templates import get_workout_templates
+from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
+from lambdas.workout.get_workout.get_workout import get_workout
 from lambdas.general.create_user.create_user import create_user
 from data import TestData
 from rds import execute_file, fetch_one

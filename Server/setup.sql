@@ -89,3 +89,11 @@ SELECT
     timeStamp,
     'rest' AS type
 FROM athlete_rest_inputs;
+
+CREATE TABLE IF NOT EXISTS section_templates(
+    id SERIAL PRIMARY KEY,
+    coachId VARCHAR(255) REFERENCES users(userId) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    section JSONB,
+    UNIQUE (coachId, name)
+);

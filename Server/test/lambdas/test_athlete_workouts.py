@@ -3,8 +3,8 @@ import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.athlete.remove_inputs.remove_inputs import remove_inputs
 from lambdas.coach.create_group.create_group import create_group
-from lambdas.coach.create_workout_template.create_workout_template import create_workout_template
-from lambdas.coach.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
+from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
+from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.general.create_user.create_user import create_user
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group

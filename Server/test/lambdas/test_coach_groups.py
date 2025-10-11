@@ -5,7 +5,7 @@ from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.coach.get_absent_group_athletes.get_absent_group_athletes import get_absent_group_athletes
 from lambdas.general.get_athletes_for_group.get_athletes_for_group import get_athletes_for_group
-from lambdas.coach.assign_group_workout.assign_group_workout import assign_group_workout
+from lambdas.workout.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.relations.add_relation.add_relation import add_relation
 from lambdas.general.create_user.create_user import create_user
 from lambdas.coach.update_group_athletes.update_group_athletes import update_group_athletes

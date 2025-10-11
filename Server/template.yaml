@@ -271,6 +271,22 @@ Resources:
   #
   #
   #
+  DeleteSectionTemplateFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/workout/delete_section_template/
+      Handler: delete_section_template.delete_section_template
+      Events:
+        DeleteSectionTemplateApi:
+          Type: Api
+          Properties:
+            Path: /coaches/delete_section_template/
+            Method: delete
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   CreateSectionTemplateFunction:
     Type: AWS::Serverless::Function 
     Properties:

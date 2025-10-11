@@ -137,6 +137,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/workout/preview_section_templates"
       output_path = "${path.module}/../Server/lambdas/workout/zips/preview_section_templates.zip"
     }
+    "delete_section_template" = {
+      source_dir  = "${path.module}/../Server/lambdas/workout/delete_section_template"
+      output_path = "${path.module}/../Server/lambdas/workout/zips/delete_section_template.zip"
+    }
 
     # General Lambdas
     "get_athletes_for_group" = {

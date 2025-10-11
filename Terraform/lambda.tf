@@ -44,6 +44,7 @@ locals {
     "create_workout_template",
     "delete_workout_template",
     "get_workout_templates",
+    "delete_section_template",
 
     # General Lambdas
     "get_athletes_for_group",

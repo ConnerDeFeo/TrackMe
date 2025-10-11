@@ -48,6 +48,7 @@ locals {
     "coaches/delete_workout_template" = { lambda = aws_lambda_function.lambdas["delete_workout_template"], method = "DELETE" }
     "coaches/delete_group" = { lambda = aws_lambda_function.lambdas["delete_group"], method = "DELETE" }
     "coaches/delete_group_workout" = { lambda = aws_lambda_function.lambdas["delete_group_workout"], method = "DELETE" }
+    "coaches/delete_section_template" = { lambda = aws_lambda_function.lambdas["delete_section_template"], method = "DELETE" }
 
     "relations/remove_user_relation" = { lambda = aws_lambda_function.lambdas["remove_user_relation"], method = "DELETE" }
   }

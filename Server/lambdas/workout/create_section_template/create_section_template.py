@@ -13,15 +13,20 @@ def create_section_template(event, context):
         section = body['section']
         sectionId = body.get('sectionId', None)
 
+        name = section['name']
+        minSets = section['minSets']
+        maxSets = section.get('maxSets', None)
+        exercises = section.get('exercises', [])
+
         if sectionId:
             # Update existing section template
             execute_commit(
                 """
                     UPDATE section_templates
-                    SET section = %s
+                    SET name = %s, minSets = %s, maxSets = %s, exercises = %s
                     WHERE id = %s AND coachId = %s
                 """,
-                (json.dumps(section), sectionId, user_id)
+                (name, minSets, maxSets, json.dumps(exercises), sectionId, user_id)
             )
             return {
                 "statusCode": 200,
@@ -38,10 +43,10 @@ def create_section_template(event, context):
         # insert section template into the database
         execute_commit(
             """
-                INSERT INTO section_templates (coachId, section)
-                VALUES (%s, %s)
+                INSERT INTO section_templates (coachId, name, minSets, maxSets, exercises)
+                VALUES (%s, %s, %s, %s, %s)
             """,
-            (user_id, json.dumps(section))
+            (user_id, name, minSets, maxSets, json.dumps(exercises))
         )
 
         return {

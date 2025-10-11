@@ -2,6 +2,7 @@ import json
 import pytest
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
+from lambdas.workout.delete_section_template.delete_section_template import delete_section_template
 from lambdas.workout.delete_workout_template.delete_workout_template import delete_workout_template
 from lambdas.workout.get_section_template.get_section_template import get_section_template
 from lambdas.workout.get_workout_templates.get_workout_templates import get_workout_templates
@@ -180,20 +181,44 @@ def test_create_section_template_returns_success():
 
     # Assert
     assert response['statusCode'] == 200
-    data = fetch_one("SELECT section FROM section_templates WHERE coachId = %s", ('123',))
+    section = fetch_one("SELECT name, minSets, maxSets, exercises FROM section_templates WHERE coachId = %s", ('123',))
+    assert section is not None
+    assert section[0] == 'Test name'
+    assert section[1] == 3
+    assert section[2] == 5
+    assert len(section[3]) == 4
+
+def test_create_section_template_update_section_returns_success():
+    # Arrange
+    event = {
+        "body": json.dumps({
+            "section": TestData.test_section
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+    create_section_template(event, {})
+    event = {
+        "body": json.dumps({
+            "section": {**TestData.test_section, 'name': 'Updated name'},
+            "sectionId": 1
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = create_section_template(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    data = fetch_all("SELECT * FROM section_templates WHERE coachId = %s", ('123',))
     assert data is not None
-    section = data[0]
-    assert section['name'] == 'Test name'
-    assert section['minSets'] == 3
-    assert section['maxSets'] == 5
-    assert len(section['exercises']) == 4
+    assert len(data) == 1
 
 def test_preview_section_templates_returns_success():
     # Arrange
     create_section_template({
         "body": json.dumps({
-            "section": TestData.test_section,
-            'name': 'Test Section'
+            "section": TestData.test_section
         }),
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
@@ -210,7 +235,7 @@ def test_preview_section_templates_returns_success():
     assert len(body) == 1
     section = body[0]
     assert section['id'] == 1
-    assert section['name'] == 'Test Section'
+    assert section['name'] == 'Test name'
 
 def test_get_section_template_returns_success():
     # Arrange
@@ -231,9 +256,29 @@ def test_get_section_template_returns_success():
 
     # Assert
     assert response['statusCode'] == 200
-    body = json.loads(response['body'])
-    section = body[0]
+    section = json.loads(response['body'])
     assert section['name'] == 'Test name'
     assert section['minSets'] == 3
     assert section['maxSets'] == 5
     assert len(section['exercises']) == 4
+
+def test_delete_section_template_returns_success():
+    # Arrange
+    create_section_template({
+        "body": json.dumps({
+            "section": TestData.test_section
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    event = {
+        "queryStringParameters": {"sectionTemplateId": 1},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = delete_section_template(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    section = fetch_one("SELECT * FROM section_templates WHERE id = %s", (1,))
+    assert section is None

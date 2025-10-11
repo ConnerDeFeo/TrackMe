@@ -48,10 +48,6 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/view_workout_inputs"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/view_workout_inputs.zip"
     }
-    "search_input_history_date" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/search_input_history_date"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/search_input_history_date.zip"
-    }
     "remove_inputs" = {
       source_dir  = "${path.module}/../Server/lambdas/athlete/remove_inputs"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/remove_inputs.zip"

@@ -1,6 +1,8 @@
 locals {
   lambdas = {
     # GET Lambdas
+    "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }
+
     "coaches/get_workout_templates" = { lambda = aws_lambda_function.lambdas["get_workout_templates"], method = "GET" }
     "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"], method = "GET" }
     "coaches/get_workout" = { lambda = aws_lambda_function.lambdas["get_workout"], method = "GET" }

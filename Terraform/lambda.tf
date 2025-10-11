@@ -20,6 +20,7 @@ locals {
     # Athlete Lambdas
     "input_times",
     "remove_inputs",
+    "view_workout_inputs",
 
     # Coach Lambdas
     "create_group",

@@ -10,33 +10,45 @@ def fetch_historical_data(event, context):
     try:
         # Get authenticated user info and determine coach ID
         user_info = get_user_info(event)
-        coach_id = user_info['userId']
+        user_id = user_info['userId']
+        account_type = user_info['accountType']
         # Expecting 'date' parameter for historical lookup
         date = query_params['date']
 
+        # Join clause based on account type
+        if account_type == "Athlete":
+            workout_join_clause = "JOIN athlete_groups ag ON g.id = ag.groupId WHERE ag.athleteId = %s"
+        else:
+            workout_join_clause = "WHERE g.coachId = %s"
+
         # Fetch all workouts assigned to this coach on the given date
         workouts = fetch_all(
-            """
+            f"""
                 SELECT g.id, g.name, w.title, w.description, w.sections 
                 FROM group_workouts gw
                 JOIN groups g ON gw.groupId = g.id
                 JOIN workouts w ON gw.workoutId = w.id
-                WHERE gw.date = %s AND g.coachId = %s
+                {workout_join_clause} AND gw.date = %s
             """,
-            (date, coach_id)
+            (user_id, date)
         ) or []
+
+        # Join clause for athlete inputs based on account type
+        if account_type == "Athlete":
+            input_join_clause = "WHERE ai.athleteId = %s"
+        else:
+            input_join_clause = "JOIN groups g ON ai.groupId = g.id WHERE g.coachId = %s"
 
         # Fetch all athlete input entries for this coach on the same date
         athlete_inputs = fetch_all(
-            """
+            f"""
                 SELECT g.id, g.name, u.userId, u.username, ai.time, ai.distance, ai.restTime, ai.type
                 FROM athlete_inputs ai
                 JOIN users u ON ai.athleteId = u.userId
-                JOIN groups g ON ai.groupId = g.id
-                WHERE ai.date = %s AND g.coachId = %s
+                {input_join_clause} AND ai.date = %s
                 ORDER BY ai.timeStamp ASC
             """,
-            (date, coach_id)
+            (user_id, date)
         ) or []
 
         # Prepare a dictionary to group data by group ID

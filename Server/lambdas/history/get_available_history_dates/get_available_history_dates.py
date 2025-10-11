@@ -17,51 +17,35 @@ def get_available_history_dates(event, context):
         account_type = user_info['accountType']
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
-        # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
-        if account_type == "Coach":
-                dates = fetch_all(
-                """
-                    SELECT DISTINCT date
-                    FROM (
-                        SELECT gw.date
-                        FROM group_workouts gw
-                        JOIN groups g ON gw.groupId = g.id
-                        WHERE g.coachId = %s
-
-                        UNION
-
-                        SELECT ai.date
-                        FROM athlete_inputs ai
-                        JOIN groups g ON ai.groupId = g.id
-                        WHERE g.coachId = %s
-                    ) AS combined
-                    WHERE date <= %s
-                    ORDER BY date DESC
-                    LIMIT 7;
-                """, (user_id, user_id, date)) or []
+        # Determine the appropriate join clause based on account type
+        if account_type == "Athlete":
+            # Athletes can only access their own history
+            workout_join_clause = "JOIN athlete_groups ag ON g.id = ag.groupId WHERE ag.athleteId = %s"
+            input_join_clause = " WHERE ai.athleteId = %s"
         else:
-            dates = fetch_all(
-                """
-                    SELECT DISTINCT date
-                    FROM (
-                        SELECT gw.date
-                        FROM group_workouts gw
-                        JOIN groups g ON gw.groupId = g.id
-                        JOIN athlete_groups ag ON g.id = ag.groupId
-                        WHERE ag.athleteId = %s
+            # Coaches can access history for all their athletes
+            workout_join_clause = "WHERE g.coachId = %s"
+            input_join_clause = "JOIN groups g ON ai.groupId = g.id WHERE g.coachId = %s"
+        # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
+        dates = fetch_all(
+        f"""
+            SELECT DISTINCT date
+            FROM (
+                SELECT gw.date
+                FROM group_workouts gw
+                JOIN groups g ON gw.groupId = g.id
+                {workout_join_clause}
 
-                        UNION
+                UNION
 
-                        SELECT ai.date
-                        FROM athlete_inputs ai
-                        JOIN groups g ON ai.groupId = g.id
-                        JOIN athlete_groups ag ON g.id = ag.groupId
-                        WHERE ag.athleteId = %s
-                    ) AS combined
-                    WHERE date <= %s
-                    ORDER BY date DESC
-                    LIMIT 7;
-                """, (user_id, user_id, date)) or []
+                SELECT ai.date
+                FROM athlete_inputs ai
+                {input_join_clause}
+            ) AS combined
+            WHERE date <= %s
+            ORDER BY date DESC
+            LIMIT 7;
+        """, (user_id, user_id, date)) or []
 
         return {
             "statusCode": 200,

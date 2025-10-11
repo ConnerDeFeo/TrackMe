@@ -98,7 +98,7 @@ const ExercisesCreation = ({
           <>
             <div
               key={partIdx}
-              className="bg-gray-50 rounded-lg border border-gray-200 cursor-move opacity-100"
+              className={`bg-gray-50 rounded-lg border border-gray-200 cursor-move ${draggedItemIndex === partIdx ? 'opacity-50' : ''}`}
               onMouseDown={e=>handleMouseDown(e,partIdx)}
               onMouseEnter={() => handleMouseEnter(partIdx)}
             >

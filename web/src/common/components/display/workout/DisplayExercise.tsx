@@ -1,6 +1,6 @@
-import { ExerciseType } from "../../constants/Enums";
-import { Variables } from "../../constants/Variables";
-import type { Exercise } from "../../types/workouts/Exercise";
+import { ExerciseType } from "../../../constants/Enums";
+import { Variables } from "../../../constants/Variables";
+import type { Exercise } from "../../../types/workouts/Exercise";
 
 // Component for displaying a single exercise entry
 const DisplayExercise = ({

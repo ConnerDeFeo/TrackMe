@@ -1,5 +1,5 @@
-import type { Workout } from "../../types/workouts/Workout";
-import DisplaySection from "./DisplaySection";
+import type { Workout } from "../../../types/workouts/Workout";
+import DisplaySection from "../workout/DisplaySection";
 
 interface DisplayWorkoutProps {
   workout: Workout;

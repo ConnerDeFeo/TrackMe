@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { Workout } from "../../types/workouts/Workout";
+import type { Workout } from "../../../types/workouts/Workout";
 import DisplaySection from "./DisplaySection";
-import TrackmeButton from "../TrackmeButton";
+import TrackmeButton from "../../TrackmeButton";
 
 interface CollapsibleWorkoutDisplayProps {
     workout: Workout;

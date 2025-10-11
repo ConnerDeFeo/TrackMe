@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Workout } from "../../common/types/workouts/Workout";
 import GeneralService from "../../services/GeneralService";
-import DisplayWorkout from "../../common/components/display/DisplayWorkout";
+import DisplayWorkout from "../../common/components/display/workout/DisplayWorkout";
 import { Variables } from "../../common/constants/Variables";
 import TrackmeButton from "../../common/components/TrackmeButton";
 import CoachGroupService from "../../services/CoachGroupService";

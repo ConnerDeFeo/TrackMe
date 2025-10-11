@@ -119,7 +119,12 @@ const GroupSchedule = () => {
                             {dayWorkouts.length > 0 ? (
                                 <View className="space-y-2">
                                     {dayWorkouts.map((workout, idx) => (
-                                        <CollapsibleWorkoutDisplay key={idx} workout={workout} />
+                                        <CollapsibleWorkoutDisplay 
+                                            key={idx} 
+                                            workout={workout} 
+                                            onPress={accountType === AccountType.Coach ? ()=>navigation.navigate('AssignNewWorkout', { groupId, groupName, workout, date: dateKey }) : undefined}
+                                            onPressText={"Edit"}
+                                        />
                                     ))}
                                 </View>
                             ) : (

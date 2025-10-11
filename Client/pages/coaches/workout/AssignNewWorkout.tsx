@@ -1,4 +1,5 @@
 import WorkoutCreation from "../../../common/components/coaches/workouts/WorkoutCreation";
+import Workout from "../../../common/types/workouts/Workout";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -17,12 +18,12 @@ const AssignNewWorkout = () => {
     } = route.params as {
         groupId: string;
         groupName: string;
-        workout?: any;
+        workout?: Workout;
         date: string;
     };
 
     // Handler called when the workout form is submitted
-    const handleWorkoutCreation = async (workoutData: any) => {
+    const handleWorkoutCreation = async (workoutData: Workout) => {
         // Call service to assign the workout to the group on the given date
         const resp = await CoachWorkoutService.assignGroupWorkout(
             groupId,

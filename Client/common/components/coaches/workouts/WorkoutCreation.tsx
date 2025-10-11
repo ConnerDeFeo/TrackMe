@@ -21,7 +21,7 @@ const WorkoutCreation = ({
   workout
 }: {
   workoutId?: string
-  handleWorkoutCreation: (workoutData: any) => void
+  handleWorkoutCreation: (workoutData: Workout) => void
   buttonText: string
   onRemove?: () => void
   workout?: Workout
@@ -86,7 +86,7 @@ const WorkoutCreation = ({
     }
 
     // Build workout payload
-    const workoutData: Record<string, any> = {
+    const workoutData: Workout = {
       title,
       description,
       sections

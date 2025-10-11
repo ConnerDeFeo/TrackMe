@@ -1,4 +1,4 @@
-import { InputType } from "../../constants/Enums";
+import { InputType } from "../../../constants/Enums";
 import RestDisplay from "./RestDisplay";
 import TimeDistanceDisplay from "./TimeDistanceDisplay";
 

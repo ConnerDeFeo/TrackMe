@@ -1,4 +1,4 @@
-import type { Exercise } from "../../types/workouts/Exercise";
+import type { Exercise } from "../../../types/workouts/Exercise";
 import DisplayExercise from "./DisplayExercise";
 
 const DisplaySection = ({ section, index }: { section: any; index: number})=>{

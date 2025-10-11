@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CoachWorkoutService from "../services/CoachWorkoutService";
-import DisplayWorkout from "../common/components/display/DisplayWorkout";
+import DisplayWorkout from "../common/components/display/workout/DisplayWorkout";
 import TrackmeButton from "../common/components/TrackmeButton";
 import WorkoutTemplatesSideBar from "../common/components/display/WorkoutTemplatesSideBar";
 import WorkoutCreation from "../common/components/workout/WorkoutCreation";

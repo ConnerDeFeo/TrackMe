@@ -3,8 +3,10 @@ import { useState } from "react";
 import RenderExercise from "./RenderExercise";
 import Section from "../../../types/workouts/Section";
 import Workout from "../../../types/workouts/Workout";
+import DisplaySection from "./DisplaySection";
+import TrackMeButton from "../TrackMeButton";
 
-const CollapsibleWorkoutDisplay = ({ workout }: { workout: Workout }) => {
+const CollapsibleWorkoutDisplay = ({ workout, onPress, onPressText }: { workout: Workout, onPress?: () => void, onPressText?: string }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const sections: Array<Section> = workout.sections || [];
     
@@ -37,39 +39,15 @@ const CollapsibleWorkoutDisplay = ({ workout }: { workout: Workout }) => {
                     
                     {/* Sections */}
                     {sections.map((section, index) => (
-                        <View key={index}>
-                            {/* Section Header */}
-                            <View className="flex-row items-center mb-3">
-                                {section.name && (
-                                    <Text className="text-md font-semibold uppercase tracking-wider">
-                                        {section.name}
-                                    </Text>
-                                )}
-                                {(section.minSets > 1 || section.maxSets) && (
-                                    <Text className="text-md font-semibold text-gray-500 ml-2">
-                                        ({section.minSets}
-                                        {section.maxSets && section.minSets !== section.maxSets 
-                                            ? ` - ${section.maxSets}` 
-                                            : ''} Sets)
-                                    </Text>
-                                )}
-                            </View>
-
-                            {/* Exercises List */}
-                            {section.exercises && section.exercises.length > 0 && (
-                                <View className="ml-6 gap-y-3">
-                                    {section.exercises.map((exercise, partIndex) => (
-                                        <RenderExercise key={partIndex} exercise={exercise} />
-                                    ))}
-                                </View>
-                            )}
-                            
-                            {/* Divider between sections */}
-                            {index < sections.length - 1 && (
-                                <View className="border-b border-gray-200 my-4" />
-                            )}
-                        </View>
+                        <DisplaySection section={section} index={index} key={index} sections={sections} />
                     ))}
+                    {onPress && onPressText && (
+                        <TrackMeButton
+                            text={onPressText}
+                            onPress={onPress}
+                            className="mt-4"
+                        />
+                    )}
                 </View>
             )}
         </View>

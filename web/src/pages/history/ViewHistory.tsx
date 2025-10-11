@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DisplayWorkout from "../../common/components/display/DisplayWorkout";
+import DisplayWorkout from "../../common/components/display/workout/DisplayWorkout";
 import type { Workout } from "../../common/types/workouts/Workout";
-import InputDisplay from "../../common/components/display/InputDisplay";
+import InputDisplay from "../../common/components/display/input/InputDisplay";
 import HistoryService from "../../services/HistoryService";
 
 const divHistory = () => {

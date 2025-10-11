@@ -26,19 +26,24 @@ locals {
     # Coach Lambdas
     "create_group",
     "add_athlete_to_group",
-    "assign_group_workout_template",
-    "create_workout_template",
-    "delete_workout_template",
     "get_absent_group_athletes",
-    "get_workout_templates",
     "remove_group_athlete",
     "get_available_history_dates",
     "fetch_historical_data",
     "delete_group",
+    "update_group_athletes",
+
+    # Workout Lambdas
+    "create_section_template",
+    "get_section_template",
+    "preview_section_templates",
+    "get_workout",
     "delete_group_workout",
     "assign_group_workout",
-    "update_group_athletes",
-    "get_workout",
+    "assign_group_workout_template",
+    "create_workout_template",
+    "delete_workout_template",
+    "get_workout_templates",
 
     # General Lambdas
     "get_athletes_for_group",

@@ -9,6 +9,8 @@ locals {
     "coaches/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "coaches/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
     "coaches/get_workout" = { lambda = aws_lambda_function.lambdas["get_workout"], method = "GET" }
+    "coaches/get_section_template" = { lambda = aws_lambda_function.lambdas["get_section_template"], method = "GET" }
+    "coaches/preview_section_templates" = { lambda = aws_lambda_function.lambdas["preview_section_templates"], method = "GET" }
 
     "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"], method = "GET" }
     "general/view_group_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }
@@ -33,6 +35,7 @@ locals {
     "coaches/assign_group_workout" = { lambda = aws_lambda_function.lambdas["assign_group_workout"], method = "POST" }
     "coaches/update_group_athletes" = { lambda = aws_lambda_function.lambdas["update_group_athletes"], method = "POST" }
     "coaches/bedrock_workout_generation" = { lambda = aws_lambda_function.public_lambdas["bedrock_workout_generation"], method = "POST" }
+    "coaches/create_section_template" = { lambda = aws_lambda_function.lambdas["create_section_template"], method = "POST" }
 
     "general/mass_input" = { lambda = aws_lambda_function.lambdas["mass_input"], method = "POST" }
     "general/create_user" = { lambda = aws_lambda_function.lambdas["create_user"], method = "POST" }

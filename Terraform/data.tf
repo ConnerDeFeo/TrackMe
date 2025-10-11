@@ -125,6 +125,18 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/workout/delete_workout_template"
       output_path = "${path.module}/../Server/lambdas/workout/zips/delete_workout_template.zip"
     }
+    "create_section_template" = {
+      source_dir  = "${path.module}/../Server/lambdas/workout/create_section_template"
+      output_path = "${path.module}/../Server/lambdas/workout/zips/create_section_template.zip"
+    }
+    "get_section_template" = {
+      source_dir  = "${path.module}/../Server/lambdas/workout/get_section_template"
+      output_path = "${path.module}/../Server/lambdas/workout/zips/get_section_template.zip"
+    }
+    "preview_section_templates" = {
+      source_dir  = "${path.module}/../Server/lambdas/workout/preview_section_templates"
+      output_path = "${path.module}/../Server/lambdas/workout/zips/preview_section_templates.zip"
+    }
 
     # General Lambdas
     "get_athletes_for_group" = {

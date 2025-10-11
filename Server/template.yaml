@@ -271,6 +271,54 @@ Resources:
   #
   #
   #
+  CreateSectionTemplateFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/workout/create_section_template/
+      Handler: create_section_template.create_section_template
+      Events:
+        CreateSectionTemplateApi:
+          Type: Api
+          Properties:
+            Path: /coaches/create_section_template/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  PreviewSectionTemplatesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/workout/preview_section_templates/
+      Handler: preview_section_templates.preview_section_templates
+      Events:
+        PreviewSectionTemplatesApi:
+          Type: Api
+          Properties:
+            Path: /coaches/preview_section_templates/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
+  GetSectionTemplateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/workout/get_section_template/
+      Handler: get_section_template.get_section_template
+      Events:
+        GetSectionTemplateApi:
+          Type: Api
+          Properties:
+            Path: /coaches/get_section_template/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   GetWorkoutFunction:
     Type: AWS::Serverless::Function 
     Properties:

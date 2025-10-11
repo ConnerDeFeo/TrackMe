@@ -4,6 +4,7 @@ from rds import execute_commit
 
 def create_section_template(event, context):
     body = json.loads(event['body'])
+    auth_header = post_auth_header()
 
     try:
         user_info = get_user_info(event)
@@ -29,12 +30,14 @@ def create_section_template(event, context):
 
         return {
             "statusCode": 200,
-            "body": json.dumps({"message": "Section template created successfully"})
+            "body": json.dumps({"message": "Section template created successfully"}),
+            'headers': auth_header
         }
 
     except Exception as e:
         print(f"Error creating section template: {e}")
         return {
             "statusCode": 500,
-            "body": json.dumps({"message": "Internal server error"})
+            "body": json.dumps({"message": "Internal server error"}),
+            'headers': auth_header
         }

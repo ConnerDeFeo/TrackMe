@@ -4,7 +4,7 @@ import { Variables } from "../../constants/Variables";
 import type { Exercise } from "../../types/workouts/Exercise";
 import type { Section } from "../../types/workouts/Section";
 import ExerciseInputs from "./ExerciseInputs";
-import { HandleMouseDownDragAndDrop } from "../../functions/handleMouseDownDragAndDrop";
+import { HandleMouseDownDragAndDrop } from "../../functions/HandleMouseDownDragAndDrop";
 
 // Component for creating/editing a list of exercises within a section
 // Component for creating/editing a list of exercises within a section

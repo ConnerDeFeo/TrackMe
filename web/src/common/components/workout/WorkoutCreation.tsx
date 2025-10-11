@@ -4,7 +4,7 @@ import SectionCreation from "./SectionCreation";
 import type { Section } from "../../types/workouts/Section";
 import TrackmeButton from "../TrackmeButton";
 import CoachWorkoutService from "../../../services/CoachWorkoutService";
-import { HandleMouseDownDragAndDrop } from "../../functions/handleMouseDownDragAndDrop";
+import { HandleMouseDownDragAndDrop } from "../../functions/HandleMouseDownDragAndDrop";
 
 // Define props for clarity
 type WorkoutCreationProps = {

@@ -63,6 +63,13 @@ const WorkoutCreation = ({
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent, index: number) => {
+    const target = e.target as HTMLElement;
+    if (["INPUT", "TEXTAREA", "BUTTON"].includes(target.tagName) || target.closest('[data-nodrag]')) {
+        return;
+    }
+    HandleMouseDownDragAndDrop(e, index, setDraggedItemIndex, setDragPosition);
+  }
     return (
         <>
             {/* Workout Title Input */}
@@ -105,7 +112,7 @@ const WorkoutCreation = ({
                         section={section}
                         setSections={setSections}
                         idx={idx}
-                        handleMouseDown={(e, index) => HandleMouseDownDragAndDrop(e, index, setDraggedItemIndex, setDragPosition)}
+                        handleMouseDown={handleMouseDown}
                         handleMouseEnter={handleMouseEnter}
                         className={`${draggedItemIndex === idx ? "opacity-50" : ""}`}
                     />

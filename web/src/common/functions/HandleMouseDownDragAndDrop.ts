@@ -1,6 +1,6 @@
 /**
  * Starts a drag-and-drop operation on mouse down.
- * - Ignores clicks on form elements (INPUT, TEXTAREA, BUTTON).
+ * - NOTE YOU MUST HANDLE IGNORE TAGS AND OTHER ON ELEMENT TO PREVENT CONFLICTS WITH NESTED DRAGGABLES
  * - Records the index of the item being dragged and its initial position.
  * - Attaches global listeners to track mouse movement and end the drag.
  */
@@ -8,14 +8,8 @@ export const HandleMouseDownDragAndDrop = (
     e: React.MouseEvent,
     index: number,
     setDraggedItemIndex: React.Dispatch<React.SetStateAction<number | null>>,
-    setDragPosition: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>
+    setDragPosition: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>,
 ) => {
-    // Skip dragging when interacting with form controls
-    const tag = (e.target as HTMLElement).tagName;
-    if (["INPUT", "TEXTAREA", "BUTTON"].includes(tag)) {
-        return;
-    }
-
     // Prevent default browser behavior (like text selection)
     e.preventDefault();
 

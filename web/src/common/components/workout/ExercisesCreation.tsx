@@ -28,6 +28,14 @@ const ExercisesCreation = ({
   // State: current mouse position for rendering the drag preview
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
+  const handleMouseDown = (e: React.MouseEvent, index: number) => {
+    const target = e.target as HTMLElement;
+    if (["INPUT", "TEXTAREA", "BUTTON"].includes(target.tagName)) {
+      return;
+    }
+    HandleMouseDownDragAndDrop(e, index, setDraggedItemIndex, setDragPosition);
+  };
+
   // Mouse enter over an item during drag will reorder the exercises
   const handleMouseEnter = (index: number) => {
     if (draggedItemIndex !== null && draggedItemIndex !== index) {
@@ -78,8 +86,6 @@ const ExercisesCreation = ({
   return (
     <div
       className="space-y-2"
-      // Ensure drag state resets if drag ends unexpectedly
-      onDragEnd={() => setDraggedItemIndex(null)}
     >
       {exercises.map((exercise, partIdx) => (
         <div key={partIdx}>
@@ -88,8 +94,9 @@ const ExercisesCreation = ({
             className={`bg-gray-50 rounded-lg border border-gray-200 cursor-move ${
               draggedItemIndex === partIdx ? "opacity-50" : ""
             }`}
-            onMouseDown={e => HandleMouseDownDragAndDrop(e, partIdx, setDraggedItemIndex, setDragPosition)}
+            onMouseDown={e => handleMouseDown(e, partIdx)}
             onMouseEnter={() => handleMouseEnter(partIdx)}
+            data-nodrag // Prevent section drag from overriding exercise drag
           >
             {/* Header row: icon, inputs, notes toggle, remove button */}
             <div className="flex items-center gap-3 p-2">

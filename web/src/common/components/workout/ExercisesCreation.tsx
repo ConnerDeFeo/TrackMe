@@ -7,7 +7,6 @@ import ExerciseInputs from "./ExerciseInputs";
 import { HandleMouseDownDragAndDrop } from "../../functions/HandleMouseDownDragAndDrop";
 
 // Component for creating/editing a list of exercises within a section
-// Component for creating/editing a list of exercises within a section
 const ExercisesCreation = ({
   exercises,
   handleExerciseRemoval,

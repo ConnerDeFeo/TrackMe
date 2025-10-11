@@ -99,16 +99,15 @@ const WorkoutCreation = ({
                     placeholder="Describe this workout..."
                     rows={3}
                     className="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl
-                                         focus:outline-none focus:border-trackme-blue focus:ring-2 focus:ring-blue-100
-                                         transition-all resize-none"
+                    focus:outline-none focus:border-trackme-blue focus:ring-2 focus:ring-blue-100
+                    transition-all resize-none"
                 />
             </div>
 
             {/* Existing Sections */}
             {sections.map((section, idx) => (
-                <>
+                <div key={idx}>
                     <SectionCreation
-                        key={idx}
                         section={section}
                         setSections={setSections}
                         idx={idx}
@@ -127,7 +126,7 @@ const WorkoutCreation = ({
                             </div>
                         </div>
                     )}
-                </>
+                </div>
             ))}
 
             {/* Button to add a new empty section */}

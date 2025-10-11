@@ -4,7 +4,7 @@ const Home = () => {
     const navigate = useNavigate();
     const buttons = [
         { label: 'Groups', path: '/groups', img: 'Groups.png' },
-        { label: 'Workout Templates', path: '/workout-templates', img: 'Template.png' },
+        { label: 'Templates', path: '/templates', img: 'Template.png' },
         { label: 'Relations', path: '/relations', img: 'Friends.png' },
         { label: 'History', path: '/history', img: 'History.png' }
     ];

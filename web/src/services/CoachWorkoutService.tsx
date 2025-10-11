@@ -1,3 +1,4 @@
+import type { Section } from "../common/types/workouts/Section";
 import type { Workout } from "../common/types/workouts/Workout";
 import API from "./API";
 const VITE_API_URL = import.meta.env.VITE_API_URL;
@@ -43,6 +44,15 @@ const CoachWorkoutService = {
     },
     bedrockWorkoutGeneration: async (userPrompt:string, currentWorkout?: Workout) => {
         return await API.post(`${VITE_API_URL}/coaches/bedrock_workout_generation`, { userPrompt, currentWorkout });
+    },
+    previewSectionTemplates: async () => {
+        return await API.get(`${VITE_API_URL}/coaches/preview_section_templates`);
+    },
+    createSectionTemplate: async (sectionData:Section) => {
+        return await API.post(`${VITE_API_URL}/coaches/create_section_template`, sectionData);
+    },
+    getSectionTemplate: async (sectionId:string) => {
+        return await API.get(`${VITE_API_URL}/coaches/get_section_template?sectionId=${sectionId}`);
     }
 }
 

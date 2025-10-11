@@ -1,1 +1,1 @@
-export type WorkoutSummary = { title: string; description?: string; workoutId?: string };
+export type WorkoutSummary = { title: string;  workoutId: string; description?: string; };

@@ -8,7 +8,6 @@ import UserService from './services/UserService';
 import Home from './pages/Home';
 import NavBar from './common/components/NavBar';
 import ViewGroup from './pages/groups/ViewGroup';
-import WorkoutTemplates from './pages/WorkoutTemplates';
 import Groups from './pages/groups/Groups';
 import GroupSchedule from './pages/groups/GroupSchedule';
 import AssignWorkout from './pages/groups/AssignWorkout';
@@ -19,6 +18,7 @@ import Profile from './pages/Profile';
 import { AuthContext } from './common/context/AuthContext';
 import History from './pages/history/History';
 import ViewHistory from './pages/history/ViewHistory';
+import Templates from './pages/Templates';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -77,7 +77,7 @@ export default function App() {
             <Route path="/history" element={<History />} />
             <Route path="/history/view/:date" element={<ViewHistory />} />
 
-            <Route path="/workout-templates" element={<WorkoutTemplates />} />
+            <Route path="/templates" element={<Templates />} />
 
             <Route path="/profile" element={<Profile />} />
           </Routes>

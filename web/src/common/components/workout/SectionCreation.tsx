@@ -2,7 +2,7 @@ import { ExerciseType } from "../../constants/Enums";
 import { Variables } from "../../constants/Variables";
 import type { Exercise } from "../../types/workouts/Exercise";
 import type { Section } from "../../types/workouts/Section";
-import ExerciseCreation from "./ExerciseCreation";
+import ExercisesCreation from "./ExercisesCreation";
 
 const SectionCreation = ({section, setSections, idx}: {section: Section, setSections: React.Dispatch<React.SetStateAction<Section[]>>, idx: number}) => {
     /**
@@ -141,7 +141,7 @@ const SectionCreation = ({section, setSections, idx}: {section: Section, setSect
         {/* Exercises */}
         {section.exercises && section.exercises.length > 0 && (
           <div className="mb-4">
-            <ExerciseCreation
+            <ExercisesCreation
               exercises={section.exercises}
               handleExerciseRemoval={handleExerciseRemoval}
               setSections={setSections}

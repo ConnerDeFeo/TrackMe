@@ -9,13 +9,14 @@ import TemplatesSideBar from "../common/components/display/TemplatesSideBar";
 import type { Section } from "../common/types/workouts/Section";
 import SectionTemplateCreation from "../common/components/workout/SectionTemplateCreation";
 import DisplaySection from "../common/components/display/workout/DisplaySection";
+import type { SectionSummary } from "../common/types/workouts/SectionSummary";
 
 // Templates page: manage workout and section templates
 const Templates = () => {
   // State: list of workout templates fetched from server
   const [workoutSummaries, setWorkoutSummaries] = useState<WorkoutSummary[]>([]);
   // State: preview data for section templates
-  const [sectionPreviews, setSectionPreviews] = useState<{ id: string; name: string }[]>([]);
+  const [sectionPreviews, setSectionPreviews] = useState<SectionSummary[]>([]);
   // State: the currently selected workout template (detailed)
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | undefined>(undefined);
   // State: the currently selected section template (detailed)
@@ -187,7 +188,7 @@ const Templates = () => {
                 workout={selectedWorkout}
                 handleWorkoutCreation={handleWorkoutSave}
                 handleCancel={() => setInWorkoutTemplateCreationMode(false)}
-                sectionsPreview={sectionPreviews}
+                sectionsPreviews={sectionPreviews}
               />
             ) : selectedWorkout && (
               // Display selected workout details

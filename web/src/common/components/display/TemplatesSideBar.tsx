@@ -94,7 +94,7 @@ const TemplatesSideBar = ({
               // Workout templates preview component
               <WorkoutTemplatesPreview
                 workoutSummaries={workoutSummaries}
-                selectedWorkout={{ workoutId: selectedWorkoutId }}
+                selectedWorkoutId={selectedWorkoutId}
                 handleWorkoutSelection={onWorkoutSelect}
               />
             ) : (

@@ -1,15 +1,15 @@
 import type { WorkoutSummary } from "../../types/workouts/WorkoutSummary";
 
-const WorkoutTemplatesPreview = ({ workoutSummaries, selectedWorkout, handleWorkoutSelection }:
+const WorkoutTemplatesPreview = ({ workoutSummaries, selectedWorkoutId, handleWorkoutSelection }:
     { workoutSummaries: WorkoutSummary[];
-      selectedWorkout: any;
+      selectedWorkoutId?: string;
       handleWorkoutSelection: (workoutId: string) => void;
     }
 ) => {
   return (
     <>
         {workoutSummaries.map((summary, idx) => {
-            const isSelected = selectedWorkout?.workoutId === `${summary.workoutId}`;
+            const isSelected = selectedWorkoutId === `${summary.workoutId}`;
             return (
             <button
                 key={idx}

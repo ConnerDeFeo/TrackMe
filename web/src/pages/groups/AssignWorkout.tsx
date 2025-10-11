@@ -4,18 +4,21 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import WorkoutCreation from "../../common/components/workout/WorkoutCreation";
 import type { Workout } from "../../common/types/workouts/Workout";
 import TrackmeButton from "../../common/components/TrackmeButton";
-import DateService from "../../services/DateService";
+import WorkoutTemplatesPreview from "../../common/components/display/WorkoutTemplatesPreview";
+import type { WorkoutSummary } from "../../common/types/workouts/WorkoutSummary";
+import Modal from "../../common/components/Modal";
+import type { SectionSummary } from "../../common/types/workouts/SectionSummary";
 
 const AssignWorkout = () => {
     const { groupId, groupName, date } = useParams<{ groupId: string; groupName: string, date: string }>();
-    const sunday = DateService.getSunday(new Date(date!));
     // Retrieve route params and navigation object
     const navigate = useNavigate();
     const location = useLocation();
     const workout = location.state?.workout;
 
     // State for storing fetched workout templates
-    const [workoutTemplates, setWorkoutTemplates] = useState<Array<Workout>>([]);
+    const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutSummary[]>([]);
+    const [sectionPreviews, setSectionPreviews] = useState<SectionSummary[]>([]);
     const [currentWorkout, setCurrentWorkout] = useState<Workout | undefined>(workout);
     const [importTemplateOpen, setImportTemplateOpen] = useState(false);
 
@@ -28,7 +31,15 @@ const AssignWorkout = () => {
                 setWorkoutTemplates(workoutTemplates || []);
             }
         };
+        const fetchSections = async () => {
+            const response = await CoachWorkoutService.previewSectionTemplates();
+            if (response.ok) {
+                const sectionPreviews = await response.json();
+                setSectionPreviews(sectionPreviews || []);
+            }
+        };
         fetchWorkouts();
+        fetchSections();
     }, []);
 
     // Assign the selected template workout to the group and navigate back on success
@@ -36,7 +47,7 @@ const AssignWorkout = () => {
         const response = await CoachWorkoutService.assignGroupWorkout(
             groupId!,
             workoutData,
-            DateService.formatDate(sunday)
+            date!
         );
         if (response.ok) {
             navigate(-1);
@@ -50,29 +61,25 @@ const AssignWorkout = () => {
         }
     };
 
+    const fetchWorkout = async (workoutId: string) => {
+        const resp = await CoachWorkoutService.getWorkout(workoutId);
+        if (resp.ok) {
+            const data = await resp.json();
+            setCurrentWorkout(data);
+            setImportTemplateOpen(false);
+        }
+    };
+
     return (
         <div className="max-w-7xl mx-auto p-4 bg-gray-50 min-h-screen">
             { importTemplateOpen &&
-                <>
-                    <div className="fixed inset-0 opacity-50 bg-black flex justify-center items-center" onClick={() => setImportTemplateOpen(false)}/>
-                    <div className="fixed inset-0 m-auto bg-white p-6 rounded-lg shadow-lg h-[80vh] w-[35vw] overflow-y-auto">
-                        <h2 className="text-xl font-bold mb-4 border-b trackme-border-gray py-2">Import Workout Template</h2>
-                        <div className="gap-y-4">
-                            {workoutTemplates.length === 0 && <p>No templates available.</p>}
-                            {workoutTemplates.map((template) => (
-                                <div key={template.workoutId} className="border p-4 rounded-lg hover:bg-gray-100 cursor-pointer"
-                                    onClick={() => {
-                                        setCurrentWorkout(undefined);
-                                        setCurrentWorkout(template);
-                                        setImportTemplateOpen(false);
-                                    }}>
-                                    <h3 className="text-lg font-semibold">{template.title}</h3>
-                                    <p className="text-sm text-gray-600">{template.sections ? template.sections.length : 0} sections</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </>  
+                <Modal onClose={() => setImportTemplateOpen(false)}>
+                    <WorkoutTemplatesPreview
+                        workoutSummaries={workoutTemplates}
+                        selectedWorkoutId={currentWorkout?.workoutId}
+                        handleWorkoutSelection={fetchWorkout}   
+                    />
+                </Modal>
             }
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-xl font-bold">{groupName}, {date}</h1>
@@ -84,6 +91,7 @@ const AssignWorkout = () => {
                 workout={currentWorkout}
                 handleWorkoutCreation={handleWorkoutCreation}
                 handleCancel={() => navigate(-1)}
+                sectionsPreviews={sectionPreviews}
             />
             {
                 workout && workout.groupWorkoutId && (

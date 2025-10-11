@@ -8,20 +8,21 @@ import { HandleMouseDownDragAndDrop } from "../../functions/HandleMouseDownDragA
 import AiGenerationTextBox from "../display/AiGenerationTextBox";
 import Modal from "../Modal";
 import SectionTemplatesPreview from "../display/SectionTemplatesPreview";
+import type { SectionSummary } from "../../types/workouts/SectionSummary";
 
 // Define props for clarity
 type WorkoutCreationProps = {
     workout?: Workout,
     handleWorkoutCreation: (workout: Workout) => void,
     handleCancel?: () => void
-    sectionsPreview?: { id: string; name: string }[]
+    sectionsPreviews?: SectionSummary[]
 }
 
 const WorkoutCreation = ({
     workout,
     handleWorkoutCreation,
     handleCancel,
-    sectionsPreview
+    sectionsPreviews
 }: WorkoutCreationProps) => {
     // Local state for workout fields
     const [title, setTitle] = useState<string>("");
@@ -165,7 +166,7 @@ const WorkoutCreation = ({
                 <Modal onClose={() => setImportSectionTemplateMode(false)}>
                     <h2 className="text-lg font-semibold mb-4 border-b trackme-border-gray py-2">Select a Section Template</h2>
                     <SectionTemplatesPreview
-                        sectionPreviews={sectionsPreview || []}
+                        sectionPreviews={sectionsPreviews || []}
                         handleSectionSelection={handleImportTemplateSelection}
                     />
                 </Modal>

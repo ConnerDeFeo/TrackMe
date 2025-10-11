@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+// Reusable button that shows a loading spinner for async actions
 const TrackmeButton = ({
     children,
     onClick,
@@ -13,18 +14,21 @@ const TrackmeButton = ({
     red?: boolean
     gray?: boolean
 }) => {
-    const [loadingState, setLoadingState] = useState<boolean>(false);
+    // Tracks whether the button is in a loading state
+    const [loadingState, setLoadingState] = useState<boolean>(false)
 
-    const handleClick = () =>{
-        if(!onClick) return;
+    // Wraps the provided onClick to handle Promise-based async calls
+    const handleClick = () => {
+        if (!onClick) return
 
-        const resp = onClick();
-
-        if(resp instanceof Promise){
-            setLoadingState(true);
-            resp.finally(() => setLoadingState(false));
+        const resp = onClick()
+        // If onClick returns a Promise, show spinner until it resolves
+        if (resp instanceof Promise) {
+            setLoadingState(true)
+            resp.finally(() => setLoadingState(false))
         }
     }
+
     return (
         <button
             onClick={handleClick}
@@ -37,6 +41,7 @@ const TrackmeButton = ({
             `}
         >
             {loadingState ? (
+                // Show spinner + children text when loading
                 <span className="flex items-center justify-center">
                     <svg
                         className="animate-spin h-5 w-5 mr-2 text-current"
@@ -61,10 +66,11 @@ const TrackmeButton = ({
                     {children}...
                 </span>
             ) : (
+                // Default: render children directly
                 children
             )}
         </button>
-    );
+    )
 }
 
-export default TrackmeButton;
+export default TrackmeButton

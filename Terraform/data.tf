@@ -143,10 +143,6 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/get_user"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_user.zip"
     }
-    "view_group_inputs" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/view_group_inputs"
-      output_path = "${path.module}/../Server/lambdas/general/zips/view_group_inputs.zip"
-    }
     "get_group_workout" = {
       source_dir  = "${path.module}/../Server/lambdas/general/get_group_workout"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_group_workout.zip"

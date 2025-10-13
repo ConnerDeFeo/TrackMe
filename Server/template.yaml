@@ -503,22 +503,6 @@ Resources:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
 
-  ViewGroupInputsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/general/view_group_inputs/
-      Handler: view_group_inputs.view_group_inputs
-      Events:
-        ViewGroupInputsApi:
-          Type: Api
-          Properties:
-            Path: /general/view_group_inputs/
-            Method: get
-            RestApiId: !Ref ApiGatewayApi
-      Layers:
-        - Ref: RDSLayer
-        - Ref: UserAuthLayer
-
   GetAthletesForGroupFunction:
     Type: AWS::Serverless::Function
     Properties:

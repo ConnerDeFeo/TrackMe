@@ -13,7 +13,6 @@ from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_
 from lambdas.relations.get_relation_invites_count.get_relation_invites_count import get_relation_invites_count
 from lambdas.general.create_user.create_user import create_user
 from lambdas.general.update_user_profile.update_user_profile import update_user_profile
-from lambdas.general.view_group_inputs.view_group_inputs import view_group_inputs
 from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
 from rds import execute_file, fetch_all
 from data import TestData
@@ -182,25 +181,6 @@ def test_get_athletes_for_group_success():
     assert '1234' in body[0]
     assert 'test_athlete' in body[0]
 
-def test_view_group_inputs_success():
-    # Arrange
-    setup_group_scenario()
-    input_times(TestData.test_input_times, {})
-    event = {"queryStringParameters": {"groupId": 1}}
-
-    # Act
-    response = view_group_inputs(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    data = json.loads(response['body'])
-    assert '1234' in data
-    
-    athlete_time_inputs = data['1234']
-    assert len(athlete_time_inputs) == 3
-    # Should be in correct insertion order
-    assert athlete_time_inputs == [{'distance': 100, 'time': 10.8, 'type': 'run'}, {'restTime': 5, 'type': 'rest'}, {'distance': 200, 'time': 30.0, 'type': 'run'}]
-
 def test_get_user():
     pass
 
@@ -267,7 +247,6 @@ def test_mass_input_success():
 
     event = {
         "body": json.dumps({
-            "groupId": 1,
             "athleteData": {
                 "1234": [{"time": 12.5, "distance": 100, "type": "run"}, {"time": 25.0, "distance": 200, "type": "run"}],
                 "5678": [{"time": 11.0, "distance": 100, "type": "run"},{"restTime": 5, "type": "rest"}, {"time": 22.0, "distance": 200, "type": "run"}],
@@ -282,8 +261,9 @@ def test_mass_input_success():
 
     # Assert
     assert response['statusCode'] == 200
-    all_inputs = fetch_all("SELECT athleteId, distance, time, restTime FROM athlete_inputs WHERE groupId = %s ORDER BY athleteId, timeStamp", (1,))
+    all_inputs = fetch_all("SELECT athleteId, distance, time, restTime FROM athlete_inputs ORDER BY athleteId, timeStamp", (1,))
     assert all_inputs is not None
+    debug_table()
     assert len(all_inputs) == 7
     
     expected_inputs = [

@@ -47,7 +47,6 @@ locals {
     "get_athletes_for_group",
     "get_groups",
     "get_user",
-    "view_group_inputs",
     "get_group_workout",
     "mass_input",
     "get_weekly_schedule",

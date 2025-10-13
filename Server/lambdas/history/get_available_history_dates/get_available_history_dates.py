@@ -17,6 +17,7 @@ def get_available_history_dates(event, context):
         account_type = user_info['accountType']
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
+        params = [user_id, user_id]
         # Determine the appropriate join clause based on account type
         if account_type == "Athlete":
             # Athletes can only access their own history
@@ -25,13 +26,13 @@ def get_available_history_dates(event, context):
         else:
             # Coaches can access history for all their athletes
             workout_join_clause = "WHERE g.coachId = %s"
-            # Only get athlete inputs from athletes where there is a relation to the coach
+            # Only get athlete inputs from athletes in the coach's groups
             input_join_clause = """
-                    JOIN users u ON ai.athleteId = u.id
-                    JOIN relations r1 on  u.id = r1.userId
-                    JOIN relations r2 on  u.id = r2.userId
-
+                    JOIN user_relations ur ON ai.athleteId = ur.userId AND ur.relationId = %s
+                    JOIN user_relations ur2 ON ai.athleteId = ur2.relationId AND ur2.userId = %s
                 """
+            params.append(user_id)
+        params.append(date)
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
         dates = fetch_all(
         f"""
@@ -51,7 +52,7 @@ def get_available_history_dates(event, context):
             WHERE date <= %s
             ORDER BY date DESC
             LIMIT 7;
-        """, (user_id, user_id, date)) or []
+        """, params) or []
 
         return {
             "statusCode": 200,

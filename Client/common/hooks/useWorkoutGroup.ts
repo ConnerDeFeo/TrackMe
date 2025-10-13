@@ -15,23 +15,13 @@ const globalSubscribers: { [key: string]: (() => void)[] } = {};
  * @param groupId The unique identifier for the workout group.
  * @returns An object containing the workout group data, loading state, and management functions.
  */
-export const useWorkoutGroup = (groupId:string) =>{
+export const useWorkoutGroup = () =>{
     // State to hold the array of athletes in the workout group.
     const [workoutGroup, setWorkoutGroup] = useState<{id: string, username: string}[]>([]);
     // State to indicate if data is currently being loaded.
     const [loading, setLoading] = useState(true);
     // The key used to store this group's data in AsyncStorage.
-    const key = `WorkoutGroup-${groupId}`;
-
-    /**
-     * Notifies all subscribed components that the data for this group has changed
-     * by calling their registered callback functions.
-     */
-    const notifySubscribers = useCallback(() => {
-        if (globalSubscribers[groupId]) {
-            globalSubscribers[groupId].forEach(callback => callback());
-        }
-    }, [groupId]);
+    const key = `WorkoutGroup`;
 
      /**
       * Loads the workout group data from AsyncStorage and updates the component's state.
@@ -49,29 +39,6 @@ export const useWorkoutGroup = (groupId:string) =>{
             setLoading(false);
         }
     }, [key]);
-
-    /**
-     * Effect to subscribe this hook instance to the global subscriber list for the given groupId.
-     * This ensures that when one instance updates the data, all other instances are notified to reload.
-     */
-    useEffect(() => {
-        // Initialize the subscriber array for this groupId if it doesn't exist.
-        if (!globalSubscribers[groupId]) {
-            globalSubscribers[groupId] = [];
-        }
-        
-        // Add this instance's `loadWorkoutGroup` function to the list of subscribers.
-        globalSubscribers[groupId].push(loadWorkoutGroup);
-        
-        // Cleanup function to run when the component unmounts.
-        return () => {
-            // Remove this instance's callback from the subscriber list to prevent memory leaks.
-            globalSubscribers[groupId] = globalSubscribers[groupId]?.filter(
-                callback => callback !== loadWorkoutGroup
-            ) || [];
-        };
-    }, [groupId, loadWorkoutGroup]);
-
     /**
      * Effect to load the workout group data when the component initially mounts.
      */
@@ -92,9 +59,7 @@ export const useWorkoutGroup = (groupId:string) =>{
         } catch (error) {
             console.error('Error adding athlete to workout group:', error);
         }
-        // Notify other hooks that data has changed.
-        notifySubscribers();
-    }, [workoutGroup, key, notifySubscribers]);
+    }, [workoutGroup, key]);
 
     /**
      * Removes an athlete from the workout group, persists the change to AsyncStorage,
@@ -109,9 +74,7 @@ export const useWorkoutGroup = (groupId:string) =>{
         } catch (error) {
             console.error('Error removing athlete from workout group:', error);
         }
-        // Notify other hooks that data has changed.
-        notifySubscribers();
-    }, [workoutGroup, key, notifySubscribers]);
+    }, [workoutGroup, key]);
 
 
   // Expose the state and management functions to the component.

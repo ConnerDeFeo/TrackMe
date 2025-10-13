@@ -22,16 +22,16 @@ const MassInput = () => {
   //fetch athletes and workout inputs
   const fetchData = async () => {
       try {
-        const workoutInputsResp = await GeneralService.viewGroupInputs(groupId);
+        // const workoutInputsResp = await GeneralService.viewGroupInputs(groupId);
         const athletesResp = await GeneralService.getAthletesForGroup(groupId);
         if(athletesResp.ok){
           const athletesData = await athletesResp.json();
           setAthletes(athletesData);
         }
-        if(workoutInputsResp.ok) {
-          const workoutInputData = await workoutInputsResp.json();
-          setWorkoutInputs(workoutInputData);
-        }
+        // if(workoutInputsResp.ok) {
+        //   const workoutInputData = await workoutInputsResp.json();
+        //   setWorkoutInputs(workoutInputData);
+        // }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -79,7 +79,7 @@ const MassInput = () => {
 
     const handleInputSubmission = async () => {
         const date = DateService.formatDate(new Date());
-        const resp = await GeneralService.massInput(currentInputs, groupId, date);
+        const resp = await GeneralService.massInput(currentInputs, date);
         if(resp.ok){
           setCurrentInputs({});
           fetchData();

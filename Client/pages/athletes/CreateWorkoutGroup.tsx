@@ -11,10 +11,9 @@ const CreateWorkoutGroup = ()=>{
     // Navigation and routing setup
     const navigation = useNavigation<any>();
     const route = useRoute();
-    const {groupId} = route.params as { groupId: string };
     const [groupMembers, setGroupMembers] = useState<string[]>([]); // All available athletes from the source group
     // Selected athletes for the workout group
-    const {workoutGroup, addAthlete, removeAthlete} = useWorkoutGroup(groupId); 
+    const {workoutGroup, addAthlete, removeAthlete} = useWorkoutGroup(); 
     const [userId, setUserId] = useState<string>('');
 
     // Fetch group athletes on component mount
@@ -24,7 +23,7 @@ const CreateWorkoutGroup = ()=>{
          * Sets up initial state with group members and pre-selects the current user
          */
         const fetchGroupAthletes = async ()=>{
-            const resp = await GeneralService.getAthletesForGroup(groupId);
+            const resp = await GeneralService.getAthletesForGroup("");
             const userId = await UserService.getUserId();
             if (resp.ok && userId) {
                 const data = await resp.json();

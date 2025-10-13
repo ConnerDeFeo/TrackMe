@@ -62,11 +62,7 @@ const ViewGroup = () => {
   return (
     <View className="px-4 mb-8">
       {/* Action buttons: Send workout and view group inputs */}
-      <View className="flex flex-row items-center justify-between mt-2 mb-2">
-        <TextButton text="Schedule" onPress={() => navigation.navigate('GroupSchedule', { groupId, groupName })} />
-        <TextButton text="Group Inputs" onPress={() => navigation.navigate('ViewGroupInputsCoach', {groupId, groupName})}/>
-      </View>
-
+      <TextButton text="Schedule" onPress={() => navigation.navigate('GroupSchedule', { groupId, groupName })} />
       <View className="my-2">
         {/* Display assigned workouts with remove option */}
         {workouts.map((workout) => (

@@ -1,6 +1,5 @@
 import type { Input } from "../common/types/inputs/Input";
 import API from "./API";
-import DateService from "./DateService";
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const GeneralService = {
@@ -9,11 +8,6 @@ const GeneralService = {
   },
   getAthletesForGroup: async (groupId:string) => {
     return await API.get(`${VITE_API_URL}/general/get_athletes_for_group?groupId=${groupId}`);
-  },
-  viewGroupInputs: async (groupId:string, date?:string) => {
-      date ??= DateService.formatDate(new Date()); 
-      const query = `${VITE_API_URL}/general/view_group_inputs?groupId=${groupId}&date=${date}`;
-      return await API.get(query);
   },
   getUser: async () => {
     return await API.get(`${VITE_API_URL}/general/get_user`);

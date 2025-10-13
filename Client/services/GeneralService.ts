@@ -1,6 +1,5 @@
 import { Input } from "../common/types/inputs/Input";
 import API from "./API";
-import DateService from "./DateService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const GeneralService = {
@@ -9,11 +8,6 @@ const GeneralService = {
   },
   getAthletesForGroup: async (groupId:string) => {
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_athletes_for_group?groupId=${groupId}`);
-  },
-  viewGroupInputs: async (groupId:string, date?:string) => {
-      date ??= DateService.formatDate(new Date()); 
-      const query = `${EXPO_PUBLIC_API_URL}/general/view_group_inputs?groupId=${groupId}&date=${date}`;
-      return await API.get(query);
   },
   getUser: async () => {
     return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_user`);
@@ -28,10 +22,9 @@ const GeneralService = {
     }
     return await API.get(request);
   },
-  massInput: async (athleteData: Record<string, Input[]>, groupId:string, date?: string) => {
+  massInput: async (athleteData: Record<string, Input[]>, date?: string) => {
     return await API.post(`${EXPO_PUBLIC_API_URL}/general/mass_input`, {
       athleteData,
-      groupId,
       date
     });
   },

@@ -14,21 +14,20 @@ import TrackMeButton from "./display/TrackMeButton";
  * @param {(groupId: string, idx: number, text: string) => void} props.handleTimeChange - Callback to handle changes in the time input.
  * @param {(groupId: string, idx: number, text: string) => void} props.handleDistanceChange - Callback to handle changes in the distance input.
  */
-const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTimeChange, handleDistanceChange, handleRestChange}:
+const InputTracking = ({currentInputs, setCurrentInputs, handleTimeChange, handleDistanceChange, handleRestChange}:
     {
-        currentInputs: Record<string, Input[]>,
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Record<string, Input[]>>>,
-        identifierId: string,
-        handleTimeChange: (groupId:string, idx:number, text:string)=>void,
-        handleDistanceChange: (groupId:string, idx:number, text:string)=>void,
-        handleRestChange: (groupId:string, idx:number, text:string)=>void,
+        currentInputs: Input[],
+        setCurrentInputs: React.Dispatch<React.SetStateAction<Input[]>>,
+        handleTimeChange: (idx:number, text:string)=>void,
+        handleDistanceChange: (idx:number, text:string)=>void,
+        handleRestChange: (idx:number, text:string)=>void,
     }
 ) => {   
     return(
         <>
             {/* Input entries */}
             <View>
-                {currentInputs[identifierId]?.map((input, idx) => (
+                {Array.isArray(currentInputs) && currentInputs.map((input, idx) => (
                     <View key={idx} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
                         <View className="flex flex-row items-center gap-x-3 justify-center">
                             {(() => {
@@ -46,7 +45,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                                                         keyboardType="numeric"
                                                         value={input?.time.toString()}
                                                         className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                                                        onChangeText={text => handleTimeChange(identifierId, idx, text)}
+                                                        onChangeText={text => handleTimeChange( idx, text)}
                                                     />
                                                 </View>
 
@@ -61,7 +60,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                                                             keyboardType="numeric"
                                                             className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
                                                             value={input?.distance.toString()}
-                                                            onChangeText={text => handleDistanceChange(identifierId, idx, text)}
+                                                            onChangeText={text => handleDistanceChange( idx, text)}
                                                         />
                                                         <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
                                                     </View>
@@ -78,11 +77,11 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                                                     currSeconds={input?.restTime || 0}
                                                     handleMinutesChange={(text) => {
                                                         const totalSeconds = parseInt(text) * 60 + (input?.restTime || 0) % 60;
-                                                        handleRestChange(identifierId, idx, totalSeconds.toString());
+                                                        handleRestChange(idx, totalSeconds.toString());
                                                     }}
                                                     handleSecondsChange={(text) => {
                                                         const totalSeconds = Math.floor((input?.restTime || 0) / 60) * 60 + parseInt(text);
-                                                        handleRestChange(identifierId, idx, totalSeconds.toString());
+                                                        handleRestChange( idx, totalSeconds.toString());
                                                     }}
                                                 />
                                             </View>
@@ -98,14 +97,14 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
             {/* Action buttons */}
             <View className="flex flex-row justify-between mt-4 gap-x-3">
                 {/* Remove button - only show if there are inputs */}
-                {currentInputs[identifierId]?.length > 0 && (
+                {currentInputs?.length > 0 && (
                     <TrackMeButton
                         text="Remove Last"
                         className="flex-1"
                         onPress={() => {
                             setCurrentInputs(prev => {
-                                const updatedGroup = prev[identifierId]?.slice(0, -1) || [];
-                                return { ...prev, [identifierId]: updatedGroup };
+                                const updatedGroup = prev?.slice(0, -1) || [];
+                                return updatedGroup;
                             });
                         }}
                         gray
@@ -117,9 +116,9 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                     text="Add Rest"
                     className="flex-1"
                     onPress={() => {
-                        const existingInputs = currentInputs[identifierId] || [];
-                        const updatedInputs = [...existingInputs, { restTime: '', type: InputType.Rest }];
-                        setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs } as Record<string, Input[]>));
+                        const safeInputs = Array.isArray(currentInputs) ? currentInputs : [];
+                        const updatedInputs = [...safeInputs, { restTime: '', type: InputType.Rest }];
+                        setCurrentInputs(updatedInputs as Input[]);
                     }}
                 />
 
@@ -127,10 +126,10 @@ const InputTracking = ({currentInputs, setCurrentInputs, identifierId, handleTim
                 <TrackMeButton
                     text="Add Run"
                     className="flex-1"
-                    onPress={() => {
-                        const existingInputs = currentInputs[identifierId] || [];
-                        const updatedInputs = [...existingInputs, { time: '', distance: '', type: InputType.Run }];
-                        setCurrentInputs(prev => ({ ...prev, [identifierId]: updatedInputs } as Record<string, Input[]>));
+                        onPress={() => {
+                        const safeInputs = Array.isArray(currentInputs) ? currentInputs : [];
+                        const updatedInputs = [...safeInputs, { time: '', distance: '', type: InputType.Run }];
+                        setCurrentInputs(updatedInputs as Input[]);
                     }}
                 />
             </View>

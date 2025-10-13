@@ -11,10 +11,9 @@ const AthleteWorkoutService = {
         let query = `${EXPO_PUBLIC_API_URL}/athletes/view_workout_inputs?athleteId=${userId}&date=${date}`;
         return await API.get(query);
     },
-    inputTimes: async ( athleteIds:string[], groupId:string, date:string, inputs: Input[]) => {
+    inputTimes: async ( athleteIds:string[],  date:string, inputs: Input[]) => {
         return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/input_times`, {
             'athleteIds': athleteIds,
-            'groupId': groupId,
             'date': date,
             'inputs': inputs
         });

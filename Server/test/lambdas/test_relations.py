@@ -1,5 +1,6 @@
 import json
 import pytest
+from lambdas.athlete.get_mutual_athletes.get_mutual_athletes import get_mutual_athletes
 from lambdas.general.create_user.create_user import create_user
 from lambdas.relations.add_relation.add_relation import add_relation
 from lambdas.relations.get_relation_invites.get_relation_invites import get_relation_invites
@@ -289,3 +290,56 @@ def test_search_user_relation_generic_success():
     assert status_map['23coachpending123'] == 'pending'
     assert status_map['coachawaiting1234'] == 'awaiting response'
     assert status_map['coachnotadded'] == 'not added'
+
+def test_get_mutual_athletes_no_mutuals():
+    # Arrange
+    create_user(TestData.test_athlete, {})
+    create_user({
+        "headers": generate_auth_header("9999", "Athlete", "otherathlete"),
+    },{})
+    add_relation({
+        "body": json.dumps({"relationId": "9999"}),
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete"),
+    },{})
+    event = {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+    
+    # Act
+    response = get_mutual_athletes(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 0
+
+def test_get_mutual_athletes_with_mutuals():
+    # Arrange
+    create_user(TestData.test_athlete, {})
+    create_user(TestData.test_coach, {})
+    add_relation(TestData.test_add_relation_athlete, {})
+    add_relation(TestData.test_add_relation_coach, {})
+    create_user({
+        "headers": generate_auth_header("9999", "Athlete", "otherathlete"),
+    },{})
+    add_relation({
+        "body": json.dumps({"relationId": "9999"}),
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete"),
+    },{})
+    add_relation({
+        "body": json.dumps({"relationId": "1234"}),
+        "headers": generate_auth_header("9999", "Athlete", "otherathlete"),
+    },{})
+    event = {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+    
+    # Act
+    response = get_mutual_athletes(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 1
+    assert body[0]['relationId'] == '9999'
+    assert body[0]['username'] == 'otherathlete'

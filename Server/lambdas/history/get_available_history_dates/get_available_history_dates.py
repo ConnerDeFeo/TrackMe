@@ -25,7 +25,13 @@ def get_available_history_dates(event, context):
         else:
             # Coaches can access history for all their athletes
             workout_join_clause = "WHERE g.coachId = %s"
-            input_join_clause = "JOIN groups g ON ai.groupId = g.id WHERE g.coachId = %s"
+            # Only get athlete inputs from athletes where there is a relation to the coach
+            input_join_clause = """
+                    JOIN users u ON ai.athleteId = u.id
+                    JOIN relations r1 on  u.id = r1.userId
+                    JOIN relations r2 on  u.id = r2.userId
+
+                """
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
         dates = fetch_all(
         f"""

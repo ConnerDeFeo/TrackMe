@@ -112,8 +112,8 @@ def setup_remove_inputs_event():
     }
 
     expected_remaining_inputs = [
-        {'athleteId': '1234', 'groupId': 1, 'distance': 200, 'time': 30.0, 'id': 2},
-        {'athleteId': '1236', 'groupId': 1, 'distance': 100, 'time': 12.5, 'id': 3}
+        {'athleteId': '1234', 'distance': 200, 'time': 30.0, 'id': 2},
+        {'athleteId': '1236', 'distance': 100, 'time': 12.5, 'id': 3}
     ]
 
     return event, expected_remaining_inputs
@@ -134,21 +134,21 @@ def test_input_times_persists_inputs_for_athlete():
 
     # Act
     input_times(event, {})
+
+    debug_table()
     # Assert
-    inputs = fetch_all("SELECT athleteId, groupId, distance, time FROM athlete_time_inputs")
+    inputs = fetch_all("SELECT athleteId, distance, time FROM athlete_time_inputs")
     assert inputs is not None
     assert len(inputs) == 2
 
     first_input, second_input = inputs
     assert first_input[0] == '1234'
-    assert first_input[1] == 1
-    assert first_input[2] == 100
-    assert first_input[3] == 10.8
+    assert first_input[1] == 100
+    assert first_input[2] == 10.8
 
     assert second_input[0] == '1234'
-    assert second_input[1] == 1
-    assert second_input[2] == 200
-    assert second_input[3] == 30
+    assert second_input[1] == 200
+    assert second_input[2] == 30
 
 def test_timestamps_unique_for_inputs_and_rest_inputs():
     # Arrange
@@ -187,10 +187,8 @@ def test_view_workout_inputs_returns_group_inputs():
     response = view_workout_inputs(event, {})
 
     # Assert
-    body = json.loads(response['body'])
-    assert len(body) == 1
-
-    inputs = body['1']
+    inputs = json.loads(response['body'])
+    assert len(inputs) == 3
     assert len(inputs) == len(expected_inputs)
     print(inputs)
     print(expected_inputs)
@@ -214,19 +212,19 @@ def test_remove_inputs_deletes_only_specified_inputs():
     remove_inputs(event, {})
 
     # Assert
-    inputs = fetch_all("SELECT athleteId, groupId, distance, time, id FROM athlete_time_inputs")
+    inputs = fetch_all("SELECT athleteId, distance, time, id FROM athlete_time_inputs")
     assert inputs is not None
     assert len(inputs) == len(expected_remaining_inputs)
 
     remaining_inputs = [
-        {'athleteId': row[0], 'groupId': row[1], 'distance': row[2], 'time': row[3], 'id': row[4]}
+        {'athleteId': row[0], 'distance': row[1], 'time': row[2], 'id': row[3]}
         for row in inputs
     ]
 
     for expected_input in expected_remaining_inputs:
         assert expected_input in remaining_inputs
 
-    rest_inputs = fetch_all("SELECT athleteId, groupId, restTime, id FROM athlete_rest_inputs")
+    rest_inputs = fetch_all("SELECT athleteId, restTime, id FROM athlete_rest_inputs")
     assert rest_inputs is not None
     assert len(rest_inputs) == 1
-    assert rest_inputs[0] == ('1234', 1, 5, 1)
+    assert rest_inputs[0] == ('1234', 5, 1)

@@ -99,3 +99,37 @@ CREATE TABLE IF NOT EXISTS section_templates(
     exercises JSONB,
     UNIQUE (coachId, name)
 );
+
+-- Migration away from athlete inputs dependant on groups
+ALTER TABLE athlete_time_inputs
+DROP CONSTRAINT IF EXISTS athlete_time_inputs_groupid_fkey;
+ALTER TABLE athlete_time_inputs
+DROP COLUMN IF EXISTS groupId CASCADE;
+
+ALTER TABLE athlete_rest_inputs
+DROP CONSTRAINT IF EXISTS athlete_rest_inputs_groupid_fkey;
+ALTER TABLE athlete_rest_inputs
+DROP COLUMN IF EXISTS groupId CASCADE;
+
+CREATE OR REPLACE VIEW athlete_inputs AS
+SELECT 
+    id,
+    athleteId,
+    distance,
+    time,
+    date,
+    NULL AS restTime,
+    timeStamp,
+    'run' AS type
+FROM athlete_time_inputs
+UNION ALL
+SELECT 
+    id,
+    athleteId,
+    NULL AS distance,
+    NULL AS time,
+    date,
+    restTime,
+    timeStamp,
+    'rest' AS type
+FROM athlete_rest_inputs;

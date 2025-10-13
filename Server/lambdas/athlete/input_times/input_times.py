@@ -1,7 +1,7 @@
 import json
-from rds import execute_commit_many, fetch_one
+from rds import execute_commit_many
 from datetime import datetime, timezone, timedelta
-from user_auth import get_user_info, post_auth_header
+from user_auth import post_auth_header
 
 #Inserts all of an athletes input times for a given group into db
 def input_times(event, context):
@@ -9,23 +9,11 @@ def input_times(event, context):
     auth_header = post_auth_header()
 
     try:
-        user_info = get_user_info(event)
-        user_id = user_info['userId']
         inputs = body['inputs'] #inputs in {time: float, distance: int} and {restTime: int}
         athleteIds = body['athleteIds'] # list of athleteIds
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))  # date in 'YYYY-MM-DD' format
-        groupId = body['groupId']
-
-        # Check to make sure user is in group
-        group = fetch_one("SELECT groupId FROM athlete_groups WHERE groupId=%s AND athleteId=%s", (groupId, user_id))
-        if group is None:
-            return {
-                'statusCode': 403,
-                'body': json.dumps({
-                    'message': 'User not in group'
-                })
-            }
         now = datetime.now(timezone.utc)
+
         #Create all inputs
         input_params = []
         rest_input_params = []
@@ -36,26 +24,26 @@ def input_times(event, context):
                     rest_time = input['restTime']
                     if rest_time == '':
                         continue
-                    rest_input_params.append((athleteId, groupId, rest_time, date, timestamp))
+                    rest_input_params.append((athleteId, rest_time, date, timestamp))
                 else:
                     time = input['time']
                     distance = input['distance']
                     if time == '' or distance == '':
                         continue
-                    input_params.append((athleteId, groupId, distance, time, date, timestamp))
+                    input_params.append((athleteId, distance, time, date, timestamp))
     
         #Insert time into rds
         execute_commit_many(
         """
-            INSERT INTO athlete_time_inputs (athleteId, groupId, distance, time, date, timeStamp)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO athlete_time_inputs (athleteId, distance, time, date, timeStamp)
+            VALUES (%s, %s, %s, %s, %s)
         """, input_params)
 
         #Insert rest time into rds
         execute_commit_many(
         """
-            INSERT INTO athlete_rest_inputs (athleteId, groupId, restTime, date, timeStamp)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO athlete_rest_inputs (athleteId, restTime, date, timeStamp)
+            VALUES (%s, %s, %s, %s)
         """, rest_input_params)
 
         return {

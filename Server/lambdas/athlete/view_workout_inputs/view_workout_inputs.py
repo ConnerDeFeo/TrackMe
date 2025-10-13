@@ -19,23 +19,20 @@ def view_workout_inputs(event, context):
         
         athlete_time_inputs = fetch_all(
         """
-            SELECT g.id, ai.id, ai.distance, ai.time, ai.restTime, ai.type
-            FROM groups g
-            JOIN athlete_inputs ai ON ai.groupId = g.id
-            WHERE ai.athleteId = %s AND ai.date = %s
-            ORDER BY ai.timeStamp ASC
+            SELECT id, distance, time, restTime, type
+            FROM athlete_inputs
+            WHERE athleteId = %s AND date = %s
+            ORDER BY timeStamp ASC
         """, (athlete_id, date))
 
         # Initialize data structure to hold workout inputs
-        parsed_data = {}
+        parsed_data = []
         if athlete_time_inputs:
-            for group_id, input_id, distance, time, rest_time, input_type in athlete_time_inputs:
-                if group_id not in parsed_data:
-                    parsed_data[group_id] = []
+            for input_id, distance, time, rest_time, input_type in athlete_time_inputs:
                 if rest_time:
-                    parsed_data[group_id].append({"restTime": rest_time, "type": "rest", "inputId": input_id})
+                    parsed_data.append({"restTime": rest_time, "type": "rest", "inputId": input_id})
                 else:
-                    parsed_data[group_id].append({"distance": distance, "time": time, "type": input_type, "inputId": input_id})
+                    parsed_data.append({"distance": distance, "time": time, "type": input_type, "inputId": input_id})
         if len(parsed_data) > 0:
             return {
                 'statusCode': 200,

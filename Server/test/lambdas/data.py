@@ -114,7 +114,6 @@ class TestData:
     test_input_times = {
         "body": json.dumps({
             "athleteIds": ["1234"],
-            'groupId': 1,
             "date": date,
             'inputs': [
                 {

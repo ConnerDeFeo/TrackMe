@@ -13,7 +13,6 @@ def remove_inputs(event, context):
 
         input_time_params = [input_id['inputId'] for input_id in input_ids if input_id['type'] == 'run']
         input_rest_params = [input_id['inputId'] for input_id in input_ids if input_id['type'] == 'rest']
-        print(f"Removing inputs {input_ids} for athlete {athlete_id}")
 
         # remove all inputs from db
         execute_commit(

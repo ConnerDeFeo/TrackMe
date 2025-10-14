@@ -1,3 +1,4 @@
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { Input } from "../common/types/inputs/Input";
 import API from "./API";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -33,7 +34,14 @@ const GeneralService = {
   },
   createUser: async () => {
     return await API.post(`${EXPO_PUBLIC_API_URL}/general/create_user`);
-  }
+  },
+  getMutualInputs: async (date?: string) => {
+    let request = `${EXPO_PUBLIC_API_URL}/general/get_mutual_inputs`;
+    if (date) {
+      request += `?date=${date}`;
+    }
+    return await API.get(request);
+  },
 };
 
 export default GeneralService;

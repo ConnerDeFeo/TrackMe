@@ -405,5 +405,6 @@ def test_get_mutual_inputs_success():
     # Assert
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
-    debug_table()
-    assert len(body) == 3
+    assert len(body) == 1
+    assert '1238' in body
+    assert len(body['1238']) == 3

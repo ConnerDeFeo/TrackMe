@@ -14,28 +14,27 @@ def get_mutual_inputs(event, context):
         # Fetch all mutual inputs for the user
         inputs = fetch_all(
         """
-            SELECT ai.id, ai.athleteId, u.username, ai.date, ai.time, ai.distance, ai.restTime
+            SELECT ai.athleteId, ai.time, ai.distance, ai.restTime, ai.type
             FROM athlete_inputs ai
             JOIN user_relations ur ON ai.athleteId = ur.relationId AND ur.userId = %s
             JOIN user_relations ur2 ON ai.athleteId = ur2.userId AND ur2.relationId = %s 
             JOIN users u ON ai.athleteId = u.userId
             WHERE ai.date = %s
-            ORDER BY ai.date DESC, ai.id DESC
+            ORDER BY ai.timeStamp DESC
         """, (user_id, user_id, date)) or []
 
+        # Parse inputs into a structured format
+        parsed_inputs = {}
+        for athleteId, time, distance, restTime, type in inputs:
+            if athleteId not in parsed_inputs:
+                parsed_inputs[athleteId] = []
+            if type=="rest":
+                parsed_inputs[athleteId].append({'restTime': restTime, 'type': type})
+            else:
+                parsed_inputs[athleteId].append({'time': time, 'distance': distance, 'type': type})
         return {
             "statusCode": 200,
-            "body": json.dumps([{
-                    'inputId': inp[0], 
-                    'athleteId': inp[1], 
-                    'username': inp[2], 
-                    'date': str(inp[3]), 
-                    'time': inp[4] if inp[4] is not None else None, 
-                    'distance': inp[5] if inp[5] is not None else None, 
-                    'restTime': inp[6] if inp[6] is not None else None
-                } 
-                for inp in inputs
-            ]),
+            "body": json.dumps(parsed_inputs),
             "headers": auth_header
         }
 

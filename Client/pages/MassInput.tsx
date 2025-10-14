@@ -1,4 +1,3 @@
-import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import GeneralService from "../services/GeneralService";
@@ -12,7 +11,6 @@ import RelationService from "../services/RelationService";
 import InputTracking from "../common/components/InputTracking";
 
 const MassInput = () => {
-  const route = useRoute();
   const [workoutInputs, setWorkoutInputs] = useState<Record<string, Input[]>>({});
   const [athletes, setAthletes] = useState<{firstName:string, lastName:string, relationId:string, username:string}[]>([]);
   // Track current input values for each given group { groupId : [time/distance, time/distance] }

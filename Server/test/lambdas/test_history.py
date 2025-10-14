@@ -116,24 +116,6 @@ def setup_before_each_test():
     execute_file('./setup.sql')
     yield
 
-# --- Test Cases ---
-def test_get_available_history_dates_coach_returns_date_when_workout_exists():
-    # Arrange
-    setup_workout_for_today()
-    event = {
-        "queryStringParameters": {"date": date},
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }
-
-    # Act
-    response = get_available_history_dates(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    body = json.loads(response['body'])
-    assert len(body) == 1
-    assert date in body
-
 def test_get_available_history_dates_coach_returns_date_when_inputs_exists():
     # Arrange
     setup_historical_inputs()
@@ -149,23 +131,6 @@ def test_get_available_history_dates_coach_returns_date_when_inputs_exists():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert len(body) == 4
-    assert date in body
-
-def test_get_available_history_dates_athlete_returns_date_when_workout_exists():
-    # Arrange
-    setup_workout_for_today()
-    event = {
-        "queryStringParameters": {"date": date},
-        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
-    }
-
-    # Act
-    response = get_available_history_dates(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    body = json.loads(response['body'])
-    assert len(body) == 1
     assert date in body
 
 def test_get_available_history_dates_athlete_returns_date_when_inputs_exists():

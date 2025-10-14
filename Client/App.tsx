@@ -22,7 +22,7 @@ import Inputs from './pages/athletes/Inputs';
 import CreateWorkoutGroup from './pages/athletes/CreateWorkoutGroup';
 import Profile from './pages/Profile';
 import CoachHistory from './pages/coaches/CoachHistory';
-import HistoricalData from './pages/coaches/HistoricalData';
+import HistoricalData from './pages/HistoricalData';
 import AssignNewWorkout from './pages/coaches/workout/AssignNewWorkout';
 import { ComponentType, useEffect, useState } from 'react';
 import ForgotPassword from './pages/authentication/ForgotPassword';
@@ -40,6 +40,7 @@ import GroupSettings from './pages/coaches/groups/GroupSettings';
 import Relations from './pages/Relations';
 import RelationInvites from './pages/RelationInvites';
 import Friends from './pages/Friends';
+import History from './pages/History';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -110,6 +111,8 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <AthleteStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />
         <AthleteStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
+        <AthleteStack.Screen name="History" options={{ title: "History" }} component={ScrollViewWrapper(<History />)} />
+        <AthleteStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
       </AthleteStack.Navigator>
       <AthleteFooter />
     </>
@@ -146,6 +149,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <CoachStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />
         <CoachStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
+        <CoachStack.Screen name="History" options={{ title: "History" }} component={ScrollViewWrapper(<History />)} />
       </CoachStack.Navigator>
       <CoachFooter />
     </>

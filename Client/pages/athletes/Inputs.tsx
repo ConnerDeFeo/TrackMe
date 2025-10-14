@@ -136,7 +136,7 @@ const Inputs = ()=>{
                     <Text className="text-2xl font-bold text-gray-800">
                         Submitted Entries
                     </Text>
-                    <TextButton text="Remove" onPress={handleInputRemoval} red/>
+                    {submittedInputs.length > 0 && <TextButton text="Remove" onPress={handleInputRemoval} red/>}
                 </View>
                 <View className="gap-y-3">
                     {submittedInputs.length > 0 ? (

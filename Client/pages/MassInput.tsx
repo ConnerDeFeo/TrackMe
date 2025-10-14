@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../common/hooks/usePersistentState";
 import DateService from "../services/DateService";
@@ -21,9 +21,14 @@ const MassInput = () => {
   const fetchData = async () => {
       try {
         const athletesResp = await RelationService.getMutualAthletes();
+        const workoutResp = await GeneralService.getMutualInputs(DateService.formatDate(new Date()));
         if(athletesResp.ok){
           const athletesData = await athletesResp.json();
           setAthletes(athletesData);
+        }
+        if(workoutResp.ok){
+          const workoutData = await workoutResp.json();
+          setWorkoutInputs(workoutData);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -86,14 +91,16 @@ const MassInput = () => {
         }
     }
     
+    console.log(workoutInputs);
   return (
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(
         <View key={athlete.relationId} className="bg-white rounded-xl shadow-md p-4 mb-4" >
-          <UserDisplay firstName={athlete.firstName} lastName={athlete.lastName} username={athlete.username}/>
+          <UserDisplay firstName={athlete.firstName} lastName={athlete.lastName} username={athlete.username} className="mb-4"/>
 
           {workoutInputs[athlete.relationId] && workoutInputs[athlete.relationId].length > 0 && (
             <View className="mb-4 gap-y-2">
+              <Text>Submitted Entries</Text>
               {workoutInputs[athlete.relationId].map((input, index) => (
                 <InputDisplay key={index} input={input} />
               ))}

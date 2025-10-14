@@ -3,7 +3,7 @@ import Footer from '../Footer';
 
 const buttons = [
     ['Template', 'WorkoutTemplates'], 
-    ['History', 'CoachHistory'], 
+    ['History', 'History'], 
     ['Groups', 'CoachGroups'], 
     ['Relations', 'Relations'], 
     ['Profile', 'CoachProfile']

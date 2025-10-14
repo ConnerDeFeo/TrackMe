@@ -1,20 +1,20 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, Pressable, View } from "react-native";
+import { View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../common/hooks/usePersistentState";
-import InputTracking from "../common/components/InputTracking";
 import DateService from "../services/DateService";
 import UserDisplay from "../common/components/display/UserDisplay";
 import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../common/components/display/input/InputDisplay";
 import TrackMeButton from "../common/components/display/TrackMeButton";
+import RelationService from "../services/RelationService";
+import InputTracking from "../common/components/InputTracking";
 
 const MassInput = () => {
   const route = useRoute();
-  const { groupId } = route.params as { groupId: string; };
   const [workoutInputs, setWorkoutInputs] = useState<Record<string, Input[]>>({});
-  const [athletes, setAthletes] = useState<string[][]>([]);
+  const [athletes, setAthletes] = useState<{firstName:string, lastName:string, relationId:string, username:string}[]>([]);
   // Track current input values for each given group { groupId : [time/distance, time/distance] }
   const [currentInputs, setCurrentInputs] = 
   usePersistentState<Record<string, Input[]>>('currentMassInputs', {});
@@ -22,16 +22,11 @@ const MassInput = () => {
   //fetch athletes and workout inputs
   const fetchData = async () => {
       try {
-        // const workoutInputsResp = await GeneralService.viewGroupInputs(groupId);
-        const athletesResp = await GeneralService.getAthletesForGroup(groupId);
+        const athletesResp = await RelationService.getMutualAthletes();
         if(athletesResp.ok){
           const athletesData = await athletesResp.json();
           setAthletes(athletesData);
         }
-        // if(workoutInputsResp.ok) {
-        //   const workoutInputData = await workoutInputsResp.json();
-        //   setWorkoutInputs(workoutInputData);
-        // }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -77,6 +72,13 @@ const MassInput = () => {
       }
     }
 
+    const handleSetCurrentInputs = (athleteId:string, inputs: Input[]) => {
+      setCurrentInputs(prev => ({
+        ...prev,
+        [athleteId]: inputs
+      }));
+    }
+
     const handleInputSubmission = async () => {
         const date = DateService.formatDate(new Date());
         const resp = await GeneralService.massInput(currentInputs, date);
@@ -85,29 +87,28 @@ const MassInput = () => {
           fetchData();
         }
     }
+    
   return (
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(
-      <View key={athlete[0]} className="bg-white rounded-xl shadow-md p-4 mb-4" >
-        <UserDisplay firstName={athlete[2]} lastName={athlete[3]} username={athlete[1]} className="mb-4"/>
-        
-        {workoutInputs[athlete[0]] && workoutInputs[athlete[0]].length > 0 && (
-          <View className="mb-4 gap-y-2">
-            {workoutInputs[athlete[0]].map((input, index) => (
-              <InputDisplay key={index} input={input} />
-            ))}
-          </View>
-        )}
+        <View key={athlete.relationId} className="bg-white rounded-xl shadow-md p-4 mb-4" >
+          <UserDisplay firstName={athlete.firstName} lastName={athlete.lastName} username={athlete.username}/>
 
-        <InputTracking
-          currentInputs={currentInputs}
-          setCurrentInputs={setCurrentInputs}
-          identifierId={athlete[0]}
-          handleTimeChange={handleTimeChange}
-          handleDistanceChange={handleDistanceChange}
-          handleRestChange={handleRestTimeChange}
-        />
-      </View>
+          {workoutInputs[athlete.relationId] && workoutInputs[athlete.relationId].length > 0 && (
+            <View className="mb-4 gap-y-2">
+              {workoutInputs[athlete.relationId].map((input, index) => (
+                <InputDisplay key={index} input={input} />
+              ))}
+            </View>
+          )}
+          <InputTracking
+            currentInputs={currentInputs[athlete.relationId]}
+            setCurrentInputs={(inputs: Input[]) => handleSetCurrentInputs(athlete.relationId, inputs)}
+            handleTimeChange={(idx, text) => handleTimeChange(athlete.relationId, idx, text)}
+            handleDistanceChange={(idx, text) => handleDistanceChange(athlete.relationId, idx, text)}
+            handleRestChange={(idx, text) => handleRestTimeChange(athlete.relationId, idx, text)}
+          />
+        </View>
       ))}
       <TrackMeButton text="Submit" onPress={handleInputSubmission} className="mt-2"/>
     </View>

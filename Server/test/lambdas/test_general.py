@@ -1,6 +1,7 @@
 import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
+from lambdas.general.get_user.get_user import get_user
 from lambdas.workout.assign_group_workout.assign_group_workout import assign_group_workout
 from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.coach.delete_group.delete_group import delete_group
@@ -18,13 +19,13 @@ from rds import execute_file, fetch_all
 from data import TestData
 from lambdas.general.get_weekly_schedule.get_weekly_schedule import get_weekly_schedule
 from lambdas.general.mass_input.mass_input import mass_input
+from lambdas.general.get_mutual_inputs.get_mutual_inputs import get_mutual_inputs
 from datetime import datetime, timedelta, timezone
 from testing_utils import *
 
 date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 # --- Helper Functions ---
-
 def setup_base_scenario():
     """Sets up a standard coach, athlete, and their relationship."""
     create_user(TestData.test_coach, {})
@@ -182,10 +183,23 @@ def test_get_athletes_for_group_success():
     assert 'test_athlete' in body[0]
 
 def test_get_user():
-    pass
+    # Arrange
+    create_user(TestData.test_athlete, {})
 
-def test_remove_coach_athlete_relationship():
-    pass
+    event = {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = get_user(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert body['username'] == 'test_athlete'
+    assert body['bio'] == None
+    assert body['firstName'] == None
+    assert body['lastName'] == None
 
 def test_get_group_workout_success():
     # Arrange
@@ -319,7 +333,6 @@ def test_get_weekly_schedule_athlete_success():
     assert six_days_ago in body
     assert len(body[six_days_ago])==2
 
-
 def test_update_user_profile():
     # Arrange
     create_user(TestData.test_coach, {})
@@ -340,3 +353,57 @@ def test_update_user_profile():
     body = json.loads(response['body'])
     user = fetch_all("SELECT bio, firstName, lastName FROM users WHERE userId = %s", ("123",))
     assert user == [("Updated bio", "John", "Doe")]
+
+def test_get_mutual_inputs_success():
+    # Arrange
+    setup_group_scenario()
+
+    # Add single relation athlete to the group
+    generate_athlete("testathlete2", "1236")
+    generate_athlete("testathlete3", "1237")
+    add_relation({"body": json.dumps({"relationId": "1236"}), "headers": generate_auth_header("1234", "Athlete", "test_athlete")}, {})
+    add_relation({"body": json.dumps({"relationId": "1234"}), "headers": generate_auth_header("1237", "testathlete3", "testathlete3")}, {})
+
+    #mutual relation
+    generate_athlete("testathlete4", "1238")
+    add_relation({"body": json.dumps({"relationId": "1238"}), "headers": generate_auth_header("1234", "Athlete", "test_athlete")}, {})
+    add_relation({"body": json.dumps({"relationId": "1234"}), "headers": generate_auth_header("1238", "testathlete4", "testathlete4")}, {})
+    
+    # Input times for both athletes
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1234","1236","1237","1238"],
+            "date": date,
+            'inputs': [
+                {
+                    'distance': 100,
+                    'time': 10.8,
+                    'type': 'run'
+                },
+                {
+                    'restTime': 5,
+                    'type': 'rest'
+                },
+                {
+                    'distance': 200,
+                    'time': 30,
+                    'type': 'run'
+                },
+            ]
+        }),
+        "headers":generate_auth_header("1238", "Athlete", "testathlete4")
+    }, {})
+
+    event = {
+        "queryStringParameters": {"date": date},
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = get_mutual_inputs(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    debug_table()
+    assert len(body) == 3

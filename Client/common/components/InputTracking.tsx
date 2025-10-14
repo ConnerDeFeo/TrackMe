@@ -17,7 +17,7 @@ import TrackMeButton from "./display/TrackMeButton";
 const InputTracking = ({currentInputs, setCurrentInputs, handleTimeChange, handleDistanceChange, handleRestChange}:
     {
         currentInputs: Input[],
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Input[]>>,
+        setCurrentInputs: (inputs: Input[]) => void,
         handleTimeChange: (idx:number, text:string)=>void,
         handleDistanceChange: (idx:number, text:string)=>void,
         handleRestChange: (idx:number, text:string)=>void,
@@ -60,7 +60,7 @@ const InputTracking = ({currentInputs, setCurrentInputs, handleTimeChange, handl
                                                             keyboardType="numeric"
                                                             className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
                                                             value={input?.distance.toString()}
-                                                            onChangeText={text => handleDistanceChange( idx, text)}
+                                                            onChangeText={text => handleDistanceChange(idx, text)}
                                                         />
                                                         <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
                                                     </View>
@@ -102,10 +102,9 @@ const InputTracking = ({currentInputs, setCurrentInputs, handleTimeChange, handl
                         text="Remove Last"
                         className="flex-1"
                         onPress={() => {
-                            setCurrentInputs(prev => {
-                                const updatedGroup = prev?.slice(0, -1) || [];
-                                return updatedGroup;
-                            });
+                            const updatedGroup = [...currentInputs];
+                            updatedGroup.pop();
+                            setCurrentInputs(updatedGroup);
                         }}
                         gray
                     />

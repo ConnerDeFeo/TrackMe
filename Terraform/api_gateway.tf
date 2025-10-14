@@ -15,7 +15,6 @@ locals {
     "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
     "general/get_weekly_schedule" = { lambda = aws_lambda_function.lambdas["get_weekly_schedule"], method = "GET" }
 
-    # History Lambdas
     "history/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "history/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
 
@@ -23,6 +22,7 @@ locals {
     "relations/get_relation_invites_count" = { lambda = aws_lambda_function.lambdas["get_relation_invites_count"], method = "GET" }
     "relations/get_relation_invites" = { lambda = aws_lambda_function.lambdas["get_relation_invites"], method = "GET" }
     "relations/search_user_relation" = { lambda = aws_lambda_function.lambdas["search_user_relation"], method = "GET" }
+    "relations/get_mutual_athletes" = { lambda = aws_lambda_function.lambdas["get_mutual_athletes"], method = "GET" }
 
     # POST Lambdas
     "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }

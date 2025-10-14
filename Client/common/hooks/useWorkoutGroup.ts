@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  * This allows multiple components using the same `groupId` to stay in sync.
  * The key is the `groupId`, and the value is an array of callback functions.
  */
-const globalSubscribers: { [key: string]: (() => void)[] } = {};
+let globalSubscribers: (() => void)[] = [];
 
 /**
  * A custom hook to manage a workout group's data, stored in AsyncStorage.
@@ -22,6 +22,14 @@ export const useWorkoutGroup = () =>{
     const [loading, setLoading] = useState(true);
     // The key used to store this group's data in AsyncStorage.
     const key = `WorkoutGroup`;
+
+    /**
+     * Notifies all subscribed components that the data for this group has changed
+     * by calling their registered callback functions.
+     */
+    const notifySubscribers = useCallback(() => {
+        globalSubscribers.forEach(callback => callback());
+    }, []);
 
      /**
       * Loads the workout group data from AsyncStorage and updates the component's state.
@@ -39,6 +47,23 @@ export const useWorkoutGroup = () =>{
             setLoading(false);
         }
     }, [key]);
+
+    /**
+     * Effect to subscribe this hook instance to the global subscriber list for the given groupId.
+     * This ensures that when one instance updates the data, all other instances are notified to reload.
+     */
+    useEffect(() => {
+        // Initialize the subscriber array for this groupId if it doesn't exist.
+        globalSubscribers.push(loadWorkoutGroup);
+
+        // Cleanup function to run when the component unmounts.
+        return () => {
+            // Remove this instance's callback from the subscriber list to prevent memory leaks.
+            globalSubscribers = globalSubscribers.filter(
+                callback => callback !== loadWorkoutGroup
+            ) || [];
+        };
+    }, [loadWorkoutGroup]);
     /**
      * Effect to load the workout group data when the component initially mounts.
      */
@@ -59,7 +84,9 @@ export const useWorkoutGroup = () =>{
         } catch (error) {
             console.error('Error adding athlete to workout group:', error);
         }
-    }, [workoutGroup, key]);
+        // Notify other hooks that data has changed.
+        notifySubscribers();
+    }, [workoutGroup, key, notifySubscribers]);
 
     /**
      * Removes an athlete from the workout group, persists the change to AsyncStorage,
@@ -74,7 +101,9 @@ export const useWorkoutGroup = () =>{
         } catch (error) {
             console.error('Error removing athlete from workout group:', error);
         }
-    }, [workoutGroup, key]);
+        // Notify other hooks that data has changed.
+        notifySubscribers();
+    }, [workoutGroup, key, notifySubscribers]);
 
 
   // Expose the state and management functions to the component.

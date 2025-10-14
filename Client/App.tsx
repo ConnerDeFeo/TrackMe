@@ -82,7 +82,6 @@ const getPageTitle = (routeName:string, params:any) => {
     case 'HistoricalData': return params.date;
     case 'ViewGroupCoach': return params.groupName;
     case 'ViewGroupAthlete': return params.groupName;
-    case 'MassInput': return `${params.groupName} Mass Input`;
     default: return routeName;
   }
 }
@@ -91,7 +90,7 @@ const AthleteStack = createNativeStackNavigator();
 const AthleteLayoutWrapper = () => {
   return (
     <>
-      <AthleteStack.Navigator initialRouteName='AthleteGroups' screenOptions={({route, navigation})=> {
+      <AthleteStack.Navigator initialRouteName='Inputs' screenOptions={({route, navigation})=> {
         const params = route.params;
         const rightButtonData = getRightButtonData(route);
         const state = navigation.getState();

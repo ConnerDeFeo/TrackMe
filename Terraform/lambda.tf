@@ -64,6 +64,7 @@ locals {
     "remove_user_relation",
     "get_mutual_user_relations",
     "get_relation_invites_count",
+    "get_mutual_athletes",
   ]
   public_lambda_names = [
     "bedrock_workout_generation",

@@ -1,20 +1,19 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, Pressable, View } from "react-native";
-import GeneralService from "../../services/GeneralService";
-import UserService from "../../services/UserService";
+import { Text, View } from "react-native";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
 import TrackMeButton from "../../common/components/display/TrackMeButton";
+import RelationService from "../../services/RelationService";
+import UserDisplay from "../../common/components/display/UserDisplay";
 
 // Page for creating a workout group by selecting athletes from a source group
 const CreateWorkoutGroup = ()=>{
     // Navigation and routing setup
     const navigation = useNavigation<any>();
-    const route = useRoute();
-    const [groupMembers, setGroupMembers] = useState<string[]>([]); // All available athletes from the source group
+    // All available athletes
+    const [athletes, setAthletes] = useState<{firstName:string, lastName:string, relationId:string, username:string}[]>([]); 
     // Selected athletes for the workout group
     const {workoutGroup, addAthlete, removeAthlete} = useWorkoutGroup(); 
-    const [userId, setUserId] = useState<string>('');
 
     // Fetch group athletes on component mount
     useEffect(()=>{
@@ -23,12 +22,10 @@ const CreateWorkoutGroup = ()=>{
          * Sets up initial state with group members and pre-selects the current user
          */
         const fetchGroupAthletes = async ()=>{
-            const resp = await GeneralService.getAthletesForGroup("");
-            const userId = await UserService.getUserId();
-            if (resp.ok && userId) {
+            const resp = await RelationService.getMutualAthletes();
+            if (resp.ok) {
                 const data = await resp.json();
-                setUserId(userId);
-                setGroupMembers(data); // Populate available athletes
+                setAthletes(data); // Populate available athletes
             }
         }
         fetchGroupAthletes();
@@ -48,21 +45,18 @@ const CreateWorkoutGroup = ()=>{
             
             {/* Athletes List with Selection Toggle */}
             <View className="mb-4">
-                {groupMembers.map((athlete) => {
-                    if(athlete[0] === userId) {
-                        return;
-                    }
-                    const isSelected = workoutGroup.some(member => member.id === athlete[0]);
+                {athletes.map((athlete) => {
+                    const isSelected = workoutGroup.some(member => member.id === athlete.relationId);
                     return (
-                        <View key={athlete[0]} className="flex flex-row justify-between items-center bg-white p-4 mb-3 rounded-xl shadow-sm border border-gray-100">
+                        <View key={athlete.relationId} className="flex flex-row items-center bg-white p-4 mb-3 rounded-xl shadow-sm border border-gray-100">
                             {/* Athlete name display */}
-                            <Text className="text-lg text-black font-medium">{athlete[1]}</Text>
+                            <UserDisplay username={athlete.username} firstName={athlete.firstName} lastName={athlete.lastName}/>
                             {/* Selection toggle button */}
                             <TrackMeButton
-                                onPress={() => handleWorkoutGroupChange({id: athlete[0], username: athlete[1]})}
+                                onPress={() => handleWorkoutGroupChange({id: athlete.relationId, username: athlete.username})}
                                 text={isSelected ? "Deselect" : "Select"}
                                 gray={isSelected}
-                                className="px-6"
+                                className="w-24 ml-auto"
                             />
                         </View>
                     );

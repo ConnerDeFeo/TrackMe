@@ -9,7 +9,9 @@ import DateService from "../../services/DateService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
 import InputDisplay from "../../common/components/display/input/InputDisplay";
-import { Button, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import TextButton from "../../common/components/display/TextButton";
+import { InputType } from "../../common/constants/Enums";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -18,6 +20,7 @@ const Inputs = ()=>{
     const { workoutGroup } = useWorkoutGroup();
     // Store previously submitted workout inputs organized by date and group
     const [submittedInputs, setSubmittedInputs] = useState<Input[]>([]);
+    const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
 
     const navigation = useNavigation<any>();
 
@@ -63,6 +66,20 @@ const Inputs = ()=>{
         }, [fetchSubmittedInputs])
     );
 
+    /**
+     * Removes the selected previous entries by their input IDs.
+     * Clears the selection on success and triggers onSubmit.
+     */
+    const handleInputRemoval = async () => {
+        const resp = await AthleteWorkoutService.removeInputs(selectedSubmittedInputs);
+
+        if (resp.ok) {
+            // Reset selection and refresh parent
+            setSelectedSubmittedInputs([]);
+            fetchSubmittedInputs();
+        }
+    };
+
     // Handle time input changes with validation (numbers only)
     const handleTimeChange = ( idx: number, value: string)=>{
         let updatedValue = ''
@@ -99,22 +116,39 @@ const Inputs = ()=>{
         });
       }
     }
+
+    const handleSubmittedInputSelection = (type: InputType, inputId?: number) => {
+        if(!inputId) return;
+        const alreadySelected = selectedSubmittedInputs.some(selected => selected.inputId === inputId && selected.type === type);
+        // Toggle selection state
+        setSelectedSubmittedInputs(prev =>
+            alreadySelected
+                ? prev.filter(selected => !(selected.inputId === inputId && selected.type === type))
+                : [...prev, {inputId: inputId, type: type}] as {inputId: number, type: InputType}[]
+        );
+    };
+
     return (
         <View className="flex-1 px-6 py-4">
             {/* Submitted Entries Section */}
             <View className="mb-6">
-                <Text className="text-2xl font-bold text-gray-800 mb-4">
-                    Submitted Entries
-                </Text>
+                <View className="flex flex-row justify-between items-center mb-4">
+                    <Text className="text-2xl font-bold text-gray-800">
+                        Submitted Entries
+                    </Text>
+                    <TextButton text="Remove" onPress={handleInputRemoval} red/>
+                </View>
                 <View className="gap-y-3">
                     {submittedInputs.length > 0 ? (
-                    submittedInputs.map((input, idx) => (
-                        <InputDisplay key={idx} input={input} />
-                    ))
-                    ) : (
-                    <Text className="text-gray-500 text-center py-4">
-                        No entries submitted yet
-                    </Text>
+                        submittedInputs.map((input, idx) => (
+                            <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)}>
+                                <InputDisplay input={input} selected={selectedSubmittedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type)} />
+                            </Pressable>
+                        ))
+                        ) : (
+                        <Text className="text-gray-500 text-center py-4">
+                            No entries submitted yet
+                        </Text>
                     )}
                 </View>
             </View>
@@ -124,11 +158,34 @@ const Inputs = ()=>{
                 <Text className="text-2xl font-bold text-gray-800 mb-4">
                     New Entry
                 </Text>
-                <View>
-                    <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')}>
-                        <Text>Create Workout Group</Text>
+                <View className="flex flex-row justify-between items-center">
+                    <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
+                        <Text className="trackme-blue text-sm">Workout Group</Text>
+                    </Pressable>
+                    <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
+                        <Text className="trackme-blue text-sm">Mass Input</Text>
                     </Pressable>
                 </View>
+                {/* Display current workout partners if any */}
+                {workoutGroup.length > 0 && (
+                    <View className="bg-gray-100 p-4 rounded-lg mt-4">
+                        <Text className="text-sm font-medium text-gray-600 mb-2">
+                            Workout Partners
+                        </Text>
+                        <View className="flex flex-row flex-wrap gap-2">
+                            {workoutGroup.map((member, idx) => (
+                                <View
+                                    key={idx}
+                                    className="bg-white border border-gray-200 rounded-full px-3 py-1"
+                                >
+                                    <Text className="text-sm font-medium text-gray-700">
+                                        {member.username}
+                                    </Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                )}
                 <InputTracking
                     currentInputs={currentInputs ?? []}
                     setCurrentInputs={setCurrentInputs}

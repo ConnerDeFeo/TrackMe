@@ -163,6 +163,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/update_user_profile"
       output_path = "${path.module}/../Server/lambdas/general/zips/update_user_profile.zip"
     }
+    "get_mutual_inputs" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/get_mutual_inputs"
+      output_path = "${path.module}/../Server/lambdas/general/zips/get_mutual_inputs.zip"
+    }
 
     # History Lambdas
     "get_available_history_dates" = {

@@ -14,6 +14,7 @@ locals {
     "general/get_groups" = { lambda = aws_lambda_function.lambdas["get_groups"], method = "GET" }
     "general/get_group_workout" = { lambda = aws_lambda_function.lambdas["get_group_workout"], method = "GET" }
     "general/get_weekly_schedule" = { lambda = aws_lambda_function.lambdas["get_weekly_schedule"], method = "GET" }
+    "general/get_mutual_inputs" = { lambda = aws_lambda_function.lambdas["get_mutual_inputs"], method = "GET" }
 
     "history/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "history/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }

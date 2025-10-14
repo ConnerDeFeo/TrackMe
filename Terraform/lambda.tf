@@ -52,6 +52,7 @@ locals {
     "get_weekly_schedule",
     "create_user",
     "update_user_profile",
+    "get_mutual_inputs",
 
     # History Lambdas
     "get_available_history_dates",

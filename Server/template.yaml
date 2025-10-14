@@ -422,6 +422,21 @@ Resources:
   #
   #
   #
+  GetMutualInputsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/general/get_mutual_inputs/
+      Handler: get_mutual_inputs.get_mutual_inputs
+      Events:
+        GetMutualInputsApi:
+          Type: Api
+          Properties:
+            Path: /general/get_mutual_inputs/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
 
   UpdateUserProfileFunction:
     Type: AWS::Serverless::Function

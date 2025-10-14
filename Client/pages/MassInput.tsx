@@ -91,7 +91,6 @@ const MassInput = () => {
         }
     }
     
-    console.log(workoutInputs);
   return (
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       {athletes.map((athlete)=>(

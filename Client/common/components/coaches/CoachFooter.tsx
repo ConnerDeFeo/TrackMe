@@ -6,7 +6,7 @@ const buttons = [
     ['History', 'History'], 
     ['Groups', 'CoachGroups'], 
     ['Relations', 'Relations'], 
-    ['Profile', 'CoachProfile']
+    ['Profile', 'Profile']
   ]
 
 //Footer at bottom of the coach screens with navigation buttons

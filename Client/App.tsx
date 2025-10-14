@@ -9,8 +9,6 @@ import ConfirmEmail from './pages/authentication/ConfirmEmail';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import SignIn from './pages/authentication/SignIn';
-import CoachGroups from './pages/coaches/groups/CoachGroups';
-import AthleteGroups from './pages/athletes/AthleteGroups';
 import CreateGroup from './pages/coaches/groups/CreateGroup';
 import AssignAthletes from './pages/coaches/groups/AssignAthletes';
 import CreateWorkoutTemplate from './pages/coaches/workout/CreateWorkoutTemplate';
@@ -103,7 +101,7 @@ const AthleteLayoutWrapper = () => {
         }
       }}>
         <AthleteStack.Screen name="Groups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
-        <AthleteStack.Screen name="AthleteProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <AthleteStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <AthleteStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
         <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
         <AthleteStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
@@ -135,7 +133,7 @@ const CoachLayoutWrapper = () => {
         }
       }}>
         <AthleteStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
-        <CoachStack.Screen name="CoachProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <CoachStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <CoachStack.Screen name="CreateGroup" options={{ title: "Create Group" }} component={ScrollViewWrapper(<CreateGroup />)} />
         <CoachStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />
         <CoachStack.Screen name="AssignAthletes" options={{ title: "Assign Athletes" }} component={ScrollViewWrapper(<AssignAthletes />)} />

@@ -6,7 +6,7 @@ const buttons = [
     ['History', 'History'], 
     ['Groups', 'Groups'], 
     ['Relations', 'Relations'], 
-    ['Profile', 'AthleteProfile']
+    ['Profile', 'Profile']
   ]
 
 //Footer for the athlete pages

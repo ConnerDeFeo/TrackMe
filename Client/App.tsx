@@ -41,6 +41,7 @@ import Relations from './pages/Relations';
 import RelationInvites from './pages/RelationInvites';
 import Friends from './pages/Friends';
 import History from './pages/History';
+import Groups from './pages/Groups';
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -101,7 +102,7 @@ const AthleteLayoutWrapper = () => {
           animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
         }
       }}>
-        <AthleteStack.Screen name="AthleteGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<AthleteGroups />)} />
+        <AthleteStack.Screen name="Groups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
         <AthleteStack.Screen name="AthleteProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <AthleteStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
         <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={ScrollViewWrapper(<Inputs />)} />
@@ -133,7 +134,7 @@ const CoachLayoutWrapper = () => {
           animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
         }
       }}>
-        <CoachStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<CoachGroups />)} />
+        <AthleteStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
         <CoachStack.Screen name="CoachProfile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <CoachStack.Screen name="CreateGroup" options={{ title: "Create Group" }} component={ScrollViewWrapper(<CreateGroup />)} />
         <CoachStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />

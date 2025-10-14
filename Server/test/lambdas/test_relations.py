@@ -1,6 +1,6 @@
 import json
 import pytest
-from lambdas.athlete.get_mutual_athletes.get_mutual_athletes import get_mutual_athletes
+from lambdas.relations.get_mutual_athletes.get_mutual_athletes import get_mutual_athletes
 from lambdas.general.create_user.create_user import create_user
 from lambdas.relations.add_relation.add_relation import add_relation
 from lambdas.relations.get_relation_invites.get_relation_invites import get_relation_invites

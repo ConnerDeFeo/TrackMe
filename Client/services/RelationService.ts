@@ -24,7 +24,7 @@ const RelationService = {
         return await API.get(`${process.env.EXPO_PUBLIC_API_URL}/relations/get_pending_proposals`);
     },
     getMutualAthletes: async () => {
-        return await API.get(`${process.env.EXPO_PUBLIC_API_URL}/athlete/get_mutual_athletes`);
+        return await API.get(`${process.env.EXPO_PUBLIC_API_URL}/relations/get_mutual_athletes`);
     }
 };
 

@@ -204,8 +204,9 @@ locals {
       output_path = "${path.module}/../Server/lambdas/relations/zips/get_relation_invites_count.zip"
     }
     "get_mutual_athletes" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/get_mutual_athletes"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/get_mutual_athletes.zip"
+      source_dir  = "${path.module}/../Server/lambdas/relations/get_mutual_athletes"
+      output_path = "${path.module}/../Server/lambdas/relations/zips/get_mutual_athletes.zip"
+    }
   }
 }
 

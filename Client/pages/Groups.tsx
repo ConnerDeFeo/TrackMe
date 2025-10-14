@@ -1,9 +1,10 @@
-import GeneralService from "../../services/GeneralService";
-import { useContext, useEffect, useState } from "react";
-import { AccountType } from "../constants/Enums";
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../context/AuthContext";
-import NavigationContainer from "./display/NavigationContainer";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../common/context/AuthContext";
+import GeneralService from "../services/GeneralService";
+import { AccountType } from "../common/constants/Enums";
+import NavigationContainer from "../common/components/display/NavigationContainer";
+
 
 //View of all groups displayed in a list
 const Groups = () => {

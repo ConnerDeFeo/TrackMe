@@ -12,14 +12,14 @@ const GroupSettings = () => {
 
     /**
      * Deletes the entire group on the server,
-     * then resets navigation to the CoachGroups list.
+     * then resets navigation to the Groups list.
      */
     const handleGroupDeletion = async () => {
         const resp = await CoachGroupService.deleteGroup(groupId);
         if (resp.ok) {
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'CoachGroups' }],
+                routes: [{ name: 'Groups' }],
             }); 
         }
     };

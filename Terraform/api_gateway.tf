@@ -1,7 +1,7 @@
 locals {
   lambdas = {
     # GET Lambdas
-    "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_group_inputs"], method = "GET" }
+    "athletes/view_workout_inputs" = { lambda = aws_lambda_function.lambdas["view_workout_inputs"], method = "GET" }
 
     "coaches/get_workout_templates" = { lambda = aws_lambda_function.lambdas["get_workout_templates"], method = "GET" }
     "coaches/get_absent_group_athletes" = { lambda = aws_lambda_function.lambdas["get_absent_group_athletes"], method = "GET" }
@@ -81,6 +81,11 @@ resource "aws_api_gateway_resource" "relations" {
   parent_id   = aws_api_gateway_rest_api.main.root_resource_id
   path_part   = "relations"
 }
+resource "aws_api_gateway_resource" "history" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  parent_id   = aws_api_gateway_rest_api.main.root_resource_id
+  path_part   = "history"
+}
 
 # Create sub-resources for each lambda function based on the defined local variables
 resource "aws_api_gateway_resource" "subresources" {
@@ -95,6 +100,7 @@ resource "aws_api_gateway_resource" "subresources" {
       coaches  = aws_api_gateway_resource.coaches.id
       general  = aws_api_gateway_resource.general.id
       relations = aws_api_gateway_resource.relations.id
+      history = aws_api_gateway_resource.history.id
     },
     split("/", each.key)[0], # first segment
     aws_api_gateway_rest_api.main.root_resource_id

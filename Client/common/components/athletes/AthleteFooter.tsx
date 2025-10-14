@@ -4,7 +4,7 @@ import Footer from '../Footer';
 const buttons = [
     ['Inputs', 'Inputs'], 
     ['History', 'History'], 
-    ['Groups', 'AthleteGroups'], 
+    ['Groups', 'Groups'], 
     ['Relations', 'Relations'], 
     ['Profile', 'AthleteProfile']
   ]

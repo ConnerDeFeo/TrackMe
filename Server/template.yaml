@@ -616,13 +616,13 @@ Resources:
   GetMutualAthletesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/athlete/get_mutual_athletes/
+      CodeUri: lambdas/relations/get_mutual_athletes/
       Handler: get_mutual_athletes.get_mutual_athletes
       Events:
         GetMutualAthletesApi:
           Type: Api
           Properties:
-            Path: /athlete/get_mutual_athletes/
+            Path: /relations/get_mutual_athletes/
             Method: get
             RestApiId: !Ref ApiGatewayApi
       Layers:

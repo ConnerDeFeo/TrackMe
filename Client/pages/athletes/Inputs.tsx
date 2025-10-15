@@ -13,6 +13,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import TextButton from "../../common/components/display/TextButton";
 import { InputType } from "../../common/constants/Enums";
 import QuickInput from "../../common/components/QuickInput";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -22,7 +23,6 @@ const Inputs = ()=>{
     // Store previously submitted workout inputs organized by date and group
     const [submittedInputs, setSubmittedInputs] = useState<Input[]>([]);
     const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
-    const [clipBoard, setClipBoard] = useState<boolean>(false);
 
     const navigation = useNavigation<any>();
 
@@ -133,16 +133,16 @@ const Inputs = ()=>{
     };
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 bg-white">
             {/* Submitted Entries Section - Scrollable */}
-            <ScrollView className="flex-1 px-6 pt-4 bg-white">
+            <ScrollView className="flex-1 px-6 pt-4">
                 <View className="flex flex-row justify-between items-center mb-4">
                     <Text className="text-2xl font-bold text-gray-800">
                         Submitted Entries
                     </Text>
                     {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
                 </View>
-                <View className="gap-y-1 mb-8">
+                <View className="gap-y-1 pb-4">
                     {submittedInputs.length > 0 ? (
                         submittedInputs.map((input, idx) => (
                             <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)} >
@@ -157,66 +157,50 @@ const Inputs = ()=>{
                 </View>
             </ScrollView>
 
-            {/* Input Tracking Section - Sticky at Bottom with max height */}
-            <View className="bg-white border-t border-gray-200" style={{ maxHeight: '50%' }}>
-                <ScrollView className="px-6 py-4">
-                    <View className="flex flex-row justify-between items-center">
-                        <Text className="text-2xl font-bold text-gray-800 mb-4">
-                            New Entry
-                        </Text>
-                        <TrackMeButton
-                            text={clipBoard ? "Quick Input" : "Clipboard"}
-                            onPress={() => setClipBoard(prev => !prev)}
-                            className="w-[40%]"
-                        />
-                    </View>
-                    <View className="flex flex-row justify-between items-center mb-4">
-                        <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
-                            <Text className="trackme-blue text-sm">Workout Group</Text>
-                        </Pressable>
-                        <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
-                            <Text className="trackme-blue text-sm">Mass Input</Text>
-                        </Pressable>
-                    </View>
-                    {/* Display current workout partners if any */}
-                    {workoutGroup.length > 0 && (
-                        <View className="bg-gray-100 p-4 rounded-lg mb-4">
-                            <Text className="text-sm font-medium text-gray-600 mb-2">
-                                Workout Partners
+            {/* Input Tracking Section - Fixed at Bottom */}
+            <View>
+                <KeyboardAwareScrollView
+                    className="border-t border-gray-200"
+                    showsVerticalScrollIndicator={false}
+                    enableOnAndroid={true}
+                    extraScrollHeight={20}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    <View className="px-6 py-4">
+                        <View className="flex flex-row justify-between items-center mb-4">
+                            <Text className="text-2xl font-bold text-gray-800">
+                                New Entry
                             </Text>
-                            <View className="flex flex-row flex-wrap gap-2">
-                                {workoutGroup.map((member, idx) => (
-                                    <View
-                                        key={idx}
-                                        className="bg-white border border-gray-200 rounded-full px-3 py-1"
-                                    >
-                                        <Text className="text-sm font-medium text-gray-700">
-                                            {member.username}
-                                        </Text>
-                                    </View>
-                                ))}
-                            </View>
+                            <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
+                                <Text className="trackme-blue text-sm">Workout Group</Text>
+                            </Pressable>
+                            <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
+                                <Text className="trackme-blue text-sm">Mass Input</Text>
+                            </Pressable>
                         </View>
-                    )}
-                    { clipBoard ? 
-                        <>
-                            <InputTracking
-                                currentInputs={currentInputs ?? []}
-                                setCurrentInputs={setCurrentInputs}
-                                handleTimeChange={handleTimeChange}
-                                handleDistanceChange={handleDistanceChange}
-                                handleRestChange={handleRestChange}
-                            />
-                            {/* Submit Button */}
-                            <TrackMeButton
-                                onPress={handleInputSubmission}
-                                text="Submit Entries"
-                            />
-                        </>
-                        :
+                        {/* Display current workout partners if any */}
+                        {workoutGroup.length > 0 && (
+                            <View className="bg-gray-100 p-4 rounded-lg mb-4">
+                                <Text className="text-sm font-medium text-gray-600 mb-2">
+                                    Workout Partners
+                                </Text>
+                                <View className="flex flex-row flex-wrap gap-2">
+                                    {workoutGroup.map((member, idx) => (
+                                        <View
+                                            key={idx}
+                                            className="bg-white border border-gray-200 rounded-full px-3 py-1"
+                                        >
+                                            <Text className="text-sm font-medium text-gray-700">
+                                                {member.username}
+                                            </Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                        )}
                         <QuickInput setSubmittedInputs={(input: Input) => setSubmittedInputs(prev => [...prev, input])}/>
-                    }
-                </ScrollView>
+                    </View>
+                </KeyboardAwareScrollView>
             </View>
         </View>
     );

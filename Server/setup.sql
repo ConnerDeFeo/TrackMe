@@ -133,3 +133,6 @@ SELECT
     timeStamp,
     'rest' AS type
 FROM athlete_rest_inputs;
+
+CREATE INDEX idx_user_relations_userid_relationid
+ON user_relations (userId, relationId);

@@ -21,6 +21,7 @@ const Inputs = ()=>{
     // Store previously submitted workout inputs organized by date and group
     const [submittedInputs, setSubmittedInputs] = useState<Input[]>([]);
     const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
+    const [clipBoard, setClipBoard] = useState<boolean>(false);
 
     const navigation = useNavigation<any>();
 
@@ -51,10 +52,10 @@ const Inputs = ()=>{
                 currentInputs
             );
 
-            // On success, reset only this group's inputs and refresh parent via onSubmit
+            // On success, reset current inputs and refresh submitted inputs
             if (resp.ok) {
+                setSubmittedInputs(prev => [...prev, ...currentInputs]);
                 setCurrentInputs([]);
-                fetchSubmittedInputs();
             }
         }
     };
@@ -157,13 +158,24 @@ const Inputs = ()=>{
 
             {/* Input Tracking Section */}
             <View className="mb-4">
-                <Text className="text-2xl font-bold text-gray-800 mb-4">
-                    New Entry
-                </Text>
+                <View className="flex flex-row justify-between">
+                    <Text className="text-2xl font-bold text-gray-800 mb-4">
+                        New Entry
+                    </Text>
+                    <View className="flex flex-row gap-x-3">
+                        <Pressable>
+                            <Text>Quick Input</Text>
+                        </Pressable>
+                        <Pressable>
+                            <Text>Clipboard</Text>
+                        </Pressable>
+                    </View>
+                </View>
                 <View className="flex flex-row justify-between items-center mb-4">
                     <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
                         <Text className="trackme-blue text-sm">Workout Group</Text>
                     </Pressable>
+                    <Text >asdf</Text>
                     <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
                         <Text className="trackme-blue text-sm">Mass Input</Text>
                     </Pressable>
@@ -188,13 +200,17 @@ const Inputs = ()=>{
                         </View>
                     </View>
                 )}
-                <InputTracking
-                    currentInputs={currentInputs ?? []}
-                    setCurrentInputs={setCurrentInputs}
-                    handleTimeChange={handleTimeChange}
-                    handleDistanceChange={handleDistanceChange}
-                    handleRestChange={handleRestChange}
-                />
+                { clipBoard ? 
+                    <InputTracking
+                        currentInputs={currentInputs ?? []}
+                        setCurrentInputs={setCurrentInputs}
+                        handleTimeChange={handleTimeChange}
+                        handleDistanceChange={handleDistanceChange}
+                        handleRestChange={handleRestChange}
+                    />
+                    :
+                    <></>
+                }
             </View>
 
             {/* Submit Button */}

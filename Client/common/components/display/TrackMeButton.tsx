@@ -8,14 +8,12 @@ const TrackMeButton = ({
   red,                  // Optional flag to render red background
   gray,                 // Optional flag to render gray background
   className,            // Additional tailwind or custom classes
-  removeTextOnLoading,  // Hide text when showing loading indicator
 }: {
   text: string;
   onPress: () => void | Promise<void>;
   red?: boolean;
   gray?: boolean;
   className?: string;
-  removeTextOnLoading?: boolean;
 }) => {
   // Local loading state to prevent double taps and show spinner
   const [loading, setLoading] = useState(false);
@@ -52,7 +50,7 @@ const TrackMeButton = ({
       // Disable tap when loading
       onPress={loading ? undefined : handlePress}
       disabled={loading}
-      className={`rounded-lg py-2 px-4 ${bgColor} ${className}`}
+      className={`rounded-lg py-2 px-4 ${bgColor} ${className} ${loading ? "opacity-70" : "opacity-100"}`}
       // Apply measured width to avoid layout shifts when spinner appears
       style={buttonWidth ? { width: buttonWidth } : undefined}
     >
@@ -63,11 +61,6 @@ const TrackMeButton = ({
             size="small"
             color={textColor === "text-white" ? "#ffffff" : "#4B5563"}
           />
-          {!removeTextOnLoading && (
-            <Text className={`text-center font-medium ml-2 ${textColor}`}>
-              {text}
-            </Text>
-          )}
         </View>
       ) : (
         // Default button label when not loading

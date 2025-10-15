@@ -58,7 +58,6 @@ const SearchDate: React.FC<{
                 <TrackMeButton
                     onPress={handleSearch}
                     text="Search"
-                    removeTextOnLoading
                 />
             </View>
 

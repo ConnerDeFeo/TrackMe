@@ -12,6 +12,7 @@ import InputDisplay from "../../common/components/display/input/InputDisplay";
 import { Pressable, Text, View } from "react-native";
 import TextButton from "../../common/components/display/TextButton";
 import { InputType } from "../../common/constants/Enums";
+import QuickInput from "../../common/components/QuickInput";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -163,10 +164,10 @@ const Inputs = ()=>{
                         New Entry
                     </Text>
                     <View className="flex flex-row gap-x-3">
-                        <Pressable>
+                        <Pressable onPress={()=>setClipBoard(false)}>
                             <Text>Quick Input</Text>
                         </Pressable>
-                        <Pressable>
+                        <Pressable onPress={()=>setClipBoard(true)}>
                             <Text>Clipboard</Text>
                         </Pressable>
                     </View>
@@ -175,7 +176,6 @@ const Inputs = ()=>{
                     <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
                         <Text className="trackme-blue text-sm">Workout Group</Text>
                     </Pressable>
-                    <Text >asdf</Text>
                     <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
                         <Text className="trackme-blue text-sm">Mass Input</Text>
                     </Pressable>
@@ -209,7 +209,7 @@ const Inputs = ()=>{
                         handleRestChange={handleRestChange}
                     />
                     :
-                    <></>
+                    <QuickInput />
                 }
             </View>
 
@@ -217,7 +217,6 @@ const Inputs = ()=>{
             <TrackMeButton
                 onPress={handleInputSubmission}
                 text="Submit Entries"
-                removeTextOnLoading
             />
         </View>
     );

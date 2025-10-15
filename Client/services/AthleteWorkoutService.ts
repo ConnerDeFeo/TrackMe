@@ -24,6 +24,13 @@ const AthleteWorkoutService = {
                 'inputIds': inputIds
             }
         );
+    },
+    quickInput: async (athleteId: string, date: string, input: Input) => {
+        return await API.post(`${EXPO_PUBLIC_API_URL}/athletes/quick_input`, {
+            athleteId,
+            date,
+            input
+        });
     }
 }
 

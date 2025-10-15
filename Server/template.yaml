@@ -64,6 +64,22 @@ Resources:
   #
   #
   #
+  QuickInputFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/athlete/quick_input/
+      Handler: quick_input.quick_input
+      Events:
+        QuickInputApi:
+          Type: Api
+          Properties:
+            Path: /athletes/quick_input/
+            Method: post
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   RemoveInputsFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -82,15 +82,15 @@ const Inputs = ()=>{
 
     // Handle time input changes with validation (numbers only)
     const handleTimeChange = ( idx: number, value: string)=>{
-        let updatedValue = ''
         // Only allow numeric values or empty string
-        if(!isNaN(Number(value)) || value === ''){
-            updatedValue = value
+        if(isNaN(Number(value)) && value !== ''){
+            return;
         }
+        const updatedValue = value === "" ? 0 : Number(value);
         // Update the specific input in the group while preserving other inputs
         setCurrentInputs((prev: Input[]) => {
             const updatedGroup = prev.map((input, i) => i === idx ? { ...input, time: updatedValue } : input) || [];
-            return updatedGroup as Input[];
+            return updatedGroup;
         });
     }
 
@@ -98,10 +98,11 @@ const Inputs = ()=>{
     const handleDistanceChange = (idx: number, value: string)=>{
       // Only allow integer values or empty string
       if (/^\d*$/.test(value)) {
+        const updatedValue = value === "" ? 0 : Number(value);
         // Update the specific input in the group while preserving other inputs
         setCurrentInputs((prev: Input[]) => {
-          const updatedGroup = prev?.map((input, i) => i === idx ? { ...input, distance: value } : input) || [];
-          return updatedGroup as Input[];
+          const updatedGroup = prev?.map((input, i) => i === idx ? { ...input, distance: updatedValue } : input) || [];
+          return updatedGroup;
         });
       }
     }
@@ -109,10 +110,11 @@ const Inputs = ()=>{
     const handleRestChange = (idx: number, value: string)=>{
       // Only allow integer values or empty string
       if (/^\d*$/.test(value)) {
+        const updatedValue = value === "" ? 0 : Number(value);
         // Update the specific input in the group while preserving other inputs
         setCurrentInputs((prev: Input[]) => {
-          const updatedGroup = prev?.map((input, i) => i === idx ? { ...input, restTime: value } : input) || [];
-          return updatedGroup as Input[];
+          const updatedGroup = prev?.map((input, i) => i === idx ? { ...input, restTime: updatedValue } : input) || [];
+          return updatedGroup;
         });
       }
     }
@@ -136,7 +138,7 @@ const Inputs = ()=>{
                     <Text className="text-2xl font-bold text-gray-800">
                         Submitted Entries
                     </Text>
-                    {submittedInputs.length > 0 && <TextButton text="Remove" onPress={handleInputRemoval} red/>}
+                    {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
                 </View>
                 <View className="gap-y-3">
                     {submittedInputs.length > 0 ? (
@@ -158,7 +160,7 @@ const Inputs = ()=>{
                 <Text className="text-2xl font-bold text-gray-800 mb-4">
                     New Entry
                 </Text>
-                <View className="flex flex-row justify-between items-center">
+                <View className="flex flex-row justify-between items-center mb-4">
                     <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
                         <Text className="trackme-blue text-sm">Workout Group</Text>
                     </Pressable>
@@ -168,7 +170,7 @@ const Inputs = ()=>{
                 </View>
                 {/* Display current workout partners if any */}
                 {workoutGroup.length > 0 && (
-                    <View className="bg-gray-100 p-4 rounded-lg mt-4">
+                    <View className="bg-gray-100 p-4 rounded-lg mb-4">
                         <Text className="text-sm font-medium text-gray-600 mb-2">
                             Workout Partners
                         </Text>

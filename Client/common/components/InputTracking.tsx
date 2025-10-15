@@ -1,8 +1,9 @@
 import { Text, TextInput, View } from "react-native";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
-import TimeInput from "./TimeInput";
 import TrackMeButton from "./display/TrackMeButton";
+import TimeInputDisplay from "./TimeInputDisplay";
+import { RestInput } from "../types/inputs/RestInput";
 
 /**
  * A component for dynamically adding and removing time and distance input fields.
@@ -23,6 +24,18 @@ const InputTracking = ({currentInputs, setCurrentInputs, handleTimeChange, handl
         handleRestChange: (idx:number, text:string)=>void,
     }
 ) => {   
+    const handleMinuteChange = (input: RestInput, text: string) => {
+        // If minutes input is cleared, return just the seconds portion
+        const value = text === "" ? 0 : parseInt(text);
+        const totalSeconds = value * 60 + (input?.restTime || 0) % 60;
+        return totalSeconds.toString();
+    }
+    const handleSecondChange = (input: RestInput, text: string) => {
+        const value = text === "" ? 0 : parseInt(text);
+        // If seconds input is cleared, return just the minutes portion
+        const totalSeconds = Math.floor((input?.restTime || 0) / 60) * 60 + value;
+        return totalSeconds.toString();
+    }
     return(
         <>
             {/* Input entries */}
@@ -71,17 +84,17 @@ const InputTracking = ({currentInputs, setCurrentInputs, handleTimeChange, handl
                                         return (
                                             <View>
                                                 <Text className="text-xs font-medium text-gray-600 mb-1">
-                                                    Rest Time (seconds)
+                                                    Rest Time (MM:SS)
                                                 </Text>
-                                                <TimeInput
+                                                <TimeInputDisplay
                                                     currSeconds={input?.restTime || 0}
                                                     handleMinutesChange={(text) => {
-                                                        const totalSeconds = parseInt(text) * 60 + (input?.restTime || 0) % 60;
-                                                        handleRestChange(idx, totalSeconds.toString());
+                                                        const totalSeconds = handleMinuteChange(input, text);
+                                                        handleRestChange(idx, totalSeconds);
                                                     }}
                                                     handleSecondsChange={(text) => {
-                                                        const totalSeconds = Math.floor((input?.restTime || 0) / 60) * 60 + parseInt(text);
-                                                        handleRestChange( idx, totalSeconds.toString());
+                                                        const totalSeconds = handleSecondChange(input, text);
+                                                        handleRestChange( idx, totalSeconds);
                                                     }}
                                                 />
                                             </View>

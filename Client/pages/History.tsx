@@ -11,6 +11,7 @@ const History = () => {
 
     const fetchAvailableDates = async (date?:string) => {
             const resp = await HistoryService.getAvailableHistoryDates(date);
+            console.log(resp);
             if(resp.ok) {
                 const data = await resp.json();
                 setAvailableDates(data);

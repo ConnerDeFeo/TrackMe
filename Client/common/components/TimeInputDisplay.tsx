@@ -1,6 +1,6 @@
 import { Text, TextInput, View } from "react-native";
 
-const TimeInput = ({handleMinutesChange, handleSecondsChange, currSeconds, required}
+const TimeInputDisplay = ({handleMinutesChange, handleSecondsChange, currSeconds, required}
     :{handleMinutesChange: (text: string) => void, handleSecondsChange: (text: string) => void, currSeconds: number, required?: boolean})=>{
     return(
         <View className="flex-row items-center gap-x-2">
@@ -27,4 +27,4 @@ const TimeInput = ({handleMinutesChange, handleSecondsChange, currSeconds, requi
     );
 }
 
-export default TimeInput;
+export default TimeInputDisplay;

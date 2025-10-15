@@ -3,7 +3,7 @@ import { useState } from "react";
 import Section from "../../../types/workouts/Section";
 import { Rest } from "../../../types/workouts/Rest";
 import { ExerciseType } from "../../../constants/Enums";
-import TimeInput from "../../TimeInput";
+import TimeInput from "../../TimeInputDisplay";
 import { Exercise } from "../../../types/workouts/Exercise";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:

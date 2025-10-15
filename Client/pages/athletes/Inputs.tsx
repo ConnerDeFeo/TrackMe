@@ -9,7 +9,7 @@ import DateService from "../../services/DateService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
 import InputDisplay from "../../common/components/display/input/InputDisplay";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import TextButton from "../../common/components/display/TextButton";
 import { InputType } from "../../common/constants/Enums";
 import QuickInput from "../../common/components/QuickInput";
@@ -133,19 +133,19 @@ const Inputs = ()=>{
     };
 
     return (
-        <View className="flex-1 px-6 py-4">
-            {/* Submitted Entries Section */}
-            <View className="mb-6">
+        <View className="flex-1">
+            {/* Submitted Entries Section - Scrollable */}
+            <ScrollView className="flex-1 px-6 pt-4 bg-white">
                 <View className="flex flex-row justify-between items-center mb-4">
                     <Text className="text-2xl font-bold text-gray-800">
                         Submitted Entries
                     </Text>
                     {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
                 </View>
-                <View className="gap-y-3">
+                <View className="gap-y-1 mb-8">
                     {submittedInputs.length > 0 ? (
                         submittedInputs.map((input, idx) => (
-                            <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)}>
+                            <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)} >
                                 <InputDisplay input={input} selected={selectedSubmittedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type)} />
                             </Pressable>
                         ))
@@ -155,69 +155,69 @@ const Inputs = ()=>{
                         </Text>
                     )}
                 </View>
-            </View>
+            </ScrollView>
 
-            {/* Input Tracking Section */}
-            <View className="mb-4">
-                <View className="flex flex-row justify-between">
-                    <Text className="text-2xl font-bold text-gray-800 mb-4">
-                        New Entry
-                    </Text>
-                    <View className="flex flex-row gap-x-3">
-                        <Pressable onPress={()=>setClipBoard(false)}>
-                            <Text>Quick Input</Text>
-                        </Pressable>
-                        <Pressable onPress={()=>setClipBoard(true)}>
-                            <Text>Clipboard</Text>
-                        </Pressable>
-                    </View>
-                </View>
-                <View className="flex flex-row justify-between items-center mb-4">
-                    <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
-                        <Text className="trackme-blue text-sm">Workout Group</Text>
-                    </Pressable>
-                    <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
-                        <Text className="trackme-blue text-sm">Mass Input</Text>
-                    </Pressable>
-                </View>
-                {/* Display current workout partners if any */}
-                {workoutGroup.length > 0 && (
-                    <View className="bg-gray-100 p-4 rounded-lg mb-4">
-                        <Text className="text-sm font-medium text-gray-600 mb-2">
-                            Workout Partners
+            {/* Input Tracking Section - Sticky at Bottom with max height */}
+            <View className="bg-white border-t border-gray-200" style={{ maxHeight: '50%' }}>
+                <ScrollView className="px-6 py-4">
+                    <View className="flex flex-row justify-between items-center">
+                        <Text className="text-2xl font-bold text-gray-800 mb-4">
+                            New Entry
                         </Text>
-                        <View className="flex flex-row flex-wrap gap-2">
-                            {workoutGroup.map((member, idx) => (
-                                <View
-                                    key={idx}
-                                    className="bg-white border border-gray-200 rounded-full px-3 py-1"
-                                >
-                                    <Text className="text-sm font-medium text-gray-700">
-                                        {member.username}
-                                    </Text>
-                                </View>
-                            ))}
-                        </View>
+                        <TrackMeButton
+                            text={clipBoard ? "Quick Input" : "Clipboard"}
+                            onPress={() => setClipBoard(prev => !prev)}
+                            className="w-[40%]"
+                        />
                     </View>
-                )}
-                { clipBoard ? 
-                    <InputTracking
-                        currentInputs={currentInputs ?? []}
-                        setCurrentInputs={setCurrentInputs}
-                        handleTimeChange={handleTimeChange}
-                        handleDistanceChange={handleDistanceChange}
-                        handleRestChange={handleRestChange}
-                    />
-                    :
-                    <QuickInput />
-                }
+                    <View className="flex flex-row justify-between items-center mb-4">
+                        <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
+                            <Text className="trackme-blue text-sm">Workout Group</Text>
+                        </Pressable>
+                        <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
+                            <Text className="trackme-blue text-sm">Mass Input</Text>
+                        </Pressable>
+                    </View>
+                    {/* Display current workout partners if any */}
+                    {workoutGroup.length > 0 && (
+                        <View className="bg-gray-100 p-4 rounded-lg mb-4">
+                            <Text className="text-sm font-medium text-gray-600 mb-2">
+                                Workout Partners
+                            </Text>
+                            <View className="flex flex-row flex-wrap gap-2">
+                                {workoutGroup.map((member, idx) => (
+                                    <View
+                                        key={idx}
+                                        className="bg-white border border-gray-200 rounded-full px-3 py-1"
+                                    >
+                                        <Text className="text-sm font-medium text-gray-700">
+                                            {member.username}
+                                        </Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+                    )}
+                    { clipBoard ? 
+                        <>
+                            <InputTracking
+                                currentInputs={currentInputs ?? []}
+                                setCurrentInputs={setCurrentInputs}
+                                handleTimeChange={handleTimeChange}
+                                handleDistanceChange={handleDistanceChange}
+                                handleRestChange={handleRestChange}
+                            />
+                            {/* Submit Button */}
+                            <TrackMeButton
+                                onPress={handleInputSubmission}
+                                text="Submit Entries"
+                            />
+                        </>
+                        :
+                        <QuickInput setSubmittedInputs={(input: Input) => setSubmittedInputs(prev => [...prev, input])}/>
+                    }
+                </ScrollView>
             </View>
-
-            {/* Submit Button */}
-            <TrackMeButton
-                onPress={handleInputSubmission}
-                text="Submit Entries"
-            />
         </View>
     );
 }

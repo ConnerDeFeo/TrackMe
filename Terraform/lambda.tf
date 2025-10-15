@@ -21,7 +21,6 @@ locals {
     "input_times",
     "remove_inputs",
     "view_workout_inputs",
-    "quick_input",
 
     # Coach Lambdas
     "create_group",

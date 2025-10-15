@@ -3,8 +3,8 @@ import { useState } from "react";
 import Section from "../../../types/workouts/Section";
 import { Rest } from "../../../types/workouts/Rest";
 import { ExerciseType } from "../../../constants/Enums";
-import TimeInput from "../../TimeInputDisplay";
 import { Exercise } from "../../../types/workouts/Exercise";
+import TimeInputDisplay from "../../TimeInputDisplay";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:
   {
@@ -171,7 +171,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
             <View className="gap-y-3 flex flex-row justify-between">
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Min Duration</Text>
-                <TimeInput
+                <TimeInputDisplay
                   handleMinutesChange={text => handleRestChange(partIdx, 'minReps', 'minutes', text)}
                   handleSecondsChange={text => handleRestChange(partIdx, 'minReps', 'seconds', text)}
                   currSeconds={exercise.minReps || 0}
@@ -180,7 +180,7 @@ const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }
               </View>
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">Max Duration (Optional)</Text>
-                <TimeInput
+                <TimeInputDisplay
                   handleMinutesChange={text => handleRestChange(partIdx, 'maxReps', 'minutes', text)}
                   handleSecondsChange={text => handleRestChange(partIdx, 'maxReps', 'seconds', text)}
                   currSeconds={exercise.maxReps || 0}

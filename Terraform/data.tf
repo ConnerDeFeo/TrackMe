@@ -52,10 +52,6 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/remove_inputs"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/remove_inputs.zip"
     }
-    "quick_input" = {
-      source_dir  = "${path.module}/../Server/lambdas/athlete/quick_input"
-      output_path = "${path.module}/../Server/lambdas/athlete/zips/quick_input.zip"
-    }
     
     # Coach Lambdas
     "create_group" = {

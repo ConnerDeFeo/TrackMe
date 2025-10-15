@@ -43,41 +43,35 @@ const InputTracking = ({currentInputs, setCurrentInputs, handleTimeChange, handl
             <View>
                 {Array.isArray(currentInputs) && currentInputs.map((input, idx) => (
                     <View key={idx} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
-                        <View className="flex flex-row items-center gap-x-3 justify-center">
-                            {(() => {
-                                switch (input.type) {
-                                    case InputType.Run:
-                                        return (
-                                            <TimeDistanceInputDisplay
-                                                input={input}
-                                                handleTimeChange={(text) => handleTimeChange(idx, text)}
-                                                handleDistanceChange={(text) => handleDistanceChange(idx, text)}
+                        {(() => {
+                            switch (input.type) {
+                                case InputType.Run:
+                                    return (
+                                        <TimeDistanceInputDisplay
+                                            time={input.time}
+                                            distance={input.distance}
+                                            handleTimeChange={(text) => handleTimeChange(idx, text)}
+                                            handleDistanceChange={(text) => handleDistanceChange(idx, text)}
+                                        />
+                                    );
+                                case InputType.Rest:
+                                    return (
+                                            <TimeInputDisplay
+                                                currSeconds={input?.restTime || 0}
+                                                handleMinutesChange={(text) => {
+                                                    const totalSeconds = handleMinuteChange(input, text);
+                                                    handleRestChange(idx, totalSeconds);
+                                                }}
+                                                handleSecondsChange={(text) => {
+                                                    const totalSeconds = handleSecondChange(input, text);
+                                                    handleRestChange(idx, totalSeconds);
+                                                }}
                                             />
-                                        );
-                                    case InputType.Rest:
-                                        return (
-                                            <View>
-                                                <Text className="text-xs font-medium text-gray-600 mb-1">
-                                                    Rest Time (MM:SS)
-                                                </Text>
-                                                <TimeInputDisplay
-                                                    currSeconds={input?.restTime || 0}
-                                                    handleMinutesChange={(text) => {
-                                                        const totalSeconds = handleMinuteChange(input, text);
-                                                        handleRestChange(idx, totalSeconds);
-                                                    }}
-                                                    handleSecondsChange={(text) => {
-                                                        const totalSeconds = handleSecondChange(input, text);
-                                                        handleRestChange( idx, totalSeconds);
-                                                    }}
-                                                />
-                                            </View>
-                                        );
-                                    default:
-                                        return <Text>Unsupported input type</Text>;
-                                }
-                            })()}
-                        </View>
+                                    );
+                                default:
+                                    return <Text>Unsupported input type</Text>;
+                            }
+                        })()}
                     </View>
                 ))}
             </View>

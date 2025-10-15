@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { TextInput, Text, View } from "react-native";
 
 /**
@@ -11,26 +12,45 @@ import { TextInput, Text, View } from "react-native";
  * @param handleDistanceChange - Callback function triggered when distance input changes
  * @param idx - Index identifier for the input pair
  */
-const TimeDistanceInputDisplay = ({ input, handleTimeChange, handleDistanceChange }:
+const TimeDistanceInputDisplay = ({ time, distance, handleTimeChange, handleDistanceChange }:
     {
-        input: {time: number, distance: number} | undefined, 
+        time: number,
+        distance: number,
         handleTimeChange: (text: string) => void, 
         handleDistanceChange: (text: string) => void
     }
 )=>{
+    const timeRef = useRef<TextInput>(null);
+    const distanceRef = useRef<TextInput>(null);
+
+    const handleTimeDistanceInputEnterKey = (current: "time" | "distance") => {
+        if (current === "time") {
+            if (distance == 0) {
+                distanceRef.current?.focus();
+            }
+        } else {
+            if (time == 0) {
+                timeRef.current?.focus();
+            }
+        }
+    }
+
     return(
-        <>
+        <View className="flex flex-row justify-between items-center gap-x-3">
             {/* Time input field */}
             <View className="flex-1">
                 <Text className="text-xs font-medium text-gray-600 mb-1">
                     Time (seconds)
                 </Text>
                 <TextInput
+                    ref={timeRef} 
                     placeholder="0.00"
                     keyboardType="numeric"
-                    value={input?.time.toString()}
+                    value={time == 0 ? "" : time.toString()}
                     className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
                     onChangeText={text => handleTimeChange(text)}
+                    returnKeyType="next"
+                    onSubmitEditing={() => handleTimeDistanceInputEnterKey("time")}
                 />
             </View>
 
@@ -42,17 +62,20 @@ const TimeDistanceInputDisplay = ({ input, handleTimeChange, handleDistanceChang
                 {/* Container for distance input and unit */}
                 <View className="flex flex-row items-center">
                     <TextInput
+                        ref={distanceRef}
                         placeholder="0"
                         keyboardType="numeric"
                         className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
-                        value={input?.distance.toString()}
+                        value={distance == 0 ? "" : distance.toString()}
                         onChangeText={text => handleDistanceChange(text)}
+                        returnKeyType="done"
+                        onSubmitEditing={() => handleTimeDistanceInputEnterKey("distance")}
                     />
                     {/* Unit label for distance (meters) */}
                     <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
                 </View>
             </View>
-        </>
+        </View>
     );
 }
 

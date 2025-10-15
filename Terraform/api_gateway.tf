@@ -28,7 +28,6 @@ locals {
     # POST Lambdas
     "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }
     "athletes/remove_inputs" = { lambda = aws_lambda_function.lambdas["remove_inputs"], method = "POST" }
-    "athletes/quick_input" = { lambda = aws_lambda_function.lambdas["quick_input"], method = "POST" }
 
     "coaches/add_athlete_to_group" = { lambda = aws_lambda_function.lambdas["add_athlete_to_group"], method = "POST" }
     "coaches/create_group" = { lambda = aws_lambda_function.lambdas["create_group"], method = "POST" }

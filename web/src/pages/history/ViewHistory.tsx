@@ -13,7 +13,6 @@ const divHistory = () => {
             const resp = await HistoryService.fetchHistoricalData(date!);
             if (resp) {
                 const data = await resp.json();
-                console.log(data);
                 setHistoricalData(data);
             }else{
                 setHistoricalData({});

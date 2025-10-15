@@ -3,18 +3,14 @@ import { Image, Pressable, View } from "react-native";
 import TimeInputDisplay from "./TimeInputDisplay";
 import TimeDistanceInputDisplay from "./display/TimeDistanceInputDisplay";
 import TrackMeButton from "./display/TrackMeButton";
-import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
-import UserService from "../../services/UserService";
-import DateService from "../../services/DateService";
 
 /**
  * QuickInput component allows users to quickly log workout inputs (runs or rest periods)
- * @param setSubmittedInputs - Callback to handle submitted input data
- * @param athleteId - Optional athlete ID, defaults to current user if not provided
+ * @param handleInputAddition - Callback to handle added input data
  */
-const QuickInput = ({setSubmittedInputs, athleteId}:{setSubmittedInputs: (inputs: Input) => void, athleteId?:string}) => {
+const QuickInput = ({handleInputAddition}:{handleInputAddition: (inputs: Input) => void}) => {
     // Flag for showing a rest input or a run time input
     const [runInput, setRunInput] = useState<boolean>(true);
     // This will either be the run time input or the seconds of the rest input
@@ -77,11 +73,10 @@ const QuickInput = ({setSubmittedInputs, athleteId}:{setSubmittedInputs: (inputs
         } else {
             input = { type: InputType.Rest, restTime: currentTime };
         }
-        
-        // Get user ID and current date for the workout entry
-        const userId = athleteId ?? await UserService.getUserId();
-        const date = DateService.formatDate(new Date());
-        
+        setCurrentDistance(0);
+        setCurrentTime(0);
+        // Pass the created input to the parent component via callback
+        handleInputAddition(input);
     }
 
     /**

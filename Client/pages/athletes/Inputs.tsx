@@ -3,17 +3,14 @@ import usePersistentState from "../../common/hooks/usePersistentState";
 import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Input } from "../../common/types/inputs/Input";
-import InputTracking from "../../common/components/InputTracking";
-import TrackMeButton from "../../common/components/display/TrackMeButton";
 import DateService from "../../services/DateService";
 import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
 import InputDisplay from "../../common/components/display/input/InputDisplay";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import TextButton from "../../common/components/display/TextButton";
 import { InputType } from "../../common/constants/Enums";
 import QuickInput from "../../common/components/QuickInput";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -133,21 +130,43 @@ const Inputs = ()=>{
     };
 
     return (
-        <View className="flex-1 bg-white">
+        <KeyboardAvoidingView 
+            className="flex-1 bg-white"
+            behavior="padding"
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        >
             {/* Submitted Entries Section - Scrollable */}
-            <ScrollView className="flex-1 px-6 pt-4">
-                <View className="flex flex-row justify-between items-center mb-4">
-                    <Text className="text-2xl font-bold text-gray-800">
-                        Submitted Entries
-                    </Text>
-                    {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
+            <ScrollView className="flex-1 px-6 pt-4" contentContainerStyle={{paddingBottom: 35}}>
+                <View className="mb-6">
+                    <View className="flex flex-row justify-between items-center">
+                        <Text className="text-2xl font-bold text-gray-800">
+                            Submitted Entries
+                        </Text>
+                        {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
+                    </View>
+                    <View className="gap-y-1 pb-4">
+                        {submittedInputs.length > 0 ? (
+                            submittedInputs.map((input, idx) => (
+                                <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)} >
+                                    <InputDisplay input={input} selected={selectedSubmittedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type)} />
+                                </Pressable>
+                            ))
+                            ) : (
+                            <Text className="text-gray-500 text-center py-4">
+                                No entries submitted yet
+                            </Text>
+                        )}
+                    </View>
                 </View>
-                <View className="gap-y-1 pb-4">
-                    {submittedInputs.length > 0 ? (
-                        submittedInputs.map((input, idx) => (
-                            <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)} >
-                                <InputDisplay input={input} selected={selectedSubmittedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type)} />
-                            </Pressable>
+                <View className="mb-12">
+                    <Text className="text-2xl font-bold text-gray-800">
+                        Current Entries
+                    </Text>
+                    {currentInputs.length > 0 ? (
+                        currentInputs.map((input, idx) => (
+                            <Text key={idx} className="text-gray-700 py-2 border-b border-gray-200 ">
+                                {input.type === InputType.Run ? `Run - Time: ${input.time}s, Distance: ${input.distance}m` : `Rest - Time: ${input.restTime}s`}
+                            </Text>
                         ))
                         ) : (
                         <Text className="text-gray-500 text-center py-4">
@@ -158,51 +177,41 @@ const Inputs = ()=>{
             </ScrollView>
 
             {/* Input Tracking Section - Fixed at Bottom */}
-            <View>
-                <KeyboardAwareScrollView
-                    className="border-t border-gray-200"
-                    showsVerticalScrollIndicator={false}
-                    enableOnAndroid={true}
-                    extraScrollHeight={20}
-                    keyboardShouldPersistTaps="handled"
-                >
-                    <View className="px-6 py-4">
-                        <View className="flex flex-row justify-between items-center mb-4">
-                            <Text className="text-2xl font-bold text-gray-800">
-                                New Entry
-                            </Text>
-                            <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
-                                <Text className="trackme-blue text-sm">Workout Group</Text>
-                            </Pressable>
-                            <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
-                                <Text className="trackme-blue text-sm">Mass Input</Text>
-                            </Pressable>
-                        </View>
-                        {/* Display current workout partners if any */}
-                        {workoutGroup.length > 0 && (
-                            <View className="bg-gray-100 p-4 rounded-lg mb-4">
-                                <Text className="text-sm font-medium text-gray-600 mb-2">
-                                    Workout Partners
-                                </Text>
-                                <View className="flex flex-row flex-wrap gap-2">
-                                    {workoutGroup.map((member, idx) => (
-                                        <View
-                                            key={idx}
-                                            className="bg-white border border-gray-200 rounded-full px-3 py-1"
-                                        >
-                                            <Text className="text-sm font-medium text-gray-700">
-                                                {member.username}
-                                            </Text>
-                                        </View>
-                                    ))}
+            <View className="border-t border-gray-200 px-6 py-4">
+                <View className="flex flex-row justify-between items-center mb-4">
+                    <Text className="text-2xl font-bold text-gray-800">
+                        New Entry
+                    </Text>
+                    <Pressable onPress={() => navigation.navigate('CreateWorkoutGroup')} className="bg-blue-50 rounded-full inline p-2">
+                        <Text className="trackme-blue text-sm">Workout Group</Text>
+                    </Pressable>
+                    <Pressable onPress={() => navigation.navigate('MassInput')} className="bg-blue-50 rounded-full inline p-2">
+                        <Text className="trackme-blue text-sm">Mass Input</Text>
+                    </Pressable>
+                </View>
+                {/* Display current workout partners if any */}
+                {workoutGroup.length > 0 && (
+                    <View className="bg-gray-100 p-4 rounded-lg mb-4">
+                        <Text className="text-sm font-medium text-gray-600 mb-2">
+                            Workout Partners
+                        </Text>
+                        <View className="flex flex-row flex-wrap gap-2">
+                            {workoutGroup.map((member, idx) => (
+                                <View
+                                    key={idx}
+                                    className="bg-white border border-gray-200 rounded-full px-3 py-1"
+                                >
+                                    <Text className="text-sm font-medium text-gray-700">
+                                        {member.username}
+                                    </Text>
                                 </View>
-                            </View>
-                        )}
-                        <QuickInput setSubmittedInputs={(input: Input) => setSubmittedInputs(prev => [...prev, input])}/>
+                            ))}
+                        </View>
                     </View>
-                </KeyboardAwareScrollView>
+                )}
+                <QuickInput handleInputAddition={(input: Input) => setCurrentInputs(prev => [...prev, input])}/>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

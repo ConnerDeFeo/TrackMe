@@ -103,7 +103,7 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="Groups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
         <AthleteStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <AthleteStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
-        <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={()=><Inputs />} />
+        <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={Inputs} />
         <AthleteStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
         <AthleteStack.Screen name="MassInput" component={ScrollViewWrapper(<MassInput />)} />
         <AthleteStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />

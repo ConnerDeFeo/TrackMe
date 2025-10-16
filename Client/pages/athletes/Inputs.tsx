@@ -1,16 +1,11 @@
-import { useCallback, useState } from "react";
+import { useRef } from "react";
 import usePersistentState from "../../common/hooks/usePersistentState";
-import AthleteWorkoutService from "../../services/AthleteWorkoutService";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Input } from "../../common/types/inputs/Input";
-import DateService from "../../services/DateService";
-import UserService from "../../services/UserService";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
-import InputDisplay from "../../common/components/display/input/InputDisplay";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from "react-native";
-import TextButton from "../../common/components/display/TextButton";
-import { InputType } from "../../common/constants/Enums";
+import { KeyboardAvoidingView, Pressable, ScrollView, Text, View } from "react-native";
 import QuickInput from "../../common/components/QuickInput";
+import InputsScrollableSection from "../../common/components/athletes/inputs/InputsScrollableSection";
 
 //Page where athletes input times
 const Inputs = ()=>{
@@ -18,163 +13,27 @@ const Inputs = ()=>{
     const [currentInputs, setCurrentInputs] = usePersistentState<Input[]>('current', []);
     const { workoutGroup } = useWorkoutGroup();
     // Store previously submitted workout inputs organized by date and group
-    const [submittedInputs, setSubmittedInputs] = useState<Input[]>([]);
-    const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
-
+    const scrollRef = useRef<ScrollView | null>(null);
     const navigation = useNavigation<any>();
 
-    // Fetch previously submitted workout inputs from the server
-    const fetchSubmittedInputs = useCallback(async () => {
-        const resp = await AthleteWorkoutService.viewWorkoutInputs();
-        if (resp.ok) {
-            const inputs = await resp.json();
-            setSubmittedInputs(inputs);
-        }
-        else{
-            setSubmittedInputs([]);
-        }
-    }, []);
 
-    const handleInputSubmission = async () => {
-        const date = DateService.formatDate(new Date());
-        const userId = await UserService.getUserId();
-
-        if (userId) {
-            // Combine group members and current user into one list of athlete IDs
-            const athletes = [...workoutGroup.map(member => member.id), userId];
-
-            // Send the inputs for this group and date
-            const resp = await AthleteWorkoutService.inputTimes(
-                athletes,
-                date,
-                currentInputs
-            );
-
-            // On success, reset current inputs and refresh submitted inputs
-            if (resp.ok) {
-                setSubmittedInputs(prev => [...prev, ...currentInputs]);
-                setCurrentInputs([]);
-            }
-        }
-    };
-
-    // Fetch submitted inputs on component mount
-    useFocusEffect(
-        useCallback(() => {
-            fetchSubmittedInputs();
-        }, [fetchSubmittedInputs])
-    );
-
-    /**
-     * Removes the selected previous entries by their input IDs.
-     * Clears the selection on success and triggers onSubmit.
-     */
-    const handleInputRemoval = async () => {
-        const resp = await AthleteWorkoutService.removeInputs(selectedSubmittedInputs);
-
-        if (resp.ok) {
-            // Reset selection and refresh parent
-            setSelectedSubmittedInputs([]);
-            fetchSubmittedInputs();
-        }
-    };
-
-    // Handle time input changes with validation (numbers only)
-    const handleTimeChange = ( idx: number, value: string)=>{
-        // Only allow numeric values or empty string
-        if(isNaN(Number(value)) && value !== ''){
-            return;
-        }
-        const updatedValue = value === "" ? 0 : Number(value);
-        // Update the specific input in the group while preserving other inputs
-        setCurrentInputs((prev: Input[]) => {
-            const updatedGroup = prev.map((input, i) => i === idx ? { ...input, time: updatedValue } : input) || [];
-            return updatedGroup;
-        });
+    const handleInputSubmission = async (input:Input) => {
+        setCurrentInputs(prev => [...prev, input]);
+        scrollRef.current?.scrollToEnd({animated: true});
     }
-
-    // Handle distance input changes with validation (integers only)
-    const handleDistanceChange = (idx: number, value: string)=>{
-      // Only allow integer values or empty string
-      if (/^\d*$/.test(value)) {
-        const updatedValue = value === "" ? 0 : Number(value);
-        // Update the specific input in the group while preserving other inputs
-        setCurrentInputs((prev: Input[]) => {
-          const updatedGroup = prev?.map((input, i) => i === idx ? { ...input, distance: updatedValue } : input) || [];
-          return updatedGroup;
-        });
-      }
-    }
-
-    const handleRestChange = (idx: number, value: string)=>{
-      // Only allow integer values or empty string
-      if (/^\d*$/.test(value)) {
-        const updatedValue = value === "" ? 0 : Number(value);
-        // Update the specific input in the group while preserving other inputs
-        setCurrentInputs((prev: Input[]) => {
-          const updatedGroup = prev?.map((input, i) => i === idx ? { ...input, restTime: updatedValue } : input) || [];
-          return updatedGroup;
-        });
-      }
-    }
-
-    const handleSubmittedInputSelection = (type: InputType, inputId?: number) => {
-        if(!inputId) return;
-        const alreadySelected = selectedSubmittedInputs.some(selected => selected.inputId === inputId && selected.type === type);
-        // Toggle selection state
-        setSelectedSubmittedInputs(prev =>
-            alreadySelected
-                ? prev.filter(selected => !(selected.inputId === inputId && selected.type === type))
-                : [...prev, {inputId: inputId, type: type}] as {inputId: number, type: InputType}[]
-        );
-    };
 
     return (
         <KeyboardAvoidingView 
             className="flex-1 bg-white"
             behavior="padding"
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+            keyboardVerticalOffset={100}
         >
             {/* Submitted Entries Section - Scrollable */}
-            <ScrollView className="flex-1 px-6 pt-4" contentContainerStyle={{paddingBottom: 35}}>
-                <View className="mb-6">
-                    <View className="flex flex-row justify-between items-center">
-                        <Text className="text-2xl font-bold text-gray-800">
-                            Submitted Entries
-                        </Text>
-                        {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
-                    </View>
-                    <View className="gap-y-1 pb-4">
-                        {submittedInputs.length > 0 ? (
-                            submittedInputs.map((input, idx) => (
-                                <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)} >
-                                    <InputDisplay input={input} selected={selectedSubmittedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type)} />
-                                </Pressable>
-                            ))
-                            ) : (
-                            <Text className="text-gray-500 text-center py-4">
-                                No entries submitted yet
-                            </Text>
-                        )}
-                    </View>
-                </View>
-                <View className="mb-12">
-                    <Text className="text-2xl font-bold text-gray-800">
-                        Current Entries
-                    </Text>
-                    {currentInputs.length > 0 ? (
-                        currentInputs.map((input, idx) => (
-                            <Text key={idx} className="text-gray-700 py-2 border-b border-gray-200 ">
-                                {input.type === InputType.Run ? `Run - Time: ${input.time}s, Distance: ${input.distance}m` : `Rest - Time: ${input.restTime}s`}
-                            </Text>
-                        ))
-                        ) : (
-                        <Text className="text-gray-500 text-center py-4">
-                            No entries submitted yet
-                        </Text>
-                    )}
-                </View>
-            </ScrollView>
+            <InputsScrollableSection 
+                scrollRef={scrollRef} 
+                currentInputs={currentInputs} 
+                setCurrentInputs={setCurrentInputs} 
+            />
 
             {/* Input Tracking Section - Fixed at Bottom */}
             <View className="border-t border-gray-200 px-6 py-4">
@@ -209,7 +68,10 @@ const Inputs = ()=>{
                         </View>
                     </View>
                 )}
-                <QuickInput handleInputAddition={(input: Input) => setCurrentInputs(prev => [...prev, input])}/>
+                <QuickInput 
+                    handleInputAddition={handleInputSubmission} 
+                    onFocus={() => scrollRef.current?.scrollToEnd({animated: true})}
+                />
             </View>
         </KeyboardAvoidingView>
     );

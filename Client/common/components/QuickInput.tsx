@@ -10,7 +10,7 @@ import { InputType } from "../constants/Enums";
  * QuickInput component allows users to quickly log workout inputs (runs or rest periods)
  * @param handleInputAddition - Callback to handle added input data
  */
-const QuickInput = ({handleInputAddition}:{handleInputAddition: (inputs: Input) => void}) => {
+const QuickInput = ({handleInputAddition, onFocus}:{handleInputAddition: (inputs: Input) => void, onFocus: () => void}) => {
     // Flag for showing a rest input or a run time input
     const [runInput, setRunInput] = useState<boolean>(true);
     // This will either be the run time input or the seconds of the rest input
@@ -88,7 +88,6 @@ const QuickInput = ({handleInputAddition}:{handleInputAddition: (inputs: Input) 
         setCurrentTime(0);
     }
 
-
     return (
         <View>
             {/* Toggle buttons for switching between Run and Rest input modes */}
@@ -118,12 +117,14 @@ const QuickInput = ({handleInputAddition}:{handleInputAddition: (inputs: Input) 
                             distance={currentDistance}
                             handleTimeChange={handleTimeChange}
                             handleDistanceChange={handleDistanceChange}
+                            onFocus={onFocus}
                         />
                         :
                         <TimeInputDisplay 
                             currSeconds={currentTime} 
                             handleMinutesChange={handleMinuteChange} 
                             handleSecondsChange={handleSecondChange}
+                            onFocus={onFocus}
                         />
                     }
                 </View>

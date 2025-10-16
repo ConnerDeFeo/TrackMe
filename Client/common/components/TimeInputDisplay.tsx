@@ -1,7 +1,14 @@
 import { Text, TextInput, View } from "react-native";
 
-const TimeInputDisplay = ({handleMinutesChange, handleSecondsChange, currSeconds, required}
-    :{handleMinutesChange: (text: string) => void, handleSecondsChange: (text: string) => void, currSeconds: number, required?: boolean})=>{
+const TimeInputDisplay = ({handleMinutesChange, handleSecondsChange, currSeconds, required, onFocus}
+    :{
+        handleMinutesChange: (text: string) => void, 
+        handleSecondsChange: (text: string) => void, 
+        currSeconds: number, 
+        required?: boolean,
+        onFocus?: () => void
+    }
+)=>{
     return(
         <>
             <Text className="text-xs font-medium text-gray-600 mb-1 text-center">
@@ -16,6 +23,7 @@ const TimeInputDisplay = ({handleMinutesChange, handleSecondsChange, currSeconds
                     onChangeText={handleMinutesChange}
                     maxLength={2}
                     value={Math.floor(currSeconds / 60) === 0 ? '' : Math.floor(currSeconds / 60).toString()}
+                    onFocus={onFocus}
                 />
                 <Text className="font-bold text-lg">:</Text>
                 {/* Seconds input */}
@@ -26,6 +34,7 @@ const TimeInputDisplay = ({handleMinutesChange, handleSecondsChange, currSeconds
                     onChangeText={handleSecondsChange}
                     maxLength={2}
                     value={currSeconds % 60 === 0 ? '' : (currSeconds % 60).toString()}
+                    onFocus={onFocus}
                 />
             </View>
         </>

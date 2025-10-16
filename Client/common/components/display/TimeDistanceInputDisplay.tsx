@@ -12,12 +12,13 @@ import { TextInput, Text, View } from "react-native";
  * @param handleDistanceChange - Callback function triggered when distance input changes
  * @param idx - Index identifier for the input pair
  */
-const TimeDistanceInputDisplay = ({ time, distance, handleTimeChange, handleDistanceChange }:
+const TimeDistanceInputDisplay = ({ time, distance, handleTimeChange, handleDistanceChange, onFocus }:
     {
         time: number,
         distance: number,
         handleTimeChange: (text: string) => void, 
-        handleDistanceChange: (text: string) => void
+        handleDistanceChange: (text: string) => void,
+        onFocus?: () => void
     }
 )=>{
     const timeRef = useRef<TextInput>(null);
@@ -51,6 +52,7 @@ const TimeDistanceInputDisplay = ({ time, distance, handleTimeChange, handleDist
                     onChangeText={text => handleTimeChange(text)}
                     returnKeyType="next"
                     onSubmitEditing={() => handleTimeDistanceInputEnterKey("time")}
+                    onFocus={onFocus}
                 />
             </View>
 
@@ -70,6 +72,7 @@ const TimeDistanceInputDisplay = ({ time, distance, handleTimeChange, handleDist
                         onChangeText={text => handleDistanceChange(text)}
                         returnKeyType="done"
                         onSubmitEditing={() => handleTimeDistanceInputEnterKey("distance")}
+                        onFocus={onFocus}
                     />
                     {/* Unit label for distance (meters) */}
                     <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>

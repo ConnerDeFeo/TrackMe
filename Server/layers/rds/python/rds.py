@@ -1,5 +1,6 @@
 import os
 import psycopg2
+from psycopg2.extras import execute_values
 
 _connection = None
 def connect():
@@ -97,13 +98,30 @@ def execute_commit_fetch_one(query, params={}):
         with conn.cursor() as cursor:
             try:
                 cursor.execute(query, params)
+                row = cursor.fetchone()
                 conn.commit()
+                return row
             except:
                 conn.rollback()
                 return False
-            return cursor.fetchone()
 
     return execute_function(_execute_commit_fetch_one, query, params)
+
+#Executes a query that commits and fetches a single row
+def execute_commit_fetch_all(query, params={}):
+    conn = connect()
+    def _execute_commit_fetch_all(query, params={}):
+        with conn.cursor() as cursor:
+            try:
+                execute_values(cursor, query, params)
+                rows = cursor.fetchall()
+                conn.commit()
+                return rows
+            except:
+                conn.rollback()
+                return False
+
+    return execute_function(_execute_commit_fetch_all, query, params)
 
 #Executes a query that commits and fetches all rows
 def execute_commit_many(query, params):

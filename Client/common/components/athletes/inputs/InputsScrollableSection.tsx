@@ -5,25 +5,26 @@ import InputDisplay from "../../display/input/InputDisplay";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import AthleteWorkoutService from "../../../../services/AthleteWorkoutService";
-import usePersistentState from "../../../hooks/usePersistentState";
 import { Input } from "../../../types/inputs/Input";
 import TextButton from "../../display/TextButton";
 
 //Scrollable input section for the inputs page
-const InputsScrollableSection = ({scrollRef, currentInputs, setCurrentInputs}:
+const InputsScrollableSection = ({scrollRef, pendingInputs, setPendingInputs, submittedInputs, setSubmittedInputs}:
     {
         scrollRef: React.RefObject<ScrollView | null>, 
-        currentInputs: Input[], 
-        setCurrentInputs: React.Dispatch<React.SetStateAction<Input[]>>
+        pendingInputs: Input[], 
+        setPendingInputs: React.Dispatch<React.SetStateAction<Input[]>>,
+        submittedInputs: Input[],
+        setSubmittedInputs: React.Dispatch<React.SetStateAction<Input[]>>
     }
 ) => {
-    const [submittedInputs, setSubmittedInputs] = useState<Input[]>([]);
     const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
     // Fetch previously submitted workout inputs from the server
     const fetchSubmittedInputs = useCallback(async () => {
         const resp = await AthleteWorkoutService.viewWorkoutInputs();
         if (resp.ok) {
             const inputs = await resp.json();
+            console.log("LAST INPUT: ",inputs[inputs.length - 1]);
             setSubmittedInputs(inputs);
         }
         else{
@@ -39,7 +40,6 @@ const InputsScrollableSection = ({scrollRef, currentInputs, setCurrentInputs}:
     );
     const handleInputRemoval = async () => {
         const resp = await AthleteWorkoutService.removeInputs(selectedSubmittedInputs);
-
         if (resp.ok) {
             // Reset selection and refresh parent
             setSelectedSubmittedInputs([]);
@@ -60,14 +60,14 @@ const InputsScrollableSection = ({scrollRef, currentInputs, setCurrentInputs}:
 
     return(
         <ScrollView className="flex-1 px-6 pt-4" contentContainerStyle={{paddingBottom: 15}} ref={scrollRef} keyboardShouldPersistTaps="handled">
-            <View className="mb-6">
+            <View className="mb-2">
                 <View className="flex flex-row justify-between items-center">
                     <Text className="text-2xl font-bold text-gray-800">
                         Submitted Entries
                     </Text>
                     {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
                 </View>
-                <View className="gap-y-1 pb-4">
+                <View className="gap-y-1 pb-4 pt-2">
                     {submittedInputs.length > 0 ? (
                         submittedInputs.map((input, idx) => (
                             <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)} >
@@ -76,24 +76,22 @@ const InputsScrollableSection = ({scrollRef, currentInputs, setCurrentInputs}:
                         ))
                         ) : (
                         <Text className="text-gray-500 text-center py-4">
-                            No entries submitted yet
+                            No entries submitted
                         </Text>
                     )}
                 </View>
             </View>
             <View className="mb-12">
                 <Text className="text-2xl font-bold text-gray-800">
-                    Current Entries
+                    Pending Entries (NOT SUBMITTED)
                 </Text>
-                {currentInputs.length > 0 ? (
-                    currentInputs.map((input, idx) => (
-                        <Text key={idx} className="text-gray-700 py-2 border-b border-gray-200 ">
-                            {input.type === InputType.Run ? `Run - Time: ${input.time}s, Distance: ${input.distance}m` : `Rest - Time: ${input.restTime}s`}
-                        </Text>
+                {pendingInputs.length > 0 ? (
+                    pendingInputs.map((input, idx) => (
+                        <InputDisplay key={idx} input={input} />
                     ))
                     ) : (
                     <Text className="text-gray-500 text-center py-4">
-                        No entries submitted yet
+                        No pending entries
                     </Text>
                 )}
             </View>

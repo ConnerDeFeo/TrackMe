@@ -229,7 +229,6 @@ def test_fetch_historical_data_athlete_success():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
 
-    debug_table()
     assert '1235' in body # Athlete ID
     athlete_time_inputs = body['1235']
 

@@ -5,7 +5,7 @@ const RestDisplay = ({ restTime, selected }: { restTime: number, selected?: bool
     const seconds = restTime % 60;
     const display = seconds >= 30 ? `${minutes}.5 minutes` : `${minutes} minutes`;
     return (
-        <Text className={`bg-gray-100 p-2 rounded-md mb-1 border-2 text-gray-700 text-center ${selected ? "border-red-500" : "border-transparent"}`}>
+        <Text className={`border p-2 rounded-md mb-1 border-2 font-semibold text-center ${selected ? "border-red-500" : "trackme-border-gray"}`}>
             Rest: {display}
         </Text>
     );

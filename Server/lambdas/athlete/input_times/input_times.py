@@ -1,7 +1,7 @@
 import json
-from rds import execute_commit_many
+from rds import execute_commit_fetch_all
 from datetime import datetime, timezone, timedelta
-from user_auth import post_auth_header
+from user_auth import post_auth_header, get_user_info
 
 #Inserts all of an athletes input times for a given group into db
 def input_times(event, context):
@@ -9,6 +9,8 @@ def input_times(event, context):
     auth_header = post_auth_header()
 
     try:
+        user_info = get_user_info(event)
+        user_id = user_info['userId']
         inputs = body['inputs'] #inputs in {time: float, distance: int} and {restTime: int}
         athleteIds = body['athleteIds'] # list of athleteIds
         date = body.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))  # date in 'YYYY-MM-DD' format
@@ -32,25 +34,40 @@ def input_times(event, context):
                         continue
                     input_params.append((athleteId, distance, time, date, timestamp))
     
-        #Insert time into rds
-        execute_commit_many(
+        #Insert time into rds, return the current users input ids
+        run_ids = execute_commit_fetch_all(
         """
-            INSERT INTO athlete_time_inputs (athleteId, distance, time, date, timeStamp)
-            VALUES (%s, %s, %s, %s, %s)
-        """, input_params)
+            WITH inserted AS (
+                INSERT INTO athlete_time_inputs (athleteId, distance, time, date)
+                VALUES %s
+                RETURNING id, athleteId
+            )
+            SELECT id
+            FROM inserted
+            WHERE athleteId = %s
+        """, input_params + [user_id]) or []
 
         #Insert rest time into rds
-        execute_commit_many(
+        rest_ids = execute_commit_fetch_all(
         """
             INSERT INTO athlete_rest_inputs (athleteId, restTime, date, timeStamp)
-            VALUES (%s, %s, %s, %s)
-        """, rest_input_params)
+            VALUES %s
+            RETURNING id
+        """, rest_input_params) or []
+
+        run_index = rest_index = 0
+        # For each input, assign the corresponding inputId FOR THE USER THAT SUBMITTED IT to the input ids
+        for i in range(len(inputs)):
+            if inputs[i]['type'] == 'rest':
+                inputs[i]['inputId'] = rest_ids[rest_index][0]
+                rest_index += 1
+            else:
+                inputs[i]['inputId'] = run_ids[run_index][0]
+                run_index += 1
 
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'message': 'Time input recorded successfully'
-            }),
+            'body': json.dumps(inputs),
             'headers':auth_header
         }
     except Exception as e:

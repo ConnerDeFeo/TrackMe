@@ -277,7 +277,6 @@ def test_mass_input_success():
     assert response['statusCode'] == 200
     all_inputs = fetch_all("SELECT athleteId, distance, time, restTime FROM athlete_inputs ORDER BY athleteId, timeStamp", (1,))
     assert all_inputs is not None
-    debug_table()
     assert len(all_inputs) == 7
     
     expected_inputs = [
@@ -304,7 +303,6 @@ def test_get_weekly_schedule_coach_success():
     # Assert
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
-    debug_table()
     assert len(body) == 2 # Should return two workouts within the week
     assert five_days_ago in body
     assert six_days_ago in body
@@ -327,7 +325,6 @@ def test_get_weekly_schedule_athlete_success():
     # Assert
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
-    debug_table()
     assert len(body) == 2 # Should return two workouts within the week
     assert five_days_ago in body
     assert six_days_ago in body

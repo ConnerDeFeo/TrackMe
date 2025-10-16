@@ -97,7 +97,6 @@ def test_add_athlete_to_group_returns_success():
 
     # Act
     response = add_athlete_to_group(event, {})
-    debug_table()
     # Assert
     assert response['statusCode'] == 200
 
@@ -296,7 +295,6 @@ def test_update_group_athletes_returns_success():
     assert response['statusCode'] == 200
     athlete_groups = fetch_all("SELECT * FROM athlete_groups WHERE groupId = %s ORDER BY athleteId", (1,))
     assert athlete_groups is not None
-    debug_table()
     assert len(athlete_groups) == 3
     assert athlete_groups[0] == ("1234", 1, True)
     assert athlete_groups[1] == ("1235", 1, False)

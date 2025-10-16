@@ -120,13 +120,66 @@ def setup_remove_inputs_event():
 
 def test_input_times_returns_success():
     # Arrange
-    event = TestData.test_input_times
+    create_extra_athlete("test2", "1235")
+    add_relation({
+        'body': json.dumps({"relationId": "1235"}),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
+    },{})
+    add_relation({
+        'body': json.dumps({"relationId": "1234"}),
+        "headers":generate_auth_header("1235", "Athlete", "test2")
+    },{})
+    event = {
+        "body": json.dumps({
+            "athleteIds": ["1234","1235"],
+            "date": date,
+            'inputs': [
+                {
+                    'distance': 100,
+                    'time': 10.8,
+                    'type': 'run'
+                },
+                {
+                    'restTime': 5,
+                    'type': 'rest'
+                },
+                {
+                    'distance': 200,
+                    'time': 30,
+                    'type': 'run'
+                },
+            ]
+        }),
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
+    }
 
     # Act
     response = input_times(event, {})
 
     # Assert
     assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 3
+    # Input ids should be appended
+    assert body == [
+                {
+                    'distance': 100,
+                    'time': 10.8,
+                    'type': 'run',
+                    "inputId": 1
+                },
+                {
+                    'restTime': 5,
+                    'type': 'rest',
+                    "inputId": 1
+                },
+                {
+                    'distance': 200,
+                    'time': 30,
+                    'type': 'run',
+                    "inputId": 2
+                },
+            ]
 
 def test_input_times_persists_inputs_for_athlete():
     # Arrange
@@ -135,7 +188,6 @@ def test_input_times_persists_inputs_for_athlete():
     # Act
     input_times(event, {})
 
-    debug_table()
     # Assert
     inputs = fetch_all("SELECT athleteId, distance, time FROM athlete_time_inputs")
     assert inputs is not None

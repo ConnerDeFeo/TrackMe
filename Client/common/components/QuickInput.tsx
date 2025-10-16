@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, Pressable, View } from "react-native";
 import TimeInputDisplay from "./TimeInputDisplay";
 import TimeDistanceInputDisplay from "./display/TimeDistanceInputDisplay";
-import TrackMeButton from "./display/TrackMeButton";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
 
@@ -10,13 +9,22 @@ import { InputType } from "../constants/Enums";
  * QuickInput component allows users to quickly log workout inputs (runs or rest periods)
  * @param handleInputAddition - Callback to handle added input data
  */
-const QuickInput = ({handleInputAddition, onFocus}:{handleInputAddition: (inputs: Input) => void, onFocus: () => void}) => {
-    // Flag for showing a rest input or a run time input
-    const [runInput, setRunInput] = useState<boolean>(true);
+const QuickInput = ({handleInputAddition, onFocus, runInput, className}:
+    {
+        handleInputAddition: (inputs: Input) => void, 
+        onFocus: () => void, 
+        runInput: boolean,
+        className?: string,
+    }
+) => {
     // This will either be the run time input or the seconds of the rest input
     const [currentTime, setCurrentTime] = useState<number>(0);
     // Distance in meters for run inputs
     const [currentDistance, setCurrentDistance] = useState<number>(0);
+
+    useEffect(()=>{
+        setCurrentTime(0);
+    }, [runInput]);
 
     /**
      * Handles changes to the seconds portion of time input
@@ -79,60 +87,33 @@ const QuickInput = ({handleInputAddition, onFocus}:{handleInputAddition: (inputs
         handleInputAddition(input);
     }
 
-    /**
-     * Toggles between Run and Rest input modes
-     * Resets time when switching modes
-     */
-    const toggleInputType = () => {
-        setRunInput(!runInput);
-        setCurrentTime(0);
-    }
-
     return (
-        <View>
-            {/* Toggle buttons for switching between Run and Rest input modes */}
-            <View className="flex flex-row items-center justify-between mx-4">
-                <TrackMeButton 
-                    text="Run" 
-                    onPress={toggleInputType} 
-                    className="w-[50%]"
-                    gray={!runInput}
-                />
-                <TrackMeButton 
-                    text="Rest" 
-                    onPress={toggleInputType} 
-                    className="w-[50%]"
-                    gray={runInput}
-                />
+        // Input section with dynamic display based on input type
+        <View className={`flex flex-row items-center gap-x-4 ${className}`}>
+            {/* Conditional rendering: Time/Distance input for runs, Time-only input for rest */}
+            <View className="flex-1">
+                {
+                    runInput ?
+                    <TimeDistanceInputDisplay
+                        time={currentTime}
+                        distance={currentDistance}
+                        handleTimeChange={handleTimeChange}
+                        handleDistanceChange={handleDistanceChange}
+                        onFocus={onFocus}
+                    />
+                    :
+                    <TimeInputDisplay 
+                        currSeconds={currentTime} 
+                        handleMinutesChange={handleMinuteChange} 
+                        handleSecondsChange={handleSecondChange}
+                        onFocus={onFocus}
+                    />
+                }
             </View>
-            
-            {/* Input section with dynamic display based on input type */}
-            <View className="flex flex-row items-center gap-x-4 p-4">
-                {/* Conditional rendering: Time/Distance input for runs, Time-only input for rest */}
-                <View className="flex-1">
-                    {
-                        runInput ?
-                        <TimeDistanceInputDisplay
-                            time={currentTime}
-                            distance={currentDistance}
-                            handleTimeChange={handleTimeChange}
-                            handleDistanceChange={handleDistanceChange}
-                            onFocus={onFocus}
-                        />
-                        :
-                        <TimeInputDisplay 
-                            currSeconds={currentTime} 
-                            handleMinutesChange={handleMinuteChange} 
-                            handleSecondsChange={handleSecondChange}
-                            onFocus={onFocus}
-                        />
-                    }
-                </View>
-                {/* Submit button with arrow icon */}
-                <Pressable className="rounded-full trackme-bg-blue mt-4" onPress={handleSubmission}>
-                    <Image source={require("../../assets/images/Back.png")} className="h-12 w-12 rotate-90" />
-                </Pressable>
-            </View>
+            {/* Submit button with arrow icon */}
+            <Pressable className="rounded-full trackme-bg-blue mt-4" onPress={handleSubmission}>
+                <Image source={require("../../assets/images/Back.png")} className="h-12 w-12 rotate-90" />
+            </Pressable>
         </View>
     );
 }

@@ -38,22 +38,31 @@ def input_times(event, context):
         run_ids = execute_commit_fetch_all(
         """
             WITH inserted AS (
-                INSERT INTO athlete_time_inputs (athleteId, distance, time, date)
+                INSERT INTO athlete_time_inputs (athleteId, distance, time, date, timeStamp)
                 VALUES %s
                 RETURNING id, athleteId
             )
             SELECT id
             FROM inserted
             WHERE athleteId = %s
-        """, input_params + [user_id]) or []
+            ORDER BY id
+        """, input_params, (user_id,)) or []
+        print(run_ids)
 
         #Insert rest time into rds
         rest_ids = execute_commit_fetch_all(
         """
-            INSERT INTO athlete_rest_inputs (athleteId, restTime, date, timeStamp)
-            VALUES %s
-            RETURNING id
-        """, rest_input_params) or []
+            WITH inserted AS (
+                INSERT INTO athlete_rest_inputs (athleteId, restTime, date, timeStamp)
+                VALUES %s
+                RETURNING id, athleteId
+            )
+            SELECT id
+            FROM inserted
+            WHERE athleteId = %s
+            ORDER BY id
+        """, rest_input_params, (user_id,)) or []
+        print(rest_ids)
 
         run_index = rest_index = 0
         # For each input, assign the corresponding inputId FOR THE USER THAT SUBMITTED IT to the input ids

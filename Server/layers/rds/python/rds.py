@@ -108,20 +108,36 @@ def execute_commit_fetch_one(query, params={}):
     return execute_function(_execute_commit_fetch_one, query, params)
 
 #Executes a query that commits and fetches a single row
-def execute_commit_fetch_all(query, params={}):
+def execute_commit_fetch_all(query, params={}, filter_params=None):
     conn = connect()
-    def _execute_commit_fetch_all(query, params={}):
+    def _execute_commit_fetch_all(query, params={}, filter_params=None):
         with conn.cursor() as cursor:
             try:
-                execute_values(cursor, query, params)
+                if params and filter_params is not None:
+                    # Template of the form (%s, %s, %s)
+                    template = "(" + ",".join(["%s"] * len(params[0])) + ")"
+                    # Create the VALUES list by formatting each row, then joining with commas and decoding
+                    values_list = ','.join(
+                        cursor.mogrify(template, row).decode('utf-8') 
+                        for row in params
+                    )
+                    # Replace VALUES %s with actual values
+                    final_query = query.replace('VALUES %s', f'VALUES {values_list}')
+                    # Execute with filter parameters
+                    cursor.execute(final_query, filter_params)
+                else:
+                    # Original behavior for simple execute_values
+                    execute_values(cursor, query, params)
+                
                 rows = cursor.fetchall()
                 conn.commit()
                 return rows
-            except:
+            except Exception as e:
+                print(f"Error: {e}")
                 conn.rollback()
                 return False
 
-    return execute_function(_execute_commit_fetch_all, query, params)
+    return execute_function(_execute_commit_fetch_all, query, params, filter_params)
 
 #Executes a query that commits and fetches all rows
 def execute_commit_many(query, params):

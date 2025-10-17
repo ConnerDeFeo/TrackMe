@@ -131,7 +131,7 @@ def test_input_times_returns_success():
     },{})
     event = {
         "body": json.dumps({
-            "athleteIds": ["1234","1235"],
+            "athleteIds": ["1235","1234"],
             "date": date,
             'inputs': [
                 {
@@ -161,25 +161,14 @@ def test_input_times_returns_success():
     body = json.loads(response['body'])
     assert len(body) == 3
     # Input ids should be appended
-    assert body == [
-                {
-                    'distance': 100,
-                    'time': 10.8,
-                    'type': 'run',
-                    "inputId": 1
-                },
-                {
-                    'restTime': 5,
-                    'type': 'rest',
-                    "inputId": 1
-                },
-                {
-                    'distance': 200,
-                    'time': 30,
-                    'type': 'run',
-                    "inputId": 2
-                },
-            ]
+    athlete_inputs = fetch_all("SELECT id, distance, time, type, restTime FROM athlete_inputs WHERE athleteId = '1234' ORDER BY id")
+    assert athlete_inputs is not None
+    assert len(athlete_inputs) == 3
+    for input in athlete_inputs:
+        if input[3] == 'run':
+            assert {'distance': input[1], 'time': float(input[2]), 'type': input[3], 'inputId': input[0]} in body
+        else:
+            assert {'restTime': input[4], 'type': input[3], 'inputId': input[0]} in body
 
 def test_input_times_persists_inputs_for_athlete():
     # Arrange

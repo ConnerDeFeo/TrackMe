@@ -9,22 +9,24 @@ import { Input } from "../../../types/inputs/Input";
 import TextButton from "../../display/TextButton";
 
 //Scrollable input section for the inputs page
-const InputsScrollableSection = ({scrollRef, pendingInputs, setPendingInputs, submittedInputs, setSubmittedInputs}:
+const InputsScrollableSection = (
+    {scrollRef, pendingInputs, selectedSubmittedInputs, setSelectedSubmittedInputs, selectedPendingInputs, setSelectedPendingInputs, submittedInputs, setSubmittedInputs}:
     {
         scrollRef: React.RefObject<ScrollView | null>, 
         pendingInputs: Input[], 
-        setPendingInputs: React.Dispatch<React.SetStateAction<Input[]>>,
+        selectedSubmittedInputs: {inputId:number, type: InputType}[], 
+        setSelectedSubmittedInputs: React.Dispatch<React.SetStateAction<{inputId:number, type: InputType}[]>>,
+        selectedPendingInputs: Set<number>, 
+        setSelectedPendingInputs: React.Dispatch<React.SetStateAction<Set<number>>>,
         submittedInputs: Input[],
         setSubmittedInputs: React.Dispatch<React.SetStateAction<Input[]>>
     }
 ) => {
-    const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
     // Fetch previously submitted workout inputs from the server
     const fetchSubmittedInputs = useCallback(async () => {
         const resp = await AthleteWorkoutService.viewWorkoutInputs();
         if (resp.ok) {
             const inputs = await resp.json();
-            console.log("LAST INPUT: ",inputs[inputs.length - 1]);
             setSubmittedInputs(inputs);
         }
         else{
@@ -38,14 +40,6 @@ const InputsScrollableSection = ({scrollRef, pendingInputs, setPendingInputs, su
             fetchSubmittedInputs();
         }, [fetchSubmittedInputs])
     );
-    const handleInputRemoval = async () => {
-        const resp = await AthleteWorkoutService.removeInputs(selectedSubmittedInputs);
-        if (resp.ok) {
-            // Reset selection and refresh parent
-            setSelectedSubmittedInputs([]);
-            fetchSubmittedInputs();
-        }
-    };
 
     const handleSubmittedInputSelection = (type: InputType, inputId?: number) => {
         if(!inputId) return;
@@ -61,13 +55,8 @@ const InputsScrollableSection = ({scrollRef, pendingInputs, setPendingInputs, su
     return(
         <ScrollView className="flex-1 px-6 pt-4" contentContainerStyle={{paddingBottom: 15}} ref={scrollRef} keyboardShouldPersistTaps="handled">
             <View className="mb-2">
-                <View className="flex flex-row justify-between items-center">
-                    <Text className="text-2xl font-bold text-gray-800">
-                        Submitted Entries
-                    </Text>
-                    {selectedSubmittedInputs.length > 0 && <TextButton text={`Remove(${selectedSubmittedInputs.length})`} onPress={handleInputRemoval} red/>}
-                </View>
-                <View className="gap-y-1 pb-4 pt-2">
+                <Text className="text-2xl font-bold text-gray-800 mb-2">Submitted Entries</Text>
+                <View className="gap-y-1 pb-4">
                     {submittedInputs.length > 0 ? (
                         submittedInputs.map((input, idx) => (
                             <Pressable key={idx} onPress={() => handleSubmittedInputSelection(input.type, input.inputId)} >
@@ -82,12 +71,25 @@ const InputsScrollableSection = ({scrollRef, pendingInputs, setPendingInputs, su
                 </View>
             </View>
             <View className="mb-12">
-                <Text className="text-2xl font-bold text-gray-800">
+                <Text className="text-2xl font-bold text-gray-800 mb-2">
                     Pending Entries (NOT SUBMITTED)
                 </Text>
                 {pendingInputs.length > 0 ? (
                     pendingInputs.map((input, idx) => (
-                        <InputDisplay key={idx} input={input} />
+                        <Pressable key={idx} onPress={() => {
+                            // Toggle selection state for pending inputs
+                            if (selectedPendingInputs.has(idx)) {
+                                setSelectedPendingInputs(prev => {
+                                    const newSet = new Set(prev);
+                                    newSet.delete(idx);
+                                    return newSet;
+                                });
+                            } else {
+                                setSelectedPendingInputs(prev => new Set(prev).add(idx));
+                            }
+                        }}>
+                            <InputDisplay input={input} selected={selectedPendingInputs.has(idx)} />
+                        </Pressable>
                     ))
                     ) : (
                     <Text className="text-gray-500 text-center py-4">

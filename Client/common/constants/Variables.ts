@@ -1,5 +1,3 @@
-const Variables = {
+export const Variables = {
     meters: "meters",
 }
-
-export default Variables;

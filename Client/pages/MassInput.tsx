@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import GeneralService from "../services/GeneralService";
 import usePersistentState from "../common/hooks/usePersistentState";
 import DateService from "../services/DateService";
@@ -16,10 +16,15 @@ const MassInput = () => {
   // Track current input values for each given group { groupId : [time/distance, time/distance] }
   const [currentInputs, setCurrentInputs] = 
   usePersistentState<Record<string, Input[]>>('currentMassInputs', {});
+  // Loading state for async operations
+  const [loading, setLoading] = useState<boolean>(false);
+  // Expanded state for each athlete to show/hide their submitted entries
+  const [expandedAthletes, setExpandedAthletes] = useState<Set<string>>(new Set());
 
   //fetch athletes and workout inputs
   const fetchData = async () => {
       try {
+        setLoading(true);
         const athletesResp = await RelationService.getMutualAthletes();
         const workoutResp = await GeneralService.getMutualInputs(DateService.formatDate(new Date()));
         if(athletesResp.ok){
@@ -32,6 +37,8 @@ const MassInput = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); 
       }
     };
   useEffect(()=>{
@@ -93,28 +100,47 @@ const MassInput = () => {
     
   return (
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
-      {athletes.map((athlete)=>(
+      { loading ? <ActivityIndicator size="large" color="#007AFF" className="m-10"/>  :
+      athletes.map((athlete)=>(
         <View key={athlete.relationId} className="bg-white rounded-xl shadow-md p-4 mb-4" >
-          <UserDisplay firstName={athlete.firstName} lastName={athlete.lastName} username={athlete.username} className="mb-4"/>
+          <Pressable className="flex flex-row justify-between" onPress={() => {
+            if (expandedAthletes.has(athlete.relationId)) {
+              setExpandedAthletes(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(athlete.relationId);
+                return newSet;
+              });
+            } else {
+              setExpandedAthletes(prev => new Set(prev).add(athlete.relationId));
+            }
+          }}>
+            <UserDisplay firstName={athlete.firstName} lastName={athlete.lastName} username={athlete.username}/>
+            <Image source={require('../assets/images/Back.png')} className={`h-6 w-6 ${expandedAthletes.has(athlete.relationId) ? 'rotate-[-90deg]' : 'rotate-180'}`}/>
+          </Pressable>
 
-          {workoutInputs[athlete.relationId] && workoutInputs[athlete.relationId].length > 0 && (
-            <View className="mb-4 gap-y-2">
-              <Text>Submitted Entries</Text>
-              {workoutInputs[athlete.relationId].map((input, index) => (
-                <InputDisplay key={index} input={input} />
-              ))}
+          { expandedAthletes.has(athlete.relationId) && (
+            <View className="pt-2 mt-2 border-t trackme-border-gray">
+              {workoutInputs[athlete.relationId] && workoutInputs[athlete.relationId].length > 0 && (
+                <View className="mb-2 gap-y-1">
+                  <Text>Submitted Entries</Text>
+                  {workoutInputs[athlete.relationId].map((input, index) => (
+                    <InputDisplay key={index} input={input} />
+                  ))}
+                </View>
+              )}
+              <InputTracking
+                currentInputs={currentInputs[athlete.relationId]}
+                setCurrentInputs={(inputs: Input[]) => handleSetCurrentInputs(athlete.relationId, inputs)}
+                handleTimeChange={(idx, text) => handleTimeChange(athlete.relationId, idx, text)}
+                handleDistanceChange={(idx, text) => handleDistanceChange(athlete.relationId, idx, text)}
+                handleRestChange={(idx, text) => handleRestTimeChange(athlete.relationId, idx, text)}
+              />
             </View>
           )}
-          <InputTracking
-            currentInputs={currentInputs[athlete.relationId]}
-            setCurrentInputs={(inputs: Input[]) => handleSetCurrentInputs(athlete.relationId, inputs)}
-            handleTimeChange={(idx, text) => handleTimeChange(athlete.relationId, idx, text)}
-            handleDistanceChange={(idx, text) => handleDistanceChange(athlete.relationId, idx, text)}
-            handleRestChange={(idx, text) => handleRestTimeChange(athlete.relationId, idx, text)}
-          />
         </View>
-      ))}
-      <TrackMeButton text="Submit" onPress={handleInputSubmission} className="mt-2"/>
+      ))
+      }
+      <TrackMeButton text="Submit" onPress={handleInputSubmission} className="mt-2 mb-24"/>
     </View>
   );
 }

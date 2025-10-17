@@ -1,4 +1,4 @@
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import './global.css'
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -40,6 +40,9 @@ import RelationInvites from './pages/RelationInvites';
 import Friends from './pages/Friends';
 import History from './pages/History';
 import Groups from './pages/Groups';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import TrackMeToast from './common/components/display/TrackMeToast';
+
 //Root component used to render everything
 Amplify.configure(awsConfig);
 
@@ -58,7 +61,7 @@ function ScrollViewWrapper(content: React.ReactElement): ComponentType<any>{
     ); 
   
 }
-const getRightButtonData = (route:RouteProp<ParamListBase, string>): { navigation: string; image: "plus" | "settings" } | null => {
+const getRightButtonData = (route:RouteProp<ParamListBase, string>): { navigation: string; image: "plus" | "settings" | "clipboard" } | null => {
   const routeName = route.name;
   switch(routeName) {
     case 'CoachGroups': return {
@@ -72,6 +75,10 @@ const getRightButtonData = (route:RouteProp<ParamListBase, string>): { navigatio
     case 'ViewGroupCoach': return {
       navigation: 'GroupSettings',
       image: 'settings'
+    };
+    case 'Inputs': return {
+      navigation: 'MassInput',
+      image: 'clipboard'
     };
     default: return null;
   }
@@ -132,7 +139,7 @@ const CoachLayoutWrapper = () => {
           animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
         }
       }}>
-        <AthleteStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
+        <CoachStack.Screen name="CoachGroups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
         <CoachStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <CoachStack.Screen name="CreateGroup" options={{ title: "Create Group" }} component={ScrollViewWrapper(<CreateGroup />)} />
         <CoachStack.Screen name="ViewGroupCoach" component={ScrollViewWrapper(<ViewGroupCoach />)} />
@@ -170,12 +177,16 @@ const AuthLayoutWrapper = () =>{
   );
 }
 
-const Stack = createNativeStackNavigator();
 //Return the navigation stack as the app
 export default function App() {
   const [awaitingAuthentication, setAwaitingAuthentication] = useState<boolean>(true);
   const [accountType, setAccountType] = useState<AccountType>(AccountType.SignedOut);
 
+  const toastConfig = {
+    success: (props: any) => (
+      <TrackMeToast props={props} />
+    ),
+  };
 
   useEffect(() => {
     async function checkAuth() {
@@ -197,6 +208,7 @@ export default function App() {
   }
 
   return (
+    <>  
       <AuthContext.Provider value={[accountType, setAccountType]}>
         {/* Keep NavigationContainer stable and isolated */}
         <View className="flex-1">
@@ -211,5 +223,7 @@ export default function App() {
           </NavigationContainer>
         </View>
       </AuthContext.Provider>
+      <Toast position='top' config={toastConfig} topOffset={110}/>
+    </>
   );
 }

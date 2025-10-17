@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import usePersistentState from "../../common/hooks/usePersistentState";
 import { useNavigation } from "@react-navigation/native";
 import { Input } from "../../common/types/inputs/Input";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
-import { KeyboardAvoidingView, Pressable, ScrollView, Text, View } from "react-native";
+import { Image, KeyboardAvoidingView, Pressable, ScrollView, Text, View } from "react-native";
 import QuickInput from "../../common/components/QuickInput";
 import InputsScrollableSection from "../../common/components/athletes/inputs/InputsScrollableSection";
 import TrackMeButton from "../../common/components/display/TrackMeButton";
@@ -11,19 +11,25 @@ import AthleteWorkoutService from "../../services/AthleteWorkoutService";
 import DateService from "../../services/DateService";
 import UserService from "../../services/UserService";
 import { InputType } from "../../common/constants/Enums";
+import Toast from "react-native-toast-message";
 
 //Page where athletes input times
 const Inputs = ()=>{
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [pendingInputs, setPendingInputs] = usePersistentState<Input[]>('current', []);
+    // Currently selected pending inputs for deletion
+    const [selectedPendingInputs, setSelectedPendingInputs] = useState<Set<number>>(new Set());
+    // Currently selected submitted inputs for deletion
     const [submittedInputs, setSubmittedInputs] = useState<Input[]>([]);
+    // Currently selected submitted inputs for deletion
+    const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
     // Flag for showing a rest input or a run time input
     const [runInput, setRunInput] = useState<boolean>(true);
     const { workoutGroup } = useWorkoutGroup();
     // Store previously submitted workout inputs organized by date and group
     const scrollRef = useRef<ScrollView | null>(null);
     const navigation = useNavigation<any>();
-
+    const inDeleteMode = selectedPendingInputs.size > 0 || selectedSubmittedInputs.length > 0;
 
     const handleInputAddition = async (input:Input) => {
         if (input.type === InputType.Run && (input.distance === 0 || input.time === 0)) return; // Prevent adding run inputs with 0 distance or time
@@ -49,11 +55,26 @@ const Inputs = ()=>{
 
             // On success, reset only this group's inputs and refresh parent via onSubmit
             if (resp.ok) {
+                Toast.show({text1: 'Inputs submitted successfully!'});
                 setPendingInputs([]);
                 const returnedInputs = await resp.json();
-                console.log("RETURNED INPUT: ", returnedInputs);
                 setSubmittedInputs(prev => [...prev, ...returnedInputs]);
             }
+        }
+    };
+    const handleInputRemoval = async () => {
+        if (selectedSubmittedInputs.length > 0) {
+            const resp = await AthleteWorkoutService.removeInputs(selectedSubmittedInputs);
+            if (resp.ok) {
+                // Remove from local state
+                setSubmittedInputs(prev => prev.filter(input => !selectedSubmittedInputs.some(selected => selected.inputId === input.inputId && selected.type === input.type)));
+                // Reset selection and refresh parent
+                setSelectedSubmittedInputs([]);
+            }
+        };
+        if (selectedPendingInputs.size > 0) {
+            setPendingInputs(prev => prev.filter((_, idx) => !selectedPendingInputs.has(idx)));
+            setSelectedPendingInputs(new Set());
         }
     };
 
@@ -67,7 +88,10 @@ const Inputs = ()=>{
             <InputsScrollableSection 
                 scrollRef={scrollRef} 
                 pendingInputs={pendingInputs} 
-                setPendingInputs={setPendingInputs} 
+                selectedSubmittedInputs={selectedSubmittedInputs}
+                setSelectedSubmittedInputs={setSelectedSubmittedInputs}
+                selectedPendingInputs={selectedPendingInputs} 
+                setSelectedPendingInputs={setSelectedPendingInputs} 
                 submittedInputs={submittedInputs} 
                 setSubmittedInputs={setSubmittedInputs}
             />
@@ -94,23 +118,28 @@ const Inputs = ()=>{
                 
                 {/* Toggle buttons for switching between Run and Rest input modes */}
                 <View className="flex flex-row items-center justify-between mx-2">
-                    <View className="flex flex-row items-center w-[50%]">
+                    <View className="flex flex-row items-center w-[55%]">
                         <TrackMeButton 
                             text="Run" 
                             onPress={()=> setRunInput(true)} 
-                            className="w-[50%]"
+                            className="w-24"
                             gray={!runInput}
                         />
                         <TrackMeButton 
                             text="Rest" 
                             onPress={()=> setRunInput(false)} 
-                            className="w-[50%]"
+                            className="w-24"
                             gray={runInput}
                         />
+                        <Pressable className="ml-4 bg-blue-100 rounded-full p-1" onPress={() => navigation.navigate("CreateWorkoutGroup")}>
+                            <Image source={require('../../assets/images/TwoRunners.png')} className="w-10 h-10" />
+                        </Pressable>
                     </View>
                     <TrackMeButton 
-                        text="Submit" 
-                        onPress={handleInputSubmission} 
+                        text={inDeleteMode ? "Remove" : "Submit"} 
+                        onPress={inDeleteMode ? handleInputRemoval : handleInputSubmission} 
+                        className="w-24"
+                        red={inDeleteMode}
                     />
                 </View>
                 <QuickInput 

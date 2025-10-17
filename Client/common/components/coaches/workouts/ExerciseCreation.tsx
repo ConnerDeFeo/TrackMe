@@ -4,7 +4,7 @@ import Section from "../../../types/workouts/Section";
 import { Rest } from "../../../types/workouts/Rest";
 import { ExerciseType } from "../../../constants/Enums";
 import { Exercise } from "../../../types/workouts/Exercise";
-import TimeInputDisplay from "../../TimeInputDisplay";
+import TimeInputDisplay from "../../display/TimeInputDisplay";
 
 const ExerciseCreation = ({ exercises, handleExerciseRemoval, setSections, idx }:
   {

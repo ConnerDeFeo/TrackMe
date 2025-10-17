@@ -2,7 +2,7 @@ import { Text, TextInput, View } from "react-native";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
 import TrackMeButton from "./display/TrackMeButton";
-import TimeInputDisplay from "./TimeInputDisplay";
+import TimeInputDisplay from "./display/TimeInputDisplay";
 import { RestInput } from "../types/inputs/RestInput";
 import TimeDistanceInputDisplay from "./display/TimeDistanceInputDisplay";
 

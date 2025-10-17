@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Image, Pressable, View } from "react-native";
-import TimeInputDisplay from "./TimeInputDisplay";
+import TimeInputDisplay from "./display/TimeInputDisplay";
 import TimeDistanceInputDisplay from "./display/TimeDistanceInputDisplay";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";

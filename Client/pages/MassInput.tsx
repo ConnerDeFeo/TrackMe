@@ -118,7 +118,7 @@ const MassInput = () => {
             <Image source={require('../assets/images/Back.png')} className={`h-6 w-6 ${expandedAthletes.has(athlete.relationId) ? 'rotate-[-90deg]' : 'rotate-180'}`}/>
           </Pressable>
 
-          { expandedAthletes.has(athlete.relationId) && (
+          {expandedAthletes.has(athlete.relationId) && (
             <View className="pt-2 mt-2 border-t trackme-border-gray">
               {workoutInputs[athlete.relationId] && workoutInputs[athlete.relationId].length > 0 && (
                 <View className="mb-2 gap-y-1">

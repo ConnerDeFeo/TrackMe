@@ -11,7 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     ...config,
     name: APP_NAME,
     slug: "Client",
-    version: "2.1.0",
+    version: "2.2.0",
     orientation: "portrait",
     userInterfaceStyle: "light",
     newArchEnabled: true,
@@ -34,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       edgeToEdgeEnabled: true,
       package: PACKAGE_NAME,
-      versionCode: 17,
+      versionCode: 18,
     },
     plugins: ["expo-secure-store"],
     extra: {

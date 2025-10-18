@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import './global.css'
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -40,7 +40,7 @@ import RelationInvites from './pages/RelationInvites';
 import Friends from './pages/Friends';
 import History from './pages/History';
 import Groups from './pages/Groups';
-import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import TrackMeToast from './common/components/display/TrackMeToast';
 
 //Root component used to render everything

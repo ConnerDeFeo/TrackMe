@@ -11,10 +11,9 @@ from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_
 from data import TestData
 from lambdas.relations.add_relation.add_relation import add_relation
 from rds import execute_file, fetch_all
-from datetime import datetime, timezone
 from testing_utils import * 
 
-date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+date = get_base_date().strftime("%Y-%m-%d")
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test

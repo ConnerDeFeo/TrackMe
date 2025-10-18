@@ -1,7 +1,8 @@
 import json
 from datetime import datetime, timezone
-from testing_utils import generate_auth_header
-date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+from testing_utils import generate_auth_header, get_base_date
+
+date = get_base_date().strftime("%Y-%m-%d")
 
 class TestData:
     test_coach = {

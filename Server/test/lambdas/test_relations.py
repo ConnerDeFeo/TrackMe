@@ -14,7 +14,8 @@ from data import TestData
 from datetime import datetime, timezone
 from testing_utils import *
 
-date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+base_date = get_base_date()
+date = base_date.strftime("%Y-%m-%d")
 
 # --- Helper Functions ---
 

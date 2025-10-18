@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from rds import fetch_all
 def debug_table():
     tables = fetch_all("SELECT tablename FROM pg_tables WHERE schemaname = 'public'")
@@ -23,3 +24,6 @@ def generate_auth_header(user_id, account_type, username):
             "username": username
         }
     }
+
+def get_base_date():
+    return datetime(2025, 10, 10, tzinfo=timezone.utc)

@@ -16,7 +16,7 @@ from rds import execute_file, fetch_one
 from datetime import datetime, timezone 
 from testing_utils import *
 
-date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+date = get_base_date().strftime("%Y-%m-%d")
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test(): #This will run before each test

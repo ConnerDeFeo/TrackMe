@@ -133,7 +133,7 @@ def execute_commit_fetch_all(query, params={}, filter_params=None):
                 conn.commit()
                 return rows
             except Exception as e:
-                print(f"Error: {e}")
+                print(f"Error execute_commit_fetch_all: {e}")
                 conn.rollback()
                 return False
 

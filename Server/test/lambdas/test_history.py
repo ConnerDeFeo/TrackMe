@@ -11,16 +11,16 @@ from data import TestData
 from lambdas.general.create_user.create_user import create_user
 from lambdas.coach.create_group.create_group import create_group
 from lambdas.relations.add_relation.add_relation import add_relation  
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from testing_utils import *
-    
-date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
-two_days_ago = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")
-three_days_ago = (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%d")
+
+base_date = get_base_date()
+date = base_date.strftime("%Y-%m-%d")
+yesterday = (base_date - timedelta(days=1)).strftime("%Y-%m-%d")
+two_days_ago = (base_date - timedelta(days=2)).strftime("%Y-%m-%d")
+three_days_ago = (base_date - timedelta(days=3)).strftime("%Y-%m-%d")
 
 # --- Helper Functions ---
-
 def setup_base_scenario():
     """Sets up a coach, athlete, two groups, and adds the athlete to both groups."""
     create_user(TestData.test_coach, {})
@@ -120,7 +120,7 @@ def test_get_available_history_dates_coach_returns_date_when_inputs_exists():
     # Arrange
     setup_historical_inputs()
     event = {
-        "queryStringParameters": {"startDate": three_days_ago, "endDate": date},
+        "queryStringParameters": {"date": base_date.strftime("%Y-%m")},
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 

@@ -3,7 +3,7 @@ from rds import fetch_all
 from datetime import datetime, timezone
 from user_auth import get_user_info, get_auth_header
 
-# Fetches dates for a given coach where there is a workout
+# Fetches available history dates for a given month year
 def get_available_history_dates(event, context):
     query_params = event.get('queryStringParameters')
     auth_header = get_auth_header()
@@ -15,22 +15,21 @@ def get_available_history_dates(event, context):
         user_info = get_user_info(event)
         user_id = user_info['userId']
         account_type = user_info['accountType']
-        start_date = query_params['startDate'] 
-        end_date = query_params['endDate']
+        yyyyMM = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m"))
 
         params = [user_id]
         # Determine the appropriate join clause based on account type
         if account_type == "Athlete":
-            join_clause = " WHERE ai.athleteId = %s AND date >= %s AND date <= %s "
+            join_clause = " WHERE ai.athleteId = %s AND date LIKE %s%"
         else:
             # Only get athlete inputs from athletes in the coach's groups
             join_clause = """
                     JOIN user_relations ur ON ai.athleteId = ur.userId AND ur.relationId = %s
                     JOIN user_relations ur2 ON ai.athleteId = ur2.relationId AND ur2.userId = %s
-                    WHERE date >= %s AND date <= %s
+                    WHERE date LIKE %s%
                 """
             params.append(user_id)
-        params.extend([start_date, end_date])
+        params.append(yyyyMM)
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
         dates = fetch_all(
         f"""

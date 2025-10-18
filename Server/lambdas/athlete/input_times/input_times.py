@@ -35,34 +35,34 @@ def input_times(event, context):
                     input_params.append((athleteId, distance, time, date, timestamp))
     
         #Insert time into rds, return the current users input ids
-        run_ids = execute_commit_fetch_all(
-        """
-            WITH inserted AS (
-                INSERT INTO athlete_time_inputs (athleteId, distance, time, date, timeStamp)
-                VALUES %s
-                RETURNING id, athleteId
-            )
-            SELECT id
-            FROM inserted
-            WHERE athleteId = %s
-            ORDER BY id
-        """, input_params, (user_id,)) or []
-        print(run_ids)
+        if input_params:
+            run_ids = execute_commit_fetch_all(
+            """
+                WITH inserted AS (
+                    INSERT INTO athlete_time_inputs (athleteId, distance, time, date, timeStamp)
+                    VALUES %s
+                    RETURNING id, athleteId
+                )
+                SELECT id
+                FROM inserted
+                WHERE athleteId = %s
+                ORDER BY id
+            """, input_params, (user_id,)) or []
 
         #Insert rest time into rds
-        rest_ids = execute_commit_fetch_all(
-        """
-            WITH inserted AS (
-                INSERT INTO athlete_rest_inputs (athleteId, restTime, date, timeStamp)
-                VALUES %s
-                RETURNING id, athleteId
-            )
-            SELECT id
-            FROM inserted
-            WHERE athleteId = %s
-            ORDER BY id
-        """, rest_input_params, (user_id,)) or []
-        print(rest_ids)
+        if rest_input_params:
+            rest_ids = execute_commit_fetch_all(
+            """
+                WITH inserted AS (
+                    INSERT INTO athlete_rest_inputs (athleteId, restTime, date, timeStamp)
+                    VALUES %s
+                    RETURNING id, athleteId
+                )
+                SELECT id
+                FROM inserted
+                WHERE athleteId = %s
+                ORDER BY id
+            """, rest_input_params, (user_id,)) or []
 
         run_index = rest_index = 0
         # For each input, assign the corresponding inputId FOR THE USER THAT SUBMITTED IT to the input ids

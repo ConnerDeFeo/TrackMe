@@ -47,16 +47,16 @@ const MassInput = () => {
 
   // Handle time input changes with validation (numbers only)
     const handleTimeChange = (athleteId:string, idx: number, value: string)=>{
-        let updatedValue = ''
-        // Only allow numeric values or empty string
-        if(!isNaN(Number(value)) || value === ''){
-          updatedValue = value
-        }
-        // Update the specific input in the group while preserving other inputs
-        setCurrentInputs(prev => {
-            const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, time: updatedValue } : input) || [];
-            return { ...prev, [athleteId]: updatedAthlete } as Record<string, Input[]>;
-        });
+      let updatedValue = ''
+      // Only allow numeric values or empty string
+      if(!isNaN(Number(value)) || value === ''){
+        updatedValue = value
+      }
+      // Update the specific input in the group while preserving other inputs
+      setCurrentInputs(prev => {
+          const updatedAthlete = prev[athleteId]?.map((input, i) => i === idx ? { ...input, time: updatedValue } : input) || [];
+          return { ...prev, [athleteId]: updatedAthlete } as Record<string, Input[]>;
+      });
     }
 
     // Handle distance input changes with validation (integers only)

@@ -3,7 +3,7 @@ import usePersistentState from "../../common/hooks/usePersistentState";
 import { useNavigation } from "@react-navigation/native";
 import { Input } from "../../common/types/inputs/Input";
 import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
-import { Image, KeyboardAvoidingView, Pressable, ScrollView, Text, View } from "react-native";
+import { Image, KeyboardAvoidingView, Pressable, ScrollView, Text, View, Keyboard } from "react-native";
 import QuickInput from "../../common/components/QuickInput";
 import InputsScrollableSection from "../../common/components/athletes/inputs/InputsScrollableSection";
 import TrackMeButton from "../../common/components/display/TrackMeButton";
@@ -31,8 +31,21 @@ const Inputs = ()=>{
     const navigation = useNavigation<any>();
     const inDeleteMode = selectedPendingInputs.size > 0 || selectedSubmittedInputs.length > 0;
 
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                scrollRef.current?.scrollToEnd({animated: true});
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+        };
+    }, []);
+
     const handleInputAddition = async (input:Input) => {
-        if (input.type === InputType.Run && (input.distance === 0 || input.time === 0)) return; // Prevent adding run inputs with 0 distance or time
+        if (input.type === InputType.Run && (input.distance === 0 || input.time === "")) return; // Prevent adding run inputs with 0 distance or time
         if (input.type === InputType.Rest && input.restTime === 0) return; // Prevent adding rest inputs with 0 time
         setPendingInputs(prev => [...prev, input]);
         scrollRef.current?.scrollToEnd({animated: true});
@@ -144,7 +157,6 @@ const Inputs = ()=>{
                 </View>
                 <QuickInput 
                     handleInputAddition={handleInputAddition} 
-                    onFocus={() => scrollRef.current?.scrollToEnd({animated: true})}
                     runInput={runInput}
                     className="py-4 mx-2"
                 />

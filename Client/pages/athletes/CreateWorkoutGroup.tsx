@@ -60,7 +60,7 @@ const CreateWorkoutGroup = ()=>{
                                 onPress={() => handleWorkoutGroupChange({id: athlete.relationId, username: athlete.username})}
                                 text={isSelected ? "Deselect" : "Select"}
                                 gray={isSelected}
-                                className="w-24 ml-auto"
+                                className="w-28 ml-auto"
                             />
                         </View>
                     );})

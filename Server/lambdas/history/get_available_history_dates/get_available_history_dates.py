@@ -16,20 +16,21 @@ def get_available_history_dates(event, context):
         user_id = user_info['userId']
         account_type = user_info['accountType']
         yyyyMM = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m"))
+        queryDate = yyyyMM + "%"
 
         params = [user_id]
         # Determine the appropriate join clause based on account type
         if account_type == "Athlete":
-            join_clause = " WHERE ai.athleteId = %s AND date LIKE %s%"
+            join_clause = " WHERE ai.athleteId = %s AND date LIKE %s"
         else:
             # Only get athlete inputs from athletes in the coach's groups
             join_clause = """
                     JOIN user_relations ur ON ai.athleteId = ur.userId AND ur.relationId = %s
                     JOIN user_relations ur2 ON ai.athleteId = ur2.relationId AND ur2.userId = %s
-                    WHERE date LIKE %s%
+                    WHERE date LIKE %s
                 """
             params.append(user_id)
-        params.append(yyyyMM)
+        params.append(queryDate)
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
         dates = fetch_all(
         f"""

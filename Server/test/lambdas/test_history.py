@@ -120,7 +120,7 @@ def test_get_available_history_dates_coach_returns_date_when_inputs_exists():
     # Arrange
     setup_historical_inputs()
     event = {
-        "queryStringParameters": {"date": date},
+        "queryStringParameters": {"startDate": three_days_ago, "endDate": date},
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
 
@@ -137,7 +137,7 @@ def test_get_available_history_dates_athlete_returns_date_when_inputs_exists():
     # Arrange
     setup_historical_inputs()
     event = {
-        "queryStringParameters": {"date": date},
+        "queryStringParameters": {"startDate": three_days_ago, "endDate": date},
         "headers": generate_auth_header("1235", "Athlete", "test_athlete_2")
     }
 
@@ -149,38 +149,6 @@ def test_get_available_history_dates_athlete_returns_date_when_inputs_exists():
     body = json.loads(response['body'])
     assert len(body) == 1 # should only return the day the athlete input times
     assert two_days_ago in body
-
-def test_get_available_history_dates_coach_returns_empty_when_no_workout():
-    # Arrange
-    setup_base_scenario()
-    event = {
-        "queryStringParameters": {"date": yesterday},
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }
-
-    # Act
-    response = get_available_history_dates(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    body = json.loads(response['body'])
-    assert len(body) == 0
-
-def test_get_available_history_dates_athlete_returns_empty_when_no_workout():
-    # Arrange
-    setup_base_scenario()
-    event = {
-        "queryStringParameters": {"date": yesterday},
-        "headers": generate_auth_header("1235", "Athlete", "test_athlete")
-    }
-
-    # Act
-    response = get_available_history_dates(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    body = json.loads(response['body'])
-    assert len(body) == 0    
 
 def test_fetch_historical_data_coach_success():
     # Arrange

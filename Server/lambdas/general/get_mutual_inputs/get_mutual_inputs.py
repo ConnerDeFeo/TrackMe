@@ -20,7 +20,7 @@ def get_mutual_inputs(event, context):
             JOIN user_relations ur2 ON ai.athleteId = ur2.userId AND ur2.relationId = %s 
             JOIN users u ON ai.athleteId = u.userId
             WHERE ai.date = %s
-            ORDER BY ai.timeStamp DESC
+            ORDER BY ai.timeStamp ASC
         """, (user_id, user_id, date)) or []
 
         # Parse inputs into a structured format

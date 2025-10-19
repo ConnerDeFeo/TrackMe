@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryService from "../services/HistoryService";
-import { Text, View } from "react-native";
+import { Text, View, PanResponder, Animated, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
 import { Variables } from "../common/constants/Variables";
 import RenderDay from "../common/components/history/RenderDay";
+import RenderMonth from "../common/components/history/RenderMonth";
 
+const SCREEN_WIDTH = Dimensions.get("window").width; 
 
 const History = () => {
     const [availableDates, setAvailableDates] = useState<Set<string>>(new Set());
@@ -14,19 +16,43 @@ const History = () => {
     const navigation = useNavigation<any>();
 
     const nextMonth = useCallback(() => {
-        setMonthYear(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, prev.getDate()));
-    }, []);
+        setMonthYear(DateService.addMonths(monthYear, 1));
+    }, [monthYear]);
 
     const prevMonth = useCallback(() => {
-        setMonthYear(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, prev.getDate()));
-    }, []);
+        setMonthYear(DateService.addMonths(monthYear, -1));
+    }, [monthYear]);
+
+    const panX = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
+    const requiredSwipeDistance = 150;
+
+    const panResponder = PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: (e, gesture) => {
+            panX.setValue(gesture.dx - SCREEN_WIDTH);
+        },
+        onPanResponderRelease: (e, gesture) => {
+            if (gesture.dx > requiredSwipeDistance) {
+                Animated.spring(panX, { toValue: 0, useNativeDriver: true }).start(() => {
+                    prevMonth();
+                    panX.setValue(-SCREEN_WIDTH);
+                });
+            } else if (gesture.dx < -requiredSwipeDistance) {
+                Animated.spring(panX, { toValue: -SCREEN_WIDTH * 2, useNativeDriver: true }).start(() => {
+                    nextMonth();
+                    panX.setValue(-SCREEN_WIDTH);
+                });
+            } else {
+                Animated.spring(panX, { toValue: -SCREEN_WIDTH, useNativeDriver: true }).start();
+            }
+        }
+    });
 
 
     const fetchAvailableDates = async (date?:string) => {
             const resp = await HistoryService.getAvailableHistoryDates(date);
             if(resp.ok) {
                 const data = await resp.json();
-                console.log("Available dates:", data);  
                 setAvailableDates(new Set(data));
             } else {
                 setAvailableDates(new Set());
@@ -41,37 +67,28 @@ const History = () => {
         navigation.navigate("HistoricalData", { date });
     }, [navigation]);
 
+
+    const months: Date[] = [
+        DateService.addMonths(monthYear, -1),
+        monthYear,
+        DateService.addMonths(monthYear, 1),
+    ];
     return(
-        <View 
-            className="m-4"
+        <Animated.View 
+            style={{ transform: [{ translateX: panX }], width: SCREEN_WIDTH*3 }} // Three times screen width for swipe
+            {...panResponder.panHandlers} 
+            className="flex-row gap-x-2 mx-auto items-center justify-center"
         >
-            <Text className="text-2xl font-bold mb-4">{monthYear.toLocaleString('default', { month: 'long', year: 'numeric' })}</Text>
-            <View>
-                {/* Days of week header */}
-                <View className="flex-row mb-2">
-                    {Variables.daysOfWeek.map((day, index) => (
-                        <View key={index} className="flex-1 items-center">
-                            <Text className="font-bold">{day}</Text>
-                        </View>
-                    ))}
+            {months.map((month, index) => 
+                <View key={index} className="w-[33%]">
+                    <RenderMonth
+                        monthYear={month}
+                        availableDates={availableDates}
+                        handleDateSelect={handleDateSelect}
+                    />
                 </View>
-                
-                {/* Calendar grid */}
-                <View className="flex-row flex-wrap">
-                    {DateService.getDaysInMonth(monthYear).map((day, index) => {
-                        const dateStr = `${DateService.formatDate(monthYear).slice(0,7)}-${day}`;
-                        return (
-                            <RenderDay
-                                key={index}
-                                day={day}
-                                available={day ? availableDates.has(dateStr) : false}
-                                onPress={day ? () => handleDateSelect(dateStr) : undefined}
-                            />
-                        );
-                    })}
-                </View>
-            </View>
-        </View>
+            )}
+        </Animated.View>
 );
 }
 

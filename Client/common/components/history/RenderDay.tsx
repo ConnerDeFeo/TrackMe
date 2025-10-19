@@ -5,7 +5,7 @@ const RenderDay = ({ day, available, onPress }: { day: number | null; available:
         <Pressable
             className={`w-[14.28%] aspect-square border trackme-border-gray rounded-full items-center justify-center 
             ${available ? "bg-blue-100" : ""}`}
-            onPress={onPress}
+            onPress={available ? onPress : undefined}
         >
             {day && <Text className="my-auto">{day}</Text>}
         </Pressable>

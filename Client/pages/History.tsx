@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryService from "../services/HistoryService";
-import { Text, View, PanResponder, Animated, Dimensions } from "react-native";
+import { View, PanResponder, Animated, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
-import { Variables } from "../common/constants/Variables";
-import RenderDay from "../common/components/history/RenderDay";
 import RenderMonth from "../common/components/history/RenderMonth";
 
 const SCREEN_WIDTH = Dimensions.get("window").width; 
@@ -23,27 +21,41 @@ const History = () => {
         setMonthYear(DateService.addMonths(monthYear, -1));
     }, [monthYear]);
 
+    useEffect(() => {
+        panX.setValue(-SCREEN_WIDTH);
+    }, [monthYear]);
+
     const panX = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
     const requiredSwipeDistance = 150;
 
     const panResponder = PanResponder.create({
         onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: (e, gesture) => {
+        onPanResponderMove: (_, gesture) => {
             panX.setValue(gesture.dx - SCREEN_WIDTH);
         },
-        onPanResponderRelease: (e, gesture) => {
+        onPanResponderRelease: (_, gesture) => {
             if (gesture.dx > requiredSwipeDistance) {
-                Animated.spring(panX, { toValue: 0, useNativeDriver: true }).start(() => {
+                // Swipe right - go to previous month
+                Animated.spring(panX, { 
+                    toValue: 7, 
+                    useNativeDriver: true 
+                }).start(() => {
                     prevMonth();
-                    panX.setValue(-SCREEN_WIDTH);
                 });
             } else if (gesture.dx < -requiredSwipeDistance) {
-                Animated.spring(panX, { toValue: -SCREEN_WIDTH * 2, useNativeDriver: true }).start(() => {
+                // Swipe left - go to next month
+                Animated.spring(panX, { 
+                    toValue: (-SCREEN_WIDTH-3.5) * 2, 
+                    useNativeDriver: true 
+                }).start(() => {
                     nextMonth();
-                    panX.setValue(-SCREEN_WIDTH);
                 });
             } else {
-                Animated.spring(panX, { toValue: -SCREEN_WIDTH, useNativeDriver: true }).start();
+                // Snap back to center
+                Animated.spring(panX, { 
+                    toValue: -SCREEN_WIDTH, 
+                    useNativeDriver: true 
+                }).start();
             }
         }
     });
@@ -80,7 +92,7 @@ const History = () => {
             className="flex-row gap-x-2 mx-auto items-center justify-center"
         >
             {months.map((month, index) => 
-                <View key={index} className="w-[33%]">
+                <View key={index} style={{ width: SCREEN_WIDTH }}>
                     <RenderMonth
                         monthYear={month}
                         availableDates={availableDates}

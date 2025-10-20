@@ -57,6 +57,7 @@ locals {
     # History Lambdas
     "get_available_history_dates",
     "fetch_historical_data",
+    "get_earliest_date_available",
 
     # Relation lambdas,
     "get_relation_invites",

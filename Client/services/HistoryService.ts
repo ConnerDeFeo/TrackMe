@@ -11,6 +11,9 @@ const HistoryService = {
     },
     fetchHistoricalData: async (date: string) => {
         return await API.get(`${EXPO_PUBLIC_API_URL}/history/fetch_historical_data?date=${date}`);
+    },
+    getEarliestDateAvailable: async () => {
+        return await API.get(`${EXPO_PUBLIC_API_URL}/history/get_earliest_date_available`);
     }
 };
 

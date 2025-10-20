@@ -177,6 +177,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/history/fetch_historical_data"
       output_path = "${path.module}/../Server/lambdas/history/zips/fetch_historical_data.zip"
     }
+    "get_earliest_date_available" = {
+      source_dir  = "${path.module}/../Server/lambdas/history/get_earliest_date_available"
+      output_path = "${path.module}/../Server/lambdas/history/zips/get_earliest_date_available.zip"
+    }
 
     # Relations Lambdas
     "add_relation" = {

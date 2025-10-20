@@ -18,6 +18,7 @@ locals {
 
     "history/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "history/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }
+    "history/get_earliest_date_available" = { lambda = aws_lambda_function.lambdas["get_earliest_date_available"], method = "GET" }
 
     "relations/get_mutual_user_relations" = { lambda = aws_lambda_function.lambdas["get_mutual_user_relations"], method = "GET" }
     "relations/get_relation_invites_count" = { lambda = aws_lambda_function.lambdas["get_relation_invites_count"], method = "GET" }

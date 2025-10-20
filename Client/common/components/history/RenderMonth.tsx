@@ -28,7 +28,7 @@ const RenderMonth = ({ monthYear, handleDateSelect, availableDates, className}:
                     if(!day) {
                         return <View key={index} className="w-[14.28%] p-1" />;
                     }
-                    const dateStr = `${DateService.formatDate(monthYear).slice(0,7)}-${day}`;
+                    const dateStr = `${DateService.formatDate(monthYear).slice(0,7)}-${day < 10 ? '0' + day : day}`;
                     return (
                         <RenderDay
                             key={index}

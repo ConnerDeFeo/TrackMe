@@ -573,6 +573,22 @@ Resources:
   #
   #
   #
+  GetEarliestDateAvailableFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/history/get_earliest_date_available/
+      Handler: get_earliest_date_available.get_earliest_date_available
+      Events:
+        GetEarliestDateAvailableApi:
+          Type: Api
+          Properties:
+            Path: /history/get_earliest_date_available/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer
+
   FetchHistoricalDataFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -3,7 +3,13 @@ import DateService from "../../../services/DateService";
 import RenderDay from "./RenderDay";
 import { Variables } from "../../constants/Variables";
 
-const RenderMonth = ({ monthYear, availableDates, handleDateSelect }: { monthYear: Date; availableDates: Set<string>; handleDateSelect: (date: string) => void }) => {
+const RenderMonth = ({ monthYear, handleDateSelect, availableDates, }: 
+    { 
+        monthYear: Date; 
+        handleDateSelect: (date: string) => void;
+        availableDates?: Set<string>; 
+    }
+) => {
     return (
         <View className="mx-4">
             <Text className="text-2xl font-bold mb-4">{monthYear.toLocaleString('default', { month: 'long', year: 'numeric' })}</Text>
@@ -28,7 +34,7 @@ const RenderMonth = ({ monthYear, availableDates, handleDateSelect }: { monthYea
                             <RenderDay
                                 key={index}
                                 day={day}
-                                available={availableDates.has(dateStr)}
+                                available={availableDates?.has(dateStr) ?? false}
                                 onPress={() => handleDateSelect(dateStr)}
                             />
                         );

@@ -16,6 +16,7 @@ def get_available_history_dates(event, context):
         user_id = user_info['userId']
         account_type = user_info['accountType']
         yyyyMM = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m"))
+        distanceFilters = query_params.get('distanceFilters', None) # String[] of distances to filter on
         queryDate = yyyyMM + "%"
 
         params = [user_id]
@@ -31,6 +32,10 @@ def get_available_history_dates(event, context):
                 """
             params.append(user_id)
         params.append(queryDate)
+
+        if distanceFilters:
+            join_clause += f" AND ai.distance IN %s"
+            params.append(tuple(distanceFilters))
         # Fetch distinct dates that have assigned workouts or athlete inputs for the coach's groups
         dates = fetch_all(
         f"""

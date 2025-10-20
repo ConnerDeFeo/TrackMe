@@ -43,6 +43,28 @@ def setup_base_scenario():
         }),
         "headers":generate_auth_header("1235", "Athlete", "test_athlete_2")
     }, {})
+
+    # Add three kinds of other athletes
+    create_user({
+        'headers':generate_auth_header("1236", "Athlete", "test_athlete_3")
+    }, {})
+    create_user({
+        'headers':generate_auth_header("1237", "Athlete", "test_athlete_4")
+    }, {})
+    create_user({
+        'headers':generate_auth_header("1238", "Athlete", "test_athlete_5")
+    }, {})
+    
+    # Coach added athlete
+    add_relation({
+        'body': json.dumps({"relationId": "1236"}),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    # Added coach
+    add_relation({
+        'body': json.dumps({"relationId": "123"}),
+        "headers":generate_auth_header("1237", "Athlete", "test_athlete_4")
+    }, {})
     
     create_group(TestData.test_group, {}) # Group ID 1
     create_group({
@@ -75,7 +97,7 @@ def setup_historical_inputs():
     # Yesterday's inputs
     input_times({
         "body": json.dumps({
-            "athleteIds": ["1234"], 'groupId': 1, "date": yesterday,
+            "athleteIds": ["1234"], "date": yesterday,
             'inputs': [{'distance': 1, 'time': 2 ,'type': 'run'}]
         }),
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
@@ -84,7 +106,7 @@ def setup_historical_inputs():
     # Two days ago's inputs
     input_times({
         "body": json.dumps({
-            "athleteIds": ["1234", '1235'], 'groupId': 2, "date": two_days_ago,
+            "athleteIds": ["1234", '1235'], "date": two_days_ago,
             'inputs': [{'distance': 3, 'time': 4, 'type': 'run'}, {'distance': 5, 'time': 6, 'type': 'run'}]
         }),
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
@@ -93,7 +115,7 @@ def setup_historical_inputs():
     # Three days ago's inputs
     input_times({
         "body": json.dumps({
-            "athleteIds": ["1234"], 'groupId': 2, "date": three_days_ago,
+            "athleteIds": ["1234"], "date": three_days_ago,
             'inputs': [{'restTime': 5, 'type': 'rest'},{'distance': 7, 'time': 8, 'type': 'run'}]
         }),
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
@@ -150,6 +172,56 @@ def test_get_available_history_dates_athlete_returns_date_when_inputs_exists():
     body = json.loads(response['body'])
     assert len(body) == 1 # should only return the day the athlete input times
     assert two_days_ago in body
+
+def test_get_available_history_dates_with_distance_filters_athlete_returns_success():
+    # Arrange
+    setup_historical_inputs()
+    event = {
+        "queryStringParameters": {"date": base_date.strftime("%Y-%m"), "distanceFilters": ["1", "7"]},
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete_2")
+    }
+
+    # Act
+    response = get_available_history_dates(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    print(body)
+    assert len(body) == 2
+    assert yesterday in body
+    assert three_days_ago in body
+
+def test_get_available_history_dates_with_distance_filters_coach_returns_success():
+    # Arrange
+    setup_historical_inputs()
+    event = {
+        "queryStringParameters": {"date": base_date.strftime("%Y-%m"), "distanceFilters": ["1", "5", "7"]},
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+    four_days_ago = (base_date - timedelta(days=4)).strftime("%Y-%m-%d")
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1236"],
+            "date": four_days_ago,
+            'inputs': [{'distance': 100, 'time': 12.5, 'type': 'run'}]
+        }),
+        "headers":generate_auth_header("1236", "Athlete", "test3")
+    }, {})
+
+    # Act
+    response = get_available_history_dates(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    print(body)
+    assert len(body) == 3 # yesterday to three days ago for the two athletes added
+    assert date not in body
+    assert yesterday in body
+    assert two_days_ago in body
+    assert three_days_ago in body
+    assert four_days_ago not in body
 
 def test_fetch_historical_data_coach_success():
     # Arrange
@@ -240,26 +312,6 @@ def test_get_earliest_date_athlete_returns_earliest_date():
 def test_get_earliest_date_coach_returns_earliest_date():
     # Arrange
     setup_historical_inputs()
-    create_user({
-        'headers':generate_auth_header("1236", "Athlete", "test_athlete_3")
-    }, {})
-    create_user({
-        'headers':generate_auth_header("1237", "Athlete", "test_athlete_4")
-    }, {})
-    create_user({
-        'headers':generate_auth_header("1238", "Athlete", "test_athlete_5")
-    }, {})
-    
-    # Coach added athlete
-    add_relation({
-        'body': json.dumps({"relationId": "1236"}),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    # Added coach
-    add_relation({
-        'body': json.dumps({"relationId": "123"}),
-        "headers":generate_auth_header("1237", "Athlete", "test_athlete_4")
-    }, {})
 
     input_times({
         "body": json.dumps({

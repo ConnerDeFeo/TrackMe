@@ -2,7 +2,7 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 import API from "./API";
 
 const HistoryService = {
-    getAvailableHistoryDates: async (date?: string) => {
+    getAvailableHistoryDates: async (date?: string, distanceFilters?: string[]) => {
         let url = `${EXPO_PUBLIC_API_URL}/history/get_available_history_dates`;
         if (date) {
             url += `?date=${date}`;

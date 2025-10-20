@@ -16,7 +16,9 @@ def get_available_history_dates(event, context):
         user_id = user_info['userId']
         account_type = user_info['accountType']
         yyyyMM = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m"))
-        distanceFilters = query_params.get('distanceFilters', None) # String[] of distances to filter on
+        distanceFilters = query_params.get('distanceFilters', None) # comma seperated list of distances
+        if distanceFilters:
+            distanceFilters = distanceFilters.split(",")
         queryDate = yyyyMM + "%"
 
         params = [user_id]

@@ -177,7 +177,7 @@ def test_get_available_history_dates_with_distance_filters_athlete_returns_succe
     # Arrange
     setup_historical_inputs()
     event = {
-        "queryStringParameters": {"date": base_date.strftime("%Y-%m"), "distanceFilters": ["1", "7"]},
+        "queryStringParameters": {"date": base_date.strftime("%Y-%m"), "distanceFilters": "1,7"},
         "headers": generate_auth_header("1234", "Athlete", "test_athlete_2")
     }
 
@@ -196,7 +196,7 @@ def test_get_available_history_dates_with_distance_filters_coach_returns_success
     # Arrange
     setup_historical_inputs()
     event = {
-        "queryStringParameters": {"date": base_date.strftime("%Y-%m"), "distanceFilters": ["1", "5", "7"]},
+        "queryStringParameters": {"date": base_date.strftime("%Y-%m"), "distanceFilters": "1,5,7"},
         "headers": generate_auth_header("123", "Coach", "testcoach")
     }
     four_days_ago = (base_date - timedelta(days=4)).strftime("%Y-%m-%d")

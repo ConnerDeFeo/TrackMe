@@ -1,18 +1,19 @@
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import DateService from "../../../services/DateService";
 import RenderDay from "./RenderDay";
 import { Variables } from "../../constants/Variables";
 
-const RenderMonth = ({ monthYear, handleDateSelect, availableDates, className}: 
+const RenderMonth = ({ monthYear, handleDateSelect, availableDates, className, loading}: 
     { 
         monthYear: Date; 
         handleDateSelect: (date: string) => void;
         availableDates?: Set<string>; 
         className?: string;
+        loading?: boolean;
     }
 ) => {
     return (
-        <View className={className}>
+        <View className={`relative ${className}`}>
             {/* Days of week header */}
             <View className="flex-row mb-2">
                 {Variables.daysOfWeek.map((day, index) => (
@@ -28,7 +29,7 @@ const RenderMonth = ({ monthYear, handleDateSelect, availableDates, className}:
                     if(!day) {
                         return <View key={index} className="w-[14.28%] p-1" />;
                     }
-                    const dateStr = `${DateService.formatDate(monthYear).slice(0,7)}-${day < 10 ? '0' + day : day}`;
+                    const dateStr = `${DateService.formatDate(monthYear).slice(0,7)}-${day < 10 ? `0${day}` : day}`;
                     return (
                         <RenderDay
                             key={index}
@@ -39,6 +40,11 @@ const RenderMonth = ({ monthYear, handleDateSelect, availableDates, className}:
                     );
                 })}
             </View>
+            {loading && 
+                <View className="absolute h-full w-full bg-white opacity-30 top-0 left-0 flex justify-center items-center">
+                    <ActivityIndicator size="large" color="#007AFF" />
+                </View>
+            }
         </View>
     );
 }

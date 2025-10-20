@@ -14,6 +14,7 @@ const History = () => {
     
     // Current month and year being viewed
     const [monthYear, setMonthYear] = useState<Date>(thisMonth);
+    const currentMonthKey = monthYear.toISOString().slice(0,7);
     
     // Earliest date with historical data available (YYYY-MM format)
     const [earliestDate, setEarliestDate] = useState<string>(thisMonth.toISOString().slice(0,7));
@@ -23,7 +24,8 @@ const History = () => {
     
     // Cached available dates with historical data, keyed by month (YYYY-MM)
     const [availableDates, setAvailableDates] = useState<Record<string, Set<string>>>({});
-    const currentMonthKey = monthYear.toISOString().slice(0,7);
+    // Loading state for available dates fetch
+    const [loading, setLoading] = useState<boolean>(false);
     
     // ========== Animation State ==========
     // Prevents user interaction during animation
@@ -38,6 +40,7 @@ const History = () => {
     // ========== Data Fetching ==========
     // Fetch available dates for a specific month from the server
     const fetchAvailableDates = async (date?:string) => {
+        setLoading(true);
         const resp = await HistoryService.getAvailableHistoryDates(date);
         if(resp.ok) {
             const data = await resp.json();
@@ -45,6 +48,7 @@ const History = () => {
         } else {
             setAvailableDates({...availableDates, [date || ""]: new Set()});
         }
+        setLoading(false);
     }
 
     // Reset animation position and fetch dates when month changes
@@ -173,6 +177,7 @@ const History = () => {
                             availableDates={availableDates[currentMonthKey]}
                             handleDateSelect={handleDateSelect}
                             className="m-4"
+                            loading={loading}
                         />
                     </View>
                 )}

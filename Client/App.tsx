@@ -129,7 +129,7 @@ const CoachStack = createNativeStackNavigator();
 const CoachLayoutWrapper = () => {
   return (
     <>
-      <CoachStack.Navigator initialRouteName='CoachGroups' screenOptions={({route, navigation})=> {
+      <CoachStack.Navigator initialRouteName='History' screenOptions={({route, navigation})=> {
         const params = route.params;
         const rightButtonData = getRightButtonData(route);
         const state = navigation.getState();

@@ -8,8 +8,10 @@ import RenderMonth from "../common/components/history/RenderMonth";
 const SCREEN_WIDTH = Dimensions.get("window").width; 
 
 const History = () => {
+    // Today's date, flag for not allowing user to go past today
+    const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     // Current month and year being viewed
-    const [monthYear, setMonthYear] = useState<Date>(new Date());
+    const [monthYear, setMonthYear] = useState<Date>(thisMonth);
     const [displayMonthName, setDisplayMonthName] = useState<string>(monthYear.toLocaleString('default', { month: 'long', year: 'numeric' }));
     // Cached available dates with historical data
     const [availableDates, setAvailableDates] = useState<Record<string, Set<string>>>({});
@@ -66,7 +68,7 @@ const History = () => {
                     prevMonth();
                     setIsAnimating(false);
                 });
-            } else if (gesture.dx < -requiredSwipeDistance) {
+            } else if (gesture.dx < -requiredSwipeDistance && monthYear < thisMonth) {
                 setDisplayMonthName(DateService.addMonths(monthYear, 1).toLocaleString('default', { month: 'long', year: 'numeric' }));
                 setIsAnimating(true);
                 // Swipe left - go to next month
@@ -100,14 +102,16 @@ const History = () => {
 
     return(
         <View className="mt-4">
-            <View className="flex-row justify-between mx-4 items-center">
+            <View className="flex-row justify-between mx-4 items-center relative">
                 <Pressable className="p-1 pr-3" onPress={prevMonth}>
                     <Image source={require('../assets/images/Back.png')} className="w-6 h-6" />
                 </Pressable>
-                <Text className="text-2xl font-bold">{displayMonthName}</Text>
-                <Pressable className="p-1 pl-3" onPress={nextMonth}>
-                    <Image source={require('../assets/images/Back.png')} className="w-6 h-6 rotate-180" />
-                </Pressable>
+                <Text className="text-2xl font-bold absolute left-1/2 transform -translate-x-1/2">{displayMonthName}</Text>
+                {thisMonth > monthYear &&
+                    <Pressable className="p-1 pl-3" onPress={nextMonth}>
+                        <Image source={require('../assets/images/Back.png')} className="w-6 h-6 rotate-180" />
+                    </Pressable>
+                }
             </View>
             <Animated.View 
                 style={{ transform: [{ translateX: panX }], width: SCREEN_WIDTH*3 }} // Three times screen width for swipe

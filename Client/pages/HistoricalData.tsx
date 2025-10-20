@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import HistoryService from "../services/HistoryService";
 import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../common/components/display/input/InputDisplay";
@@ -9,18 +9,27 @@ const HistoricalData = ()=>{
     const route = useRoute();
     const { date } = (route.params as { date: string }) || {};
     const [historicalData, setHistoricalData] = useState<Record<string, {inputs:Input[], username:string}>>({});
+    const [loading, setLoading] = useState<boolean>(false);
 
     // Fetch historical data for the given date when component mounts
     useEffect(() => {
         const fetchHistoricalData = async () => {
+            setLoading(true);
             const resp = await HistoryService.fetchHistoricalData(date);
             if (resp.ok) {
                 const data = await resp.json();
                 setHistoricalData(data);
             }
+            setLoading(false);
         };
         fetchHistoricalData();
     }, [date]);
+
+    if (loading) {
+        return (
+            <ActivityIndicator size="large" color="#007AFF" className="m-10"/>
+        );
+    }
 
     return(
         <>

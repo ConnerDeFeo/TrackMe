@@ -3,6 +3,7 @@ import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.history.fetch_historical_data.fetch_historical_data import fetch_historical_data
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
+from lambdas.history.get_earliest_date_available.get_earliest_date_available import get_earliest_date_available
 from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
 from lambdas.history.get_available_history_dates.get_available_history_dates import get_available_history_dates
@@ -219,3 +220,19 @@ def test_fetch_historical_data_no_results():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert len(body) == 0
+
+def test_get_earliest_date_athlete_returns_earliest_date():
+    # Arrange
+    setup_historical_inputs()
+
+    event = {
+        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = get_earliest_date_available(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert body == three_days_ago

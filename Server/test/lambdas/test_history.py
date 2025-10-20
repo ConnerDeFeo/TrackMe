@@ -236,3 +236,64 @@ def test_get_earliest_date_athlete_returns_earliest_date():
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
     assert body == three_days_ago
+
+def test_get_earliest_date_coach_returns_earliest_date():
+    # Arrange
+    setup_historical_inputs()
+    create_user({
+        'headers':generate_auth_header("1236", "Athlete", "test_athlete_3")
+    }, {})
+    create_user({
+        'headers':generate_auth_header("1237", "Athlete", "test_athlete_4")
+    }, {})
+    create_user({
+        'headers':generate_auth_header("1238", "Athlete", "test_athlete_5")
+    }, {})
+    
+    # Coach added athlete
+    add_relation({
+        'body': json.dumps({"relationId": "1236"}),
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }, {})
+    # Added coach
+    add_relation({
+        'body': json.dumps({"relationId": "123"}),
+        "headers":generate_auth_header("1237", "Athlete", "test_athlete_4")
+    }, {})
+
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1236"],
+            "date": (base_date - timedelta(days=4)).strftime("%Y-%m-%d"),
+            'inputs': [{'distance': 100, 'time': 12.5, 'type': 'run'}]
+        }),
+        "headers":generate_auth_header("1236", "Athlete", "test3")
+    }, {})
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1237"],
+            "date": (base_date - timedelta(days=4)).strftime("%Y-%m-%d"),
+            'inputs': [{'distance': 100, 'time': 12.5, 'type': 'run'}]
+        }),
+        "headers":generate_auth_header("1237", "Athlete", "test_athlete_4")
+    }, {})
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1238"],
+            "date": (base_date - timedelta(days=4)).strftime("%Y-%m-%d"),
+            'inputs': [{'distance': 100, 'time': 12.5, 'type': 'run'}]
+        }),
+        "headers":generate_auth_header("1238", "Athlete", "test_athlete_5")
+    }, {})
+
+    event = {
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = get_earliest_date_available(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert body == three_days_ago # should not include unadded athlete times

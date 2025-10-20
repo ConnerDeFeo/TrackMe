@@ -12,18 +12,19 @@ def get_earliest_date_available(event, context):
 
         params = [user_id]
         if account_type == "Athlete":
-            join_clause = " WHERE athleteId = %s"
+            join_clause = " WHERE ai.athleteId = %s"
         else:
             join_clause = """
-                JOIN user_relations ur ON ai.athleteId = ur.userId AND ur.relationId = %s
-                JOIN user_relations ur2 ON ai.athleteId = ur2.relationId AND ur2.userId = %s
+                JOIN user_relations ur ON ai.athleteId = ur.userId
+                JOIN user_relations ur2 ON ai.athleteId = ur2.relationId
+                WHERE ur.relationId = %s AND ur2.userId = %s
             """
             params.append(user_id)
 
         # Get earliest history date for user and connections
         result = fetch_one(
             f"""
-                SELECT MIN(date) FROM athlete_inputs
+                SELECT MIN(ai.date) FROM athlete_inputs ai
                 {join_clause}
             """,
             tuple(params)

@@ -13,6 +13,7 @@ def fetch_historical_data(event, context):
         user_info = get_user_info(event)
         user_id = user_info['userId']
         account_type = user_info['accountType']
+        distanceFilters = query_params.get('distanceFilters', None) # List of all distance filters to apply
         # Expecting 'date' parameter for historical lookup
         date = query_params['date']
 

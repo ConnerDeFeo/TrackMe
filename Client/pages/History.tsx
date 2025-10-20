@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryService from "../services/HistoryService";
-import { View, PanResponder, Animated, Dimensions, Text } from "react-native";
+import { View, PanResponder, Animated, Dimensions, Text, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
 import RenderMonth from "../common/components/history/RenderMonth";
@@ -10,6 +10,7 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 const History = () => {
     // Current month and year being viewed
     const [monthYear, setMonthYear] = useState<Date>(new Date());
+    const [displayMonthName, setDisplayMonthName] = useState<string>(monthYear.toLocaleString('default', { month: 'long', year: 'numeric' }));
     // Cached available dates with historical data
     const [availableDates, setAvailableDates] = useState<Record<string, Set<string>>>({});
     const currentMonthKey = monthYear.toISOString().slice(0,7);
@@ -36,13 +37,15 @@ const History = () => {
         }
     }, [monthYear]);
 
-    const nextMonth = useCallback(() => {
+    const nextMonth = () => {
+        setDisplayMonthName(DateService.addMonths(monthYear, 1).toLocaleString('default', { month: 'long', year: 'numeric' }));
         setMonthYear(DateService.addMonths(monthYear, 1));
-    }, [monthYear]);
+    };
 
-    const prevMonth = useCallback(() => {
+    const prevMonth = () => {
+        setDisplayMonthName(DateService.addMonths(monthYear, -1).toLocaleString('default', { month: 'long', year: 'numeric' }));
         setMonthYear(DateService.addMonths(monthYear, -1));
-    }, [monthYear]);
+    };
 
     const panResponder = PanResponder.create({
         onMoveShouldSetPanResponder: () => {
@@ -53,6 +56,7 @@ const History = () => {
         },
         onPanResponderRelease: (_, gesture) => {
             if (gesture.dx > requiredSwipeDistance) {
+                setDisplayMonthName(DateService.addMonths(monthYear, -1).toLocaleString('default', { month: 'long', year: 'numeric' }));
                 setIsAnimating(true);
                 // Swipe right - go to previous month
                 Animated.spring(panX, { 
@@ -63,6 +67,7 @@ const History = () => {
                     setIsAnimating(false);
                 });
             } else if (gesture.dx < -requiredSwipeDistance) {
+                setDisplayMonthName(DateService.addMonths(monthYear, 1).toLocaleString('default', { month: 'long', year: 'numeric' }));
                 setIsAnimating(true);
                 // Swipe left - go to next month
                 Animated.spring(panX, { 
@@ -93,23 +98,34 @@ const History = () => {
         DateService.addMonths(monthYear, 1),
     ];
 
-    console.log(availableDates);    
     return(
-        <Animated.View 
-            style={{ transform: [{ translateX: panX }], width: SCREEN_WIDTH*3 }} // Three times screen width for swipe
-            {...panResponder.panHandlers} 
-            className="flex-row gap-x-2 mx-auto justify-center mt-4"
-        >
-            {months.map((month, index) => 
-                <View key={index} style={{ width: SCREEN_WIDTH }}>
-                    <RenderMonth
-                        monthYear={month}
-                        availableDates={availableDates[currentMonthKey]}
-                        handleDateSelect={handleDateSelect}
-                    />
-                </View>
-            )}
-        </Animated.View>
+        <View className="mt-4">
+            <View className="flex-row justify-between mx-4 items-center">
+                <Pressable className="p-1 pr-3" onPress={prevMonth}>
+                    <Image source={require('../assets/images/Back.png')} className="w-6 h-6" />
+                </Pressable>
+                <Text className="text-2xl font-bold">{displayMonthName}</Text>
+                <Pressable className="p-1 pl-3" onPress={nextMonth}>
+                    <Image source={require('../assets/images/Back.png')} className="w-6 h-6 rotate-180" />
+                </Pressable>
+            </View>
+            <Animated.View 
+                style={{ transform: [{ translateX: panX }], width: SCREEN_WIDTH*3 }} // Three times screen width for swipe
+                {...panResponder.panHandlers} 
+                className="flex-row gap-x-2 mx-auto justify-center"
+            >
+                {months.map((month, index) => 
+                    <View key={index} style={{ width: SCREEN_WIDTH }}>
+                        <RenderMonth
+                            monthYear={month}
+                            availableDates={availableDates[currentMonthKey]}
+                            handleDateSelect={handleDateSelect}
+                            className="m-4"
+                        />
+                    </View>
+                )}
+            </Animated.View>
+        </View>
 );
 }
 

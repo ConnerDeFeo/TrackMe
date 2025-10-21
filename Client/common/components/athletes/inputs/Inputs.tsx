@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import usePersistentState from "../../common/hooks/usePersistentState";
-import { useNavigation } from "@react-navigation/native";
-import { Input } from "../../common/types/inputs/Input";
-import { useWorkoutGroup } from "../../common/hooks/useWorkoutGroup";
 import { Image, KeyboardAvoidingView, Pressable, ScrollView, Text, View, Keyboard } from "react-native";
-import QuickInput from "../../common/components/QuickInput";
-import InputsScrollableSection from "../../common/components/athletes/inputs/InputsScrollableSection";
-import TrackMeButton from "../../common/components/display/TrackMeButton";
-import AthleteWorkoutService from "../../services/AthleteWorkoutService";
-import DateService from "../../services/DateService";
-import UserService from "../../services/UserService";
-import { InputType } from "../../common/constants/Enums";
 import Toast from "react-native-toast-message";
+import DateService from "../../../../services/DateService";
+import usePersistentState from "../../../hooks/usePersistentState";
+import { Input } from "../../../types/inputs/Input";
+import { InputType } from "../../../constants/Enums";
+import { useWorkoutGroup } from "../../../hooks/useWorkoutGroup";
+import { useNavigation } from "@react-navigation/native";
+import UserService from "../../../../services/UserService";
+import AthleteWorkoutService from "../../../../services/AthleteWorkoutService";
+import InputsScrollableSection from "./InputsScrollableSection";
+import TrackMeButton from "../../display/TrackMeButton";
+import QuickInput from "../../QuickInput";
 
 //Page where athletes input times
-const Inputs = ()=>{
+const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: boolean})=>{
     // Track current input values for each given group { groupId : [time/distance, time/distance] }
     const [pendingInputs, setPendingInputs] = usePersistentState<Input[]>('current', []);
     // Currently selected pending inputs for deletion
@@ -52,7 +52,6 @@ const Inputs = ()=>{
     }
 
     const handleInputSubmission = async () => {
-        const date = DateService.formatDate(new Date());
         const userId = await UserService.getUserId();
 
         if (userId) {
@@ -107,6 +106,7 @@ const Inputs = ()=>{
                 setSelectedPendingInputs={setSelectedPendingInputs} 
                 submittedInputs={submittedInputs} 
                 setSubmittedInputs={setSubmittedInputs}
+                date={date}
             />
 
             {/* Input Tracking Section - Fixed at Bottom */}
@@ -132,7 +132,7 @@ const Inputs = ()=>{
                 {/* Toggle buttons for switching between Run and Rest input modes */}
                 <View className="flex flex-row items-center justify-between mx-2">
                     <View className="flex flex-row items-center w-[55%]">
-                        <TrackMeButton 
+                        <TrackMeButton
                             text="Run" 
                             onPress={()=> setRunInput(true)} 
                             className="w-24"
@@ -144,9 +144,11 @@ const Inputs = ()=>{
                             className="w-24"
                             gray={runInput}
                         />
-                        <Pressable className="ml-4 bg-blue-100 rounded-full p-1" onPress={() => navigation.navigate("CreateWorkoutGroup")}>
-                            <Image source={require('../../assets/images/TwoRunners.png')} className="w-10 h-10" />
-                        </Pressable>
+                        {workoutGroupButton && 
+                            <Pressable className="ml-4 bg-blue-100 rounded-full p-1" onPress={() => navigation.navigate("CreateWorkoutGroup")}>
+                                <Image source={require('../../../../assets/images/TwoRunners.png')} className="w-10 h-10" />
+                            </Pressable>
+                        }
                     </View>
                     <TrackMeButton 
                         text={inDeleteMode ? "Remove" : "Submit"} 
@@ -155,7 +157,7 @@ const Inputs = ()=>{
                         red={inDeleteMode}
                     />
                 </View>
-                <QuickInput 
+                <QuickInput
                     handleInputAddition={handleInputAddition} 
                     runInput={runInput}
                     className="py-4 mx-2"

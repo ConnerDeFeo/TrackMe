@@ -6,11 +6,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import AthleteWorkoutService from "../../../../services/AthleteWorkoutService";
 import { Input } from "../../../types/inputs/Input";
-import TextButton from "../../display/TextButton";
 
 //Scrollable input section for the inputs page
 const InputsScrollableSection = (
-    {scrollRef, pendingInputs, selectedSubmittedInputs, setSelectedSubmittedInputs, selectedPendingInputs, setSelectedPendingInputs, submittedInputs, setSubmittedInputs}:
+    {scrollRef, pendingInputs, selectedSubmittedInputs, setSelectedSubmittedInputs, selectedPendingInputs, setSelectedPendingInputs, submittedInputs, setSubmittedInputs, date}:
     {
         scrollRef: React.RefObject<ScrollView | null>, 
         pendingInputs: Input[], 
@@ -19,12 +18,13 @@ const InputsScrollableSection = (
         selectedPendingInputs: Set<number>, 
         setSelectedPendingInputs: React.Dispatch<React.SetStateAction<Set<number>>>,
         submittedInputs: Input[],
-        setSubmittedInputs: React.Dispatch<React.SetStateAction<Input[]>>
+        setSubmittedInputs: React.Dispatch<React.SetStateAction<Input[]>>,
+        date: string
     }
 ) => {
     // Fetch previously submitted workout inputs from the server
     const fetchSubmittedInputs = useCallback(async () => {
-        const resp = await AthleteWorkoutService.viewWorkoutInputs();
+        const resp = await AthleteWorkoutService.viewWorkoutInputs(date);
         if (resp.ok) {
             const inputs = await resp.json();
             setSubmittedInputs(inputs);

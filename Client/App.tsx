@@ -16,7 +16,7 @@ import WorkoutTemplates from './pages/coaches/workout/WorkoutTemplates';
 import AssignWorkout from './pages/coaches/workout/AssignWorkout';
 import ViewGroupCoach from './pages/coaches/groups/ViewGroupCoach';
 import ViewGroupAthlete from './pages/athletes/ViewGroupAthlete';
-import Inputs from './pages/athletes/Inputs';
+import TodayInputs from './pages/athletes/TodayInputs';
 import CreateWorkoutGroup from './pages/athletes/CreateWorkoutGroup';
 import Profile from './pages/Profile';
 import CoachHistory from './pages/coaches/CoachHistory';
@@ -42,6 +42,7 @@ import History from './pages/History';
 import Groups from './pages/Groups';
 import Toast from 'react-native-toast-message';
 import TrackMeToast from './common/components/display/TrackMeToast';
+import HistoricalInputs from './pages/athletes/HistoricalInputs';
 
 //Root component used to render everything
 Amplify.configure(awsConfig);
@@ -89,6 +90,7 @@ const getPageTitle = (routeName:string, params:any) => {
     case 'HistoricalData': return params.date;
     case 'ViewGroupCoach': return params.groupName;
     case 'ViewGroupAthlete': return params.groupName;
+    case 'HistoricalInputs': return `Inputs (${params.date})`;
     default: return routeName;
   }
 }
@@ -110,7 +112,8 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="Groups" options={{ title: "Groups" }} component={ScrollViewWrapper(<Groups />)} />
         <AthleteStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <AthleteStack.Screen name="ViewGroupAthlete" component={ScrollViewWrapper(<ViewGroupAthlete />)} />
-        <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={Inputs} />
+        <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={TodayInputs} />
+        <AthleteStack.Screen name="HistoricalInputs" component={HistoricalInputs} />
         <AthleteStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
         <AthleteStack.Screen name="MassInput" component={ScrollViewWrapper(<MassInput />)} />
         <AthleteStack.Screen name="GroupSchedule" options={{ title: "Schedule" }} component={ScrollViewWrapper(<GroupSchedule />)} />

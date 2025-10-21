@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryService from "../services/HistoryService";
 import { View, PanResponder, Animated, Dimensions, Text, Pressable, Image, TextInput } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
 import RenderMonth from "../common/components/history/RenderMonth";
 import TrackMeButton from "../common/components/display/TrackMeButton";
@@ -33,8 +33,9 @@ const History = () => {
     const [availableDates, setAvailableDates] = useState<Record<string, Set<string>>>({});
     // Loading state for available dates fetch
     const [loading, setLoading] = useState<boolean>(false);
+    // flag for component mounting to prevent double fetch
+    const [isMounted, setIsMounted] = useState<boolean>(false);
     
-    // ========== Animation State ==========
     // Prevents user interaction during animation
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     
@@ -58,6 +59,15 @@ const History = () => {
         setLoading(false);
     }
 
+    // On screen focus, fetch available dates
+    useFocusEffect(useCallback(() => {
+        const fetchAvailableDatesOnFocus = async () => {
+            await fetchAvailableDates();
+            setIsMounted(true);
+        };
+        fetchAvailableDatesOnFocus();
+    }, []));
+
     // On Filter change, clear cached dates and refetch for current month
     useEffect(() => {
         setAvailableDates({});
@@ -67,7 +77,7 @@ const History = () => {
     // Reset animation position and fetch dates when month changes
     useEffect(() => {
         panX.setValue(-SCREEN_WIDTH);
-        if (!availableDates.hasOwnProperty(currentMonthKey)) {
+        if (!availableDates.hasOwnProperty(currentMonthKey) && isMounted) {
             fetchAvailableDates();
         }
     }, [monthYear]);

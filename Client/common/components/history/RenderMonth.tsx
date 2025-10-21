@@ -12,6 +12,7 @@ const RenderMonth = ({ monthYear, handleDateSelect, availableDates, className, l
         loading?: boolean;
     }
 ) => {
+    const today = new Date().toISOString().slice(0,10);
     return (
         <View className={`relative ${className}`}>
             {/* Days of week header */}
@@ -34,8 +35,9 @@ const RenderMonth = ({ monthYear, handleDateSelect, availableDates, className, l
                         <RenderDay
                             key={index}
                             day={day}
-                            available={availableDates?.has(dateStr) ?? false}
                             onPress={() => handleDateSelect(dateStr)}
+                            hasHistoricalData={availableDates?.has(dateStr) ?? false}
+                            inFuture={dateStr > today}
                         />
                     );
                 })}

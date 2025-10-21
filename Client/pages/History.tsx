@@ -14,10 +14,9 @@ const History = () => {
     // Today's date, flag for not allowing user to go past today
     const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     
-    // Current month and year being viewed
-    const [monthYear, setMonthYear] = useState<Date>(thisMonth);
-    const currentMonthKey = monthYear.toISOString().slice(0,7);
-
+    // Current month index (0 = thisMonth, negative = past, positive would be future)
+    const [currentMonthOffset, setCurrentMonthOffset] = useState<number>(0);
+    
     // Current distance filter text input
     const [distanceInput, setDistanceInput] = useState<string>("");
     // Distance filters for available dates
@@ -26,33 +25,32 @@ const History = () => {
     // Earliest date with historical data available (YYYY-MM format)
     const [earliestDate, setEarliestDate] = useState<string>(thisMonth.toISOString().slice(0,7));
     
-    // Display name for current month (e.g., "January 2024")
-    const displayMonthName = monthYear.toLocaleString('default', { month: 'long', year: 'numeric' });
-    
     // Cached available dates with historical data, keyed by month (YYYY-MM)
     const [availableDates, setAvailableDates] = useState<Record<string, Set<string>>>({});
     // Loading state for available dates fetch
     const [loading, setLoading] = useState<boolean>(false);
     
-    
     const navigation = useNavigation<any>();
-
-    // Animation value for swipe gesture (starts at -SCREEN_WIDTH for center position)
     const flatListRef = useRef<FlatList>(null);
+    
+    // Calculate months based on offset
+    const currentMonth = DateService.addMonths(thisMonth, currentMonthOffset);
+    const currentMonthKey = currentMonth.toISOString().slice(0,7);
+    const displayMonthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
 
     const handleMomentumScrollEnd = (event: any) => {
         const offsetX = event.nativeEvent.contentOffset.x;
         const index = Math.round(offsetX / SCREEN_WIDTH);
 
-        if (index === 0) {
-            console.log("Prev month", DateService.addMonths(monthYear, -1));
-            setMonthYear(DateService.addMonths(monthYear, -1));
-        } else if (index === 2) {
-            setMonthYear(DateService.addMonths(monthYear, 1));
+        if (index === 0 && earliestDate < currentMonthKey) {
+            // Swiped to previous month
+            setCurrentMonthOffset(prev => prev - 1);
+            setTimeout(() => flatListRef.current?.scrollToIndex({ index: 1, animated: false }), 0);
+        } else if (index === 2 && currentMonthOffset < 0) {
+            // Swiped to next month
+            setCurrentMonthOffset(prev => prev + 1);
+            setTimeout(() => flatListRef.current?.scrollToIndex({ index: 1, animated: false }), 0);
         }
-
-        // Snap back to the middle
-        flatListRef.current?.scrollToIndex({ index: 1 });
     };
 
     // ========== Data Fetching ==========
@@ -79,7 +77,7 @@ const History = () => {
         if (!availableDates.hasOwnProperty(currentMonthKey) ) {
             fetchAvailableDates();
         }
-    }, [monthYear]);
+    }, [currentMonth]);
 
 
     // Fetch the earliest date with available data on component mount
@@ -100,14 +98,6 @@ const History = () => {
         navigation.navigate("HistoricalData", { date });
     }, [navigation]);
 
-    // ========== Render ==========
-    // Array of three months: previous, current, next (for swipe animation)
-    const months: Date[] = [
-        DateService.addMonths(monthYear, -1),
-        monthYear,
-        DateService.addMonths(monthYear, 1),
-    ];
-
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4' 
@@ -120,16 +110,16 @@ const History = () => {
             {/* Month header with navigation arrows */}
             <View className="flex-row justify-between m-4 items-center relative">
                 {/* Previous month button (only show if not at earliest date) */}
-                { earliestDate < monthYear.toISOString().slice(0,7) &&
-                    <Pressable className="p-1 pr-3 absolute left-0" onPress={() => setMonthYear(DateService.addMonths(monthYear, -1))}>
+                { earliestDate < currentMonthKey &&
+                    <Pressable className="p-1 pr-3 absolute left-0" onPress={() => setCurrentMonthOffset(prev => prev - 1)}>
                         <Image source={require('../assets/images/Back.png')} className="w-6 h-6" />
                     </Pressable>
                 }
                 {/* Current month display */}
                 <Text className="text-2xl font-bold absolute left-1/2 transform -translate-x-1/2">{displayMonthName}</Text>
                 {/* Next month button (only show if not at current month) */}
-                {thisMonth > monthYear &&
-                    <Pressable className="p-1 pl-3 absolute right-0" onPress={() => setMonthYear(DateService.addMonths(monthYear, 1))}>
+                {currentMonthOffset < 0 &&
+                    <Pressable className="p-1 pl-3 absolute right-0" onPress={() => setCurrentMonthOffset(prev => prev + 1)}>
                         <Image source={require('../assets/images/Back.png')} className="w-6 h-6 rotate-180" />
                     </Pressable>
                 }
@@ -140,27 +130,33 @@ const History = () => {
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
-                data={months}
+                data={[-1, 0, 1]}
                 initialScrollIndex={1}
                 getItemLayout={(_, index) => ({
                     length: SCREEN_WIDTH,
                     offset: SCREEN_WIDTH * index,
                     index,
                 })}
-                renderItem={({ item }) => (
-                    <View style={{ width: SCREEN_WIDTH }}>
-                        <RenderMonth
-                            monthYear={item}
-                            availableDates={availableDates[currentMonthKey]}
-                            handleDateSelect={handleDateSelect}
-                            className="m-4"
-                            loading={loading}
-                        />
-                    </View>
-                )}
+                renderItem={({ item }) => {
+                    const monthToRender = DateService.addMonths(currentMonth, item);
+                    const monthKey = monthToRender.toISOString().slice(0,7);
+                    
+                    return (
+                        <View style={{ width: SCREEN_WIDTH }}>
+                            <RenderMonth
+                                monthYear={monthToRender}
+                                availableDates={availableDates[monthKey]}
+                                handleDateSelect={handleDateSelect}
+                                className="m-4"
+                                loading={loading && item === 0}
+                            />
+                        </View>
+                    );
+                }}
                 ref={flatListRef}
-                keyExtractor={(item) => item.toISOString()}
+                keyExtractor={(item) => `month-offset-${item}`}
                 onMomentumScrollEnd={handleMomentumScrollEnd}
+                scrollEnabled={true}
             />
             <View className="mx-4 mt-6">
                 <Text className="text-lg font-semibold mb-3">Search Distances</Text>

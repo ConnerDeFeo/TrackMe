@@ -5,6 +5,8 @@ import HistoryService from "../services/HistoryService";
 import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../common/components/display/input/InputDisplay";
 import TrackMeButton from "../common/components/display/TrackMeButton";
+import UserService from "../services/UserService";
+import { AccountType } from "../common/constants/Enums";
 
 const HistoricalData = ()=>{
     const route = useRoute();
@@ -12,6 +14,15 @@ const HistoricalData = ()=>{
     const [historicalData, setHistoricalData] = useState<Record<string, {inputs:Input[], username:string}>>({});
     const [loading, setLoading] = useState<boolean>(false);
     const navigation = useNavigation<any>();
+    const [accountType, setAccountType] = useState<string>("");
+
+    useEffect(() => {
+        const fetchAccountType = async () => {
+            const accountType = await UserService.getAccountType();
+            setAccountType(accountType);
+        };
+        fetchAccountType();
+    }, []);
 
     // Fetch historical data for the given date when component mounts
     useFocusEffect(useCallback(() => {
@@ -47,7 +58,9 @@ const HistoricalData = ()=>{
                 :
                 <Text className="text-center text-gray-500 mt-6 pt-2">No historical data for this date.</Text>
             }
-            <TrackMeButton text="Update My Inputs" className="m-4" onPress={() => navigation.navigate('HistoricalInputs', {date})} />
+            { accountType === AccountType.Athlete &&
+                <TrackMeButton text="Update My Inputs" className="m-4" onPress={() => navigation.navigate('HistoricalInputs', {date})} />
+            }
         </View>
     );
 }

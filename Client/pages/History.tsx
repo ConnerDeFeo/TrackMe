@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryService from "../services/HistoryService";
-import { View, PanResponder, Animated, Dimensions, Text, Pressable, Image, TextInput, ScrollView, FlatList } from "react-native";
+import { View, Dimensions, Text, Pressable, Image, TextInput, FlatList } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
 import RenderMonth from "../common/components/history/RenderMonth";
@@ -27,7 +27,7 @@ const History = () => {
     const [earliestDate, setEarliestDate] = useState<string>(thisMonth.toISOString().slice(0,7));
     
     // Display name for current month (e.g., "January 2024")
-    const [displayMonthName, setDisplayMonthName] = useState<string>(monthYear.toLocaleString('default', { month: 'long', year: 'numeric' }));
+    const displayMonthName = monthYear.toLocaleString('default', { month: 'long', year: 'numeric' });
     
     // Cached available dates with historical data, keyed by month (YYYY-MM)
     const [availableDates, setAvailableDates] = useState<Record<string, Set<string>>>({});
@@ -38,16 +38,21 @@ const History = () => {
     const navigation = useNavigation<any>();
 
     // Animation value for swipe gesture (starts at -SCREEN_WIDTH for center position)
-    const panX = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
-    // Scroll enabled state for parent ScrollView
-    const [verticalScrollEnabled, setScrollEnabled] = useState(true);
-    const [currentIndex, setCurrentIndex] = useState(1); // start on middle month
-    const flatListRef = useRef(null);
+    const flatListRef = useRef<FlatList>(null);
 
-    const handleScroll = (event: any) => {
+    const handleMomentumScrollEnd = (event: any) => {
         const offsetX = event.nativeEvent.contentOffset.x;
         const index = Math.round(offsetX / SCREEN_WIDTH);
-        setCurrentIndex(index);
+
+        if (index === 0) {
+            console.log("Prev month", DateService.addMonths(monthYear, -1));
+            setMonthYear(DateService.addMonths(monthYear, -1));
+        } else if (index === 2) {
+            setMonthYear(DateService.addMonths(monthYear, 1));
+        }
+
+        // Snap back to the middle
+        flatListRef.current?.scrollToIndex({ index: 1 });
     };
 
     // ========== Data Fetching ==========
@@ -71,7 +76,6 @@ const History = () => {
 
     // Reset animation position and fetch dates when month changes
     useEffect(() => {
-        panX.setValue(-SCREEN_WIDTH);
         if (!availableDates.hasOwnProperty(currentMonthKey) ) {
             fetchAvailableDates();
         }
@@ -90,18 +94,6 @@ const History = () => {
         fetchEarliestDate();
     }, []);
 
-    // ========== Month Navigation ==========
-    // Navigate to the next month
-    const nextMonth = () => {
-        setDisplayMonthName(DateService.addMonths(monthYear, 1).toLocaleString('default', { month: 'long', year: 'numeric' }));
-        setMonthYear(DateService.addMonths(monthYear, 1));
-    };
-
-    // Navigate to the previous month
-    const prevMonth = () => {
-        setDisplayMonthName(DateService.addMonths(monthYear, -1).toLocaleString('default', { month: 'long', year: 'numeric' }));
-        setMonthYear(DateService.addMonths(monthYear, -1));
-    };
 
     // Navigate to detailed view for selected date
     const handleDateSelect = useCallback((date: string) => {
@@ -123,14 +115,13 @@ const History = () => {
             showsVerticalScrollIndicator={false}
             enableOnAndroid={true}
             extraScrollHeight={20}
-            keyboardShouldPersistTaps="handled" 
-            scrollEnabled={verticalScrollEnabled}
+            keyboardShouldPersistTaps="handled"
         >
             {/* Month header with navigation arrows */}
             <View className="flex-row justify-between m-4 items-center relative">
                 {/* Previous month button (only show if not at earliest date) */}
                 { earliestDate < monthYear.toISOString().slice(0,7) &&
-                    <Pressable className="p-1 pr-3 absolute left-0" onPress={prevMonth}>
+                    <Pressable className="p-1 pr-3 absolute left-0" onPress={() => setMonthYear(DateService.addMonths(monthYear, -1))}>
                         <Image source={require('../assets/images/Back.png')} className="w-6 h-6" />
                     </Pressable>
                 }
@@ -138,7 +129,7 @@ const History = () => {
                 <Text className="text-2xl font-bold absolute left-1/2 transform -translate-x-1/2">{displayMonthName}</Text>
                 {/* Next month button (only show if not at current month) */}
                 {thisMonth > monthYear &&
-                    <Pressable className="p-1 pl-3 absolute right-0" onPress={nextMonth}>
+                    <Pressable className="p-1 pl-3 absolute right-0" onPress={() => setMonthYear(DateService.addMonths(monthYear, 1))}>
                         <Image source={require('../assets/images/Back.png')} className="w-6 h-6 rotate-180" />
                     </Pressable>
                 }
@@ -169,6 +160,7 @@ const History = () => {
                 )}
                 ref={flatListRef}
                 keyExtractor={(item) => item.toISOString()}
+                onMomentumScrollEnd={handleMomentumScrollEnd}
             />
             <View className="mx-4 mt-6">
                 <Text className="text-lg font-semibold mb-3">Search Distances</Text>

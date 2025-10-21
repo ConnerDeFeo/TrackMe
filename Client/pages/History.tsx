@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryService from "../services/HistoryService";
-import { View, PanResponder, Animated, Dimensions, Text, Pressable, Image, TextInput, ScrollView } from "react-native";
+import { View, PanResponder, Animated, Dimensions, Text, Pressable, Image, TextInput, ScrollView, FlatList } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
 import RenderMonth from "../common/components/history/RenderMonth";
@@ -34,16 +34,21 @@ const History = () => {
     // Loading state for available dates fetch
     const [loading, setLoading] = useState<boolean>(false);
     
-    // Prevents user interaction during animation
-    const [isAnimating, setIsAnimating] = useState<boolean>(false);
     
     const navigation = useNavigation<any>();
 
     // Animation value for swipe gesture (starts at -SCREEN_WIDTH for center position)
     const panX = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
-    const requiredSwipeDistance = SCREEN_WIDTH * 0.25; // Minimum pixels to trigger month change
     // Scroll enabled state for parent ScrollView
-    const [scrollEnabled, setScrollEnabled] = useState(true);
+    const [verticalScrollEnabled, setScrollEnabled] = useState(true);
+    const [currentIndex, setCurrentIndex] = useState(1); // start on middle month
+    const flatListRef = useRef(null);
+
+    const handleScroll = (event: any) => {
+        const offsetX = event.nativeEvent.contentOffset.x;
+        const index = Math.round(offsetX / SCREEN_WIDTH);
+        setCurrentIndex(index);
+    };
 
     // ========== Data Fetching ==========
     // Fetch available dates for a specific month from the server
@@ -72,6 +77,7 @@ const History = () => {
         }
     }, [monthYear]);
 
+
     // Fetch the earliest date with available data on component mount
     useEffect(() => {
         const fetchEarliestDate = async () => {
@@ -97,62 +103,6 @@ const History = () => {
         setMonthYear(DateService.addMonths(monthYear, -1));
     };
 
-    // ========== Swipe Gesture Handling ==========
-    const panResponder = PanResponder.create({
-        // Claim responder early for horizontal swipes
-        onStartShouldSetPanResponder: (_, gesture) => {
-            return Math.abs(gesture.dx) > Math.abs(gesture.dy);
-        },
-        onMoveShouldSetPanResponder: (_, gesture) => {
-            const isHorizontal = Math.abs(gesture.dx) > Math.abs(gesture.dy) * 1.5;
-            if (isHorizontal && !isAnimating) {
-                setScrollEnabled(false);
-                return true;
-            }
-            return false;
-        },
-        onPanResponderMove: (_, gesture) => {
-            panX.setValue(gesture.dx - SCREEN_WIDTH);
-        },
-        // Handle gesture completion
-        onPanResponderRelease: (_, gesture) => {
-            // Swipe right - go to previous month (if not at earliest date)
-            if (gesture.dx > requiredSwipeDistance && monthYear.toISOString().slice(0,7) > earliestDate.slice(0,7)) {
-                setDisplayMonthName(DateService.addMonths(monthYear, -1).toLocaleString('default', { month: 'long', year: 'numeric' }));
-                setIsAnimating(true);
-                Animated.spring(panX, { 
-                    toValue: 7, 
-                    useNativeDriver: true 
-                }).start(() => {
-                    prevMonth();
-                    setIsAnimating(false);
-                });
-            } 
-            // Swipe left - go to next month (if not at current month)
-            else if (gesture.dx < -requiredSwipeDistance && monthYear < thisMonth) {
-                setDisplayMonthName(DateService.addMonths(monthYear, 1).toLocaleString('default', { month: 'long', year: 'numeric' }));
-                setIsAnimating(true);
-                Animated.spring(panX, { 
-                    toValue: (-SCREEN_WIDTH-3.5) * 2, 
-                    useNativeDriver: true 
-                }).start(() => {
-                    nextMonth();
-                    setIsAnimating(false);
-                });
-            } 
-            // Snap back to center if swipe distance insufficient
-            else {
-                Animated.spring(panX, { 
-                    toValue: -SCREEN_WIDTH, 
-                    useNativeDriver: true 
-                }).start();
-            }
-        },
-        onPanResponderTerminate: () => {
-            setScrollEnabled(true);
-        },
-    });
-
     // Navigate to detailed view for selected date
     const handleDateSelect = useCallback((date: string) => {
         navigation.navigate("HistoricalData", { date });
@@ -174,7 +124,7 @@ const History = () => {
             enableOnAndroid={true}
             extraScrollHeight={20}
             keyboardShouldPersistTaps="handled" 
-            scrollEnabled={scrollEnabled}
+            scrollEnabled={verticalScrollEnabled}
         >
             {/* Month header with navigation arrows */}
             <View className="flex-row justify-between m-4 items-center relative">
@@ -195,16 +145,21 @@ const History = () => {
             </View>
             
             {/* Swipeable month container */}
-            <Animated.View 
-                style={{ transform: [{ translateX: panX }], width: SCREEN_WIDTH*3 }} // Three times screen width for swipe
-                {...panResponder.panHandlers} 
-                className="flex-row gap-x-2 mx-auto justify-center"
-            >
-                {/* Render three months side-by-side */}
-                {months.map((month, index) => 
-                    <View key={index} style={{ width: SCREEN_WIDTH }}>
+            <FlatList
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                data={months}
+                initialScrollIndex={1}
+                getItemLayout={(_, index) => ({
+                    length: SCREEN_WIDTH,
+                    offset: SCREEN_WIDTH * index,
+                    index,
+                })}
+                renderItem={({ item }) => (
+                    <View style={{ width: SCREEN_WIDTH }}>
                         <RenderMonth
-                            monthYear={month}
+                            monthYear={item}
                             availableDates={availableDates[currentMonthKey]}
                             handleDateSelect={handleDateSelect}
                             className="m-4"
@@ -212,7 +167,9 @@ const History = () => {
                         />
                     </View>
                 )}
-            </Animated.View>
+                ref={flatListRef}
+                keyExtractor={(item) => item.toISOString()}
+            />
             <View className="mx-4 mt-6">
                 <Text className="text-lg font-semibold mb-3">Search Distances</Text>
                 <View className="flex-row gap-2 mb-3 items-center">

@@ -34,12 +34,13 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       edgeToEdgeEnabled: true,
       package: PACKAGE_NAME,
-      versionCode: 18,
+      versionCode: 19,
     },
     plugins: ["expo-secure-store"],
     extra: {
       eas: {
         projectId: APP_ID,
+         
       }
     },
     updates: {

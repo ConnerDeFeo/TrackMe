@@ -45,7 +45,6 @@ def get_available_history_dates(event, context):
             FROM athlete_inputs ai
             {join_clause}
             ORDER BY date DESC
-            LIMIT 7;
         """, params) or []
 
         return {

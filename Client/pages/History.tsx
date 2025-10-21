@@ -5,7 +5,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
 import RenderMonth from "../common/components/history/RenderMonth";
 import TrackMeButton from "../common/components/display/TrackMeButton";
-import TextButton from "../common/components/display/TextButton";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const SCREEN_WIDTH = Dimensions.get("window").width; 
 
@@ -33,8 +33,6 @@ const History = () => {
     const [availableDates, setAvailableDates] = useState<Record<string, Set<string>>>({});
     // Loading state for available dates fetch
     const [loading, setLoading] = useState<boolean>(false);
-    // flag for component mounting to prevent double fetch
-    const [isMounted, setIsMounted] = useState<boolean>(false);
     
     // Prevents user interaction during animation
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
@@ -63,25 +61,13 @@ const History = () => {
 
     // On screen focus, fetch available dates
     useFocusEffect(useCallback(() => {
-        const fetchAvailableDatesOnFocus = async () => {
-            await fetchAvailableDates();
-            setIsMounted(true);
-        };
-        fetchAvailableDatesOnFocus();
-    }, []));
-
-    // On Filter change, clear cached dates and refetch for current month
-    useEffect(() => {
-        if(isMounted){
-            setAvailableDates({});
-            fetchAvailableDates();
-        }
-    }, [distanceFilters]);
+        fetchAvailableDates();
+    }, [distanceFilters]));
 
     // Reset animation position and fetch dates when month changes
     useEffect(() => {
         panX.setValue(-SCREEN_WIDTH);
-        if (!availableDates.hasOwnProperty(currentMonthKey) && isMounted) {
+        if (!availableDates.hasOwnProperty(currentMonthKey) ) {
             fetchAvailableDates();
         }
     }, [monthYear]);
@@ -181,7 +167,15 @@ const History = () => {
     ];
 
     return(
-        <ScrollView className="pt-4 bg-white flex-1" scrollEnabled={scrollEnabled}>
+        <KeyboardAwareScrollView
+            className='bg-white flex-1 pt-4' 
+            showsHorizontalScrollIndicator={false} 
+            showsVerticalScrollIndicator={false}
+            enableOnAndroid={true}
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled" 
+            scrollEnabled={scrollEnabled}
+        >
             {/* Month header with navigation arrows */}
             <View className="flex-row justify-between m-4 items-center relative">
                 {/* Previous month button (only show if not at earliest date) */}
@@ -264,7 +258,7 @@ const History = () => {
                     </View>
                 )}
             </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     );
 }
 

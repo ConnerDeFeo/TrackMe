@@ -57,7 +57,6 @@ const History = () => {
         setCurrentMonthIndex(index);
     };
 
-    // ========== Data Fetching ==========
     // Fetch available dates for a specific month from the server
     const fetchAvailableDates = async () => {
         setLoading(true);
@@ -73,17 +72,10 @@ const History = () => {
 
     // On screen focus, fetch available dates
     useFocusEffect(useCallback(() => {
+        if (availableDates.hasOwnProperty(currentMonthKey)) return;
         fetchAvailableDates();
-    }, [distanceFilters]));
-
-    // Reset animation position and fetch dates when month changes
-    useEffect(() => {
-        if (!availableDates.hasOwnProperty(currentMonthKey) ) {
-            fetchAvailableDates();
-        }
-    }, [currentMonthKey]);
-
-
+    }, [distanceFilters, currentMonthKey]));
+    
     // Fetch the earliest date with available data on component mount
     useEffect(() => {
         const fetchEarliestDate = async () => {
@@ -105,7 +97,6 @@ const History = () => {
     const handleDateSelect = useCallback((date: string) => {
         navigation.navigate("HistoricalData", { date });
     }, [navigation]);
-
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4' 

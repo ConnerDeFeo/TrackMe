@@ -120,7 +120,7 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <AthleteStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />
         <AthleteStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
-        <AthleteStack.Screen name="History" options={{ title: "History" }} component={ScrollViewWrapper(<History />)} />
+        <AthleteStack.Screen name="History" options={{ title: "History" }} component={History} />
         <AthleteStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
       </AthleteStack.Navigator>
       <AthleteFooter />
@@ -158,7 +158,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <CoachStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />
         <CoachStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
-        <CoachStack.Screen name="History" options={{ title: "History" }} component={ScrollViewWrapper(<History />)} />
+        <CoachStack.Screen name="History" options={{ title: "History" }} component={History} />
       </CoachStack.Navigator>
       <CoachFooter />
     </>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryService from "../services/HistoryService";
-import { View, PanResponder, Animated, Dimensions, Text, Pressable, Image, TextInput } from "react-native";
+import { View, PanResponder, Animated, Dimensions, Text, Pressable, Image, TextInput, ScrollView } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import DateService from "../services/DateService";
 import RenderMonth from "../common/components/history/RenderMonth";
@@ -43,7 +43,9 @@ const History = () => {
 
     // Animation value for swipe gesture (starts at -SCREEN_WIDTH for center position)
     const panX = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
-    const requiredSwipeDistance = 150; // Minimum pixels to trigger month change
+    const requiredSwipeDistance = SCREEN_WIDTH * 0.25; // Minimum pixels to trigger month change
+    // Scroll enabled state for parent ScrollView
+    const [scrollEnabled, setScrollEnabled] = useState(true);
 
     // ========== Data Fetching ==========
     // Fetch available dates for a specific month from the server
@@ -70,8 +72,10 @@ const History = () => {
 
     // On Filter change, clear cached dates and refetch for current month
     useEffect(() => {
-        setAvailableDates({});
-        fetchAvailableDates();
+        if(isMounted){
+            setAvailableDates({});
+            fetchAvailableDates();
+        }
     }, [distanceFilters]);
 
     // Reset animation position and fetch dates when month changes
@@ -109,11 +113,18 @@ const History = () => {
 
     // ========== Swipe Gesture Handling ==========
     const panResponder = PanResponder.create({
-        // Only allow gesture when not animating
-        onMoveShouldSetPanResponder: () => {
-            return !isAnimating;
+        // Claim responder early for horizontal swipes
+        onStartShouldSetPanResponder: (_, gesture) => {
+            return Math.abs(gesture.dx) > Math.abs(gesture.dy);
         },
-        // Update animation position as user swipes
+        onMoveShouldSetPanResponder: (_, gesture) => {
+            const isHorizontal = Math.abs(gesture.dx) > Math.abs(gesture.dy) * 1.5;
+            if (isHorizontal && !isAnimating) {
+                setScrollEnabled(false);
+                return true;
+            }
+            return false;
+        },
         onPanResponderMove: (_, gesture) => {
             panX.setValue(gesture.dx - SCREEN_WIDTH);
         },
@@ -150,7 +161,10 @@ const History = () => {
                     useNativeDriver: true 
                 }).start();
             }
-        }
+        },
+        onPanResponderTerminate: () => {
+            setScrollEnabled(true);
+        },
     });
 
     // Navigate to detailed view for selected date
@@ -167,7 +181,7 @@ const History = () => {
     ];
 
     return(
-        <View className="mt-4">
+        <ScrollView className="pt-4 bg-white flex-1" scrollEnabled={scrollEnabled}>
             {/* Month header with navigation arrows */}
             <View className="flex-row justify-between m-4 items-center relative">
                 {/* Previous month button (only show if not at earliest date) */}
@@ -206,7 +220,7 @@ const History = () => {
                 )}
             </Animated.View>
             <View className="mx-4 mt-6">
-                <Text className="text-lg font-semibold mb-3 text-gray-800">Search Distances</Text>
+                <Text className="text-lg font-semibold mb-3">Search Distances</Text>
                 <View className="flex-row gap-2 mb-3 items-center">
                     <TextInput 
                         placeholder="Enter distance (meters)" 
@@ -250,7 +264,7 @@ const History = () => {
                     </View>
                 )}
             </View>
-        </View>
+        </ScrollView>
     );
 }
 

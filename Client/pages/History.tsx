@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Calender from "../common/components/history/Calender";
+import GraphService from "../services/GraphService";
+import DateService from "../services/DateService";
 
 
 const History = () => {
@@ -11,7 +13,22 @@ const History = () => {
     const [distanceInput, setDistanceInput] = useState<string>("");
     // Distance filters for available dates
     const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
-    
+
+    const [workRestRatios, setWorkRestRatios] = useState<{date:string, ratio:number}[]>([]);
+
+    useEffect(()=>{
+        const date = new Date();
+        const fetchWorkRestRatios = async () => {
+            const resp = await GraphService.getWorkRestRatio(DateService.formatDate(date));
+            if (resp.ok) {
+                const data = await resp.json();
+                console.log(data);
+                setWorkRestRatios(data);
+            }
+        };
+        fetchWorkRestRatios();
+    }, []);
+
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4' 
@@ -68,6 +85,7 @@ const History = () => {
                     </View>
                 )}
             </View>
+            {/*Graphs being displayed here*/}
         </KeyboardAwareScrollView>
     );
 }

@@ -1,6 +1,5 @@
 import { Input } from "../common/types/inputs/Input";
 import API from "./API";
-import DateService from "./DateService";
 import UserService from "./UserService";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 

@@ -6,6 +6,7 @@ import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
 
+const GRAPH_ASPECT_RATIO = 9 / 16;
 
 const History = () => {
 
@@ -29,6 +30,9 @@ const History = () => {
         fetchWorkRestRatios();
     }, []);
 
+    const min = Math.min(...workRestRatios.map(wr => wr.ratio));
+    const max = Math.max(...workRestRatios.map(wr => wr.ratio));
+    
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4' 
@@ -86,6 +90,7 @@ const History = () => {
                 )}
             </View>
             {/*Graphs being displayed here*/}
+
         </KeyboardAwareScrollView>
     );
 }

@@ -11,7 +11,7 @@ const History = () => {
     const [distanceInput, setDistanceInput] = useState<string>("");
     // Distance filters for available dates
     const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
-
+    
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4' 

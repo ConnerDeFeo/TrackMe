@@ -8,7 +8,6 @@ import RenderMonth from "./RenderMonth";
 const SCREEN_WIDTH = Dimensions.get("window").width; 
 
 const Calender = ({distanceFilters}:{distanceFilters?: string[]}) => {
-    // ========== Date State Management ==========
     // Today's date, flag for not allowing user to go past today
     const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     
@@ -67,7 +66,11 @@ const Calender = ({distanceFilters}:{distanceFilters?: string[]}) => {
     useFocusEffect(useCallback(() => {
         if (availableDates.hasOwnProperty(currentMonthKey)) return;
         fetchAvailableDates();
-    }, [distanceFilters, currentMonthKey]));
+    }, [currentMonthKey, distanceFilters]));
+    
+    useEffect(() => {
+        fetchAvailableDates();
+    }, [distanceFilters]);
     
     // Fetch the earliest date with available data on component mount
     useEffect(() => {
@@ -89,6 +92,7 @@ const Calender = ({distanceFilters}:{distanceFilters?: string[]}) => {
     const handleDateSelect = useCallback((date: string) => {
         navigation.navigate("HistoricalData", { date });
     }, [navigation]);
+
     return(
         <>
             {/* Month header with navigation arrows */}

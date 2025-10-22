@@ -14,7 +14,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     version: "2.3.0",
     orientation: "portrait",
     userInterfaceStyle: "light",
-    newArchEnabled: true,
+    newArchEnabled: false,
     icon: ICON,
     splash: {
       resizeMode: "contain",
@@ -32,7 +32,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       adaptiveIcon: {
         backgroundColor: "#ffffff",
       },
-      edgeToEdgeEnabled: true,
+      edgeToEdgeEnabled: false,
       package: PACKAGE_NAME,
       versionCode: 20,
     },

@@ -106,10 +106,11 @@ const History = () => {
                     </View>
                 )}
             </View>
-            <Svg height="100" width="100">
-                <Circle cx="50" cy="50" r="40" stroke="blue" strokeWidth="2.5" fill="green" />
-            </Svg>
-            {/*Graphs being displayed here*/}
+            <View style={{ padding: 20 }}>
+                <Svg height="100" width="100">
+                    <Circle cx="50" cy="50" r="40" stroke="blue" strokeWidth="2.5" fill="green" />
+                </Svg>
+            </View>
         </KeyboardAwareScrollView>
     );
 }

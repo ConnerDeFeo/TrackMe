@@ -26,6 +26,8 @@ locals {
     "relations/search_user_relation" = { lambda = aws_lambda_function.lambdas["search_user_relation"], method = "GET" }
     "relations/get_mutual_athletes" = { lambda = aws_lambda_function.lambdas["get_mutual_athletes"], method = "GET" }
 
+    "graph/get_work_rest_ratio" = { lambda = aws_lambda_function.lambdas["get_work_rest_ratio"], method = "GET" }
+
     # POST Lambdas
     "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }
     "athletes/remove_inputs" = { lambda = aws_lambda_function.lambdas["remove_inputs"], method = "POST" }
@@ -87,6 +89,11 @@ resource "aws_api_gateway_resource" "history" {
   parent_id   = aws_api_gateway_rest_api.main.root_resource_id
   path_part   = "history"
 }
+resource "aws_api_gateway_resource" "graph" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  parent_id   = aws_api_gateway_rest_api.main.root_resource_id
+  path_part   = "graph"
+}
 
 # Create sub-resources for each lambda function based on the defined local variables
 resource "aws_api_gateway_resource" "subresources" {
@@ -102,6 +109,7 @@ resource "aws_api_gateway_resource" "subresources" {
       general  = aws_api_gateway_resource.general.id
       relations = aws_api_gateway_resource.relations.id
       history = aws_api_gateway_resource.history.id
+      graph = aws_api_gateway_resource.graph.id
     },
     split("/", each.key)[0], # first segment
     aws_api_gateway_rest_api.main.root_resource_id

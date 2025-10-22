@@ -67,6 +67,9 @@ locals {
     "get_mutual_user_relations",
     "get_relation_invites_count",
     "get_mutual_athletes",
+
+    # Graph Lambdas
+    "get_work_rest_ratio",
   ]
   public_lambda_names = [
     "bedrock_workout_generation",

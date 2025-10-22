@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS group_workouts (
 CREATE TABLE IF NOT EXISTS athlete_time_inputs(
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES users(userId) NOT NULL,
-    groupId INT REFERENCES groups(id) NOT NULL,
     distance INT DEFAULT 0,
     time FLOAT DEFAULT 0,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
@@ -59,36 +58,10 @@ CREATE TABLE IF NOT EXISTS athlete_time_inputs(
 CREATE TABLE IF NOT EXISTS athlete_rest_inputs(
     id SERIAL PRIMARY KEY,
     athleteId VARCHAR(255) REFERENCES users(userId) NOT NULL,
-    groupId INT REFERENCES groups(id) NOT NULL,
     restTime INT DEFAULT 0,
     date VARCHAR(10) DEFAULT CURRENT_DATE,
     timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE OR REPLACE VIEW athlete_inputs AS
-SELECT 
-    id,
-    athleteId,
-    groupId,
-    distance,
-    time,
-    date,
-    NULL AS restTime,
-    timeStamp,
-    'run' AS type
-FROM athlete_time_inputs
-UNION ALL
-SELECT 
-    id,
-    athleteId,
-    groupId,
-    NULL AS distance,
-    NULL AS time,
-    date,
-    restTime,
-    timeStamp,
-    'rest' AS type
-FROM athlete_rest_inputs;
 
 CREATE TABLE IF NOT EXISTS section_templates(
     id SERIAL PRIMARY KEY,
@@ -99,17 +72,6 @@ CREATE TABLE IF NOT EXISTS section_templates(
     exercises JSONB,
     UNIQUE (coachId, name)
 );
-
--- Migration away from athlete inputs dependant on groups
-ALTER TABLE athlete_time_inputs
-DROP CONSTRAINT IF EXISTS athlete_time_inputs_groupid_fkey;
-ALTER TABLE athlete_time_inputs
-DROP COLUMN IF EXISTS groupId CASCADE;
-
-ALTER TABLE athlete_rest_inputs
-DROP CONSTRAINT IF EXISTS athlete_rest_inputs_groupid_fkey;
-ALTER TABLE athlete_rest_inputs
-DROP COLUMN IF EXISTS groupId CASCADE;
 
 CREATE OR REPLACE VIEW athlete_inputs AS
 SELECT 

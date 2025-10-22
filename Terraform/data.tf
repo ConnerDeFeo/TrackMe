@@ -211,6 +211,12 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/relations/get_mutual_athletes"
       output_path = "${path.module}/../Server/lambdas/relations/zips/get_mutual_athletes.zip"
     }
+
+    # Graph Lambdas
+    "get_work_rest_ratio" = {
+      source_dir  = "${path.module}/../Server/lambdas/graph/get_work_rest_ratio"
+      output_path = "${path.module}/../Server/lambdas/graph/zips/get_work_rest_ratio.zip"
+    }
   }
 }
 

@@ -740,3 +740,26 @@ Resources:
       Layers:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
+
+  #
+  #
+  #
+  # GRAPH FUNCTIONS
+  #
+  #
+  #
+  GetWorkRestRatioFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/graph/get_work_rest_ratio/
+      Handler: get_work_rest_ratio.get_work_rest_ratio
+      Events:
+        GetWorkRestRatioApi:
+          Type: Api
+          Properties:
+            Path: /graph/get_work_rest_ratio/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer

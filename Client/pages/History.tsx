@@ -27,6 +27,7 @@ const History = () => {
                 <View className="flex-row gap-2 mb-3 items-center">
                     <TextInput 
                         placeholder="Enter distance (meters)" 
+                        keyboardType="numeric"
                         className="flex-1 border border-gray-300 rounded-lg px-4 py-3 bg-white shadow-sm"
                         value={distanceInput}
                         onChangeText={setDistanceInput}

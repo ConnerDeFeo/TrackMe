@@ -5,6 +5,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
+import Svg, { Circle, Path } from 'react-native-svg';
+import * as d3 from 'd3';
 
 const GRAPH_ASPECT_RATIO = 9 / 16;
 
@@ -15,24 +17,39 @@ const History = () => {
     // Distance filters for available dates
     const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
 
-    const [workRestRatios, setWorkRestRatios] = useState<{date:string, ratio:number}[]>([]);
+    // const [workRestRatios, setWorkRestRatios] = useState<{date:string, ratio:number}[]>([]);
 
-    useEffect(()=>{
-        const date = new Date();
-        const fetchWorkRestRatios = async () => {
-            const resp = await GraphService.getWorkRestRatio(DateService.formatDate(date));
-            if (resp.ok) {
-                const data = await resp.json();
-                console.log(data);
-                setWorkRestRatios(data);
-            }
-        };
-        fetchWorkRestRatios();
-    }, []);
+    // useEffect(()=>{
+    //     const date = new Date();
+    //     const fetchWorkRestRatios = async () => {
+    //         const resp = await GraphService.getWorkRestRatio(DateService.formatDate(date));
+    //         if (resp.ok) {
+    //             const data = await resp.json();
+    //             setWorkRestRatios(data);
+    //         }
+    //     };
+    //     fetchWorkRestRatios();
+    // }, []);
+    const workRestRatios = [{date: "2023-01-01", ratio: 0.5}, {date: "2023-01-02", ratio: 0.7}, {date: "2023-01-03", ratio: 0.6}];
+    // Graph stuff
+    const width = 350;
+    const height = width * GRAPH_ASPECT_RATIO;
 
     const min = Math.min(...workRestRatios.map(wr => wr.ratio));
     const max = Math.max(...workRestRatios.map(wr => wr.ratio));
+
+    const yScale = d3.scaleLinear()
+        .domain([min, max])
+        .range([height, 0]);
+    const xScale = d3.scaleLinear()
+        .domain([0, workRestRatios.length - 1])
+        .range([0, width]);
+
+    const lineFn = d3.line<{date:string, ratio:number}>()
+        .x((d, i) => xScale(i))
+        .y(d => yScale(d.ratio))
     
+    const svgLine = lineFn(workRestRatios) || undefined;
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4' 
@@ -89,8 +106,10 @@ const History = () => {
                     </View>
                 )}
             </View>
+            <Svg height="100" width="100">
+                <Circle cx="50" cy="50" r="40" stroke="blue" strokeWidth="2.5" fill="green" />
+            </Svg>
             {/*Graphs being displayed here*/}
-
         </KeyboardAwareScrollView>
     );
 }

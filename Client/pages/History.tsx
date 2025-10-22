@@ -26,6 +26,7 @@ const History = () => {
     
     // Earliest date with historical data available (YYYY-MM format)
     const [earliestDate, setEarliestDate] = useState<string>(thisMonth.toISOString().slice(0,7));
+    const earliestMonth = earliestDate.slice(0,7);
     
     // Display name for current month (e.g., "January 2024")
     const displayMonthName = months[currentMonthIndex].toLocaleString('default', { month: 'long', year: 'numeric' });
@@ -50,7 +51,7 @@ const History = () => {
         const index = Math.round(offsetX / SCREEN_WIDTH);
 
         // If user scrolled to the last month (furthest back in time), add another month
-        if (index === months.length - 1 && earliestDate < months[index].toISOString().slice(0,7)) {
+        if (index === months.length - 1 && earliestMonth < months[index].toISOString().slice(0,7)) {
             appendMonth();
         }
         
@@ -82,11 +83,10 @@ const History = () => {
             const resp = await HistoryService.getEarliestDateAvailable();
             if (resp.ok) {
                 const earliestDate = await resp.json();
-                const sliced = earliestDate.slice(0,7);
-                if (sliced < earliestDate) {
+                if (earliestDate.slice(0,7) < earliestMonth) {
                     appendMonth();
                 }
-                setEarliestDate(earliestDate.slice(0,7));
+                setEarliestDate(earliestDate);
             }
         };
         fetchEarliestDate();

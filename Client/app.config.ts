@@ -26,7 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       bundleIdentifier: BUNDLE_IDENTIFIER,
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
-      }
+      },
     },
     android: {
       adaptiveIcon: {
@@ -40,12 +40,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     extra: {
       eas: {
         projectId: APP_ID,
-         
-      }
+      },
     },
     updates: {
-      url: "https://u.expo.dev/7a30db18-1202-43a9-9ca5-8c93acc236ed", 
-      fallbackToCacheTimeout: 0
+      url: `https://u.expo.dev/${APP_ID}`,
+      fallbackToCacheTimeout: 0,
     },
     runtimeVersion: {
       policy: "appVersion",

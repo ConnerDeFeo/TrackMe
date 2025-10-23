@@ -5,8 +5,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
-import Svg, { Circle, Path } from 'react-native-svg';
-import * as d3 from 'd3';
+import Svg, { Circle } from 'react-native-svg';
+import * as d3 from 'd3'; 
 
 const GRAPH_ASPECT_RATIO = 9 / 16;
 
@@ -108,7 +108,7 @@ const History = () => {
             </View>
             <View style={{ padding: 20 }}>
                 <Svg height="100" width="100">
-                    <Circle cx="50" cy="50" r="40" stroke="blue" strokeWidth="2.5" fill="green" />
+                    <Circle cx="50" cy="50" r="40" stroke="blue" fill="green" />
                 </Svg>
             </View>
         </KeyboardAwareScrollView>

@@ -6,6 +6,7 @@ import { RelationStatus } from "../common/constants/Enums";
 import TextButton from "../common/components/display/TextButton";
 import RelationActionButton from "../common/components/display/RelationActionButton";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import UserDisplay from "../common/components/display/UserDisplay";
 
 // Relations.tsx
 
@@ -94,7 +95,7 @@ const Relations = () => {
             );
         }
     };
-
+    console.log("Current Users:", currentUsers);
     // Main render: SearchBar, loading state, empty state, or list of users
     return (
         <View className="mx-4">
@@ -129,17 +130,21 @@ const Relations = () => {
             // List of users with action buttons
             ) : (
                 <View className="mt-2">
-                    {currentUsers.map((user) => (
+                    {currentUsers.map(([userId, username, firstName, lastName, accountType, relationStatus]) => (
                         <View
-                            key={user[0]}
+                            key={userId}
                             className="flex flex-row justify-between items-center border trackme-border-gray p-4 rounded-xl mb-3 bg-white shadow-sm"
                         >
                             {/* User name */}
-                            <Text className="font-semibold">{user[1]}</Text>
+                            <UserDisplay
+                                username={username}
+                                firstName={firstName}
+                                lastName={lastName}
+                            />
                             {/* Action button */}
                             <RelationActionButton
-                                relationId={user[0]}
-                                relationStatus={user[5] as RelationStatus}
+                                relationId={userId}
+                                relationStatus={relationStatus as RelationStatus}
                                 handleAddRelation={handleAddRelation}
                                 handleRelationRemoval={handleRelationRemoval}
                             />

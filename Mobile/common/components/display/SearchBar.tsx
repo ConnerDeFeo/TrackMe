@@ -10,6 +10,7 @@ const SearchBar: React.FC<{ searchTerm: string, setSearchTerm: (term: string) =>
                 placeholder={placeholder}
                 value={searchTerm}
                 onChangeText={setSearchTerm}
+                onKeyPress={(e)=>{if(e.nativeEvent.key === "Enter"){handleSearch(searchTerm)}}}
             />
             <Pressable className="flex justify-center items-center w-5 h-5 absolute right-3 top-[0.4rem] opacity-50 p-5" onPress={() => handleSearch(searchTerm)}>
                 <Image source={require('../../../assets/images/Search.png')} className="h-5 w-5"/>

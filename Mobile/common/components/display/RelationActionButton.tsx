@@ -33,7 +33,7 @@ const RelationActionButton = ({ relationStatus, relationId, handleAddRelation, h
         case RelationStatus.AwaitingResponse:
             // Show "Accept" and "Decline" side by side
             return (
-                <View className="flex flex-row justify-between items-center gap-2">
+                <View className="flex justify-between items-center gap-2">
                     <TrackMeButton
                         text="Accept"
                         onPress={() => handleAddRelation(relationId)}

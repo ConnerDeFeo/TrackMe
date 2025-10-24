@@ -87,86 +87,64 @@ const QuickInput = ({handleInputAddition, runInput, className}:
             handleInputAddition(currentRestInput);
         }
     }
+    
 
     return (
         // Input section with dynamic display based on input type
-        <View className={`flex flex-row items-center gap-x-4 ${className}`}>
-            {/* Conditional rendering: Time/Distance input for runs, Time-only input for rest */}
-            <View className="flex-1">
-                <View className="flex-row items-center gap-x-2 justify-between">
-                    <View className="flex-1">
-                        <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {runInput ? "Time (seconds)" : "Minutes"}
-                        </Text>
-                        <TextInput
-                            placeholder={runInput ? "0.00" : "Mins"}
-                            keyboardType="decimal-pad"
-                            value={runInput ? 
-                                currentTimeDistanceInput.time
-                                : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
-                            }
-                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                            onChangeText={text => runInput ? handleTimeChange(text) : handleMinuteChange(text)}
-                        />
-                    </View>
-                    {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
-                    {/**Drop down for inputing times */}
-                    <View className="flex-1">
-                        <TouchableWithoutFeedback
-                            onPress={() => {
-                                buttonRef.current?.measure((x, y, width, height, pageX, pageY) => {
-                                    setDropdownPosition({ x: pageX, y: pageY, width, height });
-                                    setIsOpen(true);
-                                });
-                            }}
-                        >
-                            <View 
-                                ref={buttonRef}
-                                className="border border-gray-300 rounded-lg px-4 py-3"
-                                
-                            >
-                                <Text>{selected || 'Select an option'}</Text>
+        <TouchableWithoutFeedback>
+            <View className={`flex flex-row items-center gap-x-4 ${className}`} pointerEvents="box-none">
+                {/* Conditional rendering: Time/Distance input for runs, Time-only input for rest */}
+                <View className="flex-1">
+                    <View className="flex-row items-center gap-x-2 justify-between">
+                        <View className="flex-1">
+                            <Text className="text-xs font-medium text-gray-600 mb-1">
+                                {runInput ? "Time (seconds)" : "Minutes"}
+                            </Text>
+                            <TextInput
+                                placeholder={runInput ? "0.00" : "Mins"}
+                                keyboardType="decimal-pad"
+                                value={runInput ? 
+                                    currentTimeDistanceInput.time
+                                    : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
+                                }
+                                className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                                onChangeText={text => runInput ? handleTimeChange(text) : handleMinuteChange(text)}
+                            />
+                        </View>
+                        {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
+                        <View className="flex-1">
+                            <Text className="text-xs font-medium text-gray-600 mb-1">
+                                {runInput ? "Distance" : "Seconds"}
+                            </Text>
+                            {/* Container for distance input and unit */}
+                            <View className="flex flex-row items-center">
+                                <View className="border trackme-border-gray rounded-lg flex-1 flex-row">
+                                    <TextInput
+                                        placeholder={runInput ? "0" : "Secs"}
+                                        keyboardType="numeric"
+                                        className="rounded-lg bg-white text-center font-medium flex-1"
+                                        value={runInput ? 
+                                            (currentTimeDistanceInput.distance === 0 ? "" : currentTimeDistanceInput.distance.toString()) 
+                                            : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
+                                        }
+                                        onChangeText={text => runInput ? handleDistanceChange(text) : handleSecondChange(text)}
+                                    />
+                                    <Pressable className="border-l border-gray-300 px-2 flex justify-center items-center" onPress={() => setCurrentTimeDistanceInput({...currentTimeDistanceInput, distance: currentTimeDistanceInput.distance + 1})}>
+                                        <Text>^</Text>
+                                    </Pressable>
+                                </View>
+                                {/* Unit label for distance (meters) */}
+                                {runInput && <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>}
                             </View>
-                        </TouchableWithoutFeedback>
-
-                        <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
-                            <Pressable 
-                                className="flex-1" 
-                                onPress={() => setIsOpen(false)}
-                            >
-                                <ScrollView 
-                                    style={{
-                                        position: 'absolute',
-                                        left: dropdownPosition.x,
-                                        top: dropdownPosition.y - (options.length * 38) - 10,
-                                        width: dropdownPosition.width,
-                                    }}
-                                    className="bg-white rounded-lg border border-gray-300 shadow-lg"
-                                    keyboardShouldPersistTaps="handled"
-                                >
-                                    {options.reverse().map((option) => (
-                                        <Pressable
-                                            key={option}
-                                            onPress={() => {
-                                                setSelected(option);
-                                                setIsOpen(false);
-                                            }}
-                                            className="py-3 px-4 border-b border-gray-200"
-                                        >
-                                            <Text>{option}</Text>
-                                        </Pressable>
-                                    ))}
-                                </ScrollView>
-                            </Pressable>
-                        </Modal>
+                        </View>
                     </View>
                 </View>
+                {/* Submit button with arrow icon */}
+                <Pressable className="rounded-full trackme-bg-blue mt-4" onPress={handleSubmission}>
+                    <Image source={require("../../assets/images/Back.png")} className="h-12 w-12 rotate-90" />
+                </Pressable>
             </View>
-            {/* Submit button with arrow icon */}
-            <Pressable className="rounded-full trackme-bg-blue mt-4" onPress={handleSubmission}>
-                <Image source={require("../../assets/images/Back.png")} className="h-12 w-12 rotate-90" />
-            </Pressable>
-        </View>
+        </TouchableWithoutFeedback>
     );
 }
 

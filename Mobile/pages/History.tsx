@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 import * as d3 from 'd3'; 
 
 const GRAPH_ASPECT_RATIO = 9 / 16;
@@ -34,28 +34,33 @@ const History = () => {
     const renderGraph = () => {
         const height = width * GRAPH_ASPECT_RATIO;
         const padding = 20;
-
-        const min = Math.min(...workRestRatios.map(wr => wr.workRestRatio));
+        const multiplier = 1.1;
         const max = Math.max(...workRestRatios.map(wr => wr.workRestRatio));
 
         const yScale = d3.scaleLinear()
-            .domain([min, max])
-            .range([height-padding, padding]);
+            .domain([0, max*multiplier])
+            .range([height, padding]);
         const xScale = d3.scaleLinear()
             .domain([0, workRestRatios.length - 1])
-            .range([padding, width-padding]);
+            .range([0, width]);
 
         const lineFn = d3.line<{date:string, workRestRatio:number}>()
             .x((_, i) => xScale(i))
             .y(d => yScale(d.workRestRatio));
+
+        const areaFn = d3.area<{date:string, workRestRatio:number}>()
+            .x((_, i) => xScale(i))
+            .y0(height)
+            .y1(d => yScale(d.workRestRatio));
         
         const svgLine = lineFn(workRestRatios) || undefined;
+        const svgArea = areaFn(workRestRatios) || undefined;
 
         return(
             <View className="w-[80%] mx-auto mt-6 flex-row">
-                <View className="justify-between mb-8 mt-6 mr-2">
-                    <Text>{workRestRatios[workRestRatios.length-1]?.workRestRatio.toString().slice(0, 5)}</Text>
-                    <Text>{workRestRatios[0]?.workRestRatio.toString().slice(0, 5)}</Text>
+                <View className="justify-between mb-6">
+                    <Text className="mr-2">{(workRestRatios[workRestRatios.length-1]?.workRestRatio * multiplier).toString().slice(0, 5)}</Text>
+                    <Text className="ml-auto mr-2">0</Text>
                 </View>
                 <View className="w-[80%]">
                     <View 
@@ -66,7 +71,14 @@ const History = () => {
                         className="border trackme-border-gray w-full"
                     >
                         <Svg height={height} width={width}>
-                            <Path d={svgLine || ""} stroke="blue" fill="none" strokeWidth={4}/>
+                            <Defs>
+                                <LinearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+                                    <Stop offset="0%" stopColor="#007AFF" stopOpacity="1" />
+                                    <Stop offset="100%" stopColor="#007AFF" stopOpacity="0.1" />
+                                </LinearGradient>
+                            </Defs>
+                            <Path d={svgLine || ""} stroke="#007AFF" fill="none" strokeWidth={3}/>
+                            <Path d={svgArea || ""} fill="url(#gradient)" />
                         </Svg>
                     </View>
                     <View className="flex-row justify-between">
@@ -133,7 +145,7 @@ const History = () => {
                     </View>
                 )}
             </View>
-            <View>
+            <View className="mb-12">
                 <Text className="text-lg font-semibold text-center mt-8">Work-Rest Ratio (Past 30 Sessions)</Text>
                 {workRestRatios.length > 1 ? renderGraph() : <Text className="text-center my-4">Loading graph...</Text>}
             </View>

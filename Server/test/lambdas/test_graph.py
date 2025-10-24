@@ -2,6 +2,7 @@ import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
+from lambdas.graph.get_avg_velocity.get_avg_velocity import get_avg_velocity
 from lambdas.graph.get_work_rest_ratio.get_work_rest_ratio import get_work_rest_ratio
 from rds import execute_file
 from data import TestData
@@ -126,7 +127,6 @@ def setup_before_each_test():
     yield
 
 def test_get_work_rest_ratio_returns_success():
-
     # Arrange
     setup_historical_inputs()
     event = {
@@ -136,7 +136,6 @@ def test_get_work_rest_ratio_returns_success():
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")
     }
 
-    debug_table()
     # Act
     response = get_work_rest_ratio(event, {})
 
@@ -146,5 +145,29 @@ def test_get_work_rest_ratio_returns_success():
     expected_ratios = [
         {"date": three_days_ago, "workRestRatio": 8 / 5.0},
         {"date": date, "workRestRatio": (10.8 + 30) / 5.0}
+    ]
+    assert body == expected_ratios
+
+def test_get_avg_velocity_returns_success():
+    # Arrange
+    setup_historical_inputs()
+    event = {
+        'queryStringParameters': {
+            "date": date
+        },
+        "headers":generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = get_avg_velocity(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    expected_ratios = [
+        {"date": three_days_ago, "avgVelocity": 8 / 7.0},
+        {"date": two_days_ago, "avgVelocity": 10 / 8.0},
+        {"date": yesterday, "avgVelocity": 2.0 / 1.0},
+        {"date": date, "avgVelocity": 31.0 / 11.0}
     ]
     assert body == expected_ratios

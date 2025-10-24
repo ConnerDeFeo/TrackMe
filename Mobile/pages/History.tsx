@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { View, Text, Pressable, TextInput, useWindowDimensions  } from "react-native";
+import { View, Text, Pressable, TextInput, ActivityIndicator  } from "react-native";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
-import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
-import * as d3 from 'd3'; 
+import Graph from "../common/components/Graph";
 
 const GRAPH_ASPECT_RATIO = 9 / 16;
 
@@ -17,8 +16,6 @@ const History = () => {
     const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
 
     const [workRestRatios, setWorkRestRatios] = useState<{date:string, workRestRatio:number}[]>([]);
-
-    const [width, setWidth] = useState<number>(0);
 
     useEffect(()=>{
         const date = new Date();
@@ -31,64 +28,7 @@ const History = () => {
         };
         fetchWorkRestRatios();
     }, []);
-    const renderGraph = () => {
-        const height = width * GRAPH_ASPECT_RATIO;
-        const padding = 20;
-        const multiplier = 1.1;
-        const max = Math.max(...workRestRatios.map(wr => wr.workRestRatio));
 
-        const yScale = d3.scaleLinear()
-            .domain([0, max*multiplier])
-            .range([height, padding]);
-        const xScale = d3.scaleLinear()
-            .domain([0, workRestRatios.length - 1])
-            .range([0, width]);
-
-        const lineFn = d3.line<{date:string, workRestRatio:number}>()
-            .x((_, i) => xScale(i))
-            .y(d => yScale(d.workRestRatio));
-
-        const areaFn = d3.area<{date:string, workRestRatio:number}>()
-            .x((_, i) => xScale(i))
-            .y0(height)
-            .y1(d => yScale(d.workRestRatio));
-        
-        const svgLine = lineFn(workRestRatios) || undefined;
-        const svgArea = areaFn(workRestRatios) || undefined;
-
-        return(
-            <View className="w-[80%] mx-auto mt-6 flex-row">
-                <View className="justify-between mb-6">
-                    <Text className="mr-2">{(workRestRatios[workRestRatios.length-1]?.workRestRatio * multiplier).toString().slice(0, 5)}</Text>
-                    <Text className="ml-auto mr-2">0</Text>
-                </View>
-                <View className="w-[80%]">
-                    <View 
-                        onLayout={(event) => {
-                            const { width: layoutWidth } = event.nativeEvent.layout;
-                            setWidth(layoutWidth);
-                        }}
-                        className="border trackme-border-gray w-full"
-                    >
-                        <Svg height={height} width={width}>
-                            <Defs>
-                                <LinearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-                                    <Stop offset="0%" stopColor="#007AFF" stopOpacity="1" />
-                                    <Stop offset="100%" stopColor="#007AFF" stopOpacity="0.1" />
-                                </LinearGradient>
-                            </Defs>
-                            <Path d={svgLine || ""} stroke="#007AFF" fill="none" strokeWidth={3}/>
-                            <Path d={svgArea || ""} fill="url(#gradient)" />
-                        </Svg>
-                    </View>
-                    <View className="flex-row justify-between">
-                        <Text>{workRestRatios[0]?.date}</Text>
-                        <Text>{workRestRatios[workRestRatios.length-1]?.date}</Text>
-                    </View>
-                </View>
-            </View>
-        );
-    };
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4 ' 
@@ -147,7 +87,16 @@ const History = () => {
             </View>
             <View className="mb-12">
                 <Text className="text-lg font-semibold text-center mt-8">Work-Rest Ratio (Past 30 Sessions)</Text>
-                {workRestRatios.length > 1 ? renderGraph() : <Text className="text-center my-4">Loading graph...</Text>}
+                {workRestRatios.length > 1 ? 
+                    <Graph 
+                        data={workRestRatios.map(item => item.workRestRatio)} 
+                        className="w-[80%] mx-auto mt-6 flex-row"
+                        xStart={workRestRatios[0]?.date}
+                        xEnd={workRestRatios[workRestRatios.length - 1]?.date}
+                    /> 
+                    : 
+                    <ActivityIndicator className="mt-6" size="large" color="#007AFF" />
+                }
             </View>
         </KeyboardAwareScrollView>
     );

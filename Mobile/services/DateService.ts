@@ -39,7 +39,13 @@ const DateService = {
         const d = new Date(date);
         d.setMonth(d.getMonth() + months);
         return d;
+    },
+    formateSecondsToTimeString: (totalSeconds: number): string => {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = Math.round((totalSeconds % 60) * 1000) / 1000;
+        const displaySeconds = seconds < 10 ? `0${seconds}` : seconds;
+        return minutes > 0 ? `${minutes}:${displaySeconds}` : `${seconds}s`;
     }
-}
+};
 
 export default DateService;

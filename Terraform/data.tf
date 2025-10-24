@@ -217,6 +217,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/graph/get_work_rest_ratio"
       output_path = "${path.module}/../Server/lambdas/graph/zips/get_work_rest_ratio.zip"
     }
+    "get_avg_velocity" = {
+      source_dir  = "${path.module}/../Server/lambdas/graph/get_avg_velocity"
+      output_path = "${path.module}/../Server/lambdas/graph/zips/get_avg_velocity.zip"
+    }
   }
 }
 

@@ -70,6 +70,7 @@ locals {
 
     # Graph Lambdas
     "get_work_rest_ratio",
+    "get_avg_velocity",
   ]
   public_lambda_names = [
     "bedrock_workout_generation",

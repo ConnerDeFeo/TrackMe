@@ -27,6 +27,7 @@ locals {
     "relations/get_mutual_athletes" = { lambda = aws_lambda_function.lambdas["get_mutual_athletes"], method = "GET" }
 
     "graph/get_work_rest_ratio" = { lambda = aws_lambda_function.lambdas["get_work_rest_ratio"], method = "GET" }
+    "graph/get_avg_velocity" = { lambda = aws_lambda_function.lambdas["get_avg_velocity"], method = "GET" }
 
     # POST Lambdas
     "athletes/input_times" = { lambda = aws_lambda_function.lambdas["input_times"], method = "POST" }

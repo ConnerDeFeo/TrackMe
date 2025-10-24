@@ -763,3 +763,18 @@ Resources:
       Layers:
         - Ref: RDSLayer
         - Ref: UserAuthLayer
+  GetAvgVelocityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/graph/get_avg_velocity/
+      Handler: get_avg_velocity.get_avg_velocity
+      Events:
+        GetAvgVelocityApi:
+          Type: Api
+          Properties:
+            Path: /graph/get_avg_velocity/
+            Method: get
+            RestApiId: !Ref ApiGatewayApi
+      Layers:
+        - Ref: RDSLayer
+        - Ref: UserAuthLayer

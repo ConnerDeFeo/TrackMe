@@ -29,31 +29,30 @@ def get_avg_velocity(event, context):
             """,
             (user_id, date, user_id, date)
         ) or []
-        
+        print(f"Fetched time inputs: {results}")
         avg_velocity_ratios = []
         current_date = None
-        current_total_work = 0
+        current_total_time = 0
         current_total_distance = 0
 
-        def append_ratio(work, ditsance):
-            if ditsance == 0 or current_date is None:
-                return 
+        def append_ratio(time, distance):
+            if time == 0 or current_date is None:
+                return
             avg_velocity_ratios.append({
                 "date": current_date,
-                "avgVelocity": work / float(ditsance)
+                "avgVelocity": distance / float(time)
             })
         for time, distance, input_date in results:
             if input_date != current_date:
-                append_ratio(current_total_work, current_total_distance)
-                current_total_work = 0
+                append_ratio(current_total_time, current_total_distance)
+                current_total_time = 0
                 current_total_distance = 0
             current_date = input_date
-            current_total_work += time if time else 0
+            current_total_time += time if time else 0
             current_total_distance += distance if distance else 0
         # Handle the last date
-        append_ratio(current_total_work, current_total_distance)
+        append_ratio(current_total_time, current_total_distance)
 
-        print(avg_velocity_ratios)
         return {
             "statusCode": 200,
             "body": json.dumps(avg_velocity_ratios),

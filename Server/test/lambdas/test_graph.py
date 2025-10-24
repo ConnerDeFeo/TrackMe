@@ -164,10 +164,13 @@ def test_get_avg_velocity_returns_success():
     # Assert
     assert response['statusCode'] == 200
     body = json.loads(response['body'])
+    assert len(body) == 4
     expected_ratios = [
-        {"date": three_days_ago, "avgVelocity": 8 / 7.0},
-        {"date": two_days_ago, "avgVelocity": 10 / 8.0},
-        {"date": yesterday, "avgVelocity": 2.0 / 1.0},
-        {"date": date, "avgVelocity": 31.0 / 11.0}
+        {"date": three_days_ago, "avgVelocity": 7 / 8.0},
+        {"date": two_days_ago, "avgVelocity":  (3 + 5) / (4 + 6.0)},
+        {"date": yesterday, "avgVelocity": 1 / 2.0},
+        {"date": date, "avgVelocity": 300 / 40.8}
     ]
-    assert body == expected_ratios
+    for i in range(4):
+        assert body[i]['date'] == expected_ratios[i]['date']
+        assert body[i]['avgVelocity'] == expected_ratios[i]['avgVelocity'], f"For index {i}, expected {expected_ratios[i]['avgVelocity']} but got {body[i]['avgVelocity']}"

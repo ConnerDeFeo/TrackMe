@@ -1,9 +1,11 @@
-import { useRef, useState } from "react";
-import { Image, Modal, Pressable, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Image, Pressable, Text, TextInput, View, Keyboard  } from "react-native";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
 import { RestInput } from "../types/inputs/RestInput";
 import { TimeInput } from "../types/inputs/TimeInput";
+import AvailiableInputs from "./athletes/inputs/AvailibleInputs";
+import { Variables } from "../constants/Variables";
 
 /**
  * QuickInput component allows users to quickly log workout inputs (runs or rest periods)
@@ -21,11 +23,21 @@ const QuickInput = ({handleInputAddition, runInput, className}:
     // Distance input for runs
     const [currentRestInput, setCurrentRestInput] = useState<RestInput>({type: InputType.Rest, restTime: 0});
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState('');
-    const inputRef = useRef<TextInput>(null);
+    const [optionsOpen, setOptionsOpen] = useState(false);
 
-    const options = ['Option 1', 'Option 2', 'Option 3'];
+    // Listen for keyboard hide to close dropdown
+    useEffect(() => {
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setOptionsOpen(false);
+            }
+        );
+
+        return () => {
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     /**
      * Handles changes to the seconds portion of time input
@@ -78,7 +90,7 @@ const QuickInput = ({handleInputAddition, runInput, className}:
         if(!runInput && currentRestInput.restTime === 0) return; // Prevent adding rest inputs with 0 time
         // Pass the created input to the parent component via callback
         if(runInput){
-            setCurrentTimeDistanceInput({type: InputType.Run, time: "", distance: 0});
+            setCurrentTimeDistanceInput(prev=>({...prev, time: ""}));
             handleInputAddition(currentTimeDistanceInput);
         }
         else {
@@ -112,11 +124,11 @@ const QuickInput = ({handleInputAddition, runInput, className}:
                     {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
                     <View className="flex-1">
                         <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {runInput ? "Distance" : "Seconds"}
+                            {runInput ? "Distance (meters)" : "Seconds"}
                         </Text>
                         {/* Container for distance input and unit */}
                         <View className="flex flex-row items-center">
-                            <View className="border trackme-border-gray rounded-lg flex-1 flex-row">
+                            <View className="border trackme-border-gray rounded-lg flex-1 flex-row relative">
                                 <TextInput
                                     placeholder={runInput ? "0" : "Secs"}
                                     keyboardType="numeric"
@@ -127,16 +139,22 @@ const QuickInput = ({handleInputAddition, runInput, className}:
                                     }
                                     onChangeText={text => runInput ? handleDistanceChange(text) : handleSecondChange(text)}
                                 />
-
                                 <Pressable 
                                     className="border-l border-gray-300 px-2 flex justify-center items-center" 
-                                    onPressIn={() => setIsOpen(true)}
+                                    onPressIn={() => setOptionsOpen(prev=>!prev)}
                                 >
-                                    <Text>^</Text>
+                                    <Image source={require("../../assets/images/Back.png")} className="h-6 w-6 rotate-90" />
                                 </Pressable>
+                                <AvailiableInputs
+                                    isOpen={optionsOpen}
+                                    onClose={() => setOptionsOpen(false)}
+                                    options={Variables.distanceOptions}
+                                    setSelected={(value:string)=>setCurrentTimeDistanceInput({
+                                        ...currentTimeDistanceInput,
+                                        distance: parseInt(value,10)
+                                    })}
+                                />
                             </View>
-                            {/* Unit label for distance (meters) */}
-                            {runInput && <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>}
                         </View>
                     </View>
                 </View>

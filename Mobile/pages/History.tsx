@@ -11,8 +11,6 @@ import * as d3 from 'd3';
 const GRAPH_ASPECT_RATIO = 9 / 16;
 
 const History = () => {
-    const { width: screenWidth } = useWindowDimensions();
-
     // Current distance filter text input
     const [distanceInput, setDistanceInput] = useState<string>("");
     // Distance filters for available dates
@@ -20,48 +18,63 @@ const History = () => {
 
     const [workRestRatios, setWorkRestRatios] = useState<{date:string, workRestRatio:number}[]>([]);
 
+    const [width, setWidth] = useState<number>(0);
+
     useEffect(()=>{
         const date = new Date();
         const fetchWorkRestRatios = async () => {
             const resp = await GraphService.getWorkRestRatio(DateService.formatDate(date));
             if (resp.ok) {
                 const data = await resp.json();
-                console.log("Fetched work-rest ratios:", data);
                 setWorkRestRatios(data);
             }
         };
         fetchWorkRestRatios();
     }, []);
-    // const workRestRatios = [{date: "2023-01-01", workRestRatio: 0.9}, {date: "2023-01-02", workRestRatio: 1.2}, {date: "2023-01-03", workRestRatio: 4.2}, 
-    //     {date: "2023-01-04", workRestRatio: 1.5}, {date: "2023-01-05", workRestRatio: 3.0}, {date: "2023-01-06", workRestRatio: 2.5}, {date: "2023-01-07", workRestRatio: 1},
-    //     {date: "2023-01-08", workRestRatio: 0.8}, {date: "2023-01-09", workRestRatio: 2.2}, {date: "2023-01-10", workRestRatio: 3.5}, {date: "2023-01-11", workRestRatio: 2.8},
-    //     {date: "2023-01-12", workRestRatio: 1.9}, {date: "2023-01-13", workRestRatio: 0.5}, {date: "2023-01-14", workRestRatio: 1.1}, {date: "2023-01-15", workRestRatio: 2.7},
-    // ];
-    // Graph stuff
     const renderGraph = () => {
-        const width = screenWidth * 0.8;
         const height = width * GRAPH_ASPECT_RATIO;
+        const padding = 20;
 
         const min = Math.min(...workRestRatios.map(wr => wr.workRestRatio));
         const max = Math.max(...workRestRatios.map(wr => wr.workRestRatio));
 
         const yScale = d3.scaleLinear()
             .domain([min, max])
-            .range([height, 0]);
+            .range([height-padding, padding]);
         const xScale = d3.scaleLinear()
             .domain([0, workRestRatios.length - 1])
-            .range([0, width]);
+            .range([padding, width-padding]);
 
         const lineFn = d3.line<{date:string, workRestRatio:number}>()
-            .x((d, i) => xScale(i))
+            .x((_, i) => xScale(i))
             .y(d => yScale(d.workRestRatio));
         
         const svgLine = lineFn(workRestRatios) || undefined;
 
         return(
-            <Svg height={height} width={width}>
-                <Path d={svgLine || ""} stroke="blue" fill="none" strokeWidth={4}/>
-            </Svg>
+            <View className="w-[80%] mx-auto mt-6 flex-row">
+                <View className="justify-between mb-8 mt-6 mr-2">
+                    <Text>{workRestRatios[workRestRatios.length-1]?.workRestRatio.toString().slice(0, 5)}</Text>
+                    <Text>{workRestRatios[0]?.workRestRatio.toString().slice(0, 5)}</Text>
+                </View>
+                <View className="w-[80%]">
+                    <View 
+                        onLayout={(event) => {
+                            const { width: layoutWidth } = event.nativeEvent.layout;
+                            setWidth(layoutWidth);
+                        }}
+                        className="border trackme-border-gray w-full"
+                    >
+                        <Svg height={height} width={width}>
+                            <Path d={svgLine || ""} stroke="blue" fill="none" strokeWidth={4}/>
+                        </Svg>
+                    </View>
+                    <View className="flex-row justify-between">
+                        <Text>{workRestRatios[0]?.date}</Text>
+                        <Text>{workRestRatios[workRestRatios.length-1]?.date}</Text>
+                    </View>
+                </View>
+            </View>
         );
     };
     return(
@@ -120,7 +133,8 @@ const History = () => {
                     </View>
                 )}
             </View>
-            <View className="border w-[80%] mx-auto mt-6 mb-32">
+            <View>
+                <Text className="text-lg font-semibold text-center mt-8">Work Time-Rest Ratio (Past 30 Sessions)</Text>
                 {workRestRatios.length > 1 ? renderGraph() : <Text className="text-center my-4">Loading graph...</Text>}
             </View>
         </KeyboardAwareScrollView>

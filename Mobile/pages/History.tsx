@@ -6,7 +6,7 @@ import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
 import Svg, { Circle } from 'react-native-svg';
-import * as d3 from 'd3'; 
+// import * as d3 from 'd3'; 
 
 const GRAPH_ASPECT_RATIO = 9 / 16;
 
@@ -38,18 +38,18 @@ const History = () => {
     const min = Math.min(...workRestRatios.map(wr => wr.ratio));
     const max = Math.max(...workRestRatios.map(wr => wr.ratio));
 
-    const yScale = d3.scaleLinear()
-        .domain([min, max])
-        .range([height, 0]);
-    const xScale = d3.scaleLinear()
-        .domain([0, workRestRatios.length - 1])
-        .range([0, width]);
+    // const yScale = d3.scaleLinear()
+    //     .domain([min, max])
+    //     .range([height, 0]);
+    // const xScale = d3.scaleLinear()
+    //     .domain([0, workRestRatios.length - 1])
+    //     .range([0, width]);
 
-    const lineFn = d3.line<{date:string, ratio:number}>()
-        .x((d, i) => xScale(i))
-        .y(d => yScale(d.ratio))
+    // const lineFn = d3.line<{date:string, ratio:number}>()
+    //     .x((d, i) => xScale(i))
+    //     .y(d => yScale(d.ratio))
     
-    const svgLine = lineFn(workRestRatios) || undefined;
+    // const svgLine = lineFn(workRestRatios) || undefined;
     return(
         <KeyboardAwareScrollView
             className='bg-white flex-1 pt-4' 

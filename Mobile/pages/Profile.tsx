@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Text, TextInput, Pressable, View, ScrollView, Alert } from "react-native";
+import { Text, TextInput, Pressable, View, Alert } from "react-native";
 import UserService from "../services/UserService";
 import GeneralService from "../services/GeneralService";
 import { useState } from "react";

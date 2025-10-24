@@ -4,6 +4,9 @@ import API from "./API";
 const GraphService = {
     getWorkRestRatio: async (date: string) => {
         return API.get(`${EXPO_PUBLIC_API_URL}/graph/get_work_rest_ratio?date=${date}`);
+    },
+    getAvgVelocity: async (date: string) => {
+        return API.get(`${EXPO_PUBLIC_API_URL}/graph/get_avg_velocity?date=${date}`);
     }
 }
 

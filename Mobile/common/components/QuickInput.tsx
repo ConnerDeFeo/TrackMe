@@ -108,54 +108,58 @@ const QuickInput = ({handleInputAddition, runInput, className}:
                 <View className="flex-row items-center gap-x-2 justify-between">
                     <View className="flex-1">
                         <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {runInput ? "Time (seconds)" : "Minutes"}
-                        </Text>
-                        <TextInput
-                            placeholder={runInput ? "0.00" : "Mins"}
-                            keyboardType="decimal-pad"
-                            value={runInput ? 
-                                currentTimeDistanceInput.time
-                                : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
-                            }
-                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                            onChangeText={text => runInput ? handleTimeChange(text) : handleMinuteChange(text)}
-                        />
-                    </View>
-                    {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
-                    <View className="flex-1">
-                        <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {runInput ? "Distance (meters)" : "Seconds"}
+                            {runInput ? "Distance (meters)" : "Minutes"}
                         </Text>
                         {/* Container for distance input and unit */}
                         <View className="flex flex-row items-center">
                             <View className="border trackme-border-gray rounded-lg flex-1 flex-row relative">
                                 <TextInput
-                                    placeholder={runInput ? "0" : "Secs"}
+                                    placeholder={runInput ? "0" : "Mins"}
                                     keyboardType="numeric"
                                     className="rounded-lg bg-white text-center font-medium flex-1"
                                     value={runInput ? 
                                         (currentTimeDistanceInput.distance === 0 ? "" : currentTimeDistanceInput.distance.toString()) 
-                                        : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
+                                        : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
                                     }
-                                    onChangeText={text => runInput ? handleDistanceChange(text) : handleSecondChange(text)}
+                                    onChangeText={text => runInput ? handleDistanceChange(text) : handleMinuteChange(text)}
                                 />
-                                <Pressable 
-                                    className="border-l border-gray-300 px-2 flex justify-center items-center" 
-                                    onPressIn={() => setOptionsOpen(prev=>!prev)}
-                                >
-                                    <Image source={require("../../assets/images/Back.png")} className="h-6 w-6 rotate-90" />
-                                </Pressable>
-                                <AvailiableInputs
-                                    isOpen={optionsOpen}
-                                    onClose={() => setOptionsOpen(false)}
-                                    options={Variables.distanceOptions}
-                                    setSelected={(value:string)=>setCurrentTimeDistanceInput({
-                                        ...currentTimeDistanceInput,
-                                        distance: parseInt(value,10)
-                                    })}
-                                />
+                                { runInput &&
+                                    <>
+                                        <Pressable 
+                                            className="border-l border-gray-300 px-2 flex justify-center items-center" 
+                                            onPressIn={() => setOptionsOpen(prev=>!prev)}
+                                        >
+                                            <Image source={require("../../assets/images/Back.png")} className="h-6 w-6 rotate-90" />
+                                        </Pressable>
+                                        <AvailiableInputs
+                                            isOpen={optionsOpen}
+                                            onClose={() => setOptionsOpen(false)}
+                                            options={Variables.distanceOptions}
+                                            setSelected={(value:string)=>setCurrentTimeDistanceInput({
+                                                ...currentTimeDistanceInput,
+                                                distance: parseInt(value,10)
+                                            })}
+                                        />
+                                    </>
+                                }
                             </View>
                         </View>
+                    </View>
+                    {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
+                    <View className="flex-1">
+                        <Text className="text-xs font-medium text-gray-600 mb-1">
+                            {runInput ? "Time (seconds)" : "Seconds"}
+                        </Text>
+                        <TextInput
+                            placeholder={runInput ? "0.00" : "Secs"}
+                            keyboardType="decimal-pad"
+                            value={runInput ? 
+                                currentTimeDistanceInput.time
+                                : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
+                            }
+                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                            onChangeText={text => runInput ? handleTimeChange(text) : handleSecondChange(text)}
+                        />
                     </View>
                 </View>
             </View>

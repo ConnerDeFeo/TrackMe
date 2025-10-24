@@ -7,8 +7,6 @@ import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
 import Graph from "../common/components/Graph";
 
-const GRAPH_ASPECT_RATIO = 9 / 16;
-
 const History = () => {
     // Current distance filter text input
     const [distanceInput, setDistanceInput] = useState<string>("");
@@ -16,6 +14,7 @@ const History = () => {
     const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
 
     const [workRestRatios, setWorkRestRatios] = useState<{date:string, workRestRatio:number}[]>([]);
+    const [avgVelocities, setAvgVelocities] = useState<{date:string, avgVelocity:number}[]>([]);
 
     useEffect(()=>{
         const date = new Date();
@@ -26,7 +25,15 @@ const History = () => {
                 setWorkRestRatios(data);
             }
         };
+        const fetchAvgVelocities = async () => {
+            const resp = await GraphService.getAvgVelocity(DateService.formatDate(date));
+            if (resp.ok) {
+                const data = await resp.json();
+                setAvgVelocities(data);
+            }
+        };
         fetchWorkRestRatios();
+        fetchAvgVelocities();
     }, []);
 
     return(
@@ -86,17 +93,32 @@ const History = () => {
                 )}
             </View>
             <View className="mb-12">
-                <Text className="text-lg font-semibold text-center mt-8">Work-Rest Ratio (Past 30 Sessions)</Text>
-                {workRestRatios.length > 1 ? 
-                    <Graph 
-                        data={workRestRatios.map(item => item.workRestRatio)} 
-                        className="w-[80%] mx-auto mt-6 flex-row"
-                        xStart={workRestRatios[0]?.date}
-                        xEnd={workRestRatios[workRestRatios.length - 1]?.date}
-                    /> 
-                    : 
-                    <ActivityIndicator className="mt-6" size="large" color="#007AFF" />
-                }
+                <View>
+                    <Text className="text-lg font-semibold text-center mt-8">Work-Rest Ratio (Past 30 Sessions)</Text>
+                    {workRestRatios.length > 1 ? 
+                        <Graph 
+                            data={workRestRatios.map(item => item.workRestRatio)} 
+                            className="w-[80%] mx-auto mt-6 flex-row"
+                            xStart={workRestRatios[0]?.date}
+                            xEnd={workRestRatios[workRestRatios.length - 1]?.date}
+                        /> 
+                        : 
+                        <ActivityIndicator className="mt-6" size="large" color="#007AFF" />
+                    }
+                </View>
+                <View>
+                    <Text className="text-lg font-semibold text-center mt-8">Average Velocity (Past 30 Sessions, m/s)</Text>
+                    {avgVelocities.length > 1 ? 
+                        <Graph 
+                            data={avgVelocities.map(item => item.avgVelocity)} 
+                            className="w-[80%] mx-auto mt-6 flex-row"
+                            xStart={avgVelocities[0]?.date}
+                            xEnd={avgVelocities[avgVelocities.length - 1]?.date}
+                        /> 
+                        : 
+                        <ActivityIndicator className="mt-6" size="large" color="#007AFF" />
+                    }
+                </View>
             </View>
         </KeyboardAwareScrollView>
     );

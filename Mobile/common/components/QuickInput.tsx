@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Image, Keyboard, Modal, Pressable, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Modal, Pressable, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
 import { RestInput } from "../types/inputs/RestInput";
@@ -23,8 +23,7 @@ const QuickInput = ({handleInputAddition, runInput, className}:
 
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState('');
-    const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
-    const buttonRef = useRef<View>(null);
+    const inputRef = useRef<TextInput>(null);
 
     const options = ['Option 1', 'Option 2', 'Option 3'];
 
@@ -91,60 +90,62 @@ const QuickInput = ({handleInputAddition, runInput, className}:
 
     return (
         // Input section with dynamic display based on input type
-        <TouchableWithoutFeedback>
-            <View className={`flex flex-row items-center gap-x-4 ${className}`} pointerEvents="box-none">
-                {/* Conditional rendering: Time/Distance input for runs, Time-only input for rest */}
-                <View className="flex-1">
-                    <View className="flex-row items-center gap-x-2 justify-between">
-                        <View className="flex-1">
-                            <Text className="text-xs font-medium text-gray-600 mb-1">
-                                {runInput ? "Time (seconds)" : "Minutes"}
-                            </Text>
-                            <TextInput
-                                placeholder={runInput ? "0.00" : "Mins"}
-                                keyboardType="decimal-pad"
-                                value={runInput ? 
-                                    currentTimeDistanceInput.time
-                                    : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
-                                }
-                                className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                                onChangeText={text => runInput ? handleTimeChange(text) : handleMinuteChange(text)}
-                            />
-                        </View>
-                        {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
-                        <View className="flex-1">
-                            <Text className="text-xs font-medium text-gray-600 mb-1">
-                                {runInput ? "Distance" : "Seconds"}
-                            </Text>
-                            {/* Container for distance input and unit */}
-                            <View className="flex flex-row items-center">
-                                <View className="border trackme-border-gray rounded-lg flex-1 flex-row">
-                                    <TextInput
-                                        placeholder={runInput ? "0" : "Secs"}
-                                        keyboardType="numeric"
-                                        className="rounded-lg bg-white text-center font-medium flex-1"
-                                        value={runInput ? 
-                                            (currentTimeDistanceInput.distance === 0 ? "" : currentTimeDistanceInput.distance.toString()) 
-                                            : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
-                                        }
-                                        onChangeText={text => runInput ? handleDistanceChange(text) : handleSecondChange(text)}
-                                    />
-                                    <Pressable className="border-l border-gray-300 px-2 flex justify-center items-center" onPress={() => setCurrentTimeDistanceInput({...currentTimeDistanceInput, distance: currentTimeDistanceInput.distance + 1})}>
-                                        <Text>^</Text>
-                                    </Pressable>
-                                </View>
-                                {/* Unit label for distance (meters) */}
-                                {runInput && <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>}
+        <View className={`flex flex-row items-center gap-x-4 ${className}`}>
+            {/* Conditional rendering: Time/Distance input for runs, Time-only input for rest */}
+            <View className="flex-1">
+                <View className="flex-row items-center gap-x-2 justify-between">
+                    <View className="flex-1">
+                        <Text className="text-xs font-medium text-gray-600 mb-1">
+                            {runInput ? "Time (seconds)" : "Minutes"}
+                        </Text>
+                        <TextInput
+                            placeholder={runInput ? "0.00" : "Mins"}
+                            keyboardType="decimal-pad"
+                            value={runInput ? 
+                                currentTimeDistanceInput.time
+                                : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
+                            }
+                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                            onChangeText={text => runInput ? handleTimeChange(text) : handleMinuteChange(text)}
+                        />
+                    </View>
+                    {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
+                    <View className="flex-1">
+                        <Text className="text-xs font-medium text-gray-600 mb-1">
+                            {runInput ? "Distance" : "Seconds"}
+                        </Text>
+                        {/* Container for distance input and unit */}
+                        <View className="flex flex-row items-center">
+                            <View className="border trackme-border-gray rounded-lg flex-1 flex-row">
+                                <TextInput
+                                    placeholder={runInput ? "0" : "Secs"}
+                                    keyboardType="numeric"
+                                    className="rounded-lg bg-white text-center font-medium flex-1"
+                                    value={runInput ? 
+                                        (currentTimeDistanceInput.distance === 0 ? "" : currentTimeDistanceInput.distance.toString()) 
+                                        : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
+                                    }
+                                    onChangeText={text => runInput ? handleDistanceChange(text) : handleSecondChange(text)}
+                                />
+
+                                <Pressable 
+                                    className="border-l border-gray-300 px-2 flex justify-center items-center" 
+                                    onPressIn={() => setIsOpen(true)}
+                                >
+                                    <Text>^</Text>
+                                </Pressable>
                             </View>
+                            {/* Unit label for distance (meters) */}
+                            {runInput && <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>}
                         </View>
                     </View>
                 </View>
-                {/* Submit button with arrow icon */}
-                <Pressable className="rounded-full trackme-bg-blue mt-4" onPress={handleSubmission}>
-                    <Image source={require("../../assets/images/Back.png")} className="h-12 w-12 rotate-90" />
-                </Pressable>
             </View>
-        </TouchableWithoutFeedback>
+            {/* Submit button with arrow icon */}
+            <Pressable className="rounded-full trackme-bg-blue mt-4" onPress={handleSubmission}>
+                <Image source={require("../../assets/images/Back.png")} className="h-12 w-12 rotate-90" />
+            </Pressable>
+        </View>
     );
 }
 

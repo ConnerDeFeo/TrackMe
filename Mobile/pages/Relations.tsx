@@ -95,7 +95,6 @@ const Relations = () => {
             );
         }
     };
-    console.log("Current Users:", currentUsers);
     // Main render: SearchBar, loading state, empty state, or list of users
     return (
         <View className="mx-4">

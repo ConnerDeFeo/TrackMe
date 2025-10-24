@@ -134,7 +134,7 @@ const History = () => {
                 )}
             </View>
             <View>
-                <Text className="text-lg font-semibold text-center mt-8">Work Time-Rest Ratio (Past 30 Sessions)</Text>
+                <Text className="text-lg font-semibold text-center mt-8">Work-Rest Ratio (Past 30 Sessions)</Text>
                 {workRestRatios.length > 1 ? renderGraph() : <Text className="text-center my-4">Loading graph...</Text>}
             </View>
         </KeyboardAwareScrollView>

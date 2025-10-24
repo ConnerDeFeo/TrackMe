@@ -1,58 +1,72 @@
 import { useEffect, useState } from "react";
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable, TextInput, useWindowDimensions  } from "react-native";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
-import Svg, { Circle } from 'react-native-svg';
-// import * as d3 from 'd3'; 
+import Svg, { Path } from 'react-native-svg';
+import * as d3 from 'd3'; 
 
 const GRAPH_ASPECT_RATIO = 9 / 16;
 
 const History = () => {
+    const { width: screenWidth } = useWindowDimensions();
 
     // Current distance filter text input
     const [distanceInput, setDistanceInput] = useState<string>("");
     // Distance filters for available dates
     const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
 
-    // const [workRestRatios, setWorkRestRatios] = useState<{date:string, ratio:number}[]>([]);
+    const [workRestRatios, setWorkRestRatios] = useState<{date:string, workRestRatio:number}[]>([]);
 
-    // useEffect(()=>{
-    //     const date = new Date();
-    //     const fetchWorkRestRatios = async () => {
-    //         const resp = await GraphService.getWorkRestRatio(DateService.formatDate(date));
-    //         if (resp.ok) {
-    //             const data = await resp.json();
-    //             setWorkRestRatios(data);
-    //         }
-    //     };
-    //     fetchWorkRestRatios();
-    // }, []);
-    const workRestRatios = [{date: "2023-01-01", ratio: 0.5}, {date: "2023-01-02", ratio: 0.7}, {date: "2023-01-03", ratio: 0.6}];
+    useEffect(()=>{
+        const date = new Date();
+        const fetchWorkRestRatios = async () => {
+            const resp = await GraphService.getWorkRestRatio(DateService.formatDate(date));
+            if (resp.ok) {
+                const data = await resp.json();
+                console.log("Fetched work-rest ratios:", data);
+                setWorkRestRatios(data);
+            }
+        };
+        fetchWorkRestRatios();
+    }, []);
+    // const workRestRatios = [{date: "2023-01-01", workRestRatio: 0.9}, {date: "2023-01-02", workRestRatio: 1.2}, {date: "2023-01-03", workRestRatio: 4.2}, 
+    //     {date: "2023-01-04", workRestRatio: 1.5}, {date: "2023-01-05", workRestRatio: 3.0}, {date: "2023-01-06", workRestRatio: 2.5}, {date: "2023-01-07", workRestRatio: 1},
+    //     {date: "2023-01-08", workRestRatio: 0.8}, {date: "2023-01-09", workRestRatio: 2.2}, {date: "2023-01-10", workRestRatio: 3.5}, {date: "2023-01-11", workRestRatio: 2.8},
+    //     {date: "2023-01-12", workRestRatio: 1.9}, {date: "2023-01-13", workRestRatio: 0.5}, {date: "2023-01-14", workRestRatio: 1.1}, {date: "2023-01-15", workRestRatio: 2.7},
+    // ];
     // Graph stuff
-    const width = 350;
-    const height = width * GRAPH_ASPECT_RATIO;
+    const renderGraph = () => {
+        const width = screenWidth * 0.8;
+        const height = width * GRAPH_ASPECT_RATIO;
 
-    const min = Math.min(...workRestRatios.map(wr => wr.ratio));
-    const max = Math.max(...workRestRatios.map(wr => wr.ratio));
+        const min = Math.min(...workRestRatios.map(wr => wr.workRestRatio));
+        const max = Math.max(...workRestRatios.map(wr => wr.workRestRatio));
 
-    // const yScale = d3.scaleLinear()
-    //     .domain([min, max])
-    //     .range([height, 0]);
-    // const xScale = d3.scaleLinear()
-    //     .domain([0, workRestRatios.length - 1])
-    //     .range([0, width]);
+        const yScale = d3.scaleLinear()
+            .domain([min, max])
+            .range([height, 0]);
+        const xScale = d3.scaleLinear()
+            .domain([0, workRestRatios.length - 1])
+            .range([0, width]);
 
-    // const lineFn = d3.line<{date:string, ratio:number}>()
-    //     .x((d, i) => xScale(i))
-    //     .y(d => yScale(d.ratio))
-    
-    // const svgLine = lineFn(workRestRatios) || undefined;
+        const lineFn = d3.line<{date:string, workRestRatio:number}>()
+            .x((d, i) => xScale(i))
+            .y(d => yScale(d.workRestRatio));
+        
+        const svgLine = lineFn(workRestRatios) || undefined;
+
+        return(
+            <Svg height={height} width={width}>
+                <Path d={svgLine || ""} stroke="blue" fill="none" strokeWidth={4}/>
+            </Svg>
+        );
+    };
     return(
         <KeyboardAwareScrollView
-            className='bg-white flex-1 pt-4' 
+            className='bg-white flex-1 pt-4 ' 
             showsHorizontalScrollIndicator={false} 
             showsVerticalScrollIndicator={false}
             enableOnAndroid={true}
@@ -106,10 +120,8 @@ const History = () => {
                     </View>
                 )}
             </View>
-            <View style={{ padding: 20 }}>
-                <Svg height="100" width="100">
-                    <Circle cx="50" cy="50" r="40" stroke="blue" fill="green" />
-                </Svg>
+            <View className="border w-[80%] mx-auto mt-6 mb-32">
+                {workRestRatios.length > 1 ? renderGraph() : <Text className="text-center my-4">Loading graph...</Text>}
             </View>
         </KeyboardAwareScrollView>
     );

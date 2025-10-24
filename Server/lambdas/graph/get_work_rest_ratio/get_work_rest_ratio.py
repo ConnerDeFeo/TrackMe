@@ -17,11 +17,18 @@ def get_work_rest_ratio(event, context):
             """
                 SELECT time, restTime, date
                 FROM athlete_inputs
-                WHERE athleteId = %s AND date <= %s
+                WHERE athleteId = %s 
+                AND date <= %s
+                AND date IN (
+                    SELECT DISTINCT date
+                    FROM athlete_inputs
+                    WHERE athleteId = %s AND date <= %s
+                    ORDER BY date DESC
+                    LIMIT 30
+                )
                 ORDER BY date ASC
-                LIMIT 30
             """,
-            (user_id, date)
+            (user_id, date, user_id, date)
         ) or []
         
         work_rest_ratios = []

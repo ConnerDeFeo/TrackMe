@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Image, Modal, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Image, Keyboard, Modal, Pressable, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import { Input } from "../types/inputs/Input";
 import { InputType } from "../constants/Enums";
 import { RestInput } from "../types/inputs/RestInput";
@@ -112,18 +112,22 @@ const QuickInput = ({handleInputAddition, runInput, className}:
                     {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
                     {/**Drop down for inputing times */}
                     <View className="flex-1">
-                        <Pressable 
-                            ref={buttonRef}
+                        <TouchableWithoutFeedback
                             onPress={() => {
-                            buttonRef.current?.measure((x, y, width, height, pageX, pageY) => {
-                                setDropdownPosition({ x: pageX, y: pageY, width, height });
-                                setIsOpen(true);
-                            });
+                                buttonRef.current?.measure((x, y, width, height, pageX, pageY) => {
+                                    setDropdownPosition({ x: pageX, y: pageY, width, height });
+                                    setIsOpen(true);
+                                });
                             }}
-                            className="border border-gray-300 rounded-lg px-4 py-3"
                         >
-                            <Text>{selected || 'Select an option'}</Text>
-                        </Pressable>
+                            <View 
+                                ref={buttonRef}
+                                className="border border-gray-300 rounded-lg px-4 py-3"
+                                
+                            >
+                                <Text>{selected || 'Select an option'}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
 
                         <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
                             <Pressable 
@@ -167,25 +171,3 @@ const QuickInput = ({handleInputAddition, runInput, className}:
 }
 
 export default QuickInput;
-
-{/* Distance input field with unit label */}
-// <View className="flex-1">
-//     <Text className="text-xs font-medium text-gray-600 mb-1">
-//         {runInput ? "Distance" : "Seconds"}
-//     </Text>
-//     {/* Container for distance input and unit */}
-//     <View className="flex flex-row items-center">
-//         <TextInput
-//             placeholder={runInput ? "0" : "Secs"}
-//             keyboardType="numeric"
-//             className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium flex-1"
-//             value={runInput ? 
-//                 (currentTimeDistanceInput.distance === 0 ? "" : currentTimeDistanceInput.distance.toString()) 
-//                 : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
-//             }
-//             onChangeText={text => runInput ? handleDistanceChange(text) : handleSecondChange(text)}
-//         />
-//         {/* Unit label for distance (meters) */}
-//         {runInput && <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>}
-//     </View>
-// </View>

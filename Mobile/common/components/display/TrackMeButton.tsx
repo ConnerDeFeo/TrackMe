@@ -8,17 +8,19 @@ const TrackMeButton = ({
   red,                  // Optional flag to render red background
   gray,                 // Optional flag to render gray background
   className,            // Additional tailwind or custom classes
+  width,         // Optional fixed width for the button
 }: {
   text: string;
   onPress: () => void | Promise<void>;
   red?: boolean;
   gray?: boolean;
   className?: string;
+  width?: number;
 }) => {
   // Local loading state to prevent double taps and show spinner
   const [loading, setLoading] = useState(false);
   // Store measured button width to keep a fixed size during loading
-  const [buttonWidth, setButtonWidth] = useState<number>(0);
+  const [buttonWidth, setButtonWidth] = useState<number>(width ?? 0);
 
   // Handle press logic, detect Promise to toggle loading state
   const handlePress = () => {
@@ -50,7 +52,7 @@ const TrackMeButton = ({
       // Disable tap when loading
       onPress={loading ? undefined : handlePress}
       disabled={loading}
-      className={`rounded-lg py-2 px-4 ${className} ${bgColor} ${loading ? "opacity-70" : "opacity-100"}`}
+      className={`${className} rounded-lg py-2 px-4 ${bgColor} ${loading ? "opacity-70" : "opacity-100"}`}
       // Apply measured width to avoid layout shifts when spinner appears
       style={buttonWidth ? { width: buttonWidth } : undefined}
     >

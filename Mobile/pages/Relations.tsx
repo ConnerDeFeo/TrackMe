@@ -64,7 +64,19 @@ const Relations = () => {
     const handleAddRelation = async (relationId: string) => {
         const resp = await RelationService.addRelation(relationId);
         if (resp.ok) {
-            handleSearch(searchTerm);
+            setCurrentUsers((prevUsers) =>
+                prevUsers.map((user) => {
+                    if (user[0] === relationId) {
+                        // Update relation status based on previous status
+                        if (user[5] === RelationStatus.NotAdded.toString()) {
+                            user[5] = RelationStatus.Pending.toString();
+                        } else if (user[5] === RelationStatus.AwaitingResponse.toString()) {
+                            user[5] = RelationStatus.Added.toString();
+                        }
+                    }
+                    return user;
+                })
+            );
         }
     };
 
@@ -72,7 +84,14 @@ const Relations = () => {
     const handleRelationRemoval = async (relationId: string) => {
         const resp = await RelationService.removeRelation(relationId);
         if (resp.ok) {
-            handleSearch(searchTerm);
+            setCurrentUsers((prevUsers) =>
+                prevUsers.map((user) => {
+                    if (user[0] === relationId) {
+                        user[5] = RelationStatus.NotAdded.toString();
+                    }
+                    return user;
+                })
+            );
         }
     };
 

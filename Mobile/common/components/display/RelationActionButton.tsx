@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { RelationStatus } from "../../constants/Enums";
-import TextButton from "./TextButton";
+import TrackMeButton from "./TrackMeButton";
 
 const RelationActionButton = ({ relationStatus, relationId, handleAddRelation, handleRelationRemoval }:
     {
@@ -9,45 +9,52 @@ const RelationActionButton = ({ relationStatus, relationId, handleAddRelation, h
         handleAddRelation: (id: string) => void,
         handleRelationRemoval: (id: string) => void
     })=>{
+    const width = 100;
     switch (relationStatus) {
         case RelationStatus.NotAdded:
             // Show "Add" button
             return (
-                <TextButton
+                <TrackMeButton
                     text="Add"
                     onPress={() => handleAddRelation(relationId)}
+                    width={width}
                 />
             );
         case RelationStatus.Pending:
             // Show "Pending…" button (disabled-looking)
             return (
-                <TextButton
+                <TrackMeButton
                     text="Pending..."
                     onPress={() => handleRelationRemoval(relationId)}
+                    gray
+                    width={width}
                 />
             );
         case RelationStatus.AwaitingResponse:
             // Show "Accept" and "Decline" side by side
             return (
                 <View className="flex flex-row justify-between items-center gap-2">
-                    <TextButton
+                    <TrackMeButton
                         text="Accept"
                         onPress={() => handleAddRelation(relationId)}
+                        width={width}
                     />
-                    <TextButton
+                    <TrackMeButton
                         text="Decline"
                         red
                         onPress={() => handleRelationRemoval(relationId)}
+                        width={width}
                     />
                 </View>
             );
         case RelationStatus.Added:
             // Show "Remove" button
             return (
-                <TextButton
+                <TrackMeButton
                     text="Remove"
                     onPress={() => handleRelationRemoval(relationId)}
                     red
+                    width={width}
                 />
             );
         default:

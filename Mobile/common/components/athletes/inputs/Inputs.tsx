@@ -12,6 +12,7 @@ import AthleteWorkoutService from "../../../../services/AthleteWorkoutService";
 import InputsScrollableSection from "./InputsScrollableSection";
 import TrackMeButton from "../../display/TrackMeButton";
 import QuickInput from "../../QuickInput";
+import { RestInput } from "../../../types/inputs/RestInput";
 
 //Page where athletes input times
 const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: boolean})=>{
@@ -47,12 +48,26 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
     const handleInputAddition = async (input:Input) => {
         if (input.type === InputType.Run && (input.distance === 0 || input.time === "")) return; // Prevent adding run inputs with 0 distance or time
         if (input.type === InputType.Rest && input.restTime === 0) return; // Prevent adding rest inputs with 0 time
-        setPendingInputs(prev => [...prev, input]);
+        setPendingInputs(prev => {
+            if (prev.length > 0 && prev[prev.length - 1].type === InputType.Rest && input.type === InputType.Rest) {
+                // Combine consecutive rest inputs
+                const updated = [...prev];
+                const lastRestInput = updated[updated.length - 1] as RestInput;
+                lastRestInput.restTime += input.restTime;
+                return updated;
+            }
+           return [...prev, input];
+        });
         scrollRef.current?.scrollToEnd({animated: true});
     }
 
     const handleInputSubmission = async () => {
         const userId = await UserService.getUserId();
+
+        let inputsToSend = [...pendingInputs];
+        while (inputsToSend.length > 0 && inputsToSend[inputsToSend.length - 1]?.type === InputType.Rest) {
+            inputsToSend.pop();
+        }
 
         if (userId) {
             // Combine group members and current user into one list of athlete IDs
@@ -62,7 +77,7 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
             const resp = await AthleteWorkoutService.inputTimes(
                 athletes,
                 date,
-                pendingInputs
+                inputsToSend
             );
 
             // On success, reset only this group's inputs and refresh parent via onSubmit

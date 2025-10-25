@@ -2,9 +2,7 @@ import React from 'react';
 import Footer from '../Footer';
 
 const buttons = [
-    ['Template', 'WorkoutTemplates'], 
     ['History', 'History'], 
-    ['Groups', 'CoachGroups'], 
     ['Relations', 'Relations'], 
     ['Profile', 'Profile']
   ]

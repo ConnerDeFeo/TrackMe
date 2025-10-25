@@ -14,23 +14,29 @@ const History = () => {
     const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
 
     const [workRestRatios, setWorkRestRatios] = useState<{date:string, workRestRatio:number}[]>([]);
+    const [workRestRatioLoading, setWorkRestRatioLoading] = useState<boolean>(true);
     const [avgVelocities, setAvgVelocities] = useState<{date:string, avgVelocity:number}[]>([]);
+    const [avgVelocitiesLoading, setAvgVelocitiesLoading] = useState<boolean>(true);
 
     useEffect(()=>{
         const date = new Date();
         const fetchWorkRestRatios = async () => {
+            setWorkRestRatioLoading(true);
             const resp = await GraphService.getWorkRestRatio(DateService.formatDate(date));
             if (resp.ok) {
                 const data = await resp.json();
                 setWorkRestRatios(data);
             }
+            setWorkRestRatioLoading(false);
         };
         const fetchAvgVelocities = async () => {
+            setAvgVelocitiesLoading(true);
             const resp = await GraphService.getAvgVelocity(DateService.formatDate(date));
             if (resp.ok) {
                 const data = await resp.json();
                 setAvgVelocities(data);
             }
+            setAvgVelocitiesLoading(false);
         };
         fetchWorkRestRatios();
         fetchAvgVelocities();
@@ -52,7 +58,7 @@ const History = () => {
                     <TextInput 
                         placeholder="Enter distance (meters)" 
                         keyboardType="numeric"
-                        className="flex-1 border border-gray-300 rounded-lg px-4 py-3 bg-white shadow-sm"
+                        className="flex-1 border border-gray-300 rounded-lg px-4 py-3"
                         value={distanceInput}
                         onChangeText={setDistanceInput}
                     />
@@ -95,23 +101,27 @@ const History = () => {
             <View className="mb-12">
                 <View>
                     <Text className="text-lg font-semibold text-center mt-8">Work-Rest Ratio (Past 30 Sessions)</Text>
-                    {workRestRatios.length > 1 ? 
+                    { workRestRatioLoading ?
+                        <ActivityIndicator className="mt-6" size="large" color="#007AFF" /> :
+                        workRestRatios.length > 1 ? 
                         <Graph 
                             data={workRestRatios.map(item => item.workRestRatio)} 
-                            className="w-[80%] mx-auto mt-6 flex-row"
+                            className="w-[90%] mx-auto mt-6 flex-row"
                             xStart={workRestRatios[0]?.date}
                             xEnd={workRestRatios[workRestRatios.length - 1]?.date}
                         /> 
                         : 
-                        <ActivityIndicator className="mt-6" size="large" color="#007AFF" />
+                        <Text className="text-center mt-6 text-gray-600">Not enough data to display graph.</Text>
                     }
                 </View>
                 <View>
                     <Text className="text-lg font-semibold text-center mt-8">Average Velocity (Past 30 Sessions, m/s)</Text>
-                    {avgVelocities.length > 1 ? 
+                    {avgVelocitiesLoading ?
+                        <ActivityIndicator className="mt-6" size="large" color="#007AFF" /> :
+                        avgVelocities.length > 1 ? 
                         <Graph 
                             data={avgVelocities.map(item => item.avgVelocity)} 
-                            className="w-[80%] mx-auto mt-6 flex-row"
+                            className="w-[90%] mx-auto mt-6 flex-row"
                             xStart={avgVelocities[0]?.date}
                             xEnd={avgVelocities[avgVelocities.length - 1]?.date}
                         /> 

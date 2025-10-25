@@ -7,6 +7,7 @@ const TrackMeButton = ({
   onPress,              // Callback when the button is pressed
   red,                  // Optional flag to render red background
   gray,                 // Optional flag to render gray background
+  black,
   className,            // Additional tailwind or custom classes
   width,         // Optional fixed width for the button
 }: {
@@ -14,6 +15,7 @@ const TrackMeButton = ({
   onPress: () => void | Promise<void>;
   red?: boolean;
   gray?: boolean;
+  black?: boolean;
   className?: string;
   width?: number;
 }) => {
@@ -43,6 +45,8 @@ const TrackMeButton = ({
     ? "trackme-bg-red"
     : gray
     ? "trackme-bg-gray"
+    : black
+    ? "bg-black"
     : "trackme-bg-blue";
   const textColor = gray ? "text-gray-800" : "text-white";
 
@@ -52,9 +56,9 @@ const TrackMeButton = ({
       // Disable tap when loading
       onPress={loading ? undefined : handlePress}
       disabled={loading}
-      className={`${className} rounded-lg py-2 px-4 ${bgColor} ${loading ? "opacity-70" : "opacity-100"}`}
+      className={`${className} rounded-lg px-4 h-[2.4rem] py-2 ${bgColor} ${loading ? "opacity-70" : "opacity-100"}`}
       // Apply measured width to avoid layout shifts when spinner appears
-      style={buttonWidth ? { width: buttonWidth } : undefined}
+      style={buttonWidth > 0 ? { width: buttonWidth } : undefined}
     >
       {loading ? (
         // Show spinner with optional text if removeTextOnLoading is false

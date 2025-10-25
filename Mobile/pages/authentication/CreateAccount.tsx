@@ -5,6 +5,7 @@ import { signUp } from 'aws-amplify/auth';
 import AuthenticationHeader from "../../common/components/authentication/AuthenticationHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AccountType } from "../../common/constants/Enums";
+import TrackMeButton from "../../common/components/display/TrackMeButton";
 
 //Create account page
 const CreateAccount = ()=>{
@@ -82,7 +83,7 @@ const CreateAccount = ()=>{
             <Text className="text-red-500 text-center text-xl">{message}</Text>
             
             {/**CREATE ACCOUNT FORM*/}
-            <View className="gap-y-8 bg-red-200 rounded-xl p-6">
+            <View className="gap-y-8 bg-blue-200 rounded-xl p-6">
                 <View className="rounded-lg h-12 flex flex-row overflow-hidden">
                 <Pressable 
                     onPress={() => setAccountType(AccountType.Athlete)} 
@@ -101,17 +102,13 @@ const CreateAccount = ()=>{
                 <AuthInput value={username} setValue={setUsername} placeholder="Username"/>
                 <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
                 <AuthInput value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" sensitive={true}/>
-                <Pressable onPress={handleCreateAccount} className="bg-black rounded-lg py-3 items-center">
-                    <Text className="text-white text-xl font-bold">Create Account</Text>
-                </Pressable>
+                <TrackMeButton text="Create Account" onPress={handleCreateAccount} black/>
             </View>
 
             {/**SIGN IN LINK*/}
             <View className="gap-y-6">
                 <Text className="text-center text-xl">Already have an account? </Text>
-                <Pressable onPress={handleSignInButtonPress} className="trackme-bg-red rounded-lg py-3">
-                    <Text className="text-white text-xl font-bold text-center">Sign In</Text>
-                </Pressable>
+                <TrackMeButton text="Sign In" onPress={handleSignInButtonPress}/>
             </View>
             </View>
         </View>

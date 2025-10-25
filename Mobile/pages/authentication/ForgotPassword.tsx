@@ -4,6 +4,7 @@ import { useState } from "react";
 import { resetPassword } from "aws-amplify/auth";
 import AuthenticationHeader from "../../common/components/authentication/AuthenticationHeader";
 import { useNavigation } from "@react-navigation/native";
+import TrackMeButton from "../../common/components/display/TrackMeButton";
 
 //Forgot password page
 const ForgotPassword = () => {
@@ -33,33 +34,19 @@ const ForgotPassword = () => {
     return (
         <View className="relative h-full w-[85%] mx-auto">
             <AuthenticationHeader />
-            <View className="m-auto gap-y-10 w-full">
+            <View className="m-auto gap-y-6 w-full">
                 {/**ERROR/SUCCESS MESSAGES*/}
                 {error && <Text className="text-red-500 text-center">{error}</Text>}
                 {/**RESET PASSWORD FORM*/}
-                <View className="gap-y-4 bg-red-200 rounded-xl p-6">
+                <View className="gap-y-4 bg-blue-200 rounded-xl p-6">
                     <AuthInput 
                         value={username} 
                         setValue={setUsername} 
                         placeholder="Username or Email"
                     />
-                    <Pressable 
-                        onPress={handleRequestReset} 
-                        className="bg-black py-3 rounded"
-                    >
-                        <Text className="text-white text-center font-medium">Send Reset Code</Text>
-                    </Pressable>
+                    <TrackMeButton text="Send Reset Code" onPress={handleRequestReset} black/>
                 </View>
-
-                {/**BACK TO SIGN IN*/}
-                <View className="gap-y-6">
-                    <Pressable 
-                        onPress={() => navigation.reset({index: 0, routes: [{ name: "SignIn"}],})} 
-                        className="py-3 rounded trackme-bg-red"
-                    >
-                        <Text className="text-white text-center font-medium">Back to Sign In</Text>
-                    </Pressable>
-                </View>
+                <TrackMeButton text="Back to Sign In" onPress={() => navigation.reset({index: 0, routes: [{ name: "SignIn"}],})}/>
             </View>
         </View>
     );

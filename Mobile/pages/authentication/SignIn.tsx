@@ -7,6 +7,7 @@ import AuthenticationHeader from "../../common/components/authentication/Authent
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AuthContext } from "../../common/context/AuthContext";
 import { AccountType } from "../../common/constants/Enums";
+import TrackMeButton from "../../common/components/display/TrackMeButton";
 
 //Create account page
 const SignIn = ()=>{
@@ -61,7 +62,7 @@ const SignIn = ()=>{
             <View className="m-auto gap-y-6 w-full">
                 {/**SIGN IN*/}
                 <Text className="text-red-500 text-center mt-100">{error}</Text>
-                <View className="gap-y-4 bg-red-200 rounded-xl p-6">
+                <View className="gap-y-4 rounded-xl p-6 bg-blue-200">
                     <AuthInput value={username} setValue={setUsername} placeholder="Username or Email"/>
                     <View className="gap-y-2">
                         <AuthInput value={password} setValue={setPassword} placeholder="Password" sensitive={true}/>
@@ -69,16 +70,12 @@ const SignIn = ()=>{
                             <Text className="text-right">Forgot Password?</Text>
                         </Pressable>
                     </View>
-                    <Pressable onPress={handleSignIn} className="bg-black rounded-lg py-3">
-                        <Text className="text-white text-xl font-bold text-center">Login</Text>
-                    </Pressable>
+                    <TrackMeButton text="Sign In" onPress={handleSignIn} black/>
                 </View>
                 {/**CREATE NEW ACCOUNT*/}
                 <View className="gap-y-4">
                     <Text className="text-center text-xl">Don't have an account? </Text>
-                    <Pressable onPress={handleCreateAccountButtonPress} className="trackme-bg-red rounded-lg py-3">
-                        <Text className="text-white text-xl font-bold text-center">Create Account</Text>
-                    </Pressable>
+                    <TrackMeButton text="Create Account" onPress={handleCreateAccountButtonPress}/>
                 </View>
             </View>
         </View>

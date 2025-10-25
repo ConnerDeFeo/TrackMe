@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { AuthContext } from "../../common/context/AuthContext";
 import { AccountType } from "../../common/constants/Enums";
 import GeneralService from "../../services/GeneralService";
+import TrackMeButton from "../../common/components/display/TrackMeButton";
 
 
 //Confirm Email page
@@ -20,7 +21,7 @@ const ConfirmEmail = () => {
     const setAccountType = context[1];
     // Whenever code is resent, start a 60 second timer
     useEffect(() => {
-        let timer: NodeJS.Timeout;
+        let timer: ReturnType<typeof setTimeout>;
         if (resendCodeTimer > 0) {
             timer = setTimeout(() => setResendCodeTimer(resendCodeTimer - 1), 1000);
         }
@@ -68,15 +69,15 @@ const ConfirmEmail = () => {
     return (
         <View className="flex-1 justify-center items-center bg-gray-50 px-6">
             {message ? (
-                <View className="bg-red-50 border border-red-200 rounded-lg p-3 m-3">
-                    <Text className="text-red-500 text-center">{message}</Text>
+                <View className="bg-green-50 border border-green-200 rounded-lg p-3 m-3">
+                    <Text className="text-green-500 text-center">{message}</Text>
                 </View>
             ) : null}
             <View className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 gap-y-6">
                 <View className="items-center gap-y-2">
                     <Text className="text-2xl font-bold text-gray-800">Confirm Email</Text>
                     <Text className="text-gray-600 text-center">
-                    Enter the verification code sent to your email.
+                        Enter the verification code sent to your email.
                     </Text>
                 </View>
                 
@@ -92,18 +93,8 @@ const ConfirmEmail = () => {
                     />
                     
                     <View className="gap-y-3">
-                        <Pressable 
-                            className="trackme-bg-red rounded-lg py-3 px-4"
-                            onPress={handleConfirmEmail}
-                        >
-                            <Text className="text-white text-center font-semibold">Confirm Email</Text>
-                        </Pressable>
-                        <Pressable 
-                            className="bg-black rounded-lg py-3 px-4"
-                            onPress={() => navigation.reset({index: 0,routes: [{ name: "SignIn" }],})}
-                        >
-                            <Text className="text-white text-center font-semibold">Back to Sign In</Text>
-                        </Pressable>
+                        <TrackMeButton text="Confirm Email" onPress={handleConfirmEmail} black/>
+                        <TrackMeButton text="Back to Sign In" onPress={() => navigation.reset({index: 0,routes: [{ name: "SignIn" }],})}/>
                         <View className="flex flex-row justify-between items-center">
                             <Pressable onPress={handleResendCode} disabled={resendCodeTimer > 0}>
                                 <Text>Resend Code</Text>

@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import HistoryService from "../services/HistoryService";
 import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../common/components/display/input/InputDisplay";
@@ -13,6 +13,7 @@ const HistoricalData = ()=>{
     const { date } = (route.params as { date: string }) || {};
     const [historicalData, setHistoricalData] = useState<Record<string, {inputs:Input[], username:string}>>({});
     const [loading, setLoading] = useState<boolean>(false);
+    const [expandedUsers, setExpandedUsers] = useState<Set<string>>(new Set());
     const navigation = useNavigation<any>();
     const [accountType, setAccountType] = useState<string>("");
 
@@ -32,27 +33,53 @@ const HistoricalData = ()=>{
             if (resp.ok) {
                 const data = await resp.json();
                 setHistoricalData(data);
+                // Expand all users by default
+                setExpandedUsers(new Set(Object.keys(data)));
             }
             setLoading(false);
         };
         fetchHistoricalData();
     }, [date]));
 
+    const toggleUser = (userID: string) => {
+        setExpandedUsers(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(userID)) {
+                newSet.delete(userID);
+            } else {
+                newSet.add(userID);
+            }
+            return newSet;
+        });
+    };
+
     if (loading) {
         return (
             <ActivityIndicator size="large" color="#007AFF" className="m-10"/>
         );
     }
-
+    console.log(historicalData);
     return(
         <View className="flex-1">
             {Object.keys(historicalData).length > 0 ?
                 Object.entries(historicalData).map(([userID, data]) => 
                     <View key={userID} className="bg-white p-4 rounded-xl shadow-sm border border-b border-gray-100">
-                        <Text className="font-bold text-lg mb-2">{data.username}</Text>
-                        {data.inputs.map((input, idx) => (
-                            <InputDisplay key={idx} input={input} />
-                        ))}
+                        <Pressable 
+                            onPress={() => toggleUser(userID)}
+                            className="flex-row items-center justify-between mb-2"
+                        >
+                            <Text className="font-bold text-lg">{data.username}</Text>
+                            <Text className="text-lg font-bold text-gray-500">
+                                {expandedUsers.has(userID) ? '▼' : '▶'}
+                            </Text>
+                        </Pressable>
+                        {expandedUsers.has(userID) && (
+                            <>
+                                {data.inputs.map((input, idx) => (
+                                    <InputDisplay key={idx} input={input} />
+                                ))}
+                            </>
+                        )}
                     </View>
                 )
                 :

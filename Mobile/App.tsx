@@ -18,11 +18,6 @@ import HistoricalInputs from './pages/athletes/HistoricalInputs';
 import Friends from './pages/Friends';
 import History from './pages/History';
 import HistoricalData from './pages/HistoricalData';
-import CreateWorkoutTemplate from './pages/coaches/workout/CreateWorkoutTemplate';
-import WorkoutTemplates from './pages/coaches/workout/WorkoutTemplates';
-import AssignWorkout from './pages/coaches/workout/AssignWorkout';
-import CoachHistory from './pages/coaches/CoachHistory';
-import AssignNewWorkout from './pages/coaches/workout/AssignNewWorkout';
 import CoachFooter from './common/components/coaches/CoachFooter';
 import SignIn from './pages/authentication/SignIn';
 import CreateAccount from './pages/authentication/CreateAccount';
@@ -132,12 +127,7 @@ const CoachLayoutWrapper = () => {
         }
       }}>
         <CoachStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
-        <CoachStack.Screen name="CreateWorkoutTemplate" options={{ title: "Create Workout Template" }} component={ScrollViewWrapper(<CreateWorkoutTemplate />)} />
-        <CoachStack.Screen name="WorkoutTemplates" options={{ title: "Workout Templates" }} component={ScrollViewWrapper(<WorkoutTemplates/>)} />
-        <CoachStack.Screen name="AssignWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignWorkout/>)} />
-        <CoachStack.Screen name="CoachHistory" options={{ title: "Coach History" }} component={ScrollViewWrapper(<CoachHistory />)} />
         <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
-        <CoachStack.Screen name="AssignNewWorkout" options={{ title: "Assign Workout" }} component={ScrollViewWrapper(<AssignNewWorkout />)} />
         <CoachStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <CoachStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />
         <CoachStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />

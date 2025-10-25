@@ -52,108 +52,15 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/athlete/remove_inputs"
       output_path = "${path.module}/../Server/lambdas/athlete/zips/remove_inputs.zip"
     }
-    
-    # Coach Lambdas
-    "create_group" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/create_group"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/create_group.zip"
-    }
-    "add_athlete_to_group" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/add_athlete_to_group"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/add_athlete_to_group.zip"
-    }
-    "get_absent_group_athletes" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/get_absent_group_athletes"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/get_absent_group_athletes.zip"
-    }
-    "remove_group_athlete" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/remove_group_athlete"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/remove_group_athlete.zip"
-    }
-    "delete_group" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/delete_group"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/delete_group.zip"
-    }
-    "update_group_athletes" = {
-      source_dir  = "${path.module}/../Server/lambdas/coach/update_group_athletes"
-      output_path = "${path.module}/../Server/lambdas/coach/zips/update_group_athletes.zip"
-    }
-
-
-    # Workout Lambdas
-    "get_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/get_workout"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/get_workout.zip"
-    }
-    "delete_group_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/delete_group_workout"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/delete_group_workout.zip"
-    }
-    "assign_group_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/assign_group_workout"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/assign_group_workout.zip"
-    }
-    "bedrock_workout_generation" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/bedrock_workout_generation"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/bedrock_workout_generation.zip"
-    }
-    "get_workout_templates" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/get_workout_templates"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/get_workout_templates.zip"
-    }
-    "assign_group_workout_template" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/assign_group_workout_template"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/assign_group_workout_template.zip"
-    }
-    "create_workout_template" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/create_workout_template"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/create_workout_template.zip"
-    }
-    "delete_workout_template" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/delete_workout_template"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/delete_workout_template.zip"
-    }
-    "create_section_template" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/create_section_template"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/create_section_template.zip"
-    }
-    "get_section_template" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/get_section_template"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/get_section_template.zip"
-    }
-    "preview_section_templates" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/preview_section_templates"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/preview_section_templates.zip"
-    }
-    "delete_section_template" = {
-      source_dir  = "${path.module}/../Server/lambdas/workout/delete_section_template"
-      output_path = "${path.module}/../Server/lambdas/workout/zips/delete_section_template.zip"
-    }
 
     # General Lambdas
-    "get_athletes_for_group" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_athletes_for_group"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_athletes_for_group.zip"
-    }
-    "get_groups" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_groups"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_groups.zip"
-    }
     "get_user" = {
       source_dir  = "${path.module}/../Server/lambdas/general/get_user"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_user.zip"
     }
-    "get_group_workout" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_group_workout"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_group_workout.zip"
-    }
     "mass_input" = {
       source_dir  = "${path.module}/../Server/lambdas/general/mass_input"
       output_path = "${path.module}/../Server/lambdas/general/zips/mass_input.zip"
-    }
-    "get_weekly_schedule" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/get_weekly_schedule"
-      output_path = "${path.module}/../Server/lambdas/general/zips/get_weekly_schedule.zip"
     }
     "create_user" = {
       source_dir  = "${path.module}/../Server/lambdas/general/create_user"

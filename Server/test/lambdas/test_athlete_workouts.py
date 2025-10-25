@@ -2,12 +2,8 @@ import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.athlete.remove_inputs.remove_inputs import remove_inputs
-from lambdas.coach.create_group.create_group import create_group
-from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
-from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
 from lambdas.general.create_user.create_user import create_user
 from lambdas.athlete.view_workout_inputs.view_workout_inputs import view_workout_inputs
-from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from data import TestData
 from lambdas.relations.add_relation.add_relation import add_relation
 from rds import execute_file, fetch_all
@@ -22,11 +18,8 @@ def setup_before_each_test(): #This will run before each test
     execute_file('./setup.sql')
     create_user(TestData.test_athlete, {})
     create_user(TestData.test_coach, {})
-    create_group(TestData.test_group, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
-    add_athlete_to_group(TestData.test_add_athlete_to_group, {})
-    create_workout_template(TestData.test_workout, {})
     test_assign_workout = {
         "body": json.dumps({
             "workoutId": 1,
@@ -35,7 +28,6 @@ def setup_before_each_test(): #This will run before each test
         }),
         "headers":generate_auth_header("123", "Coach", "testcoach")
     }
-    assign_group_workout_template(test_assign_workout, {})
     yield
 
 def create_extra_athlete(username,id):
@@ -77,13 +69,6 @@ def setup_remove_inputs_event():
             "relationId": "123"
         }),
         "headers":generate_auth_header("1236", "Athlete", "test3")
-    }, {})
-    add_athlete_to_group({
-        "body": json.dumps({
-            "athleteId": "1236",
-            "groupId": "1"
-        }),
-        "headers":generate_auth_header("123", "Coach", "testcoach")
     }, {})
     input_times(TestData.test_input_times, {})
     input_times({

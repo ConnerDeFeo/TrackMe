@@ -2,15 +2,11 @@ import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
 from lambdas.history.fetch_historical_data.fetch_historical_data import fetch_historical_data
-from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.history.get_earliest_date_available.get_earliest_date_available import get_earliest_date_available
-from lambdas.workout.assign_group_workout_template.assign_group_workout_template import assign_group_workout_template
-from lambdas.workout.create_workout_template.create_workout_template import create_workout_template
 from lambdas.history.get_available_history_dates.get_available_history_dates import get_available_history_dates
 from rds import execute_file
 from data import TestData
 from lambdas.general.create_user.create_user import create_user
-from lambdas.coach.create_group.create_group import create_group
 from lambdas.relations.add_relation.add_relation import add_relation  
 from datetime import timedelta
 from testing_utils import *
@@ -66,27 +62,6 @@ def setup_base_scenario():
         "headers":generate_auth_header("1237", "Athlete", "test_athlete_4")
     }, {})
     
-    create_group(TestData.test_group, {}) # Group ID 1
-    create_group({
-        "body": json.dumps({"groupName": "Test Group 2"}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {}) # Group ID 2
-
-    add_athlete_to_group(TestData.test_add_athlete_to_group, {}) # Add to Group 1
-    add_athlete_to_group({
-        "body": json.dumps({"athleteId": "1234", "groupId": 2}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {}) # Add to Group 2
-
-    add_athlete_to_group({
-        "body": json.dumps({"athleteId": "1235", "groupId": 1}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    add_athlete_to_group({
-        "body": json.dumps({"athleteId": "1235", "groupId": 2}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-
 def setup_historical_inputs():
     """Inputs a variety of times for an athlete across multiple days and groups."""
     setup_base_scenario()
@@ -121,15 +96,6 @@ def setup_historical_inputs():
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
 
-def setup_workout_for_today():
-    """Creates and assigns a workout template for today."""
-    setup_base_scenario()
-    response = create_workout_template(TestData.test_workout, {})
-    workout_id = json.loads(response['body'])['workout_id']
-    assign_group_workout_template({
-        "body": json.dumps({"groupId": "1", "workoutId": workout_id}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
 
 @pytest.fixture(autouse=True)
 def setup_before_each_test():
@@ -225,7 +191,7 @@ def test_get_available_history_dates_with_distance_filters_coach_returns_success
 
 def test_fetch_historical_data_coach_success():
     # Arrange
-    setup_workout_for_today()
+    setup_base_scenario()
     input_times(TestData.test_input_times, {}) # Input for today
     # Input for yesterday to ensure it's filtered out
     input_times({
@@ -255,7 +221,6 @@ def test_fetch_historical_data_coach_success():
 
 def test_fetch_historical_data_athlete_success():
     # Arrange
-    setup_workout_for_today()
     setup_historical_inputs()
 
     event = {

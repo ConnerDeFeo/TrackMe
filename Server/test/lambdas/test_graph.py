@@ -1,13 +1,11 @@
 import json
 import pytest
 from lambdas.athlete.input_times.input_times import input_times
-from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from lambdas.graph.get_avg_velocity.get_avg_velocity import get_avg_velocity
 from lambdas.graph.get_work_rest_ratio.get_work_rest_ratio import get_work_rest_ratio
 from rds import execute_file
 from data import TestData
 from lambdas.general.create_user.create_user import create_user
-from lambdas.coach.create_group.create_group import create_group
 from lambdas.relations.add_relation.add_relation import add_relation  
 from datetime import timedelta
 from testing_utils import *
@@ -61,27 +59,6 @@ def setup_base_scenario():
     add_relation({
         'body': json.dumps({"relationId": "123"}),
         "headers":generate_auth_header("1237", "Athlete", "test_athlete_4")
-    }, {})
-    
-    create_group(TestData.test_group, {}) # Group ID 1
-    create_group({
-        "body": json.dumps({"groupName": "Test Group 2"}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {}) # Group ID 2
-
-    add_athlete_to_group(TestData.test_add_athlete_to_group, {}) # Add to Group 1
-    add_athlete_to_group({
-        "body": json.dumps({"athleteId": "1234", "groupId": 2}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {}) # Add to Group 2
-
-    add_athlete_to_group({
-        "body": json.dumps({"athleteId": "1235", "groupId": 1}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
-    }, {})
-    add_athlete_to_group({
-        "body": json.dumps({"athleteId": "1235", "groupId": 2}),
-        "headers": generate_auth_header("123", "Coach", "testcoach")
     }, {})
 
 def setup_historical_inputs():

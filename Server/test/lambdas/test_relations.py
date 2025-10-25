@@ -7,8 +7,6 @@ from lambdas.relations.get_relation_invites.get_relation_invites import get_rela
 from lambdas.relations.remove_user_relation.remove_user_relation import remove_user_relation
 from lambdas.relations.get_mutual_user_relations.get_mutual_user_relations import get_mutual_user_relations
 from lambdas.relations.search_user_relation.search_user_relation import search_user_relation
-from lambdas.coach.create_group.create_group import create_group
-from lambdas.coach.add_athlete_to_group.add_athlete_to_group import add_athlete_to_group
 from rds import execute_file, fetch_one, fetch_all
 from data import TestData
 from datetime import datetime, timezone
@@ -32,8 +30,6 @@ def setup_base_scenerio():
     create_user(TestData.test_athlete, {})
     add_relation(TestData.test_add_relation_athlete, {})
     add_relation(TestData.test_add_relation_coach, {})
-    create_group(TestData.test_group, {})
-    add_athlete_to_group(TestData.test_add_athlete_to_group,{})
 
 def setup_search_scenario():
     # Two way connection to athlete
@@ -148,40 +144,6 @@ def test_remove_user_relation_mutual_sucess():
     relations = fetch_all("SELECT * FROM user_relations WHERE (userId = %s AND relationId = %s) OR (userId = %s AND relationId = %s)", ("1234", "123", "123", "1234"))
     assert relations is not None
     assert len(relations) == 0  # Both relations should be removed
-
-def test_remove_user_relation_removes_group_athlete_success():
-    # Arrange
-    setup_base_scenerio()
-    event = {
-        "queryStringParameters": {"targetId": "123"},
-        "headers": generate_auth_header("1234", "Athlete", "test_athlete")
-    }
-
-    # Act
-    response = remove_user_relation(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    group_athlete = fetch_one("SELECT removed FROM athlete_groups WHERE athleteId = %s AND groupId = %s", ("1234", 1))
-    assert group_athlete is not None
-    assert group_athlete[0] == True
-
-def test_remove_user_relation_removes_group_coach_success():
-    # Arrange
-    setup_base_scenerio()
-    event = {
-        "queryStringParameters": {"targetId": "1234"},
-        "headers": generate_auth_header("123", "Coach", "test_coach")
-    }
-
-    # Act
-    response = remove_user_relation(event, {})
-
-    # Assert
-    assert response['statusCode'] == 200
-    group_athlete = fetch_one("SELECT removed FROM athlete_groups WHERE athleteId = %s AND groupId = %s", ("1234", 1))
-    assert group_athlete is not None
-    assert group_athlete[0] == True
 
 def test_get_mutual_user_relations_success():
     # Arrange

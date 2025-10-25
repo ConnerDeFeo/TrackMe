@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import SearchBar from "../common/components/display/SearchBar";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import RelationService from "../services/RelationService";
 import { RelationStatus } from "../common/constants/Enums";
 import TextButton from "../common/components/display/TextButton";
@@ -114,10 +114,7 @@ const Relations = () => {
 
             {/* Loading indicator */}
             {loading ? (
-                <View className="flex-1 justify-center items-center">
-                    <Text className="text-gray-500 text-base">Loading...</Text>
-                </View>
-
+                <ActivityIndicator size="large" color="#007AFF" className="m-10"/>
             // No users found or no relations yet
             ) : currentUsers.length === 0 ? (
                 <View className="flex-1 justify-center items-center px-8">

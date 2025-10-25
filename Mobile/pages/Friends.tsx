@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import RelationService from "../services/RelationService";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import RelationActionButton from "../common/components/display/RelationActionButton";
 import { RelationStatus } from "../common/constants/Enums";
 import UserDisplay from "../common/components/display/UserDisplay";
 
 const Friends = ()=>{
     const [friends, setFriends] = useState<Record<string,string>[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(()=>{
         const fetchFriends = async ()=>{
+            setLoading(true);
             const resp = await RelationService.getMutualUserRelationships();
             if(resp.ok){
                 const data = await resp.json();
@@ -17,6 +19,7 @@ const Friends = ()=>{
             } else {
                 setFriends([]);
             }
+            setLoading(false);
         };
         fetchFriends();
     }, []);
@@ -30,7 +33,11 @@ const Friends = ()=>{
 
     return(
         <View className="mt-2 mx-4">
-            {friends.map((friend) => (
+            {loading ? (
+                <ActivityIndicator size="large" color="#007AFF" className="m-10"/>
+            ) : friends.length === 0 ? (
+                <Text className="text-center text-gray-500 mt-10">No friends yet.</Text>
+            ) : friends.map((friend) => (
                 <View
                     key={friend.relationId}
                     className="flex flex-row justify-between items-center border trackme-border-gray p-4 rounded-xl mb-3 bg-white shadow-sm"

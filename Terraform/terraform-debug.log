@@ -1,0 +1,13 @@
+2025-10-25T13:13:52.372-0400 [INFO]  Terraform version: 1.12.2
+2025-10-25T13:13:52.372-0400 [DEBUG] using github.com/hashicorp/go-tfe v1.74.1
+2025-10-25T13:13:52.372-0400 [DEBUG] using github.com/hashicorp/hcl/v2 v2.23.1-0.20250203194505-ba0759438da2
+2025-10-25T13:13:52.372-0400 [DEBUG] using github.com/hashicorp/terraform-svchost v0.1.1
+2025-10-25T13:13:52.372-0400 [DEBUG] using github.com/zclconf/go-cty v1.16.2
+2025-10-25T13:13:52.372-0400 [INFO]  Go runtime version: go1.24.2
+2025-10-25T13:13:52.372-0400 [INFO]  CLI args: []string{"D:\\Terraform\\terraform.exe", "apply", "-target=aws_instance.bastion_host"}
+2025-10-25T13:13:52.375-0400 [DEBUG] Attempting to open CLI config file: C:\Users\cjack\AppData\Roaming\terraform.rc
+2025-10-25T13:13:52.375-0400 [DEBUG] File doesn't exist, but doesn't need to. Ignoring.
+2025-10-25T13:13:52.375-0400 [DEBUG] ignoring non-existing provider search directory terraform.d/plugins
+2025-10-25T13:13:52.376-0400 [DEBUG] ignoring non-existing provider search directory C:\Users\cjack\AppData\Roaming\terraform.d\plugins
+2025-10-25T13:13:52.376-0400 [DEBUG] ignoring non-existing provider search directory C:\Users\cjack\AppData\Roaming\HashiCorp\Terraform\plugins
+2025-10-25T13:13:52.376-0400 [INFO]  CLI command args: []string{"apply", "-target=aws_instance.bastion_host"}

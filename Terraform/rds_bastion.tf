@@ -108,13 +108,10 @@ resource "aws_instance" "bastion_host" {
   key_name                    = var.keypair_name
 
   # Install PostgreSQL client automatically
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo yum update -y
-              sudo yum install -y postgresql
-              sudo amazon-linux-extras enable postgresql14
-              sudo yum install -y postgresql
-              EOF
+  # user_data = <<-EOF
+  #             #!/bin/bash
+  #             sudo amazon-linux-extras install postgresql14 -y
+  #             EOF
 
   tags = {
     Name = "trackme-bastion-host"

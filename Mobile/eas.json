@@ -1,0 +1,32 @@
+{
+  "cli": {
+    "version": ">= 16.18.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development"
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_ENVIRONMENT": "production",
+        "EXPO_PUBLIC_API_URL": "https://buzzzp4ywk.execute-api.us-east-2.amazonaws.com/prod"
+      },
+      "channel": "preview"
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_ENVIRONMENT": "production",
+        "EXPO_PUBLIC_API_URL": "https://buzzzp4ywk.execute-api.us-east-2.amazonaws.com/prod"
+      },
+      "channel": "production"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

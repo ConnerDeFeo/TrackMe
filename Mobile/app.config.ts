@@ -34,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       edgeToEdgeEnabled: true,
       package: PACKAGE_NAME,
-      versionCode: 20,
+      versionCode: 21,
     },
     plugins: ["expo-secure-store"],
     extra: {

@@ -6,7 +6,6 @@ import {
     TouchableWithoutFeedback,
     BackHandler,
     Platform,
-    Text,
 } from 'react-native'
 
 interface ModalProps {

@@ -1,13 +1,13 @@
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import HistoryService from "../services/HistoryService";
 import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../common/components/display/input/InputDisplay";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import UserService from "../services/UserService";
 import { AccountType } from "../common/constants/Enums";
-import UserDisplay from "../common/components/display/UserDisplay";
+import CollapsibleUserDisplay from "../common/components/display/CollapsibleUserDisplay";
 
 const HistoricalData = ()=>{
     const route = useRoute();
@@ -63,25 +63,18 @@ const HistoricalData = ()=>{
         <View className="flex-1">
             {Object.keys(historicalData).length > 0 ?
                 Object.entries(historicalData).map(([userID, data]) => 
-                    <View key={userID} className="bg-white p-4 rounded-xl shadow-sm border border-b border-gray-100">
-                        <Pressable 
-                            onPress={() => toggleUser(userID)}
-                            className="flex-row items-center justify-between mb-2"
-                        >
-                            <UserDisplay username={data.username} firstName={data.firstName} lastName={data.lastName} />
-                            <Image
-                                source={require('../assets/images/Back.png')}
-                                className={`w-8 h-8 ${expandedUsers.has(userID) ? 'rotate-[-90deg]' : 'rotate-180'}`}
-                            />
-                        </Pressable>
-                        {expandedUsers.has(userID) && (
-                            <>
-                                {data.inputs.map((input, idx) => (
-                                    <InputDisplay key={idx} input={input} />
-                                ))}
-                            </>
-                        )}
-                    </View>
+                    <CollapsibleUserDisplay
+                        key={userID}
+                        username={data.username}
+                        firstName={data.firstName}
+                        lastName={data.lastName}
+                        expanded={expandedUsers.has(userID)}
+                        onPress={() => toggleUser(userID)}
+                    >
+                        {data.inputs.map((input, idx) => (
+                            <InputDisplay key={idx} input={input} />
+                        ))}
+                    </CollapsibleUserDisplay>
                 )
                 :
                 <Text className="text-center text-gray-500 mt-6 pt-2">No historical data for this date.</Text>

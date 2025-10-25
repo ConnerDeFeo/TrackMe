@@ -9,6 +9,7 @@ import InputDisplay from "../common/components/display/input/InputDisplay";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import RelationService from "../services/RelationService";
 import InputTracking from "../common/components/InputTracking";
+import CollapsibleUserDisplay from "../common/components/display/CollapsibleUserDisplay";
 
 const MassInput = () => {
   const [workoutInputs, setWorkoutInputs] = useState<Record<string, Input[]>>({});
@@ -102,8 +103,13 @@ const MassInput = () => {
     <View className="p-4 bg-gray-50 flex-1 min-h-screen">
       { loading ? <ActivityIndicator size="large" color="#007AFF" className="m-10"/>  :
       athletes.map((athlete)=>(
-        <View key={athlete.relationId} className="bg-white rounded-xl shadow-md p-4 mb-4" >
-          <Pressable className="flex flex-row justify-between" onPress={() => {
+        <CollapsibleUserDisplay
+          key={athlete.relationId}
+          username={athlete.username}
+          firstName={athlete.firstName}
+          lastName={athlete.lastName}
+          expanded={expandedAthletes.has(athlete.relationId)}
+          onPress={() => {
             if (expandedAthletes.has(athlete.relationId)) {
               setExpandedAthletes(prev => {
                 const newSet = new Set(prev);
@@ -113,31 +119,26 @@ const MassInput = () => {
             } else {
               setExpandedAthletes(prev => new Set(prev).add(athlete.relationId));
             }
-          }}>
-            <UserDisplay firstName={athlete.firstName} lastName={athlete.lastName} username={athlete.username}/>
-            <Image source={require('../assets/images/Back.png')} className={`h-6 w-6 ${expandedAthletes.has(athlete.relationId) ? 'rotate-[-90deg]' : 'rotate-180'}`}/>
-          </Pressable>
-
-          {expandedAthletes.has(athlete.relationId) && (
-            <View className="pt-2 mt-2 border-t trackme-border-gray">
-              {workoutInputs[athlete.relationId] && workoutInputs[athlete.relationId].length > 0 && (
-                <View className="mb-2 gap-y-1">
-                  <Text>Submitted Entries</Text>
-                  {workoutInputs[athlete.relationId].map((input, index) => (
-                    <InputDisplay key={index} input={input} />
-                  ))}
-                </View>
-              )}
-              <InputTracking
-                currentInputs={currentInputs[athlete.relationId]}
-                setCurrentInputs={(inputs: Input[]) => handleSetCurrentInputs(athlete.relationId, inputs)}
-                handleTimeChange={(idx, text) => handleTimeChange(athlete.relationId, idx, text)}
-                handleDistanceChange={(idx, text) => handleDistanceChange(athlete.relationId, idx, text)}
-                handleRestChange={(idx, text) => handleRestTimeChange(athlete.relationId, idx, text)}
-              />
-            </View>
-          )}
-        </View>
+          }}
+        >
+          <>
+            {workoutInputs[athlete.relationId] && workoutInputs[athlete.relationId].length > 0 && (
+              <View className="mb-2 gap-y-1">
+                <Text>Submitted Entries</Text>
+                {workoutInputs[athlete.relationId].map((input, index) => (
+                  <InputDisplay key={index} input={input} />
+                ))}
+              </View>
+            )}
+            <InputTracking
+              currentInputs={currentInputs[athlete.relationId]}
+              setCurrentInputs={(inputs: Input[]) => handleSetCurrentInputs(athlete.relationId, inputs)}
+              handleTimeChange={(idx, text) => handleTimeChange(athlete.relationId, idx, text)}
+              handleDistanceChange={(idx, text) => handleDistanceChange(athlete.relationId, idx, text)}
+              handleRestChange={(idx, text) => handleRestTimeChange(athlete.relationId, idx, text)}
+            />
+          </>
+        </CollapsibleUserDisplay>
       ))
       }
       <TrackMeButton text="Submit" onPress={handleInputSubmission} className="mt-2 mb-24"/>

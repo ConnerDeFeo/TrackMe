@@ -1,17 +1,18 @@
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import HistoryService from "../services/HistoryService";
 import { Input } from "../common/types/inputs/Input";
 import InputDisplay from "../common/components/display/input/InputDisplay";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import UserService from "../services/UserService";
 import { AccountType } from "../common/constants/Enums";
+import UserDisplay from "../common/components/display/UserDisplay";
 
 const HistoricalData = ()=>{
     const route = useRoute();
     const { date } = (route.params as { date: string }) || {};
-    const [historicalData, setHistoricalData] = useState<Record<string, {inputs:Input[], username:string}>>({});
+    const [historicalData, setHistoricalData] = useState<Record<string, {inputs:Input[], username:string, firstName:string, lastName:string}>>({});
     const [loading, setLoading] = useState<boolean>(false);
     const [expandedUsers, setExpandedUsers] = useState<Set<string>>(new Set());
     const navigation = useNavigation<any>();
@@ -58,7 +59,6 @@ const HistoricalData = ()=>{
             <ActivityIndicator size="large" color="#007AFF" className="m-10"/>
         );
     }
-    console.log(historicalData);
     return(
         <View className="flex-1">
             {Object.keys(historicalData).length > 0 ?
@@ -68,10 +68,11 @@ const HistoricalData = ()=>{
                             onPress={() => toggleUser(userID)}
                             className="flex-row items-center justify-between mb-2"
                         >
-                            <Text className="font-bold text-lg">{data.username}</Text>
-                            <Text className="text-lg font-bold text-gray-500">
-                                {expandedUsers.has(userID) ? '▼' : '▶'}
-                            </Text>
+                            <UserDisplay username={data.username} firstName={data.firstName} lastName={data.lastName} />
+                            <Image
+                                source={require('../assets/images/Back.png')}
+                                className={`w-8 h-8 ${expandedUsers.has(userID) ? 'rotate-[-90deg]' : 'rotate-180'}`}
+                            />
                         </Pressable>
                         {expandedUsers.has(userID) && (
                             <>

@@ -9,14 +9,12 @@ def get_avg_velocity(event, context):
     try:
         user_info = get_user_info(event)
         user_id = user_info['userId']
+        account_type = user_info['accountType']
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
-        # Fetch total work and rest times for the given date
-        results = fetch_all(
-            """
-                SELECT time, distance, date
-                FROM athlete_time_inputs
-                WHERE athleteId = %s 
+        if account_type == "Athlete":
+            join_clause = """
+                WHERE athleteId = %s
                 AND date <= %s
                 AND date IN (
                     SELECT DISTINCT date
@@ -24,12 +22,42 @@ def get_avg_velocity(event, context):
                     WHERE athleteId = %s AND date <= %s
                     ORDER BY date DESC
                     LIMIT 30
+                )    
+            """
+        else:
+            join_clause = """
+                WHERE athleteId IN (
+                    SELECT ur.relationId
+                    FROM user_relations ur
+                    JOIN user_relations ur2 ON ur.relationId = ur2.userId
+                    WHERE ur.userId = %s AND ur2.relationId = ur.userId
                 )
+                AND date <= %s
+                AND date IN (
+                    SELECT DISTINCT date
+                    FROM athlete_time_inputs
+                    WHERE athleteId IN (
+                        SELECT ur.relationId
+                        FROM user_relations ur
+                        JOIN user_relations ur2 ON ur.relationId = ur2.userId
+                        WHERE ur.userId = %s AND ur2.relationId = ur.userId
+                    )
+                    AND date <= %s
+                    ORDER BY date DESC
+                    LIMIT 30
+                )   
+            """
+
+        # Fetch total work and rest times for the given date
+        results = fetch_all(
+            f"""
+                SELECT time, distance, date
+                FROM athlete_time_inputs
+                {join_clause}
                 ORDER BY date ASC
             """,
             (user_id, date, user_id, date)
         ) or []
-        print(f"Fetched time inputs: {results}")
         avg_velocity_ratios = []
         current_date = None
         current_total_time = 0

@@ -118,6 +118,15 @@ def setup_historical_inputs():
         "headers": generate_auth_header("1234", "Athlete", "test_athlete")
     }, {})
 
+    # Three days ago's inputs
+    input_times({
+        "body": json.dumps({
+            "athleteIds": ["1235"], "date": three_days_ago,
+            'inputs': [{'restTime': 1, 'type': 'rest'},{'distance': 14, 'time': 16, 'type': 'run'}]
+        }),
+        "headers": generate_auth_header("1235", "Athlete", "test_athlete2")
+    }, {})
+
 @pytest.fixture(autouse=True)
 def setup_before_each_test():
     """This will run before each test, setting up a clean database."""
@@ -148,6 +157,30 @@ def test_get_work_rest_ratio_returns_success():
     ]
     assert body == expected_ratios
 
+def test_get_work_rest_ratio_coach_returns_success():
+    # Arrange
+    setup_historical_inputs()
+    event = {
+        'queryStringParameters': {
+            "date": date
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
+    }
+
+    # Act
+    response = get_work_rest_ratio(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    expected_ratios = [
+        {"date": three_days_ago, "workRestRatio": (16+8) / 6.0},
+        {"date": date, "workRestRatio": (10.8 + 30) / 5.0}
+    ]
+    # Filter out entries with no rest time
+    expected_ratios = [r for r in expected_ratios if r['workRestRatio'] != float('inf')]
+    assert body == expected_ratios
+
 def test_get_avg_velocity_returns_success():
     # Arrange
     setup_historical_inputs()
@@ -156,6 +189,33 @@ def test_get_avg_velocity_returns_success():
             "date": date
         },
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")
+    }
+
+    # Act
+    response = get_avg_velocity(event, {})
+
+    # Assert
+    assert response['statusCode'] == 200
+    body = json.loads(response['body'])
+    assert len(body) == 4
+    expected_ratios = [
+        {"date": three_days_ago, "avgVelocity": 7 / 8.0},
+        {"date": two_days_ago, "avgVelocity":  (3 + 5) / (4 + 6.0)},
+        {"date": yesterday, "avgVelocity": 1 / 2.0},
+        {"date": date, "avgVelocity": 300 / 40.8}
+    ]
+    for i in range(4):
+        assert body[i]['date'] == expected_ratios[i]['date']
+        assert body[i]['avgVelocity'] == expected_ratios[i]['avgVelocity'], f"For index {i}, expected {expected_ratios[i]['avgVelocity']} but got {body[i]['avgVelocity']}"
+
+def test_get_avg_velocity_coach_returns_success():
+    # Arrange
+    setup_historical_inputs()
+    event = {
+        'queryStringParameters': {
+            "date": date
+        },
+        "headers":generate_auth_header("123", "Coach", "testcoach")
     }
 
     # Act

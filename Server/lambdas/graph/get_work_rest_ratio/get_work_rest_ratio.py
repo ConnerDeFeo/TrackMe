@@ -10,19 +10,41 @@ def get_work_rest_ratio(event, context):
     try:
         user_info = get_user_info(event)
         user_id = user_info['userId']
+        account_type = user_info['accountType']
         date = query_params.get('date', datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+
+        if account_type == "Athlete":
+            join_clause = "WHERE athleteId = %s"
+            date_subquery = "WHERE athleteId = %s"
+        else:
+            join_clause = """
+                WHERE athleteId IN (
+                    SELECT ur.relationId
+                    FROM user_relations ur
+                    JOIN user_relations ur2 ON ur.relationId = ur2.userId
+                    WHERE ur.userId = %s AND ur2.relationId = ur.userId
+                )
+            """
+            date_subquery = """
+                WHERE athleteId IN (
+                    SELECT ur.relationId
+                    FROM user_relations ur
+                    JOIN user_relations ur2 ON ur.relationId = ur2.userId
+                    WHERE ur.userId = %s AND ur2.relationId = ur.userId
+                )
+            """
 
         # Fetch total work and rest times for the given date
         results = fetch_all(
-            """
+            f"""
                 SELECT time, restTime, date
                 FROM athlete_inputs
-                WHERE athleteId = %s 
+                {join_clause}
                 AND date <= %s
                 AND date IN (
                     SELECT DISTINCT date
                     FROM athlete_inputs
-                    WHERE athleteId = %s AND date <= %s
+                    {date_subquery} AND date <= %s
                     ORDER BY date DESC
                     LIMIT 30
                 )

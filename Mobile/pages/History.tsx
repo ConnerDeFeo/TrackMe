@@ -126,7 +126,7 @@ const History = () => {
                             xEnd={avgVelocities[avgVelocities.length - 1]?.date}
                         /> 
                         : 
-                        <ActivityIndicator className="mt-6" size="large" color="#007AFF" />
+                        <Text className="text-center mt-6 text-gray-600">Not enough data to display graph.</Text>
                     }
                 </View>
             </View>

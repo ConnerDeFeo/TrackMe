@@ -2,6 +2,7 @@ from user_auth import get_user_info, get_auth_header
 from rds import fetch_all
 import json
 from datetime import datetime, timezone
+from statistics import mean, stdev
 
 # Gets the average work time to rest time ratio for the user for their past 30 workouts
 def get_work_rest_ratio(event, context):
@@ -76,7 +77,6 @@ def get_work_rest_ratio(event, context):
         # Handle the last date
         append_ratio(current_total_work, current_total_rest)
 
-        print(work_rest_ratios)
         return {
             "statusCode": 200,
             "body": json.dumps(work_rest_ratios),

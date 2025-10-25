@@ -50,7 +50,7 @@ const Graph = ({data, xStart, xEnd, className}: {data: number[],xStart:string, x
     return(
         <View className={`flex-row ${className}`}>
             {/* Y-axis labels */}
-            <View className="justify-between mb-6">
+            <View className="justify-between mb-4">
                 <Text className="mr-2">{(max * multiplier).toString().slice(0, 5)}</Text>
                 <Text className="ml-auto mr-2">0</Text>
             </View>

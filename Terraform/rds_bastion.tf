@@ -3,27 +3,6 @@
 #   url = "https://ipv4.icanhazip.com"
 # }
 
-# # Get the latest Amazon Linux 2 AMI
-# data "aws_ami" "amazon_linux" {
-#   most_recent = true
-#   owners      = ["amazon"]
-
-#   filter {
-#     name   = "name"
-#     values = ["amzn2-ami-hvm-*-arm64-gp2"]
-#   }
-
-#   filter {
-#     name   = "virtualization-type"
-#     values = ["hvm"]s
-#   }
-
-#   filter {
-#     name   = "architecture"
-#     values = ["arm64"]
-#   }
-# }
-
 # #Allow batstion to connect to rds instance in the default security group
 # resource "aws_security_group_rule" "allow_bastion_to_rds" {
 #   type                     = "ingress"
@@ -100,8 +79,8 @@
 
 # # Bastion host EC2 instance
 # resource "aws_instance" "bastion_host" {
-#   ami                         = data.aws_ami.amazon_linux.id
-#   instance_type               = "t4g.micro"
+#   ami                         = "ami-0ea3c35c5c3284d82"
+#   instance_type               = "t2.micro"
 #   subnet_id                   = aws_subnet.bastion_subnet.id
 #   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
 #   associate_public_ip_address = true
@@ -110,10 +89,8 @@
 #   # Install PostgreSQL client automatically
 #   user_data = <<-EOF
 #               #!/bin/bash
-#               sudo yum update -y
-#               sudo yum install -y postgresql
-#               sudo amazon-linux-extras enable postgresql14
-#               sudo yum install -y postgresql
+#               apt-get update
+#               apt-get install -y postgresql-client
 #               EOF
 
 #   tags = {

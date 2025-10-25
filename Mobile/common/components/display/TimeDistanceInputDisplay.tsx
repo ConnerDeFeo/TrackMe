@@ -27,24 +27,6 @@ const TimeDistanceInputDisplay = ({ time, distance, handleTimeChange, handleDist
 
     return(
         <View className={`flex flex-row justify-between items-center gap-x-3 ${hidden ? 'hidden' : ''}`}>
-            {/* Time input field */}
-            <View className="flex-1">
-                <Text className="text-xs font-medium text-gray-600 mb-1">
-                    Time (seconds)
-                </Text>
-                <TextInput
-                    ref={ref} 
-                    placeholder="0.00"
-                    keyboardType="decimal-pad"
-                    value={time}
-                    className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                    onChangeText={text => handleTimeChange(text)}
-                    returnKeyType="next"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                />
-            </View>
-
             {/* Distance input field with unit label */}
             <View className="flex-1">
                 <Text className="text-xs font-medium text-gray-600 mb-1">
@@ -65,6 +47,23 @@ const TimeDistanceInputDisplay = ({ time, distance, handleTimeChange, handleDist
                     {/* Unit label for distance (meters) */}
                     <Text className="text-xs font-medium text-gray-500 ml-2">m</Text>
                 </View>
+            </View>
+            {/* Time input field */}
+            <View className="flex-1">
+                <Text className="text-xs font-medium text-gray-600 mb-1">
+                    Time (seconds)
+                </Text>
+                <TextInput
+                    ref={ref} 
+                    placeholder="0.00"
+                    keyboardType="decimal-pad"
+                    value={time}
+                    className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                    onChangeText={text => handleTimeChange(text)}
+                    returnKeyType="next"
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                />
             </View>
         </View>
     );

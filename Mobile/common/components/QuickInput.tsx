@@ -11,10 +11,10 @@ import { Variables } from "../constants/Variables";
  * QuickInput component allows users to quickly log workout inputs (runs or rest periods)
  * @param handleInputAddition - Callback to handle added input data
  */
-const QuickInput = ({handleInputAddition, runInput, className}:
+const QuickInput = ({handleInputAddition, inputType, className}:
     {
         handleInputAddition: (inputs: Input) => void, 
-        runInput: boolean,
+        inputType: InputType,
         className?: string,
     }
 ) => {
@@ -86,10 +86,10 @@ const QuickInput = ({handleInputAddition, runInput, className}:
      * Resets input fields on successful submission
      */
     const handleSubmission = async () => {
-        if(runInput && (currentTimeDistanceInput.distance === 0 || currentTimeDistanceInput.time === "")) return; // Prevent adding run inputs with 0 distance or time
-        if(!runInput && currentRestInput.restTime === 0) return; // Prevent adding rest inputs with 0 time
+        if(inputType==InputType.Run && (currentTimeDistanceInput.distance === 0 || currentTimeDistanceInput.time === "")) return; // Prevent adding run inputs with 0 distance or time
+        if(inputType==InputType.Rest && currentRestInput.restTime === 0) return; // Prevent adding rest inputs with 0 time
         // Pass the created input to the parent component via callback
-        if(runInput){
+        if(inputType==InputType.Run){
             setCurrentTimeDistanceInput(prev=>({...prev, time: ""}));
             handleInputAddition(currentTimeDistanceInput);
         }
@@ -108,22 +108,22 @@ const QuickInput = ({handleInputAddition, runInput, className}:
                 <View className="flex-row items-center gap-x-2 justify-between">
                     <View className="flex-1">
                         <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {runInput ? "Distance (meters)" : "Minutes"}
+                            {inputType==InputType.Run ? "Distance (meters)" : "Minutes"}
                         </Text>
                         {/* Container for distance input and unit */}
                         <View className="flex flex-row items-center">
                             <View className="border trackme-border-gray rounded-lg flex-1 flex-row relative">
                                 <TextInput
-                                    placeholder={runInput ? "0" : "Mins"}
+                                    placeholder={inputType==InputType.Run ? "0" : "Mins"}
                                     keyboardType="numeric"
                                     className="rounded-lg bg-white text-center font-medium flex-1"
-                                    value={runInput ? 
+                                    value={inputType==InputType.Run ? 
                                         (currentTimeDistanceInput.distance === 0 ? "" : currentTimeDistanceInput.distance.toString()) 
                                         : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
                                     }
-                                    onChangeText={text => runInput ? handleDistanceChange(text) : handleMinuteChange(text)}
+                                    onChangeText={text => inputType==InputType.Run ? handleDistanceChange(text) : handleMinuteChange(text)}
                                 />
-                                { runInput &&
+                                { inputType==InputType.Run &&
                                     <>
                                         <Pressable 
                                             className="border-l border-gray-300 px-2 flex justify-center items-center" 
@@ -145,20 +145,20 @@ const QuickInput = ({handleInputAddition, runInput, className}:
                             </View>
                         </View>
                     </View>
-                    {!runInput && <Text className="font-bold text-lg mt-4">:</Text>}
+                    {inputType===InputType.Rest && <Text className="font-bold text-lg mt-4">:</Text>}
                     <View className="flex-1">
                         <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {runInput ? "Time (seconds)" : "Seconds"}
+                            {inputType===InputType.Run ? "Time (seconds)" : "Seconds"}
                         </Text>
                         <TextInput
-                            placeholder={runInput ? "0.00" : "Secs"}
+                            placeholder={inputType===InputType.Run ? "0.00" : "Secs"}
                             keyboardType="decimal-pad"
-                            value={runInput ? 
+                            value={inputType===InputType.Run ? 
                                 currentTimeDistanceInput.time
                                 : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
                             }
                             className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
-                            onChangeText={text => runInput ? handleTimeChange(text) : handleSecondChange(text)}
+                            onChangeText={text => inputType===InputType.Run ? handleTimeChange(text) : handleSecondChange(text)}
                         />
                     </View>
                 </View>

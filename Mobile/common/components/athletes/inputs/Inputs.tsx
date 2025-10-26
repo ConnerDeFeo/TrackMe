@@ -25,7 +25,7 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
     // Currently selected submitted inputs for deletion
     const [selectedSubmittedInputs, setSelectedSubmittedInputs] = useState<{inputId:number, type: InputType}[]>([]);
     // Flag for showing a rest input or a run time input
-    const [runInput, setRunInput] = useState<boolean>(true);
+    const [inputType, setInputType] = useState<InputType>(InputType.Run);
     const { workoutGroup } = useWorkoutGroup();
     // Store previously submitted workout inputs organized by date and group
     const scrollRef = useRef<ScrollView | null>(null);
@@ -147,18 +147,26 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
                 {/* Toggle buttons for switching between Run and Rest input modes */}
                 <View className="flex flex-row items-center justify-between mx-2">
                     <View className="flex flex-row items-center w-[55%]">
-                        <TrackMeButton
-                            text="Run" 
-                            onPress={()=> setRunInput(true)} 
-                            className="w-24"
-                            gray={!runInput}
-                        />
-                        <TrackMeButton 
-                            text="Rest" 
-                            onPress={()=> setRunInput(false)} 
-                            className="w-24"
-                            gray={runInput}
-                        />
+                        <View className="flex flex-row items-center gap-x-1">
+                            <TrackMeButton
+                                text="Run" 
+                                onPress={()=> setInputType(InputType.Run)} 
+                                width={60}
+                                gray={inputType!==InputType.Run}
+                            />
+                            <TrackMeButton 
+                                text="Rest" 
+                                onPress={()=> setInputType(InputType.Rest)} 
+                                width={60}
+                                gray={inputType!==InputType.Rest}
+                            />
+                            <TrackMeButton 
+                                text="Note" 
+                                onPress={()=> setInputType(InputType.Notes)} 
+                                width={60}
+                                gray={inputType!==InputType.Notes}
+                            />
+                        </View>
                         {workoutGroupButton && 
                             <Pressable className="ml-4 bg-blue-100 rounded-full p-1" onPress={() => navigation.navigate("CreateWorkoutGroup")}>
                                 <Image source={require('../../../../assets/images/TwoRunners.png')} className="w-10 h-10" />
@@ -174,7 +182,7 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
                 </View>
                 <QuickInput
                     handleInputAddition={handleInputAddition} 
-                    runInput={runInput}
+                    inputType={inputType}
                     className="py-4 mx-2"
                 />
             </View>

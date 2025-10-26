@@ -8,10 +8,10 @@ const buttons = [
   ]
 
 //Footer at bottom of the coach screens with navigation buttons
-const CoachFooter = () => {
+const CoachFooter = ({currentRoute}:{currentRoute: string}) => {
 
     return (
-        <Footer buttons={buttons} />
+        <Footer buttons={buttons} currentRoute={currentRoute} />
     );
 };
 

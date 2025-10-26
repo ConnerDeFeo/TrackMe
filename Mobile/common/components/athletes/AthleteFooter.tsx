@@ -9,9 +9,9 @@ const buttons = [
   ]
 
 //Footer for the athlete pages
-const AthleteFooter = () => {
+const AthleteFooter = ({currentRoute}:{currentRoute: string}) => {
     return (
-        <Footer buttons={buttons}/>
+        <Footer buttons={buttons} currentRoute={currentRoute}/>
     );
 };
 

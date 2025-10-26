@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import { View, Pressable, Image } from 'react-native';
 
 // Import all images statically
@@ -12,10 +12,11 @@ const images = {
 };
 
 //Footer at bottom of the screen with navigation buttons
-const Footer = ({buttons}: {buttons: string[][]}) => {
+const Footer = ({buttons, currentRoute}: {buttons: string[][], currentRoute: string}) => {
     const navigation = useNavigation<any>();
 
     const handleNavigation = (destination: string) => {
+        if (destination === currentRoute) return; // Do nothing if already on the desired route
         navigation.reset({
             index: 0,
             routes: [{ name: destination }],

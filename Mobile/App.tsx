@@ -1,8 +1,8 @@
 import { Amplify } from 'aws-amplify';
 import awsConfig from './aws-config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ComponentType, useEffect, useState } from 'react';
-import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native';
+import { ComponentType, startTransition, useEffect, useState } from 'react';
+import { NavigationContainer, ParamListBase, RouteProp, useNavigationState } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import './global.css';
 import { ActivityIndicator, View } from "react-native";
@@ -84,18 +84,29 @@ const getPageTitle = (routeName:string, params:any) => {
 
 const AthleteStack = createNativeStackNavigator();
 const AthleteLayoutWrapper = () => {
+  const [currentRoute, setCurrentRoute] = useState<string>('Inputs');
   return (
     <>
-      <AthleteStack.Navigator initialRouteName='Inputs' screenOptions={({route, navigation})=> {
-        const params = route.params;
-        const rightButtonData = getRightButtonData(route);
-        const state = navigation.getState();
-        return{
-          headerRight: rightButtonData ? ()=><HeaderRightButton onPress={() => navigation.navigate(rightButtonData.navigation,route.params)} image={rightButtonData.image} /> : ()=>null,
-          title: getPageTitle(route.name, params),
-          animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
-        }
-      }}>
+      <AthleteStack.Navigator 
+        initialRouteName='Inputs' 
+        screenOptions={({route, navigation})=> {
+          const params = route.params;
+          const rightButtonData = getRightButtonData(route);
+          const state = navigation.getState();
+          return{
+            headerRight: rightButtonData ? ()=><HeaderRightButton onPress={() => navigation.navigate(rightButtonData.navigation,route.params)} image={rightButtonData.image} /> : ()=>null,
+            title: getPageTitle(route.name, params),
+            animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
+          }
+        }}
+        screenListeners={{
+          state:(e) =>{
+            const state = e.data.state;
+            const currentRouteName = state.routes[state.index].name;
+            setCurrentRoute(currentRouteName)
+          }
+        }}
+      >
         <AthleteStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={TodayInputs} />
         <AthleteStack.Screen name="HistoricalInputs" component={HistoricalInputs} />
@@ -107,25 +118,36 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="History" options={{ title: "History" }} component={History} />
         <AthleteStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
       </AthleteStack.Navigator>
-      <AthleteFooter />
+      <AthleteFooter currentRoute={currentRoute}/>
     </>
   );
 }
 
 const CoachStack = createNativeStackNavigator();
 const CoachLayoutWrapper = () => {
+  const [currentRoute, setCurrentRoute] = useState<string>('History');
   return (
     <>
-      <CoachStack.Navigator initialRouteName='History' screenOptions={({route, navigation})=> {
-        const params = route.params;
-        const rightButtonData = getRightButtonData(route);
-        const state = navigation.getState();
-        return{
-          headerRight: rightButtonData ? ()=><HeaderRightButton onPress={() => navigation.navigate(rightButtonData.navigation, route.params)} image={rightButtonData.image} /> : ()=>null,
-          title: getPageTitle(route.name, params),
-          animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
-        }
-      }}>
+      <CoachStack.Navigator 
+        initialRouteName='History' 
+        screenOptions={({route, navigation})=> {
+          const params = route.params;
+          const rightButtonData = getRightButtonData(route);
+          const state = navigation.getState();
+          return{
+            headerRight: rightButtonData ? ()=><HeaderRightButton onPress={() => navigation.navigate(rightButtonData.navigation, route.params)} image={rightButtonData.image} /> : ()=>null,
+            title: getPageTitle(route.name, params),
+            animation: state.index === 0 ? 'none' : 'default', // No animation on initial screen
+          }
+        }}
+        screenListeners={{
+          state:(e) =>{
+            const state = e.data.state;
+            const currentRouteName = state.routes[state.index].name;
+            setCurrentRoute(currentRouteName)
+          }
+        }}
+      >
         <CoachStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
         <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <CoachStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
@@ -133,7 +155,7 @@ const CoachLayoutWrapper = () => {
         <CoachStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
         <CoachStack.Screen name="History" options={{ title: "History" }} component={History} />
       </CoachStack.Navigator>
-      <CoachFooter/>
+      <CoachFooter currentRoute={currentRoute}/>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Text, TextInput, Pressable, View, Alert } from "react-native";
+import { Text, TextInput, Pressable, View, Alert, Image } from "react-native";
 import UserService from "../services/UserService";
 import GeneralService from "../services/GeneralService";
 import { useState } from "react";
@@ -18,6 +18,8 @@ const Profile = () => {
     // Loading and feedback states
     const [isSaving, setIsSaving] = useState(false);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    // Editation flag
+    const [isEditing, setIsEditing] = useState(false);
 
     // Fetch user data when component mounts
     useEffect(() => {
@@ -124,42 +126,64 @@ const Profile = () => {
 
                 {/* Profile Form */}
                 <View className="bg-white rounded-2xl p-6 shadow-sm">
-                    <Text className="text-xl font-bold text-gray-800 mb-6">Profile Information</Text>
-                    
+                    <View className="flex-row items-center justify-between mb-6">
+                        <Text className="text-xl font-bold text-gray-800">Profile Information</Text>
+                        <Pressable onPress={() => setIsEditing(prev => !prev)} className="pl-4 py-2 pr-2">
+                            <Image source={require("../assets/images/Edit.png")} className="h-6 w-6" />
+                        </Pressable>
+                    </View>
                     <View className="gap-y-5">
                         {/* Bio input field */}
                         <View>
                             <Text className="text-gray-700 font-semibold mb-2">Bio</Text>
-                            <TextInput
-                                className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
-                                placeholder="Tell us about yourself..."
-                                value={userData.bio || ''}
-                                onChangeText={(text) => handleFieldChange('bio', text)}
-                                multiline
-                                numberOfLines={4}
-                                textAlignVertical="top"
-                            />
+                            {isEditing ?
+                                <TextInput
+                                    className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
+                                    placeholder="Tell us about yourself..."
+                                    value={userData.bio || ''}
+                                    onChangeText={(text) => handleFieldChange('bio', text)}
+                                    multiline
+                                    numberOfLines={4}
+                                    textAlignVertical="top"
+                                />
+                                :
+                                <Text className="font-semibold ml-4 my-4">
+                                    {userData.bio || 'No bio provided.'}
+                                </Text>
+                            }
                         </View>
 
                         {/* First and Last name inputs */}
                         <View className="flex-row gap-x-3">
                             <View className="flex-1">
                                 <Text className="text-gray-700 font-semibold mb-2">First Name</Text>
-                                <TextInput
-                                    className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
-                                    placeholder="First name"
-                                    value={userData.firstName || ''}
-                                    onChangeText={(text) => handleFieldChange('firstName', text)}
-                                />
+                                {isEditing ? 
+                                    <TextInput
+                                        className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
+                                        placeholder="First name"
+                                        value={userData.firstName || ''}
+                                        onChangeText={(text) => handleFieldChange('firstName', text)}
+                                    />
+                                    : 
+                                    <Text className="font-semibold ml-4 my-4">
+                                        {userData.firstName || 'No first name provided.'}
+                                    </Text>
+                                }
                             </View>
                             <View className="flex-1">
                                 <Text className="text-gray-700 font-semibold mb-2">Last Name</Text>
-                                <TextInput
-                                    className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
-                                    placeholder="Last name"
-                                    value={userData.lastName || ''}
-                                    onChangeText={(text) => handleFieldChange('lastName', text)}
-                                />
+                                { isEditing ?
+                                    <TextInput
+                                        className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
+                                        placeholder="Last name"
+                                        value={userData.lastName || ''}
+                                        onChangeText={(text) => handleFieldChange('lastName', text)}
+                                    />
+                                    :
+                                    <Text className="font-semibold ml-4 my-4">
+                                        {userData.lastName || 'No last name provided.'}
+                                    </Text>
+                                }
                             </View>
                         </View>
                     </View>
@@ -184,7 +208,7 @@ const Profile = () => {
 
                 {/* Logout Section */}
                 <View className="mt-6">
-                    <TrackMeButton text="Sign Out" onPress={handleLogout} red />
+                    <TrackMeButton text="Sign Out" onPress={handleLogout} />
                 </View>
             </View>
         </View>

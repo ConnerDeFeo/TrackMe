@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Calender from "../common/components/history/Calender";
 import GraphService from "../services/GraphService";
 import DateService from "../services/DateService";
-// import Graph from "../common/components/Graph";
+import Graph from "../common/components/Graph";
 
 const History = () => {
     // Current distance filter text input
@@ -98,7 +98,7 @@ const History = () => {
                     </View>
                 )}
             </View>
-            {/* <View className="mb-12">
+            <View className="mb-12">
                 <View>
                     <Text className="text-lg font-semibold text-center mt-8">Work-Rest Ratio (Past 30 Sessions)</Text>
                     { workRestRatioLoading ?
@@ -129,7 +129,7 @@ const History = () => {
                         <Text className="text-center mt-6 text-gray-600">Not enough data to display graph.</Text>
                     }
                 </View>
-            </View> */}
+            </View>
         </KeyboardAwareScrollView>
     );
 }

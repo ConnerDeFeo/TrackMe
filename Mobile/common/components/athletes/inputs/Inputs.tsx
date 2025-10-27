@@ -11,7 +11,7 @@ import UserService from "../../../../services/UserService";
 import AthleteWorkoutService from "../../../../services/AthleteWorkoutService";
 import InputsScrollableSection from "./InputsScrollableSection";
 import TrackMeButton from "../../display/TrackMeButton";
-import QuickInput from "../../QuickInput";
+import QuickInput from "./QuickInput";
 import { RestInput } from "../../../types/inputs/RestInput";
 
 //Page where athletes input times

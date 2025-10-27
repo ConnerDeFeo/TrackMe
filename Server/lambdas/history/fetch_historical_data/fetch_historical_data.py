@@ -31,7 +31,7 @@ def fetch_historical_data(event, context):
         # Fetch all athlete input entries for this coach on the same date
         athlete_inputs = fetch_all(
             f"""
-                SELECT u.userId, u.username, u.firstName, u.lastName, ai.time, ai.distance, ai.restTime, ai.type
+                SELECT u.userId, u.username, u.firstName, u.lastName, ai.time, ai.distance, ai.restTime, ai.note, ai.type
                 FROM athlete_inputs ai
                 JOIN users u ON ai.athleteId = u.userId
                 {input_join_clause} AND ai.date = %s
@@ -42,7 +42,7 @@ def fetch_historical_data(event, context):
         filtered_data = {}
 
         # Populate filtered_data with athlete inputs per group and athlete
-        for user_id, username, firstName, lastName, time, distance, rest_time, input_type in athlete_inputs:
+        for user_id, username, firstName, lastName, time, distance, rest_time, note, input_type in athlete_inputs:
             # Initialize athlete entry if not present
             if user_id not in filtered_data:
                 filtered_data[user_id] = {
@@ -57,7 +57,12 @@ def fetch_historical_data(event, context):
                     "restTime": rest_time,
                     "type": input_type
                 })
-            else:
+            elif note:
+                filtered_data[user_id]["inputs"].append({
+                    "note": note,
+                    "type": input_type
+                })
+            elif time and distance:
                 filtered_data[user_id]["inputs"].append({
                     "time": time,
                     "distance": distance,

@@ -216,8 +216,12 @@ def test_fetch_historical_data_coach_success():
     
     athlete_inputs = body['1234']
     assert athlete_inputs['username'] == 'test_athlete'
-    assert len(athlete_inputs['inputs']) == 3
-    assert athlete_inputs['inputs'] == [{'distance': 100, 'time': 10.8, 'type': 'run'}, {'restTime': 5, 'type': 'rest'}, {'distance': 200, 'time': 30.0, 'type': 'run'}]
+    assert athlete_inputs['inputs'] == [
+        {'distance': 100, 'time': 10.8, 'type': 'run'}, 
+        {'restTime': 5, 'type': 'rest'}, 
+        {'distance': 200, 'time': 30.0, 'type': 'run'}, 
+        {'note': 'Test note', 'type': 'note'}
+    ]
 
 def test_fetch_historical_data_athlete_success():
     # Arrange

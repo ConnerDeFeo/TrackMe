@@ -75,22 +75,26 @@ const InputsScrollableSection = (
                     Pending Entries (NOT SUBMITTED)
                 </Text>
                 {pendingInputs.length > 0 ? (
-                    pendingInputs.map((input, idx) => (
-                        <Pressable key={idx} onPress={() => {
-                            // Toggle selection state for pending inputs
-                            if (selectedPendingInputs.has(idx)) {
-                                setSelectedPendingInputs(prev => {
-                                    const newSet = new Set(prev);
-                                    newSet.delete(idx);
-                                    return newSet;
-                                });
-                            } else {
-                                setSelectedPendingInputs(prev => new Set(prev).add(idx));
-                            }
-                        }}>
-                            <InputDisplay input={input} selected={selectedPendingInputs.has(idx)} />
-                        </Pressable>
-                    ))
+                    <View className="gap-y-1">
+                        {
+                            pendingInputs.map((input, idx) => (
+                                <Pressable key={idx} onPress={() => {
+                                    // Toggle selection state for pending inputs
+                                    if (selectedPendingInputs.has(idx)) {
+                                        setSelectedPendingInputs(prev => {
+                                            const newSet = new Set(prev);
+                                            newSet.delete(idx);
+                                            return newSet;
+                                        });
+                                    } else {
+                                        setSelectedPendingInputs(prev => new Set(prev).add(idx));
+                                    }
+                                }}>
+                                    <InputDisplay input={input} selected={selectedPendingInputs.has(idx)} />
+                                </Pressable>
+                            ))
+                        }
+                    </View>
                     ) : (
                     <Text className="text-gray-500 text-center py-4">
                         No pending entries

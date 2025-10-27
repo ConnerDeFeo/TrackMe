@@ -91,6 +91,7 @@ const QuickInput = ({handleInputAddition, inputType, className}:
                 break;
             case InputType.Rest:
                 setCurrentRestInput({type: InputType.Rest, restTime: 0});
+                handleInputAddition(currentRestInput);
                 break;
             case InputType.Note:
                 setCurrentNoteInput({type: InputType.Note, note: ""});

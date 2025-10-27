@@ -47,6 +47,7 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
     const handleInputAddition = async (input:Input) => {
         if (input.type === InputType.Run && (input.distance === 0 || input.time === "")) return; // Prevent adding run inputs with 0 distance or time
         if (input.type === InputType.Rest && input.restTime === 0) return; // Prevent adding rest inputs with 0 time
+        if (input.type === InputType.Note && input.note?.trim() === "") return; // Prevent adding empty notes
         setPendingInputs(prev => {
             if (prev.length > 0 && prev[prev.length - 1].type === InputType.Rest && input.type === InputType.Rest) {
                 // Combine consecutive rest inputs
@@ -102,7 +103,6 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
             setSelectedPendingInputs(new Set());
         }
     };
-
     return (
         <KeyboardAvoidingView 
             className="flex-1 bg-white"

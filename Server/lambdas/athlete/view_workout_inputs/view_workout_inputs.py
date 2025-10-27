@@ -19,7 +19,7 @@ def view_workout_inputs(event, context):
         
         athlete_time_inputs = fetch_all(
         """
-            SELECT id, distance, time, restTime, type
+            SELECT id, distance, time, restTime, note, type
             FROM athlete_inputs
             WHERE athleteId = %s AND date = %s
             ORDER BY timeStamp ASC
@@ -28,10 +28,12 @@ def view_workout_inputs(event, context):
         # Initialize data structure to hold workout inputs
         parsed_data = []
         if athlete_time_inputs:
-            for input_id, distance, time, rest_time, input_type in athlete_time_inputs:
+            for input_id, distance, time, rest_time, note, input_type in athlete_time_inputs:
                 if rest_time:
                     parsed_data.append({"restTime": rest_time, "type": "rest", "inputId": input_id})
-                else:
+                elif note:
+                    parsed_data.append({"note": note, "type": "note", "inputId": input_id})
+                elif time and distance:
                     parsed_data.append({"distance": distance, "time": time, "type": input_type, "inputId": input_id})
         if len(parsed_data) > 0:
             return {

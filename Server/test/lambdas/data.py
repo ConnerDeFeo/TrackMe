@@ -131,6 +131,10 @@ class TestData:
                     'time': 30,
                     'type': 'run'
                 },
+                {
+                    'note': 'Test note',
+                    'type': 'note'
+                }
             ]
         }),
         "headers":generate_auth_header("1234", "Athlete", "test_athlete")

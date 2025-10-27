@@ -51,7 +51,8 @@ def setup_view_workout_inputs():
     expected_inputs = [
         {"distance": 100, "time": 10.8, "type": "run", "inputId": 1},
         {'restTime': 5, "type": "rest", "inputId": 1}, # Same Id sense from different table
-        {"distance": 200, "time": 30.0, "type": "run", "inputId": 2}
+        {"distance": 200, "time": 30.0, "type": "run", "inputId": 2},
+        {'note': 'Test note', "type": "note", "inputId": 1}, # Note input for athlete 1234
     ]
 
     return event, expected_inputs
@@ -188,7 +189,7 @@ def test_timestamps_unique_for_inputs_and_rest_inputs():
     assert inputs is not None
     prev = inputs[0][0]
     assert inputs[0][1] == 'run'
-    order = ['rest', 'run']
+    order = ['rest', 'run', 'note']
     for i, input in enumerate(inputs[1:]):
         assert input[0] > prev, "Timestamps are not unique or are not in increasing order"
         prev = input[0]
@@ -213,10 +214,6 @@ def test_view_workout_inputs_returns_group_inputs():
 
     # Assert
     inputs = json.loads(response['body'])
-    assert len(inputs) == 3
-    assert len(inputs) == len(expected_inputs)
-    print(inputs)
-    print(expected_inputs)
     assert inputs == expected_inputs
 
 def test_remove_inputs_returns_success():

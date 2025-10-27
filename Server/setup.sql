@@ -30,6 +30,14 @@ CREATE TABLE IF NOT EXISTS athlete_rest_inputs(
     timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS athlete_note_inputs(
+    id SERIAL PRIMARY KEY,
+    athleteId VARCHAR(255) REFERENCES users(userId) NOT NULL,
+    note TEXT DEFAULT '',
+    date VARCHAR(10) DEFAULT CURRENT_DATE,
+    timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE OR REPLACE VIEW athlete_inputs AS
 SELECT 
     id,
@@ -38,6 +46,7 @@ SELECT
     time,
     date,
     NULL AS restTime,
+    NULL AS note,
     timeStamp,
     'run' AS type
 FROM athlete_time_inputs
@@ -49,9 +58,22 @@ SELECT
     NULL AS time,
     date,
     restTime,
+    NULL AS note,
     timeStamp,
     'rest' AS type
-FROM athlete_rest_inputs;
+FROM athlete_rest_inputs
+UNION ALL
+SELECT 
+    id,
+    athleteId,
+    NULL AS distance,
+    NULL AS time,
+    date,
+    NULL AS restTime,
+    note,
+    timeStamp,
+    'note' AS type
+FROM athlete_note_inputs;
 
 CREATE INDEX idx_user_relations_userid_relationid
 ON user_relations (userId, relationId);

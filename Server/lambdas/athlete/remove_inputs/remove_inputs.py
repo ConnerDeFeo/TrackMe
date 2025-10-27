@@ -13,20 +13,29 @@ def remove_inputs(event, context):
 
         input_time_params = [input_id['inputId'] for input_id in input_ids if input_id['type'] == 'run']
         input_rest_params = [input_id['inputId'] for input_id in input_ids if input_id['type'] == 'rest']
+        input_note_params = [input_id['inputId'] for input_id in input_ids if input_id['type'] == 'note']
 
         # remove all inputs from db
-        execute_commit(
-            """
-                DELETE FROM athlete_time_inputs WHERE id IN %s AND athleteId = %s
-            """,
-        (tuple(input_time_params), athlete_id))
+        if input_time_params:
+            execute_commit(
+                """
+                    DELETE FROM athlete_time_inputs WHERE id IN %s AND athleteId = %s
+                """,
+            (tuple(input_time_params), athlete_id))
 
-        execute_commit(
-            """
-                DELETE FROM athlete_rest_inputs WHERE id IN %s AND athleteId = %s
-            """,
-        (tuple(input_rest_params), athlete_id))
+        if input_rest_params:
+            execute_commit(
+                """
+                    DELETE FROM athlete_rest_inputs WHERE id IN %s AND athleteId = %s
+                """,
+            (tuple(input_rest_params), athlete_id))
 
+        if input_note_params:
+            execute_commit(
+                """
+                    DELETE FROM athlete_note_inputs WHERE id IN %s AND athleteId = %s
+                """,
+            (tuple(input_note_params), athlete_id))
 
         return {
             'statusCode': 200,

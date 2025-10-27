@@ -6,6 +6,7 @@ import { RestInput } from "../types/inputs/RestInput";
 import { TimeInput } from "../types/inputs/TimeInput";
 import AvailiableInputs from "./athletes/inputs/AvailibleInputs";
 import { Variables } from "../constants/Variables";
+import LeftInputTextFeild from "./athletes/inputs/LeftInputTextFeild";
 
 /**
  * QuickInput component allows users to quickly log workout inputs (runs or rest periods)
@@ -22,22 +23,6 @@ const QuickInput = ({handleInputAddition, inputType, className}:
     const [currentTimeDistanceInput, setCurrentTimeDistanceInput] = useState<TimeInput>({type: InputType.Run, time: "", distance: 0});
     // Distance input for runs
     const [currentRestInput, setCurrentRestInput] = useState<RestInput>({type: InputType.Rest, restTime: 0});
-
-    const [optionsOpen, setOptionsOpen] = useState(false);
-
-    // Listen for keyboard hide to close dropdown
-    useEffect(() => {
-        const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-                setOptionsOpen(false);
-            }
-        );
-
-        return () => {
-            keyboardDidHideListener.remove();
-        };
-    }, []);
 
     /**
      * Handles changes to the seconds portion of time input
@@ -98,66 +83,32 @@ const QuickInput = ({handleInputAddition, inputType, className}:
             handleInputAddition(currentRestInput);
         }
     }
-    
-
     return (
         // Input section with dynamic display based on input type
         <View className={`flex flex-row items-center gap-x-4 ${className}`}>
             {/* Conditional rendering: Time/Distance input for runs, Time-only input for rest */}
             <View className="flex-1">
                 <View className="flex-row items-center gap-x-2 justify-between">
-                    <View className="flex-1">
-                        <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {inputType==InputType.Run ? "Distance (meters)" : "Minutes"}
-                        </Text>
-                        {/* Container for distance input and unit */}
-                        <View className="flex flex-row items-center">
-                            <View className="border trackme-border-gray rounded-lg flex-1 flex-row relative">
-                                <TextInput
-                                    placeholder={inputType==InputType.Run ? "0" : "Mins"}
-                                    keyboardType="numeric"
-                                    className="rounded-lg bg-white text-center font-medium flex-1"
-                                    value={inputType==InputType.Run ? 
-                                        (currentTimeDistanceInput.distance === 0 ? "" : currentTimeDistanceInput.distance.toString()) 
-                                        : (Math.floor(currentRestInput.restTime / 60) === 0 ? '' : Math.floor(currentRestInput.restTime / 60).toString())
-                                    }
-                                    onChangeText={text => inputType==InputType.Run ? handleDistanceChange(text) : handleMinuteChange(text)}
-                                />
-                                { inputType==InputType.Run &&
-                                    <>
-                                        <Pressable 
-                                            className="border-l border-gray-300 px-2 flex justify-center items-center" 
-                                            onPressIn={() => setOptionsOpen(prev=>!prev)}
-                                        >
-                                            <Image source={require("../../assets/images/Back.png")} className="h-6 w-6 rotate-90" />
-                                        </Pressable>
-                                        <AvailiableInputs
-                                            isOpen={optionsOpen}
-                                            onClose={() => setOptionsOpen(false)}
-                                            options={Variables.distanceOptions}
-                                            setSelected={(value:string)=>setCurrentTimeDistanceInput({
-                                                ...currentTimeDistanceInput,
-                                                distance: parseInt(value,10)
-                                            })}
-                                        />
-                                    </>
-                                }
-                            </View>
-                        </View>
-                    </View>
+                    <LeftInputTextFeild
+                        inputType={inputType}
+                        currentTimeDistanceInput={currentTimeDistanceInput}
+                        currentRestInput={currentRestInput}
+                        handleDistanceChange={handleDistanceChange}
+                        handleMinuteChange={handleMinuteChange}
+                    />
                     {inputType===InputType.Rest && <Text className="font-bold text-lg mt-4">:</Text>}
                     <View className="flex-1">
                         <Text className="text-xs font-medium text-gray-600 mb-1">
-                            {inputType===InputType.Run ? "Time (seconds)" : "Seconds"}
+                            {Variables.inputs.quickInputs.rightInputTextFeild.headers[inputType]}
                         </Text>
                         <TextInput
-                            placeholder={inputType===InputType.Run ? "0.00" : "Secs"}
+                            placeholder={Variables.inputs.quickInputs.rightInputTextFeild.placeHolders[inputType]}
                             keyboardType="decimal-pad"
                             value={inputType===InputType.Run ? 
                                 currentTimeDistanceInput.time
                                 : (currentRestInput.restTime % 60 === 0 ? '' : (currentRestInput.restTime % 60).toString())
                             }
-                            className="border trackme-border-gray rounded-lg p-3 bg-white text-center font-medium"
+                            className={`border trackme-border-gray rounded-lg p-3 bg-white font-medium ${inputType===InputType.Note ? 'pl-5' : 'text-center'}`}
                             onChangeText={text => inputType===InputType.Run ? handleTimeChange(text) : handleSecondChange(text)}
                         />
                     </View>

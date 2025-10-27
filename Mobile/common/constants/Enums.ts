@@ -13,7 +13,7 @@ export enum ExerciseType {
 export enum InputType {
     Run = "run",
     Rest = "rest",
-    Notes = "notes"
+    Note = "note"
 }
 
 export enum RelationStatus {

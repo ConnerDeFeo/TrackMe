@@ -44,7 +44,6 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
             keyboardDidShowListener.remove();
         };
     }, []);
-
     const handleInputAddition = async (input:Input) => {
         if (input.type === InputType.Run && (input.distance === 0 || input.time === "")) return; // Prevent adding run inputs with 0 distance or time
         if (input.type === InputType.Rest && input.restTime === 0) return; // Prevent adding rest inputs with 0 time
@@ -60,7 +59,6 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
         });
         scrollRef.current?.scrollToEnd({animated: true});
     }
-
     const handleInputSubmission = async () => {
         const userId = await UserService.getUserId();
 
@@ -162,9 +160,9 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
                             />
                             <TrackMeButton 
                                 text="Note" 
-                                onPress={()=> setInputType(InputType.Notes)} 
+                                onPress={()=> setInputType(InputType.Note)} 
                                 width={60}
-                                gray={inputType!==InputType.Notes}
+                                gray={inputType!==InputType.Note}
                             />
                         </View>
                         {workoutGroupButton && 

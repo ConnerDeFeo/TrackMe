@@ -49,7 +49,7 @@ const RightInputTextFeild = ({inputType, currentTimeDistanceInput, currentRestIn
                 keyboardType={inputType===InputType.Note ? "default" : "decimal-pad"}
                 value={value}
                 onFocus={onFocus}
-                className={`border trackme-border-gray rounded-lg p-3 bg-white font-medium ${inputType===InputType.Note ? 'pl-5' : 'text-center'}`}
+                className={`border trackme-border-gray rounded-lg p-3 bg-white font-medium ${inputType===InputType.Note ? '' : 'text-center'}`}
                 onChangeText={handleChange}
             />
         </View>

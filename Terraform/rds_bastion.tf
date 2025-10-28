@@ -1,4 +1,4 @@
-# # Public Ip address of the machine running Terraform for use in security group rules
+# Public Ip address of the machine running Terraform for use in security group rules
 # data "http" "myip" {
 #   url = "https://ipv4.icanhazip.com"
 # }
@@ -89,8 +89,8 @@
 #   # Install PostgreSQL client automatically
 #   user_data = <<-EOF
 #               #!/bin/bash
-#               apt-get update
-#               apt-get install -y postgresql-client
+#               sudo apt update
+#               sudo apt install -y postgresql
 #               EOF
 
 #   tags = {

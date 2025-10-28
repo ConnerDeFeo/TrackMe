@@ -78,6 +78,7 @@ const Inputs = ({date, workoutGroupButton }:{date:string, workoutGroupButton?: b
                 date,
                 inputsToSend
             );
+            console.log(resp);
 
             // On success, reset only this group's inputs and refresh parent via onSubmit
             if (resp.ok) {

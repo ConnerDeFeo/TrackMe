@@ -174,3 +174,10 @@ class TestData:
         }),
         "headers":generate_auth_header("123", "Coach", "testcoach")
     }
+
+    test_add_context_url = {
+        "body": json.dumps({
+            "contextUrl": "http://example.com/profile"
+        }),
+        "headers": generate_auth_header("123", "Coach", "testcoach")
+    }

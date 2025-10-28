@@ -77,3 +77,11 @@ FROM athlete_note_inputs;
 
 CREATE INDEX idx_user_relations_userid_relationid
 ON user_relations (userId, relationId);
+
+-- Addition 10/28/2025
+CREATE TABLE IF NOT EXISTS context_urls(
+    id SERIAL PRIMARY KEY,
+    coachId VARCHAR(255) REFERENCES users(userId) NOT NULL,
+    contextUrl TEXT NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_DATE
+);

@@ -13,10 +13,23 @@ def remove_context_url(event, context):
         url_id = query_params['urlId']
 
         # delete from db
-        execute_commit("""
-            DELETE FROM context_urls
-            WHERE coachId = %s AND id=%s
-        """, (coach_id, url_id))
+        execute_commit(
+        """
+            DELETE FROM context_urls cu
+            WHERE cu.id = %s 
+            AND (
+                cu.coachId = %s
+                OR EXISTS (
+                    SELECT 1 
+                    FROM user_relations ur1
+                    JOIN user_relations ur2 
+                        ON ur1.relationId = ur2.userId 
+                        AND ur2.relationId = ur1.userId
+                    WHERE ur1.userId = %s 
+                    AND ur2.userId = cu.coachId
+                )
+            )
+        """, (url_id, coach_id, coach_id))
 
         return {
             'statusCode': 204,

@@ -56,7 +56,7 @@ const TrackMeButton = ({
       // Disable tap when loading
       onPress={loading ? undefined : handlePress}
       disabled={loading}
-      className={`${className} rounded-lg px-4 h-[2.4rem] py-2 ${bgColor} ${loading ? "opacity-70" : "opacity-100"}`}
+      className={`${className} rounded-lg px-4 h-[2.4rem] py-2 active:opacity-70 ${bgColor} ${loading ? "opacity-70" : "opacity-100"}`}
       // Apply measured width to avoid layout shifts when spinner appears
       style={buttonWidth > 0 ? { width: buttonWidth } : undefined}
     >

@@ -133,7 +133,7 @@ const QuickInput = ({handleInputAddition, inputType, className}:
                 </View>
             </View>
             {/* Submit button with arrow icon */}
-            <Pressable className="rounded-full trackme-bg-blue mt-4" onPress={handleAddition}>
+            <Pressable className="rounded-full trackme-bg-blue mt-4 active:opacity-70" onPress={handleAddition}>
                 <Image source={require("../../../../assets/images/Back.png")} className="h-12 w-12 rotate-90" />
             </Pressable>
         </View>

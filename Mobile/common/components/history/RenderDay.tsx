@@ -3,7 +3,7 @@ import { Pressable, Text } from "react-native";
 const RenderDay = ({ day, onPress, hasHistoricalData, inFuture }: { day: number | null; onPress?: () => void; hasHistoricalData: boolean; inFuture?: boolean }) => {
     return (
         <Pressable
-            className={`w-[14.28%] aspect-square border trackme-border-gray rounded-full items-center justify-center 
+            className={`w-[14.28%] aspect-square border trackme-border-gray rounded-full items-center justify-center active:opacity-70 
             ${hasHistoricalData ? "trackme-bg-blue" : inFuture ? "trackme-bg-gray" : ""}`}
             onPress={!inFuture ? onPress : undefined}
         >

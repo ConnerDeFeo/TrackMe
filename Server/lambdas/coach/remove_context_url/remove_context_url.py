@@ -1,7 +1,6 @@
 import json
 from rds import execute_commit
 from user_auth import get_user_info, post_auth_header
-from datetime import datetime, timezone
 
 def remove_context_url(event, context):
     auth_header = post_auth_header()

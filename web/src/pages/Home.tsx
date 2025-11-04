@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
     const navigate = useNavigate();
     const buttons = [
-        { label: 'Groups', path: '/groups', img: 'Groups.png' },
-        { label: 'Templates', path: '/templates', img: 'Template.png' },
         { label: 'Relations', path: '/relations', img: 'Friends.png' },
         { label: 'History', path: '/history', img: 'History.png' }
     ];

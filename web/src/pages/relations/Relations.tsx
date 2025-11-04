@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RelationService from "../../services/RelationService";
 import UserDisplay from "../../common/components/display/UserDisplay";
 import RelationActionButton from "../../common/components/display/RelationActionButton";
-import type { RelationStatus } from "../../common/constants/Enums";
+import { RelationStatus } from "../../common/constants/Enums";
 import SearchBar from "../../common/components/SearchBar";
 import TrackmeButton from "../../common/components/TrackmeButton";
 
@@ -56,7 +56,17 @@ const Relations = () => {
     const handleAddRelation = async (relationId: string) => {
         const resp = await RelationService.addRelation(relationId);
         if (resp.ok) {
-            handleSearch(searchTerm);
+            setCurrentUsers((prevUsers) =>{
+                return prevUsers.map(user => {
+                    if (user[0] === relationId) {
+                        if(user[6] === RelationStatus.AwaitingResponse){
+                            return [...user.slice(0, 5), RelationStatus.Added];
+                        }
+                        return [...user.slice(0, 5), RelationStatus.Pending];
+                    }
+                    return user;
+                });
+            });
         }
     };
 
@@ -64,7 +74,9 @@ const Relations = () => {
     const handleRelationRemoval = async (relationId: string) => {
         const resp = await RelationService.removeRelation(relationId);
         if (resp.ok) {
-            handleSearch(searchTerm);
+            setCurrentUsers((prevUsers) =>
+                prevUsers.map(user => user[0] === relationId ? [...user.slice(0, 5), RelationStatus.NotAdded] : user
+            ));
         }
     };
     return(

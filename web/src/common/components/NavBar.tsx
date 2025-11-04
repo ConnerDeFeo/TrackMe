@@ -11,9 +11,7 @@ const NavBar = () => {
     
     // Navigation items configuration
     const navItems: { path: string; label: string; image: string }[] = [
-        { path: '/groups', label: 'Groups', image: '/assets/images/Groups.png' },
         { path: '/relations', label: 'Relations', image: '/assets/images/Friends.png'},
-        { path: '/templates', label: 'Templates', image: '/assets/images/Template.png'},
         { path: '/history', label: 'History', image: '/assets/images/History.png' },
         { path: '/profile', label: 'Profile', image: '/assets/images/Profile.png' },
     ];

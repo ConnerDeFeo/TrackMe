@@ -7,10 +7,6 @@ import { useEffect, useState } from 'react';
 import UserService from './services/UserService';
 import Home from './pages/Home';
 import NavBar from './common/components/NavBar';
-import ViewGroup from './pages/groups/ViewGroup';
-import Groups from './pages/groups/Groups';
-import GroupSchedule from './pages/groups/GroupSchedule';
-import AssignWorkout from './pages/groups/AssignWorkout';
 import RelationInvites from './pages/relations/RelationInvites';
 import Relations from './pages/relations/Relations';
 import Friends from './pages/relations/Friends';
@@ -18,8 +14,6 @@ import Profile from './pages/Profile';
 import { AuthContext } from './common/context/AuthContext';
 import History from './pages/history/History';
 import ViewHistory from './pages/history/ViewHistory';
-import Templates from './pages/Templates';
-import GroupSettings from './pages/GroupSettings';
 
 Amplify.configure(awsconfig);
 export default function App() {
@@ -66,20 +60,12 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
 
-            <Route path="/groups" element={<Groups />} />
-            <Route path="/groups/view-group/:groupName/:groupId" element={<ViewGroup />} />
-            <Route path="/groups/view-group/:groupName/:groupId/settings" element={<GroupSettings />} />
-            <Route path="/groups/view-group/:groupName/:groupId/schedule" element={<GroupSchedule />} />
-            <Route path="/groups/view-group/:groupName/:groupId/schedule/assign-workout/:date" element={<AssignWorkout />} />
-
             <Route path="/relations" element={<Relations />} />
             <Route path="/relations/relation-invites" element={<RelationInvites />} />
             <Route path="/relations/friends" element={<Friends />} />
 
             <Route path="/history" element={<History />} />
             <Route path="/history/view/:date" element={<ViewHistory />} />
-
-            <Route path="/templates" element={<Templates />} />
 
             <Route path="/profile" element={<Profile />} />
           </Routes>

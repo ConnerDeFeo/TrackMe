@@ -48,7 +48,11 @@ const Calender = ({distanceFilters}:{distanceFilters?: string[]}) => {
     useEffect(() => {
         if (availableDates.hasOwnProperty(currentMonthKey)) return;
         fetchAvailableDates();
-    }, [currentMonthKey, distanceFilters]);
+    }, [currentMonthKey]);
+
+    useEffect(() => {
+        fetchAvailableDates();
+    }, [distanceFilters]);
     
     // Fetch the earliest date with available data on component mount
     useEffect(() => {

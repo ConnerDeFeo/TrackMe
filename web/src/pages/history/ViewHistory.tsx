@@ -5,7 +5,7 @@ import HistoryService from "../../services/HistoryService";
 import type { Input } from "../../common/types/inputs/Input";
 import TrackmeButton from "../../common/components/TrackmeButton";
 
-const divHistory = () => {
+const ViewHistory = () => {
     const { date } = useParams<{ date: string }>();
     const [historicalData, setHistoricalData] = useState<Record<string, {username:string, inputs: Input[]}>>({});
     const [loading, setLoading] = useState<boolean>(false);
@@ -59,4 +59,4 @@ const divHistory = () => {
     );
 }
 
-export default divHistory;
+export default ViewHistory;

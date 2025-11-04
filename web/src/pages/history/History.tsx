@@ -1,50 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HistoryService from "../../services/HistoryService";
-import NavigationContainer from "../../common/components/display/NavigationContainer";
-import SearchDate from "../../common/components/SearchDate";
+import Calender from "../../common/components/history/Calender";
 
 const History = () => {
-    // Local state to hold the list of dates for which history exists
-    const [availableDates, setAvailableDates] = useState<string[]>([]);
-    const navigate = useNavigate();
+    // Current distance filter text input
+    const [distanceInput, setDistanceInput] = useState<string>("");
+    // Distance filters for available dates
+    const [distanceFilters, setDistanceFilters] = useState<string[]>([]);
 
-    // Fetch all dates that have workouts assigned when the component mounts
-    const fetchAvailableHistoryDates = async () => {
-        const resp = await HistoryService.getAvailableHistoryDates();
-        if (resp.ok) {
-            const historyData = await resp.json();       // Parse response JSON
-            setAvailableDates(historyData);              // Update state with fetched dates
-        }
-    };
-
-    // Run once on component mount
-    useEffect(() => {
-        fetchAvailableHistoryDates();
-    }, []);
-
-    // Handler called when user searches for a specific date
-    const handleDateSearch = async (dateInput: string) => {
-        const resp = await HistoryService.getAvailableHistoryDates(dateInput);
-        if (resp.ok) {
-            const historyData = await resp.json();
-            setAvailableDates(historyData);              // Filter state by search result
-        }
-    };
 
     return(
         <div className="grid max-w-3xl mx-auto">
-            <SearchDate
-                handleDateSearch={handleDateSearch}
-                handleClear={fetchAvailableHistoryDates}
-            />
-            {availableDates.map((date) => (
-                <NavigationContainer
-                    key={date}
-                    navigateTo={() => navigate(`view/${date}`)}
-                    text={date}
-                />
-            ))}
+            <Calender distanceFilters={distanceFilters} />
         </div>
     );
 }

@@ -106,21 +106,30 @@ const Profile = () => {
     return (
         <View className="flex-1 bg-gray-50 min-h-screen">
             <View className="px-6 pb-8">
-                {/* Header Section */}
-                <View className="bg-white rounded-2xl p-6 mb-6 shadow-sm">
-                    <View className="items-center">
-                        
-                        {/* Display user's full name */}
-                        <Text className="text-2xl font-bold text-gray-800 mb-1">
-                            {userData.firstName} {userData.lastName}
-                        </Text>
-                        {/* Display username */}
-                        <Text className="text-gray-500 text-base">@{userData.username}</Text>
-                        {/* Account type badge */}
-                        <View className="bg-trackme-blue/10 px-3 py-1 rounded-full mt-2">
-                            <Text className="text-trackme-blue text-sm font-medium">
-                                {accountType}
+                <View className="flex-row w-full items-center justify-between my-6 bg-white rounded-2xl shadow-sm p-6">
+                    <View className="flex-row">
+                        <View className="rounded-full border h-32 w-32 bg-gray-200 flex items-center justify-center">
+                            <Text>Profile pic</Text>
+                        </View>
+                        <Pressable onPress={() => {}} className="pl-4 py-2 pr-2">
+                            <Image source={require("../assets/images/Edit.png")} className="h-6 w-6" />
+                        </Pressable>
+                    </View>
+                    {/* Header Section */}
+                    <View>
+                        <View className="ml-auto"> 
+                            {/* Display user's full name */}
+                            <Text className="text-2xl font-bold text-gray-800 mb-1 text-right">
+                                {userData.firstName} {userData.lastName}
                             </Text>
+                            {/* Display username */}
+                            <Text className="text-gray-500 text-base text-right">@{userData.username}</Text>
+                            {/* Account type badge */}
+                            <View className="bg-trackme-blue/10 px-3 py-1 rounded-full mt-2">
+                                <Text className="text-trackme-blue text-sm font-medium text-right">
+                                    {accountType}
+                                </Text>
+                            </View>
                         </View>
                     </View>
                 </View>

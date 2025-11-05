@@ -1,4 +1,4 @@
-# Public Ip address of the machine running Terraform for use in security group rules
+# #Public Ip address of the machine running Terraform for use in security group rules
 # data "http" "myip" {
 #   url = "https://ipv4.icanhazip.com"
 # }

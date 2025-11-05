@@ -6,6 +6,7 @@ import { useState } from "react";
 import { AuthContext } from "../common/context/AuthContext";
 import { AccountType } from "../common/constants/Enums";
 import TrackMeButton from "../common/components/display/TrackMeButton";
+import ProfileInformation from "../common/components/profile/ProfileInformation";
 
 //Profile page for both coaches and athletes
 const Profile = () => {
@@ -134,57 +135,32 @@ const Profile = () => {
                     </View>
                     <View className="gap-y-5">
                         {/* Bio input field */}
-                        <View className="flex-1">
-                            <Text className="text-gray-700 font-semibold mb-2">Bio</Text>
-                            {isEditing ?
-                                <TextInput
-                                    className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
-                                    placeholder="Tell us about yourself..."
-                                    value={userData.bio || ''}
-                                    onChangeText={(text) => handleFieldChange('bio', text)}
-                                    multiline
-                                    numberOfLines={4}
-                                    textAlignVertical="top"
-                                />
-                                :
-                                <Text className="font-semibold ml-4 my-4">
-                                    {userData.bio || 'No bio provided.'}
-                                </Text>
-                            }
-                        </View>
+                        <ProfileInformation
+                            isEditing={isEditing}
+                            data={userData.bio}
+                            handleFieldChange={(text) => handleFieldChange('bio', text)}
+                            dataEmpty="No bio provided."
+                            title="Bio"
+                        />
 
                         {/* First and Last name inputs */}
                         <View className="flex-row gap-x-3">
-                            <View className="flex-1">
-                                <Text className="text-gray-700 font-semibold mb-2">First Name</Text>
-                                {isEditing ? 
-                                    <TextInput
-                                        className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
-                                        placeholder="First name"
-                                        value={userData.firstName || ''}
-                                        onChangeText={(text) => handleFieldChange('firstName', text)}
-                                    />
-                                    : 
-                                    <Text className="font-semibold ml-4 my-4">
-                                        {userData.firstName || 'No first name provided.'}
-                                    </Text>
-                                }
-                            </View>
-                            <View className="flex-1">
-                                <Text className="text-gray-700 font-semibold mb-2">Last Name</Text>
-                                { isEditing ?
-                                    <TextInput
-                                        className="bg-gray-50 border border-gray-200 p-4 rounded-xl text-gray-800"
-                                        placeholder="Last name"
-                                        value={userData.lastName || ''}
-                                        onChangeText={(text) => handleFieldChange('lastName', text)}
-                                    />
-                                    :
-                                    <Text className="font-semibold ml-4 my-4">
-                                        {userData.lastName || 'No last name provided.'}
-                                    </Text>
-                                }
-                            </View>
+                            <ProfileInformation
+                                isEditing={isEditing}
+                                data={userData.firstName}
+                                handleFieldChange={(text) => handleFieldChange('firstName', text)}
+                                dataEmpty="First name"
+                                title="First Name"
+                                className="flex-1"
+                            />
+                            <ProfileInformation
+                                isEditing={isEditing}
+                                data={userData.lastName}
+                                handleFieldChange={(text) => handleFieldChange('lastName', text)}
+                                dataEmpty="Last name"
+                                title="Last Name"
+                                className="flex-1"
+                            />
                         </View>
                     </View>
 

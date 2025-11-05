@@ -126,7 +126,7 @@ def test_get_available_history_dates_athlete_returns_date_when_inputs_exists():
     # Arrange
     setup_historical_inputs()
     event = {
-        "queryStringParameters": {"startDate": three_days_ago, "endDate": date},
+        "queryStringParameters": {"date": base_date.strftime("%Y-%m")},
         "headers": generate_auth_header("1235", "Athlete", "test_athlete_2")
     }
 

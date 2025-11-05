@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
     accountType VARCHAR(10) CHECK (accountType IN ('Coach', 'Athlete')),
     bio TEXT,
     firstName VARCHAR(255),
-    lastName VARCHAR(255)
+    lastName VARCHAR(255),
+    profilePicUrl TEXT
 );
 
 CREATE TABLE IF NOT EXISTS user_relations(

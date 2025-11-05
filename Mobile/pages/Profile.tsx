@@ -134,7 +134,7 @@ const Profile = () => {
                     </View>
                     <View className="gap-y-5">
                         {/* Bio input field */}
-                        <View>
+                        <View className="flex-1">
                             <Text className="text-gray-700 font-semibold mb-2">Bio</Text>
                             {isEditing ?
                                 <TextInput

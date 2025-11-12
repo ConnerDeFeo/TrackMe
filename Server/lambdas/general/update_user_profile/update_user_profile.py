@@ -13,15 +13,14 @@ def update_user_profile(event, context):
         bio = body.get('bio', '')
         first_name = body.get('firstName', '')
         last_name = body.get('lastName', '')
-        profile_pic_url = body.get('profilePicUrl', '')
 
         # Update user profile in the database
         execute_commit(
         '''
             UPDATE users
-            SET bio = %s, firstName = %s, lastName = %s, profilePicUrl = %s
+            SET bio = %s, firstName = %s, lastName = %s
             WHERE userId = %s
-        ''', (bio, first_name, last_name, profile_pic_url, user_id))
+        ''', (bio, first_name, last_name, user_id))
 
         return {
             'statusCode': 200,

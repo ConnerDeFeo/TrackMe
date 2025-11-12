@@ -7,6 +7,7 @@ import { AuthContext } from "../common/context/AuthContext";
 import { AccountType } from "../common/constants/Enums";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import ProfileInformation from "../common/components/profile/ProfileInformation";
+import * as ImagePicker from 'expo-image-picker';
 
 //Profile page for both coaches and athletes
 const Profile = () => {
@@ -21,6 +22,8 @@ const Profile = () => {
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     // Editation flag
     const [isEditing, setIsEditing] = useState(false);
+    // Image
+    const [image, setImage] = useState<string>("");
 
     // Fetch user data when component mounts
     useEffect(() => {
@@ -103,15 +106,28 @@ const Profile = () => {
         setUserData({ ...userData, [field]: value });
     };
 
+    // handle image upload
+    const handleImageUpload = async () => {
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ["images"],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
     return (
         <View className="flex-1 bg-gray-50 min-h-screen">
             <View className="px-6 pb-8">
                 <View className="flex-row w-full items-center justify-between my-6 bg-white rounded-2xl shadow-sm p-6">
                     <View className="flex-row">
-                        <View className="rounded-full border h-32 w-32 bg-gray-200 flex items-center justify-center">
-                            <Text>Profile pic</Text>
-                        </View>
-                        <Pressable onPress={() => {}} className="pl-4 py-2 pr-2">
+                        <Image source={image ? { uri: image } : require("../assets/images/DefaultProfilePic.png")} className="h-32 w-32 rounded-full" />
+                        <Pressable onPress={handleImageUpload} className="pl-4 py-2 pr-2">
                             <Image source={require("../assets/images/Edit.png")} className="h-6 w-6" />
                         </Pressable>
                     </View>

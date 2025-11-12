@@ -16,41 +16,24 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
-# Policy to allow lambda to access bedrock
-resource "aws_iam_role_policy" "lambda_bedrock_access" {
-  name = "lambda-bedrock-access"
+// Allow lambda access to s3 buckets
+resource "aws_iam_role_policy" "lambda_s3_access" {
+  name = "lambda_s3_access_policy"
   role = aws_iam_role.lambda_role.id
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "bedrock:InvokeModel",
-          "bedrock:InvokeModelWithResponseStream"
-        ],
-        Resource = "*"
-      }
-    ]
-  })
-}
-
-//Allow the creation and deleteion of network interfaces
-resource "aws_iam_role_policy" "lambda_vpc" {
-  name   = "lambda_vpc_policy"
-  role   = aws_iam_role.lambda_role.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Action = [
-          "ec2:CreateNetworkInterface",
-          "ec2:DescribeNetworkInterfaces",
-          "ec2:DeleteNetworkInterface"
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
         ]
         Effect   = "Allow"
-        Resource = "*"
+        Resource = [
+          "${aws_s3_bucket.profile_pictures.arn}/*"
+        ]
       }
     ]
   })

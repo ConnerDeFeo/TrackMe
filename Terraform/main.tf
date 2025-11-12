@@ -45,3 +45,12 @@ resource "aws_db_instance" "default" {
   db_subnet_group_name = aws_db_subnet_group.rds_private.name
   skip_final_snapshot  = true
 }
+
+# S3 bucket for profile pictures
+resource "aws_s3_bucket" "profile_pictures" {
+  bucket = "trackme-profile-pictures"
+
+  tags = {
+    Name = "trackme-profile-pictures"
+  }
+}

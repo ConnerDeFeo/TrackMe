@@ -54,3 +54,33 @@ resource "aws_s3_bucket" "profile_pictures" {
     Name = "trackme-profile-pictures"
   }
 }
+
+# Publicly allow S3 read access to the profile pictures bucket
+resource "aws_s3_bucket_policy" "profile_pictures_policy" {
+  bucket = aws_s3_bucket.profile_pictures.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = "*"
+        Action = ["s3:GetObject"]
+        Resource = "${aws_s3_bucket.profile_pictures.arn}/*"
+      }
+    ]
+  })
+}
+
+# s3 vcp endpoint to allow lambda access to s3 within vpc
+resource "aws_vpc_endpoint" "s3_endpoint" {
+  vpc_id            = data.aws_vpc.default.id
+  service_name      = "com.amazonaws.${var.aws_region}.s3"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = [data.aws_vpc.default.main_route_table_id]
+
+  tags = {
+    Name = "trackme-s3-endpoint"
+  }
+}

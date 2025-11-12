@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Text, TextInput, Pressable, View, Alert, Image } from "react-native";
+import { Text, Pressable, View, Alert, Image } from "react-native";
 import UserService from "../services/UserService";
 import GeneralService from "../services/GeneralService";
 import { useState } from "react";
@@ -116,8 +116,28 @@ const Profile = () => {
             quality: 1,
         });
 
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
+        if (result.canceled) {
+            return;
+        }
+        const image = await fetch(result.assets[0].uri);
+        const blob = await image.blob();
+    
+        // Convert blob to base64
+        const base64 = await new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                const base64Data = base64String.split(',')[1];
+                resolve(base64Data);
+            };
+            reader.readAsDataURL(blob);
+        });
+
+        const resp = await GeneralService.updateProfilePic(base64);
+        if(resp.ok){
+            const url = await resp.json();
+            console.log(url);
+            setImage(url);
         }
     };
 

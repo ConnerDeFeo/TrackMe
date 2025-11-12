@@ -45,6 +45,10 @@ locals {
     }
 
     # General Lambdas
+    "update_profile_pic" = {
+      source_dir  = "${path.module}/../Server/lambdas/general/update_profile_pic"
+      output_path = "${path.module}/../Server/lambdas/general/zips/update_profile_pic.zip"
+    }
     "get_user" = {
       source_dir  = "${path.module}/../Server/lambdas/general/get_user"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_user.zip"
@@ -142,7 +146,7 @@ resource "aws_lambda_function" "lambdas" {
   source_code_hash = data.archive_file.lambda_archives[each.key].output_base64sha256
   depends_on       = [aws_iam_role_policy_attachment.lambda_rds_auth, aws_db_instance.default]
   layers           = [aws_lambda_layer_version.rds.arn, aws_lambda_layer_version.user_auth.arn]
-  timeout          = 5
+  timeout          = 30
 
   environment {
     variables = {

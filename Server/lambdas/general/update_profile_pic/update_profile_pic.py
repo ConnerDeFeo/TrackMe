@@ -13,26 +13,31 @@ def update_profile_pic(event, context):
         user_id = user_info['userId']
         image_data = body['imageData']
 
+        print("CONNECTING TO S3 AND UPLOADING IMAGE")
         s3 = boto3.client('s3')
-        key = f'profile-photos/{user_id}.jpg'
+        key = f'{user_id}.jpg'
         
+        print("UPLOADING TO S3")
         s3.put_object(
-            Bucket='your-bucket',
+            Bucket='trackme-profile-pictures',
             Key=key,
             Body=base64.b64decode(image_data),
             ContentType='image/jpeg'
         )
+        print("UPLOAD COMPLETE")
     
         # Return the S3 URL
-        s3_url = f'https://your-bucket.s3.amazonaws.com/{key}'
+        s3_url = f'https://trackme-profile-pictures.s3.amazonaws.com/{key}'
 
         # Update profile picture URL in the database
+        print("UPDATING DATABASE")
         execute_commit(
         '''
             UPDATE users
             SET profilePicUrl = %s
             WHERE userId = %s
         ''', (s3_url, user_id))
+        print("DATABASE UPDATED")
 
         return {
             'statusCode': 200,

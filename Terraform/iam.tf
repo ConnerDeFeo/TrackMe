@@ -16,6 +16,26 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
+//Allow the creation and deleteion of network interfaces
+resource "aws_iam_role_policy" "lambda_vpc" {
+  name   = "lambda_vpc_policy"
+  role   = aws_iam_role.lambda_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ec2:CreateNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DeleteNetworkInterface"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 // Allow lambda access to s3 buckets
 resource "aws_iam_role_policy" "lambda_s3_access" {
   name = "lambda_s3_access_policy"

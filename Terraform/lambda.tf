@@ -11,6 +11,12 @@ data "archive_file" "user_auth_layer" {
   output_path = "${path.module}/../Server/layers/user_auth/user_auth.zip"
 }
 
+data "archive_file" "s3_layer" {
+  type        = "zip"
+  source_dir  = "${path.module}/../Server/layers/s3/"
+  output_path = "${path.module}/../Server/layers/s3/s3.zip"
+}
+
 # Layer definition
 resource "aws_lambda_layer_version" "rds" {
   filename         = data.archive_file.rds_layer.output_path
@@ -24,6 +30,13 @@ resource "aws_lambda_layer_version" "user_auth" {
   layer_name       = "user_auth"
   compatible_runtimes = ["python3.12"]
   source_code_hash = data.archive_file.user_auth_layer.output_base64sha256
+}
+
+resource "aws_lambda_layer_version" "s3" {
+  filename         = data.archive_file.s3_layer.output_path
+  layer_name       = "s3"
+  compatible_runtimes = ["python3.12"]
+  source_code_hash = data.archive_file.s3_layer.output_base64sha256
 }
 
 # Mapping lambda function names to their locations for archive creation
@@ -145,7 +158,7 @@ resource "aws_lambda_function" "lambdas" {
   filename         = data.archive_file.lambda_archives[each.key].output_path
   source_code_hash = data.archive_file.lambda_archives[each.key].output_base64sha256
   depends_on       = [aws_iam_role_policy_attachment.lambda_rds_auth, aws_db_instance.default]
-  layers           = [aws_lambda_layer_version.rds.arn, aws_lambda_layer_version.user_auth.arn]
+  layers           = [aws_lambda_layer_version.rds.arn, aws_lambda_layer_version.user_auth.arn, aws_lambda_layer_version.s3.arn]
   timeout          = 10
 
   environment {

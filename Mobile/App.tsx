@@ -1,14 +1,13 @@
 import { Amplify } from 'aws-amplify';
 import awsConfig from './aws-config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ComponentType, startTransition, useEffect, useState } from 'react';
-import { NavigationContainer, ParamListBase, RouteProp, useNavigationState } from '@react-navigation/native';
+import { ComponentType, useEffect, useState } from 'react';
+import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import './global.css';
 import { ActivityIndicator, View } from "react-native";
 import AthleteFooter from './common/components/athletes/AthleteFooter';
 import HeaderRightButton from './common/components/HeaderRightButton';
-import Profile from './pages/Profile';
 import CreateWorkoutGroup from './pages/athletes/CreateWorkoutGroup';
 import RelationInvites from './pages/RelationInvites';
 import Relations from './pages/Relations';
@@ -29,6 +28,10 @@ import TrackMeToast from './common/components/display/TrackMeToast';
 import UserService from './services/UserService';
 import { AuthContext } from './common/context/AuthContext';
 import Toast from 'react-native-toast-message';
+import PersonalProfile from './pages/PersonalProfile';
+import OtherProfile from './pages/OtherProfile';
+import Video from './pages/Video';
+import UploadVideo from './pages/UploadVideo';
 
 
 //Root component used to render everything
@@ -67,6 +70,10 @@ const getRightButtonData = (route:RouteProp<ParamListBase, string>): { navigatio
     case 'Inputs': return {
       navigation: 'MassInput',
       image: 'clipboard'
+    };
+    case "Video": return {
+      navigation: 'UploadVideo',
+      image: 'plus'
     };
     default: return null;
   }
@@ -107,7 +114,8 @@ const AthleteLayoutWrapper = () => {
           }
         }}
       >
-        <AthleteStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <AthleteStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<PersonalProfile />)} />
+        <AthleteStack.Screen name="OtherProfile" options={{ title: "" }} component={ScrollViewWrapper(<OtherProfile />)} />
         <AthleteStack.Screen name="Inputs" options={{ title: "Inputs" }} component={TodayInputs} />
         <AthleteStack.Screen name="HistoricalInputs" component={HistoricalInputs} />
         <AthleteStack.Screen name="CreateWorkoutGroup" options={{ title: "Create Workout Group" }} component={ScrollViewWrapper(<CreateWorkoutGroup />)} />
@@ -117,6 +125,8 @@ const AthleteLayoutWrapper = () => {
         <AthleteStack.Screen name="Friends" options={{ title: "Friends" }} component={ScrollViewWrapper(<Friends />)} />
         <AthleteStack.Screen name="History" options={{ title: "History" }} component={History} />
         <AthleteStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
+        <AthleteStack.Screen name="Video" component={ScrollViewWrapper(<Video />)} />
+        <AthleteStack.Screen name="UploadVideo" options={{ title: "Upload Video" }} component={ScrollViewWrapper(<UploadVideo />)} />
       </AthleteStack.Navigator>
       <AthleteFooter currentRoute={currentRoute}/>
     </>
@@ -148,7 +158,7 @@ const CoachLayoutWrapper = () => {
           }
         }}
       >
-        <CoachStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<Profile />)} />
+        <CoachStack.Screen name="Profile" options={{ title: "Profile" }} component={ScrollViewWrapper(<PersonalProfile />)} />
         <CoachStack.Screen name="HistoricalData" component={ScrollViewWrapper(<HistoricalData />)} />
         <CoachStack.Screen name="Relations" options={{ title: "Relations" }} component={ScrollViewWrapper(<Relations />)} />
         <CoachStack.Screen name="RelationInvites" options={{ title: "Relation Invites" }} component={ScrollViewWrapper(<RelationInvites />)} />

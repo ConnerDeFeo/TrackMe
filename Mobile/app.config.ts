@@ -36,7 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       package: PACKAGE_NAME,
       versionCode: 22,
     },
-    plugins: ["expo-secure-store"],
+    plugins: ["expo-secure-store", "expo-video"],
     extra: {
       eas: {
         projectId: APP_ID,

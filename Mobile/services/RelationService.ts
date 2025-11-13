@@ -20,8 +20,8 @@ const RelationService = {
         }
         return await API.get(query);
     },
-    getPendingProposals: async () => {
-        return await API.get(`${process.env.EXPO_PUBLIC_API_URL}/relations/get_pending_proposals`);
+    getRelationInvitesCount: async () => {
+        return await API.get(`${process.env.EXPO_PUBLIC_API_URL}/relations/get_relation_invites_count`);
     },
     getMutualAthletes: async () => {
         return await API.get(`${process.env.EXPO_PUBLIC_API_URL}/relations/get_mutual_athletes`);

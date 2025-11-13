@@ -2,6 +2,7 @@ import React from 'react';
 import Footer from '../Footer';
 
 const buttons = [
+    ['Video', 'Video'],
     ['Inputs', 'Inputs'], 
     ['History', 'History'], 
     ['Relations', 'Relations'], 

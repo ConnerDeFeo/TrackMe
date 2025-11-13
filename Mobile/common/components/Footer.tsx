@@ -9,6 +9,7 @@ const images = {
     'Template': require('../../assets/images/Template.png'),
     'Profile': require('../../assets/images/Profile.png'),
     'History': require('../../assets/images/History.png'),
+    'Video': require('../../assets/images/Video.png'),
 };
 
 //Footer at bottom of the screen with navigation buttons

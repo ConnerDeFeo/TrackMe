@@ -10,7 +10,8 @@
     "extraPaths": [
         "Server",
         "Server/layers/rds/python",
-        "Server/layers/user_auth/python"
+        "Server/layers/user_auth/python",
+        "Server/layers/s3/python"
     ],
     "pythonVersion": "3.12",
     "typeCheckingMode": "basic",

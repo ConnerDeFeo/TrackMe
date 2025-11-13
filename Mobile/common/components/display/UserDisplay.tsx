@@ -10,7 +10,7 @@ const UserDisplay = ({userId, username, firstName, lastName, userProfilePic, cla
     const shotrenedDisplayName = (displayName.length + username.length) > maxLength ? displayName.slice(0, 15) + '...' : displayName;
     const navigation = useNavigation<any>();
     return (
-        <Pressable className={`flex flex-row gap-x-2 items-center ${className}`} onPress={()=>navigation.navigate('Profile', { userId: userId })}>
+        <Pressable className={`flex flex-row gap-x-2 items-center ${className}`} onPress={()=>navigation.navigate('OtherProfile', { userId: userId })}>
             <UserProfilePic imageUri={userProfilePic} height={32} width={32}/>
             <Text className="font-semibold">{shotrenedDisplayName}</Text>
             <Text className="text-sm text-gray-500">@{username}</Text>

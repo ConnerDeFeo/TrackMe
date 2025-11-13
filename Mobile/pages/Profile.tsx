@@ -34,6 +34,9 @@ const Profile = () => {
                     const resp = await GeneralService.getUser();
                     if (resp) {
                         const data = await resp.json();
+                        if(data.profilePicUrl){
+                            setImage(data.profilePicUrl);
+                        }
                         setUserData(data);
                         setOriginalUserData(data); // Store original data for change detection
                     }
@@ -136,11 +139,11 @@ const Profile = () => {
         const resp = await GeneralService.updateProfilePic(base64);
         if(resp.ok){
             const url = await resp.json();
-            console.log(url);
             setImage(url);
         }
     };
 
+    console.log("Rendering Profile with image:", image);
     return (
         <View className="flex-1 bg-gray-50 min-h-screen">
             <View className="px-6 pb-8">

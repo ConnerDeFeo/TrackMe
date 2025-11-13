@@ -1,10 +1,11 @@
 import json
 from user_auth import get_user_info, post_auth_header
 from rds import execute_commit
+import boto3
 import base64
 import time
-from s3 import s3
 
+s3 = boto3.client('s3')
 def update_profile_pic(event, context):
     body = json.loads(event['body'])
     auth_header = post_auth_header()

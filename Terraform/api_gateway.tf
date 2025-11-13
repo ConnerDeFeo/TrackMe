@@ -5,6 +5,7 @@ locals {
 
     "general/get_user" = { lambda = aws_lambda_function.lambdas["get_user"], method = "GET" }
     "general/get_mutual_inputs" = { lambda = aws_lambda_function.lambdas["get_mutual_inputs"], method = "GET" }
+    "general/generate_presigned_s3_url" = { lambda = aws_lambda_function.lambdas["generate_presigned_s3_url"], method = "GET" }
 
     "history/get_available_history_dates" = { lambda = aws_lambda_function.lambdas["get_available_history_dates"], method = "GET" }
     "history/fetch_historical_data" = { lambda = aws_lambda_function.lambdas["fetch_historical_data"], method = "GET" }

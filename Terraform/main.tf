@@ -83,6 +83,18 @@ resource "aws_s3_bucket_policy" "profile_pictures_policy" {
   })
 }
 
+# CORS for uploads
+resource "aws_s3_bucket_cors_configuration" "profile_pictures_cors" {
+  bucket = aws_s3_bucket.profile_pictures.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "POST", "GET"]
+    allowed_origins = ["*"]
+    max_age_seconds = 3000
+  }
+}
+
 # s3 vcp endpoint to allow lambda access to s3 within vpc
 resource "aws_vpc_endpoint" "s3_endpoint" {
   vpc_id            = data.aws_vpc.default.id

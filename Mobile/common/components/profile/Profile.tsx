@@ -124,26 +124,34 @@ const Profile = ({routedUserId}:{routedUserId?: string}) => {
         if (result.canceled) {
             return;
         }
+        setIsUploadingImage(true);
         const image = await fetch(result.assets[0].uri);
         const blob = await image.blob();
     
         // Convert blob to base64
-        const base64 = await new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64String = reader.result as string;
-                const base64Data = base64String.split(',')[1];
-                resolve(base64Data);
-            };
-            reader.readAsDataURL(blob);
-        });
+        // const base64 = await new Promise<string>((resolve) => {
+        //     const reader = new FileReader();
+        //     reader.onloadend = () => {
+        //         const base64String = reader.result as string;
+        //         const base64Data = base64String.split(',')[1];
+        //         resolve(base64Data);
+        //     };
+        //     reader.readAsDataURL(blob);
+        // });
 
-        setIsUploadingImage(true);
-        const resp = await GeneralService.updateProfilePic(base64);
-        if(resp.ok){
-            const url = await resp.json();
-            setImage(url);
+        const presignedUrlResp = await GeneralService.generatePresignedS3Url(`${userData.userId}_profile_pic.jpg`, "profilePicture");
+        if(!presignedUrlResp.ok){
+            return;
         }
+        const { presigned_url, public_url } = await presignedUrlResp.json();
+        await fetch(presigned_url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'image/jpeg',
+            },
+            body: blob,
+        });
+        setImage(public_url);
         setIsUploadingImage(false);
     };
 

@@ -25,8 +25,8 @@ const GeneralService = {
     }
     return await API.get(request);
   },
-  updateProfilePic: async(imageData: string) => {
-    return await API.post(`${EXPO_PUBLIC_API_URL}/general/update_profile_pic`, {imageData});
+  generatePresignedS3Url: async (title: string, destination: "profilePicture" | "videos") => {
+    return await API.get(`${EXPO_PUBLIC_API_URL}/general/generate_presigned_s3_url?title=${title}&destination=${destination}`);
   }
 };
 

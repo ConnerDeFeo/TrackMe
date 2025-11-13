@@ -5,6 +5,7 @@ import boto3
 import base64
 import time
 
+s3 = boto3.client('s3')
 def update_profile_pic(event, context):
     body = json.loads(event['body'])
     auth_header = post_auth_header()
@@ -14,35 +15,29 @@ def update_profile_pic(event, context):
         user_id = user_info['userId']
         image_data = body['imageData']
 
-        print("CONNECTING TO S3 AND UPLOADING IMAGE")
-        s3 = boto3.client('s3')
         key = f'profilePicture/{user_id}.jpg'
         
-        print("UPLOADING TO S3")
         s3.put_object(
             Bucket='trackme-media',
             Key=key,
             Body=base64.b64decode(image_data),
             ContentType='image/jpeg'
         )
-        print("UPLOAD COMPLETE")
     
         # Return the S3 URL
-        s3_url = f'https://trackme-media.s3.amazonaws.com/{key}'
+        s3_url = f'https://trackme-media.s3.amazonaws.com/{key}?t={int(time.time())}'
 
         # Update profile picture URL in the database
-        print("UPDATING DATABASE")
         execute_commit(
         '''
             UPDATE users
             SET profilePicUrl = %s
             WHERE userId = %s
         ''', (s3_url, user_id))
-        print("DATABASE UPDATED")
 
         return {
             'statusCode': 200,
-            'body': json.dumps(f"{s3_url}?t={int(time.time())}"),
+            'body': json.dumps(s3_url),
             'headers': auth_header
         }
     except Exception as e:

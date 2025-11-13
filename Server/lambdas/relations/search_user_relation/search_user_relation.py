@@ -16,7 +16,7 @@ def search_user_relation(event, context):
         # if other --> user one way, awaiting acceptance
         # if both ways, added
         search_query = """
-            SELECT u.userId, u.username, u.firstName, u.lastName, u.accountType,
+            SELECT u.userId, u.username, u.firstName, u.lastName, u.accountType, u.profilePicUrl,
                 CASE
                     WHEN ur1.userId IS NOT NULL AND ur2.userId IS NOT NULL THEN 'added'
                     WHEN ur1.userId IS NOT NULL AND ur2.userId IS NULL THEN 'pending'
@@ -51,7 +51,7 @@ def search_user_relation(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps(results),
+            'body': json.dumps([{"id": r[0], "username": r[1], "firstName": r[2], "lastName": r[3], "accountType": r[4], "profilePicUrl": r[5], "relationStatus": r[6]} for r in results or []]),
             'headers': auth_header
         }
     except Exception as e:

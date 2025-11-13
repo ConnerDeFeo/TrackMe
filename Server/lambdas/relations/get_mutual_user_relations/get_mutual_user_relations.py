@@ -12,7 +12,7 @@ def get_mutual_user_relations(event, context):
         # Fetch mutual relations from db   
         relations = fetch_all(
         """
-            SELECT ur.relationId, u.username, u.firstName, u.lastName, u.accountType
+            SELECT ur.relationId, u.username, u.firstName, u.lastName, u.accountType, u.profilePicUrl
             FROM user_relations ur
             JOIN user_relations ur2 ON ur.relationId = ur2.userId
             JOIN users u ON ur.relationId = u.userId
@@ -21,7 +21,7 @@ def get_mutual_user_relations(event, context):
         )
         
         if relations:
-            mutual_relations = [{'relationId': r[0], 'username': r[1], 'firstName': r[2], 'lastName': r[3], 'accountType': r[4]} for r in relations]
+            mutual_relations = [{'relationId': r[0], 'username': r[1], 'firstName': r[2], 'lastName': r[3], 'accountType': r[4], 'profilePicUrl': r[5]} for r in relations]
             return {
                 'statusCode': 200,
                 'body': json.dumps(mutual_relations),

@@ -8,6 +8,7 @@ import { AccountType } from "../common/constants/Enums";
 import TrackMeButton from "../common/components/display/TrackMeButton";
 import ProfileInformation from "../common/components/profile/ProfileInformation";
 import * as ImagePicker from 'expo-image-picker';
+import UserProfilePic from "../common/components/display/UserProfilePic";
 
 //Profile page for both coaches and athletes
 const Profile = () => {
@@ -24,6 +25,8 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
     // Image
     const [image, setImage] = useState<string>("");
+    // Image uploading flag
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
 
     // Fetch user data when component mounts
     useEffect(() => {
@@ -136,19 +139,21 @@ const Profile = () => {
             reader.readAsDataURL(blob);
         });
 
+        setIsUploadingImage(true);
         const resp = await GeneralService.updateProfilePic(base64);
         if(resp.ok){
             const url = await resp.json();
             setImage(url);
         }
+        setIsUploadingImage(false);
     };
 
     return (
-        <View className="flex-1 bg-gray-50 min-h-screen">
+        <View className="flex-1 bg-gray-50">
             <View className="px-6 pb-8">
                 <View className="flex-row w-full items-center justify-between my-6 bg-white rounded-2xl shadow-sm p-6">
                     <View className="flex-row relative">
-                        <Image source={image ? { uri: image } : require("../assets/images/DefaultProfilePic.png")} className="h-32 w-32 rounded-full" />
+                        <UserProfilePic imageUri={image} height={96} width={96} loading={isUploadingImage} />
                         <Pressable onPress={handleImageUpload} className="p-2 absolute bottom-0 right-0 bg-white rounded-full shadow-md">
                             <Image source={require("../assets/images/ImageGallery.png")} className="h-6 w-6" />
                         </Pressable>

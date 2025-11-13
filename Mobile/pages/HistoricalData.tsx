@@ -8,11 +8,12 @@ import TrackMeButton from "../common/components/display/TrackMeButton";
 import UserService from "../services/UserService";
 import { AccountType } from "../common/constants/Enums";
 import CollapsibleUserDisplay from "../common/components/display/CollapsibleUserDisplay";
+import { User } from "../common/types/User";
 
 const HistoricalData = ()=>{
     const route = useRoute();
     const { date } = (route.params as { date: string }) || {};
-    const [historicalData, setHistoricalData] = useState<Record<string, {inputs:Input[], username:string, firstName:string, lastName:string}>>({});
+    const [historicalData, setHistoricalData] = useState<Record<string, User & {inputs: Input[]}>>({});
     const [loading, setLoading] = useState<boolean>(false);
     const [expandedUsers, setExpandedUsers] = useState<Set<string>>(new Set());
     const navigation = useNavigation<any>();
@@ -68,6 +69,7 @@ const HistoricalData = ()=>{
                         username={data.username}
                         firstName={data.firstName}
                         lastName={data.lastName}
+                        userProfilePic={data.profilePicUrl}
                         expanded={expandedUsers.has(userID)}
                         onPress={() => toggleUser(userID)}
                     >

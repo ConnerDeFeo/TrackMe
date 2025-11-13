@@ -12,7 +12,7 @@ def get_relation_invites(event, context):
         # Fetch relation invites from db   
         invites = fetch_all(
         """
-            SELECT ur.userId, u.username, u.firstName, u.lastName, u.accountType
+            SELECT ur.userId, u.username, u.firstName, u.lastName, u.accountType, u.profilePicUrl
             FROM user_relations ur
             JOIN users u ON ur.userId = u.userId
             LEFT JOIN user_relations ur2 
@@ -24,7 +24,7 @@ def get_relation_invites(event, context):
         ) or []
         return {
             'statusCode': 200,
-            'body': json.dumps(invites),
+            'body': json.dumps([{"id": i[0], "username": i[1], "firstName": i[2], "lastName": i[3], "accountType": i[4], "profilePicUrl": i[5]} for i in invites]),
             'headers': auth_header
         }
     except Exception as e:

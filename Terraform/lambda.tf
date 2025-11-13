@@ -146,7 +146,7 @@ resource "aws_lambda_function" "lambdas" {
   source_code_hash = data.archive_file.lambda_archives[each.key].output_base64sha256
   depends_on       = [aws_iam_role_policy_attachment.lambda_rds_auth, aws_db_instance.default]
   layers           = [aws_lambda_layer_version.rds.arn, aws_lambda_layer_version.user_auth.arn]
-  timeout          = 30
+  timeout          = 10
 
   environment {
     variables = {

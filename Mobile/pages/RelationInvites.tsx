@@ -3,11 +3,14 @@ import RelationService from "../services/RelationService";
 import RelationActionButton from "../common/components/display/RelationActionButton";
 import { RelationStatus } from "../common/constants/Enums";
 import { ActivityIndicator, Text, View } from "react-native";
+import UserDisplay from "../common/components/display/UserDisplay";
+import { User } from "../common/types/User";
 
 const RelationInvites = () => {
-    const [invites, setInvites] = useState<string[][]>([]);
+    const [invites, setInvites] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const fetchInvites = async () => {
+        setLoading(true);
         const resp = await RelationService.getRelationInvites();
         if (resp.ok) {
             const data = await resp.json();
@@ -15,6 +18,7 @@ const RelationInvites = () => {
         } else {
             setInvites([]);
         }
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -42,16 +46,16 @@ const RelationInvites = () => {
                 : invites.length === 0 ?
                 <Text className="text-center text-gray-500 mt-10">No pending relation invites.</Text>
                 :
-                invites.map((user) => (
+                invites.map(({id, username, firstName, lastName, profilePicUrl}) => (
                     <View
-                        key={user[0]}
+                        key={id}
                         className="flex flex-row justify-between items-center border trackme-border-gray p-4 rounded-xl mb-3 bg-white shadow-sm"
                     >
                         {/* User name */}
-                        <Text className="font-semibold">{user[1]}</Text>
+                        <UserDisplay firstName={firstName} lastName={lastName} username={username} userProfilePic={profilePicUrl} />
                         {/* Action button */}
                         <RelationActionButton
-                            relationId={user[0]}
+                            relationId={id}
                             relationStatus={RelationStatus.AwaitingResponse}
                             handleAddRelation={handleAcceptInvite}
                             handleRelationRemoval={handleDeclineInvite}

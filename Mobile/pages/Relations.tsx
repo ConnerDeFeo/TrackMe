@@ -96,7 +96,6 @@ const Relations = () => {
             );
         }
     };
-    console.log(currentUsers);
     // Main render: SearchBar, loading state, empty state, or list of users
     return (
         <View className="mx-4">
@@ -135,6 +134,7 @@ const Relations = () => {
                         >
                             {/* User name */}
                             <UserDisplay
+                                userId={id}
                                 username={username}
                                 firstName={firstName}
                                 lastName={lastName}

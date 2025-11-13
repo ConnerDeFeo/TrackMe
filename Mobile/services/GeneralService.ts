@@ -3,8 +3,8 @@ import API from "./API";
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const GeneralService = {
-  getUser: async () => {
-    return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_user`);
+  getUser: async (userId: string) => {
+    return await API.get(`${EXPO_PUBLIC_API_URL}/general/get_user?userId=${userId}`);
   },
   updateUserProfile: async (userData: Record<string, any>) => {
     return await API.post(`${EXPO_PUBLIC_API_URL}/general/update_user_profile`, userData);

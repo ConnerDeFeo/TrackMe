@@ -63,15 +63,16 @@ const HistoricalData = ()=>{
     return(
         <View className="flex-1">
             {Object.keys(historicalData).length > 0 ?
-                Object.entries(historicalData).map(([userID, data]) => 
+                Object.entries(historicalData).map(([userId, data]) => 
                     <CollapsibleUserDisplay
-                        key={userID}
+                        key={userId}
+                        userId={userId}
                         username={data.username}
                         firstName={data.firstName}
                         lastName={data.lastName}
                         userProfilePic={data.profilePicUrl}
-                        expanded={expandedUsers.has(userID)}
-                        onPress={() => toggleUser(userID)}
+                        expanded={expandedUsers.has(userId)}
+                        onPress={() => toggleUser(userId)}
                     >
                         {data.inputs.map((input, idx) => (
                             <InputDisplay key={idx} input={input} />

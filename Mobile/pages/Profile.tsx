@@ -9,11 +9,12 @@ import TrackMeButton from "../common/components/display/TrackMeButton";
 import ProfileInformation from "../common/components/profile/ProfileInformation";
 import * as ImagePicker from 'expo-image-picker';
 import UserProfilePic from "../common/components/display/UserProfilePic";
+import { useRoute } from "@react-navigation/native";
 
 //Profile page for both coaches and athletes
 const Profile = () => {
     const context = useContext(AuthContext);
-    const [accountType, setAccountType] = context;
+    const [_, setAccountType] = context;
     // State to hold current user data being displayed/edited
     const [userData, setUserData] = useState<Record<string, any>>({});
     // State to track original data for comparison to detect changes
@@ -27,14 +28,18 @@ const Profile = () => {
     const [image, setImage] = useState<string>("");
     // Image uploading flag
     const [isUploadingImage, setIsUploadingImage] = useState(false);
-
+    // Potential second userId to view others profile
+    const route = useRoute();
+    const routeParams = route.params as { userId?: string } | undefined;
+    const routedUserId = routeParams?.userId;
     // Fetch user data when component mounts
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userId = await UserService.getUserId();
+                const userId = routedUserId || await UserService.getUserId();
+                console.log("Fetching profile for userId:", userId);
                 if (userId) {
-                    const resp = await GeneralService.getUser();
+                    const resp = await GeneralService.getUser(userId);
                     if (resp) {
                         const data = await resp.json();
                         if(data.profilePicUrl){
@@ -154,9 +159,11 @@ const Profile = () => {
                 <View className="flex-row w-full items-center justify-between my-6 bg-white rounded-2xl shadow-sm p-6">
                     <View className="flex-row relative">
                         <UserProfilePic imageUri={image} height={96} width={96} loading={isUploadingImage} />
-                        <Pressable onPress={handleImageUpload} className="p-2 absolute bottom-0 right-0 bg-white rounded-full shadow-md">
-                            <Image source={require("../assets/images/ImageGallery.png")} className="h-6 w-6" />
-                        </Pressable>
+                        {!routedUserId &&
+                            <Pressable onPress={handleImageUpload} className="p-2 absolute bottom-0 right-0 bg-white rounded-full shadow-md">
+                                <Image source={require("../assets/images/ImageGallery.png")} className="h-6 w-6" />
+                            </Pressable>
+                        }
                     </View>
                     {/* Header Section */}
                     <View>
@@ -170,7 +177,7 @@ const Profile = () => {
                             {/* Account type badge */}
                             <View className="bg-trackme-blue/10 px-3 py-1 rounded-full mt-2">
                                 <Text className="text-trackme-blue text-sm font-medium text-right">
-                                    {accountType}
+                                    {userData.accountType}
                                 </Text>
                             </View>
                         </View>
@@ -181,9 +188,11 @@ const Profile = () => {
                 <View className="bg-white rounded-2xl p-6 shadow-sm">
                     <View className="flex-row items-center justify-between mb-6">
                         <Text className="text-xl font-bold text-gray-800">Profile Information</Text>
-                        <Pressable onPress={() => setIsEditing(prev => !prev)} className="p-2 rounded-full">
-                            <Image source={require("../assets/images/Edit.png")} className="h-6 w-6" />
-                        </Pressable>
+                        {!routedUserId &&
+                            <Pressable onPress={() => setIsEditing(prev => !prev)} className="p-2 rounded-full">
+                                <Image source={require("../assets/images/Edit.png")} className="h-6 w-6" />
+                            </Pressable>
+                        }
                     </View>
                     <View className="gap-y-5">
                         {/* Bio input field */}
@@ -235,9 +244,12 @@ const Profile = () => {
                 </View>
 
                 {/* Logout Section */}
-                <View className="mt-6">
-                    <TrackMeButton text="Sign Out" onPress={handleLogout} />
-                </View>
+                {
+                    !routedUserId && 
+                    <View className="mt-6">
+                        <TrackMeButton text="Sign Out" onPress={handleLogout} />
+                    </View>
+                }
             </View>
         </View>
     );

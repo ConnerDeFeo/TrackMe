@@ -54,7 +54,7 @@ const CreateWorkoutGroup = ()=>{
                     return (
                         <View key={athlete.relationId} className="flex flex-row items-center bg-white p-4 mb-3 rounded-xl shadow-sm border border-gray-100">
                             {/* Athlete name display */}
-                            <UserDisplay username={athlete.username} firstName={athlete.firstName} lastName={athlete.lastName}/>
+                            <UserDisplay userId={athlete.relationId} username={athlete.username} firstName={athlete.firstName} lastName={athlete.lastName}/>
                             {/* Selection toggle button */}
                             <TrackMeButton
                                 onPress={() => handleWorkoutGroupChange({id: athlete.relationId, username: athlete.username})}

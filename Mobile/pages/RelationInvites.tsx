@@ -52,7 +52,7 @@ const RelationInvites = () => {
                         className="flex flex-row justify-between items-center border trackme-border-gray p-4 rounded-xl mb-3 bg-white shadow-sm"
                     >
                         {/* User name */}
-                        <UserDisplay firstName={firstName} lastName={lastName} username={username} userProfilePic={profilePicUrl} />
+                        <UserDisplay userId={id} firstName={firstName} lastName={lastName} username={username} userProfilePic={profilePicUrl} />
                         {/* Action button */}
                         <RelationActionButton
                             relationId={id}

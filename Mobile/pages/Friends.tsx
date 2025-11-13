@@ -42,7 +42,7 @@ const Friends = ()=>{
                     className="flex flex-row justify-between items-center border trackme-border-gray p-4 rounded-xl mb-3 bg-white shadow-sm"
                 >
                     {/* User name */}
-                    <UserDisplay username={friend.username} firstName={friend.firstName} lastName={friend.lastName} userProfilePic={friend.profilePicUrl} />
+                    <UserDisplay userId={friend.relationId} username={friend.username} firstName={friend.firstName} lastName={friend.lastName} userProfilePic={friend.profilePicUrl} />
                     {/* Action button */}
                     <RelationActionButton
                         relationId={friend.relationId}

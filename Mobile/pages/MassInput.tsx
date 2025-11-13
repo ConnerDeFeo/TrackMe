@@ -105,6 +105,7 @@ const MassInput = () => {
       athletes.map((athlete)=>(
         <CollapsibleUserDisplay
           key={athlete.relationId}
+          userId={athlete.relationId}
           username={athlete.username}
           firstName={athlete.firstName}
           lastName={athlete.lastName}

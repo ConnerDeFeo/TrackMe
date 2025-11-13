@@ -143,15 +143,14 @@ const Profile = () => {
         }
     };
 
-    console.log("Rendering Profile with image:", image);
     return (
         <View className="flex-1 bg-gray-50 min-h-screen">
             <View className="px-6 pb-8">
                 <View className="flex-row w-full items-center justify-between my-6 bg-white rounded-2xl shadow-sm p-6">
-                    <View className="flex-row">
+                    <View className="flex-row relative">
                         <Image source={image ? { uri: image } : require("../assets/images/DefaultProfilePic.png")} className="h-32 w-32 rounded-full" />
-                        <Pressable onPress={handleImageUpload} className="pl-4 py-2 pr-2">
-                            <Image source={require("../assets/images/Edit.png")} className="h-6 w-6" />
+                        <Pressable onPress={handleImageUpload} className="p-2 absolute bottom-0 right-0 bg-white rounded-full shadow-md">
+                            <Image source={require("../assets/images/ImageGallery.png")} className="h-6 w-6" />
                         </Pressable>
                     </View>
                     {/* Header Section */}

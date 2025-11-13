@@ -3,6 +3,7 @@ from user_auth import get_user_info, post_auth_header
 from rds import execute_commit
 import boto3
 import base64
+import time
 
 def update_profile_pic(event, context):
     body = json.loads(event['body'])
@@ -41,7 +42,7 @@ def update_profile_pic(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps(s3_url),
+            'body': json.dumps(f"{s3_url}?t={int(time.time())}"),
             'headers': auth_header
         }
     except Exception as e:

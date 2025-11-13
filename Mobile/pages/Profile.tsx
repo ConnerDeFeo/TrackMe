@@ -176,7 +176,7 @@ const Profile = () => {
                 <View className="bg-white rounded-2xl p-6 shadow-sm">
                     <View className="flex-row items-center justify-between mb-6">
                         <Text className="text-xl font-bold text-gray-800">Profile Information</Text>
-                        <Pressable onPress={() => setIsEditing(prev => !prev)} className="pl-4 py-2 pr-2">
+                        <Pressable onPress={() => setIsEditing(prev => !prev)} className="p-2 rounded-full">
                             <Image source={require("../assets/images/Edit.png")} className="h-6 w-6" />
                         </Pressable>
                     </View>

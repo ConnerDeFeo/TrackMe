@@ -23,8 +23,6 @@ const Profile = ({routedUserId}:{routedUserId?: string}) => {
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     // Editation flag
     const [isEditing, setIsEditing] = useState(false);
-    // Image
-    const [image, setImage] = useState<string>("");
     // Image uploading flag
     const [isUploadingImage, setIsUploadingImage] = useState(false);
     // Fetch user data when component mounts
@@ -37,7 +35,7 @@ const Profile = ({routedUserId}:{routedUserId?: string}) => {
                     if (resp) {
                         const data = await resp.json();
                         if(data.profilePicUrl){
-                            setImage(data.profilePicUrl);
+                            setUserData({ ...userData, profilePicUrl: data.profilePicUrl });
                         }
                         setUserData(data);
                         setOriginalUserData(data); // Store original data for change detection
@@ -120,29 +118,19 @@ const Profile = ({routedUserId}:{routedUserId?: string}) => {
             aspect: [1, 1],
             quality: 1,
         });
-
         if (result.canceled) {
             return;
         }
         setIsUploadingImage(true);
         const image = await fetch(result.assets[0].uri);
         const blob = await image.blob();
-    
-        // Convert blob to base64
-        // const base64 = await new Promise<string>((resolve) => {
-        //     const reader = new FileReader();
-        //     reader.onloadend = () => {
-        //         const base64String = reader.result as string;
-        //         const base64Data = base64String.split(',')[1];
-        //         resolve(base64Data);
-        //     };
-        //     reader.readAsDataURL(blob);
-        // });
 
         const presignedUrlResp = await GeneralService.generatePresignedS3Url(`${userData.userId}_profile_pic.jpg`, "profilePicture");
         if(!presignedUrlResp.ok){
+            setIsUploadingImage(false);
             return;
         }
+
         const { presigned_url, public_url } = await presignedUrlResp.json();
         await fetch(presigned_url, {
             method: 'PUT',
@@ -151,7 +139,8 @@ const Profile = ({routedUserId}:{routedUserId?: string}) => {
             },
             body: blob,
         });
-        setImage(public_url);
+        setUserData({ ...userData, profilePicUrl: public_url });
+        GeneralService.updateUserProfile({ firstName: userData.firstName, lastName: userData.lastName, profilePicUrl: public_url });
         setIsUploadingImage(false);
     };
 
@@ -160,7 +149,7 @@ const Profile = ({routedUserId}:{routedUserId?: string}) => {
             <View className="px-6 pb-8">
                 <View className="flex-row w-full items-center justify-between my-6 bg-white rounded-2xl shadow-sm p-6">
                     <View className="flex-row relative">
-                        <UserProfilePic imageUri={image} height={96} width={96} loading={isUploadingImage} />
+                        <UserProfilePic imageUri={userData.profilePicUrl} height={96} width={96} loading={isUploadingImage} />
                         {!routedUserId &&
                             <Pressable onPress={handleImageUpload} className="p-2 absolute bottom-0 right-0 bg-white rounded-full shadow-md">
                                 <Image source={require("../../../assets/images/ImageGallery.png")} className="h-6 w-6" />

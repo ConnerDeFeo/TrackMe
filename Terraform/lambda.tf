@@ -46,10 +46,6 @@ locals {
     }
 
     # General Lambdas
-    "update_profile_pic" = {
-      source_dir  = "${path.module}/../Server/lambdas/general/update_profile_pic"
-      output_path = "${path.module}/../Server/lambdas/general/zips/update_profile_pic.zip"
-    }
     "get_user" = {
       source_dir  = "${path.module}/../Server/lambdas/general/get_user"
       output_path = "${path.module}/../Server/lambdas/general/zips/get_user.zip"

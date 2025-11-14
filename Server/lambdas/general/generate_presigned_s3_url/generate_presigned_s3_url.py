@@ -11,15 +11,15 @@ def generate_presigned_s3_url(event, context):
     query_params = event.get('queryStringParameters', {}) or {}
 
     try:
-        user_info = get_user_info(auth_header)
-        user_id = user_info['user_id']
+        user_info = get_user_info(event)
+        user_id = user_info['userId']
         title = query_params['title']
         destination = query_params.get('destination', 'profilePicture')
         if destination not in ['profilePicture', 'videos']:
             raise ValueError("Invalid destination parameter")
-
+        video = destination == 'videos'
         key = f"{destination}/{user_id}.jpg"
-        if destination == 'videos':
+        if video:
             key = f"{destination}/{user_id}/{title}.mp4"
         else:
             key = f"{destination}/{user_id}.jpg"
@@ -30,7 +30,7 @@ def generate_presigned_s3_url(event, context):
             Params={
                 'Bucket': 'trackme-media',
                 'Key': key,
-                'ContentType': 'image/jpeg'
+                'ContentType': 'video/mp4' if video else 'image/jpeg'
             },
             ExpiresIn=3600
         )
@@ -44,5 +44,6 @@ def generate_presigned_s3_url(event, context):
         print("Authentication failed:", e)
         return {
             'statusCode': 401,
-            'body': 'Unauthorized: ' + str(e)
+            'body': 'Unauthorized: ' + str(e),
+            'headers': auth_header
         }

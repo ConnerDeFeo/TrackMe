@@ -22,6 +22,7 @@ def get_relation_invites(event, context):
             AND ur2.userId IS NULL
         """,(user_id,)
         ) or []
+        # Return the invites
         return {
             'statusCode': 200,
             'body': json.dumps(invites),

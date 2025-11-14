@@ -49,6 +49,7 @@ def search_user_relation(event, context):
             params
         )
 
+        # Return the search results
         return {
             'statusCode': 200,
             'body': json.dumps(results),

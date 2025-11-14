@@ -70,6 +70,10 @@ locals {
       source_dir  = "${path.module}/../Server/lambdas/general/generate_presigned_s3_url"
       output_path = "${path.module}/../Server/lambdas/general/zips/generate_presigned_s3_url.zip"
     }
+    "upload_video"= {
+      source_dir  = "${path.module}/../Server/lambdas/general/upload_video"
+      output_path = "${path.module}/../Server/lambdas/general/zips/upload_video.zip"
+    }
 
     # History Lambdas
     "get_available_history_dates" = {

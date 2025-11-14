@@ -81,6 +81,8 @@ ON user_relations (userId, relationId);
 
 CREATE TABLE IF NOT EXISTS video_uploads(
     id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
     userId VARCHAR(255) REFERENCES users(userId) NOT NULL,
     videoUrl TEXT NOT NULL,
     date TIMESTAMP DEFAULT CURRENT_DATE

@@ -27,6 +27,7 @@ locals {
     "general/mass_input" = { lambda = aws_lambda_function.lambdas["mass_input"], method = "POST" }
     "general/create_user" = { lambda = aws_lambda_function.lambdas["create_user"], method = "POST" }
     "general/update_user_profile" = { lambda = aws_lambda_function.lambdas["update_user_profile"], method = "POST" }
+    "general/upload_video" = { lambda = aws_lambda_function.lambdas["upload_video"], method = "POST" }
 
     "relations/add_relation" = { lambda = aws_lambda_function.lambdas["add_relation"], method = "POST" }
 

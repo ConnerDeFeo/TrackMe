@@ -20,7 +20,6 @@ const CreateAccount = ()=>{
     
     //Handle error messages based on the error type
     const handleError = (error:any) => {
-        console.log("Sign up error:", error);
         switch (error.name) {
             case 'UsernameExistsException':
                 setMessage("Username already exists. Please choose a different username.");

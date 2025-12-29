@@ -46,7 +46,6 @@ const RightInputTextFeild = ({inputType, currentTimeDistanceInput, currentRestIn
             </Text>
             <TextInput
                 placeholder={Variables.inputs.quickInputs.rightInputTextFeild.placeHolders[inputType]}
-                keyboardType={inputType===InputType.Note ? "default" : "decimal-pad"}
                 value={value}
                 onFocus={onFocus}
                 className={`border trackme-border-gray rounded-lg p-3 bg-white font-medium ${inputType===InputType.Note ? '' : 'text-center'}`}

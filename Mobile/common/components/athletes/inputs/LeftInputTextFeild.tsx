@@ -67,7 +67,6 @@ const LeftInputTextField = ({inputType, currentTimeDistanceInput, currentRestInp
                 <View className="border trackme-border-gray rounded-lg flex-1 flex-row relative">
                     <TextInput
                         placeholder={Variables.inputs.quickInputs.LeftInputTextField.placeHolders[inputType]}
-                        keyboardType={inputType===InputType.Note ? "default" : "numeric"}
                         className={`rounded-lg bg-white font-medium flex-1 p-3 ${inputType===InputType.Note ? '' : 'text-center'}`}
                         value={value}
                         onChangeText={handleChange}

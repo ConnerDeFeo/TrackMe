@@ -52,7 +52,7 @@ const History = () => {
             keyboardShouldPersistTaps="handled"
         >
             <Calender distanceFilters={distanceFilters} />
-            <View className="mx-4 mt-6">
+            <View className="mx-4 mt-4">
                 <Text className="text-lg font-semibold mb-3">Search Distances</Text>
                 <View className="flex-row gap-2 mb-3 items-center">
                     <TextInput 
